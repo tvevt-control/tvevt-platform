@@ -1,9 +1,637 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>TVEVT</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="dark"/>
+
+  <title>TVEVT — Influence Infrastructure</title>
+  <meta name="description" content="TVEVT is influence infrastructure: a centralized control layer for strategic signal orchestration across channels, with embedded AI for content preparation and signal governance." />
+
+  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg?v=2026-02-25">
+  <link rel="shortcut icon" href="/tvevt-favicon.svg?v=2026-02-25">
+  <meta name="theme-color" content="#0b0d10"/>
+
+  <meta property="og:title" content="TVEVT — Influence Infrastructure"/>
+  <meta property="og:description" content="Control your digital signal. Orchestrate distribution across channels. Embedded AI supports preparation and governance."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://tvevt.com/"/>
+
+  <style>
+    :root{
+      --bg0:#07090c;
+      --bg1:#0b0d10;
+      --card: rgba(255,255,255,.06);
+      --card2: rgba(255,255,255,.08);
+      --stroke: rgba(255,255,255,.12);
+      --text:#eef2f6;
+      --muted: rgba(238,242,246,.72);
+      --muted2: rgba(238,242,246,.56);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --orange1:#ff8a00;
+      --orange2:#ff4d00;
+      --radius: 18px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(255,138,0,.18), transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, rgba(255,77,0,.12), transparent 60%),
+        radial-gradient(900px 700px at 60% 95%, rgba(255,255,255,.06), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:1120px; margin:0 auto; padding:28px 18px 70px; }
+
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      position:sticky; top:0;
+      padding:16px 0;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index:50;
+    }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      width:100%;
+      padding:14px 14px;
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius: 22px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.35);
+    }
+
+    .brand{ display:flex; align-items:center; gap:12px; min-width:260px; }
+    .mark{
+      width:34px; height:34px;
+      display:grid; place-items:center;
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .word{ display:flex; flex-direction:column; line-height:1.05; }
+    .word b{ font-size:16px; letter-spacing:.7px; }
+    .word span{ font-size:12px; color:var(--muted2); }
+
+    .nav{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius: 999px;
+      font-size:13px;
+      letter-spacing:.2px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      position:relative;
+      z-index:20;
+      pointer-events:auto;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.07);
+    }
+    .btn:active{ transform: translateY(0px); }
+
+    .btn-primary{
+      border:1px solid rgba(255,138,0,.35);
+      background: linear-gradient(135deg, rgba(255,138,0,.95), rgba(255,77,0,.92));
+      color:#1a120a;
+      font-weight:800;
+      box-shadow: 0 14px 40px rgba(255,138,0,.14);
+    }
+    .btn-primary:hover{ box-shadow: 0 18px 60px rgba(255,138,0,.18); }
+
+    .btn-ghost{
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--text);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    .hero{
+      margin-top:18px;
+      border-radius: var(--radius);
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding:34px 28px 26px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 280px at 18% 0%, rgba(255,138,0,.22), transparent 55%),
+        radial-gradient(600px 260px at 78% 10%, rgba(255,77,0,.15), transparent 60%);
+      pointer-events:none;
+      z-index:0;
+    }
+    .hero-grid{
+      position:relative; z-index:5;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    .kicker{
+      display:inline-flex; gap:10px; align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color:rgba(238,242,246,.78);
+      font-size:12px;
+      position:relative;
+      z-index:10;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: linear-gradient(135deg, var(--orange1), var(--orange2));
+      box-shadow: 0 10px 30px rgba(255,138,0,.18);
+    }
+
+    h1{
+      margin:12px 0 0;
+      font-size:54px;
+      letter-spacing:-1.2px;
+      line-height:1.02;
+      text-shadow: 0 8px 30px rgba(0,0,0,.55);
+    }
+    .lead{
+      margin-top:12px;
+      color:var(--muted);
+      font-size:16px;
+      line-height:1.6;
+      max-width: 680px;
+    }
+    .cta-row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+      position:relative;
+      z-index:10;
+      pointer-events:auto;
+    }
+    .mini{
+      margin-top:10px;
+      color:var(--muted2);
+      font-size:13px;
+      line-height:1.55;
+    }
+
+    .side{
+      display:flex; flex-direction:column; gap:12px;
+      position:relative; z-index:10;
+      pointer-events:auto;
+    }
+    .note{
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.13);
+      background: rgba(0,0,0,.18);
+      padding:14px 14px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    .note b{ display:block; font-size:14px; margin-bottom:6px; }
+    .note p{ margin:0; color:var(--muted); font-size:13px; line-height:1.55; }
+
+    .section{
+      margin-top:22px;
+      border-radius: var(--radius);
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.05);
+      box-shadow: 0 14px 40px rgba(0,0,0,.28);
+      padding:18px 18px 16px;
+    }
+    .section h2{
+      margin:0 0 10px 0;
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(238,242,246,.72);
+    }
+    .section .title{
+      margin:0 0 10px 0;
+      font-size:20px;
+      font-weight:900;
+      letter-spacing:-.3px;
+    }
+    .section .text{
+      margin:0;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.75;
+      max-width: 980px;
+    }
+    .list{
+      margin:10px 0 0;
+      padding:0;
+      list-style:none;
+      color:rgba(238,242,246,.78);
+      font-size:13px;
+      line-height:1.9;
+    }
+    .list li::before{
+      content:"→";
+      display:inline-block;
+      margin-right:10px;
+      color: rgba(255,165,60,.95);
+    }
+
+    .aiBox{
+      margin-top:14px;
+      border-radius:16px;
+      border:1px solid rgba(255,138,0,.35);
+      background: linear-gradient(180deg, rgba(255,138,0,.08), rgba(255,255,255,.04));
+      padding:14px;
+    }
+    .aiGrid{
+      margin-top:10px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+    }
+    .aiMini{
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      padding:12px;
+    }
+    .aiMini .t{
+      font-size:12px;
+      color:rgba(238,242,246,.70);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      margin-bottom:6px;
+    }
+    .aiMini .p{
+      margin:0;
+      color:rgba(238,242,246,.72);
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .pricing h3{
+      margin:0;
+      font-size:34px;
+      letter-spacing:-.6px;
+      text-align:center;
+      text-shadow: 0 8px 30px rgba(0,0,0,.55);
+    }
+    .pricing .sub{
+      margin:10px auto 0;
+      text-align:center;
+      color:var(--muted);
+      max-width:760px;
+      line-height:1.6;
+      font-size:14px;
+    }
+    .grid3{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap:14px;
+    }
+    .plan{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      padding:18px 18px 16px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.35);
+      position:relative;
+      overflow:visible; /* allow badge to float above */
+    }
+    .plan h4{ margin:0; font-size:13px; letter-spacing:.8px; color:rgba(238,242,246,.86); }
+
+    .price{
+      margin-top:10px;
+      font-size:34px;
+      font-weight:900;
+      letter-spacing:-.8px;
+    }
+    .per{ font-size:13px; color:var(--muted); font-weight:700; margin-left:6px; }
+    .plan .cta{ margin-top:16px; width:100%; display:flex; }
+    .plan .cta .btn{ width:100%; border-radius: 14px; padding:12px 14px; }
+
+    .popular{
+      border-color: rgba(255,138,0,.35);
+      background: linear-gradient(180deg, rgba(255,138,0,.08), rgba(255,255,255,.05));
+      padding-top:32px; /* reserve space so title never collides with badge */
+    }
+
+    /* ✅ FIXED BADGE (floats above, never on title) */
+    .badge{
+      position:absolute;
+      top:-12px;
+      left:50%;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, rgba(255,138,0,.95), rgba(255,77,0,.92));
+      color:#1a120a;
+      font-weight:900;
+      font-size:11px;
+      padding:6px 12px;
+      border-radius: 999px;
+      letter-spacing:.6px;
+      box-shadow: 0 10px 30px rgba(255,138,0,.18);
+      z-index:10;
+      white-space:nowrap;
+      pointer-events:none;
+    }
+
+    footer{
+      margin-top:22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      color:rgba(238,242,246,.52);
+      font-size:12px;
+      padding:18px 6px 0;
+    }
+    .footlinks{ display:flex; gap:12px; flex-wrap:wrap; }
+    .footlinks a{ color:rgba(238,242,246,.62); text-decoration:underline; text-underline-offset:3px; }
+    .footlinks a:hover{ color:rgba(255,200,140,.95); }
+
+    @media (max-width: 980px){
+      .hero-grid{ grid-template-columns: 1fr; }
+      h1{ font-size:44px; }
+      .grid3{ grid-template-columns: 1fr; }
+      .aiGrid{ grid-template-columns: 1fr; }
+      .brand{ min-width: 0; }
+    }
+  </style>
 </head>
+
 <body>
-    <h1>TVEVT is rebuilding</h1>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <div class="brand">
+          <div class="mark" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="22" height="22">
+              <defs>
+                <linearGradient id="tvevtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ff8a00"/>
+                  <stop offset="100%" stop-color="#ff4d00"/>
+                </linearGradient>
+              </defs>
+              <rect x="20" y="25" width="65" height="50" rx="14" fill="none" stroke="url(#tvevtGradient)" stroke-width="6"/>
+              <rect x="45" y="40" width="65" height="50" rx="14" fill="none" stroke="url(#tvevtGradient)" stroke-width="6"/>
+              <polygon points="30,75 42,75 32,90" fill="url(#tvevtGradient)"/>
+            </svg>
+          </div>
+          <div class="word">
+            <b>TVEVT</b>
+            <span>Influence Infrastructure</span>
+          </div>
+        </div>
+
+        <nav class="nav" aria-label="Top navigation">
+          <a class="btn btn-ghost" href="#pricing">Infrastructure Tiers</a>
+          <a class="btn btn-ghost" href="https://leads.tvevt.com/log" target="_blank" rel="noopener">Execution Log</a>
+          <a class="btn btn-primary" href="https://leads.tvevt.com/" target="_blank" rel="noopener">Request Early Access</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="hero" aria-label="Hero">
+        <div class="hero-grid">
+          <div>
+            <span class="kicker"><span class="dot"></span> Control Layer • Governance • Orchestration</span>
+            <h1>Control your digital signal.<br/>Orchestrate distribution across channels.</h1>
+
+            <p class="lead">
+              TVEVT provides a centralized control layer for strategic signal orchestration.
+              It restores structure, consistency, and authority across systems you do not control.
+            </p>
+
+            <div class="cta-row">
+              <a class="btn btn-primary" href="https://leads.tvevt.com/" target="_blank" rel="noopener">
+                Request Early Access
+              </a>
+              <a class="btn btn-ghost" href="#solution">How it works</a>
+            </div>
+
+            <div class="mini">
+              TVEVT is infrastructure-first. AI is embedded where it strengthens preparation and governance.
+            </div>
+          </div>
+
+          <aside class="side" aria-label="Key points">
+            <div class="note">
+              <b>Infrastructure, not a posting tool</b>
+              <p>TVEVT is a control layer for signal structure and distribution governance — across channels and systems.</p>
+            </div>
+            <div class="note">
+              <b>Embedded AI</b>
+              <p>Operational content preparation + governance oversight, integrated into the same control environment.</p>
+            </div>
+            <div class="note">
+              <b>Execution Log</b>
+              <p>Verifiable distribution records: what, where, when — enabling accountability and governance.</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <section class="section" id="problem">
+        <h2>SECTION 1 – The Problem</h2>
+        <div class="title">Digital signal is fragmented.</div>
+        <p class="text">
+          Video in one system. Audio in another. Live streams elsewhere.
+          Internal communication disconnected. Social channels governed by external algorithms.<br/><br/>
+          Signal becomes scattered. Distribution becomes reactive. Influence becomes dependent.<br/><br/>
+          Organizations no longer control their own digital presence. They operate inside systems they do not govern.<br/><br/>
+          Control weakens. Consistency breaks. Authority erodes.
+        </p>
+      </section>
+
+      <section class="section" id="solution">
+        <h2>SECTION 2 – The Solution</h2>
+        <div class="title">A centralized control layer for strategic signal orchestration.</div>
+
+        <p class="text">
+          TVEVT enables structured distribution, multi-channel governance, unified signal control, strategic amplification,
+          and infrastructure-level oversight.
+        </p>
+
+        <ul class="list">
+          <li>Structured distribution across channels</li>
+          <li>Multi-channel governance</li>
+          <li>Unified digital signal control</li>
+          <li>Strategic amplification</li>
+          <li>Infrastructure-level oversight</li>
+        </ul>
+
+        <div class="aiBox">
+          <b style="display:block;font-size:14px;">Embedded AI (used where it strengthens control)</b>
+          <p class="text" style="margin-top:8px; max-width: 1000px;">
+            AI is integrated into the control layer — not as decoration, but as operational leverage.
+            It accelerates preparation, enforces consistency, and strengthens governance.
+          </p>
+
+          <div class="aiGrid">
+            <div class="aiMini">
+              <div class="t">Operational preparation</div>
+              <p class="p">Drafting, refinement, tone calibration, channel-specific adaptation, summarization, multi-format transformation — inside the same control environment.</p>
+            </div>
+            <div class="aiMini">
+              <div class="t">Governance oversight</div>
+              <p class="p">Consistency monitoring, fragmentation alerts, anomaly detection, performance pattern analysis, governance risk signals — reinforcing authority across channels.</p>
+            </div>
+          </div>
+        </div>
+
+        <p class="text" style="margin-top:14px;">
+          TVEVT does not create more content. It transforms content into managed influence.<br/>
+          By restoring structure and control, TVEVT turns fragmented communication into strategic signal architecture.
+        </p>
+      </section>
+
+      <section class="section" id="phase">
+        <h2>SECTION 3 – Phase I</h2>
+        <div class="title">Strategic Video Distribution Control Layer</div>
+        <p class="text">
+          TVEVT begins with the highest-impact digital format: video. The first operational module provides:
+        </p>
+        <ul class="list">
+          <li>Centralized video publishing control</li>
+          <li>Structured multi-channel deployment</li>
+          <li>Signal consistency management</li>
+          <li>Distribution governance</li>
+          <li>Foundational analytics</li>
+        </ul>
+        <p class="text" style="margin-top:10px;">
+          Built for professional structures that require authority over how their signal is deployed and perceived.
+        </p>
+      </section>
+
+      <section class="section" id="vision">
+        <h2>SECTION 4 – Expansion Vision</h2>
+        <div class="title">Modular infrastructure. Expanding signal control.</div>
+        <p class="text">Future modules expand the signal layer to include:</p>
+        <ul class="list">
+          <li>Audio orchestration</li>
+          <li>Live broadcast control</li>
+          <li>Private signal channels</li>
+          <li>Monetization architecture</li>
+          <li>Governance frameworks</li>
+          <li>Advanced analytics</li>
+        </ul>
+        <p class="text" style="margin-top:10px;">
+          The architecture evolves. The core remains constant: control of digital signal and its distribution.
+        </p>
+      </section>
+
+      <section class="section pricing" id="pricing" aria-label="Pricing">
+        <h3>Infrastructure Tiers</h3>
+        <p class="sub">
+          TVEVT is priced as strategic signal governance infrastructure — not as a marketing tool.
+          (Annual contracts.)
+        </p>
+
+        <div class="grid3">
+          <div class="plan">
+            <h4>TIER I — PROFESSIONAL INFRASTRUCTURE</h4>
+            <div class="price">$1,500<span class="per">/mo</span></div>
+            <ul class="list">
+              <li>Strategic video distribution control</li>
+              <li>Structured multi-channel deployment</li>
+              <li>Governance structure + execution log</li>
+              <li>Foundational analytics</li>
+            </ul>
+            <div class="cta">
+              <a class="btn btn-ghost" href="https://leads.tvevt.com/" target="_blank" rel="noopener">Request Access</a>
+            </div>
+          </div>
+
+          <div class="plan popular">
+            <div class="badge">CORE TIER</div>
+            <h4>TIER II — STRATEGIC CONTROL</h4>
+            <div class="price">$3,000<span class="per">/mo</span></div>
+            <ul class="list">
+              <li>Advanced governance architecture</li>
+              <li>Amplification + signal consistency enforcement</li>
+              <li>Enhanced analytics + reporting</li>
+              <li>Priority roadmap alignment</li>
+            </ul>
+            <div class="cta">
+              <a class="btn btn-primary" href="https://leads.tvevt.com/" target="_blank" rel="noopener">Request Access</a>
+            </div>
+          </div>
+
+          <div class="plan">
+            <h4>TIER III — ENTERPRISE ARCHITECTURE</h4>
+            <div class="price">$5,000–$8,000<span class="per">/mo</span></div>
+            <ul class="list">
+              <li>Custom infrastructure design</li>
+              <li>Private signal channels</li>
+              <li>Governance frameworks + integrations</li>
+              <li>Dedicated strategic support</li>
+            </ul>
+            <div class="cta">
+              <a class="btn btn-ghost" href="/call.html">Book a Call</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="final-cta">
+        <h2>FINAL CTA</h2>
+        <div class="title">Regain control of your signal.</div>
+        <p class="text">Request early access to the TVEVT control layer.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary" href="https://leads.tvevt.com/" target="_blank" rel="noopener">Request Early Access</a>
+          <a class="btn btn-ghost" href="https://leads.tvevt.com/log" target="_blank" rel="noopener">View Execution Log</a>
+        </div>
+      </section>
+
+      <footer>
+        <div>©️ 2026 TVEVT — Influence Infrastructure</div>
+        <div class="footlinks">
+          <a href="#pricing">Infrastructure Tiers</a>
+          <a href="https://leads.tvevt.com/" target="_blank" rel="noopener">Early Access</a>
+          <a href="/call.html">Contact</a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    document.querySelectorAll('a[href^="#"]').forEach(a=>{
+      a.addEventListener('click', (e)=>{
+        const id = a.getAttribute('href');
+        const el = document.querySelector(id);
+        if(!el) return;
+        e.preventDefault();
+        el.scrollIntoView({behavior:'smooth', block:'start'});
+      });
+    });
+  </script>
 </body>
 </html>
