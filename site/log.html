@@ -2,467 +2,406 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TVEVT — Execution Log</title>
-  <meta name="description" content="Execution Log — immutable by design. Append-only proof of execution for governed publishing." />
+  <meta name="description" content="Execution Log — immutable by design. Append-only proof of execution." />
+  <link rel="icon" href="/tvevt-favicon.svg" type="image/svg+xml" />
 
   <style>
     :root{
-      --bg:#0b0e11;
-      --panel:#12161c;
-      --panel2:#161b22;
-      --stroke:#222a35;
-      --text:#e9eef5;
-      --muted:#a9b4c2;
-      --muted2:#7f8a98;
-      --accent:#f4a43a;
-      --accent2:#ffb44f;
-      --good:#2bd67b;
+      --bg0:#0b0d10;
+      --bg1:#0f1217;
+      --panel:#12161d;
+      --panel2:#10141a;
+      --stroke:rgba(255,255,255,.10);
+      --stroke2:rgba(255,255,255,.14);
+      --text:rgba(255,255,255,.92);
+      --muted:rgba(255,255,255,.68);
+      --muted2:rgba(255,255,255,.54);
+      --accent:#f39a2b;
+      --accent2:#f7b04f;
+      --ok:#35c27a;
+      --warn:#f2c94c;
       --bad:#ff5a6a;
-      --warn:#f4a43a;
-      --pill:#1a2230;
-      --shadow: 0 18px 45px rgba(0,0,0,.45);
-      --radius:18px;
+      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --radius: 18px;
+      --radius2: 14px;
+      --max: 1120px;
+      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
 
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-      background: radial-gradient(1200px 650px at 20% 15%, rgba(244,164,58,.22), rgba(0,0,0,0)) ,
-                  radial-gradient(900px 520px at 80% 25%, rgba(255,180,79,.13), rgba(0,0,0,0)) ,
-                  var(--bg);
+      font-family:var(--font);
       color:var(--text);
+      background:
+        radial-gradient(900px 500px at 20% 15%, rgba(243,154,43,.18), transparent 60%),
+        radial-gradient(900px 500px at 85% 25%, rgba(122,167,255,.16), transparent 60%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
     }
 
-    a{color:inherit;text-decoration:none}
-    .wrap{max-width:1120px;margin:0 auto;padding:18px 18px 70px}
+    a{color:inherit; text-decoration:none}
+    .wrap{max-width:var(--max); margin:0 auto; padding:22px 18px 40px}
 
     /* Top bar */
     .topbar{
-      position:sticky; top:0; z-index:50;
+      display:flex; align-items:center; justify-content:space-between;
+      padding:14px 14px;
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius: 22px;
+      box-shadow: var(--shadow);
       backdrop-filter: blur(10px);
-      background: rgba(10,12,15,.55);
-      border-bottom:1px solid rgba(255,255,255,.06);
+      position: sticky;
+      top: 12px;
+      z-index: 10;
     }
-    .topbar-inner{
-      max-width:1120px;margin:0 auto;
-      display:flex;align-items:center;justify-content:space-between;
-      padding:14px 18px;
-    }
-    .brand{display:flex;align-items:center;gap:10px}
+    .brand{display:flex; align-items:center; gap:10px; padding:6px 10px}
     .mark{
-      width:28px;height:28px;border-radius:9px;
-      background: linear-gradient(135deg, rgba(244,164,58,.95), rgba(255,180,79,.45));
-      box-shadow: 0 10px 22px rgba(244,164,58,.18);
-      border:1px solid rgba(255,255,255,.08);
-      display:grid;place-items:center;
-      font-weight:800;color:#101318;font-size:14px;
+      width:34px; height:34px; border-radius:12px;
+      border:1px solid var(--stroke2);
+      background: radial-gradient(circle at 30% 30%, rgba(243,154,43,.35), rgba(243,154,43,.10) 60%, rgba(255,255,255,.02));
+      display:grid; place-items:center;
+      overflow:hidden;
     }
-    .brand-txt{line-height:1.05}
-    .brand-txt b{display:block;font-size:14px;letter-spacing:.2px}
-    .brand-txt span{display:block;font-size:12px;color:var(--muted2)}
-
-    .nav{
-      display:flex;align-items:center;gap:8px;
-      padding:6px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(18,22,28,.55);
+    .mark img{width:22px; height:22px; opacity:.95}
+    .brand .t1{font-weight:800; letter-spacing:.3px; line-height:1}
+    .brand .t2{font-size:12px; color:var(--muted2); margin-top:2px}
+    .nav{display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end}
+    .pill{
+      padding:9px 12px;
       border-radius:999px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.22);
-    }
-    .nav a{
-      padding:8px 12px;border-radius:999px;
-      color:var(--muted);
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      color: rgba(255,255,255,.82);
       font-size:13px;
-      border:1px solid transparent;
+      line-height:1;
+      user-select:none;
     }
-    .nav a:hover{color:var(--text); background: rgba(255,255,255,.05)}
-    .nav a.active{
-      background: rgba(244,164,58,.18);
-      border-color: rgba(244,164,58,.35);
-      color: var(--text);
+    .pill:hover{border-color: rgba(255,255,255,.18)}
+    .pill.active{
+      border-color: rgba(243,154,43,.45);
+      background: rgba(243,154,43,.14);
+      color: rgba(255,255,255,.92);
     }
-    .nav a.primary{
-      background: linear-gradient(135deg, rgba(244,164,58,.95), rgba(255,180,79,.55));
-      border-color: rgba(255,255,255,.1);
-      color:#171a1f;
+    .cta{
+      padding:10px 14px;
+      border-radius:999px;
+      border:1px solid rgba(243,154,43,.55);
+      background: linear-gradient(180deg, rgba(243,154,43,.95), rgba(243,154,43,.78));
+      color:#20170a;
       font-weight:800;
+      font-size:13px;
+      line-height:1;
+      box-shadow: 0 10px 24px rgba(243,154,43,.18);
     }
-    .nav a.primary:hover{filter: brightness(1.03)}
 
     /* Hero */
     .hero{
       margin-top:18px;
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.01));
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
       border-radius: var(--radius);
+      padding:20px 20px 18px;
       box-shadow: var(--shadow);
-      padding:22px;
-      position:relative;
-      overflow:hidden;
-    }
-    .hero:before{
-      content:"";
-      position:absolute;inset:-2px;
-      background: radial-gradient(600px 250px at 18% 10%, rgba(244,164,58,.18), rgba(0,0,0,0));
-      pointer-events:none;
+      backdrop-filter: blur(10px);
     }
     .kicker{
-      position:relative;
-      display:inline-flex;align-items:center;gap:10px;
-      padding:7px 11px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.08);
-      background: rgba(10,12,15,.35);
-      color:var(--muted);
+      display:inline-flex; gap:10px; align-items:center;
+      color: var(--muted);
       font-size:12px;
+      padding:6px 10px;
+      border:1px solid var(--stroke);
+      border-radius:999px;
+      background: rgba(255,255,255,.03);
     }
-    .dot{
-      width:8px;height:8px;border-radius:99px;
-      background: var(--accent);
-      box-shadow: 0 0 0 5px rgba(244,164,58,.15);
-    }
+    .dot{width:8px;height:8px;border-radius:99px;background:var(--accent)}
     h1{
-      position:relative;
-      margin:14px 0 8px;
-      font-size:40px;
-      letter-spacing:-.8px;
+      margin:12px 0 8px;
+      font-size:44px;
       line-height:1.05;
+      letter-spacing:-.6px;
     }
-    .sub{
-      position:relative;
-      color:var(--muted);
-      max-width:820px;
-      font-size:14px;
-      line-height:1.55;
-      margin:0 0 14px;
-    }
-
-    .actions{
-      position:relative;
-      display:flex;flex-wrap:wrap;gap:10px;
-      margin-top:14px;
-    }
+    .lead{color:var(--muted); max-width: 900px; line-height:1.55}
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
     .btn{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:10px 12px;border-radius:12px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(18,22,28,.6);
-      color:var(--text);
+      display:inline-flex; align-items:center; gap:8px;
+      padding:10px 12px;
+      border-radius:12px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      color: rgba(255,255,255,.88);
+      font-weight:650;
       font-size:13px;
-      box-shadow: 0 10px 24px rgba(0,0,0,.18);
       cursor:pointer;
-      user-select:none;
     }
-    .btn:hover{background: rgba(255,255,255,.05)}
+    .btn:hover{border-color: rgba(255,255,255,.18)}
     .btn.primary{
-      background: linear-gradient(135deg, rgba(244,164,58,.95), rgba(255,180,79,.55));
-      border-color: rgba(255,255,255,.12);
-      color:#171a1f;
-      font-weight:800;
+      border-color: rgba(243,154,43,.50);
+      background: rgba(243,154,43,.14);
     }
-    .btn.primary:hover{filter: brightness(1.03)}
-    .btn.ghost{
-      background: rgba(10,12,15,.35);
-      border-color: rgba(255,255,255,.10);
-      color:var(--text);
-    }
+    .note{margin-top:10px; color:var(--muted2); font-size:12px; line-height:1.45}
 
     /* Grid */
     .grid{
       margin-top:16px;
       display:grid;
-      grid-template-columns: 1.4fr .9fr;
+      grid-template-columns: 1.4fr .8fr;
       gap:14px;
     }
-    @media (max-width: 920px){
-      h1{font-size:34px}
-      .grid{grid-template-columns: 1fr}
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+      h1{font-size:36px}
+      .topbar{position:relative; top:auto}
     }
 
     .card{
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
-      border:1px solid rgba(255,255,255,.08);
-      border-radius: var(--radius);
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
+      border-radius: var(--radius2);
       box-shadow: var(--shadow);
-      padding:14px;
+      overflow:hidden;
     }
-    .card h3{
-      margin:0 0 10px;
-      font-size:13px;
-      color:var(--muted);
-      font-weight:700;
-      letter-spacing:.2px;
+    .card .hd{
+      padding:14px 14px 10px;
+      border-bottom:1px solid var(--stroke);
+      display:flex; align-items:center; justify-content:space-between;
+      gap:10px;
     }
+    .card .hd .title{font-weight:800}
+    .card .bd{padding:14px}
 
-    /* Filters */
-    .filters{
-      display:flex;flex-wrap:wrap;gap:8px;
-      padding:4px 0 10px;
-    }
+    .filters{display:flex; flex-wrap:wrap; gap:8px}
     .chip{
-      padding:7px 10px;border-radius:999px;
-      background: rgba(10,12,15,.30);
-      border:1px solid rgba(255,255,255,.09);
-      color:var(--muted);
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
       font-size:12px;
+      color: rgba(255,255,255,.82);
       cursor:pointer;
       user-select:none;
     }
-    .chip:hover{background: rgba(255,255,255,.05); color:var(--text)}
-    .chip.on{
-      background: rgba(244,164,58,.18);
-      border-color: rgba(244,164,58,.35);
-      color:var(--text);
+    .chip.active{
+      border-color: rgba(243,154,43,.45);
+      background: rgba(243,154,43,.14);
     }
 
-    /* Table */
-    .table{
+    table{
       width:100%;
-      border-collapse:separate;
-      border-spacing:0 10px;
+      border-collapse:collapse;
+      font-size:13px;
     }
-    .row{
-      background: rgba(10,12,15,.30);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
-      overflow:hidden;
-    }
-    .row td{
-      padding:12px 12px;
-      vertical-align:top;
-      border-top:1px solid rgba(255,255,255,.06);
-    }
-    .row tr:first-child td{border-top:none}
-    .table th{
-      text-align:left;
-      padding:0 12px 8px;
-      color:var(--muted2);
-      font-size:11px;
-      font-weight:700;
-      letter-spacing:.25px;
-      text-transform:uppercase;
-    }
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
-    .muted{color:var(--muted)}
-    .small{font-size:12px;line-height:1.35;color:var(--muted)}
-    .payload{color:var(--text); font-size:13px; line-height:1.35}
+    th,td{padding:10px 10px; border-bottom:1px solid rgba(255,255,255,.08); vertical-align:top}
+    th{color:var(--muted2); font-weight:700; text-align:left; font-size:12px; letter-spacing:.2px}
+    .empty{color:var(--muted2); padding:14px; font-size:13px}
+
     .badge{
-      display:inline-flex;align-items:center;gap:6px;
-      padding:6px 10px;border-radius:999px;
-      font-size:12px;font-weight:700;
-      border:1px solid rgba(255,255,255,.12);
-      background: rgba(18,22,28,.55);
-      color:var(--text);
+      display:inline-flex;
+      padding:6px 10px;
+      border-radius:999px;
+      font-size:12px;
+      border:1px solid var(--stroke);
+      background: rgba(255,255,255,.03);
+      color: rgba(255,255,255,.85);
       white-space:nowrap;
     }
-    .b-sent{border-color: rgba(43,214,123,.28); background: rgba(43,214,123,.12)}
-    .b-planned{border-color: rgba(244,164,58,.28); background: rgba(244,164,58,.12)}
-    .b-failed{border-color: rgba(255,90,106,.30); background: rgba(255,90,106,.12)}
-    .b-blocked{border-color: rgba(169,180,194,.20); background: rgba(169,180,194,.10)}
-    .chan{
-      display:inline-flex;align-items:center;gap:8px;
-      font-size:13px;
-      color:var(--text);
-      font-weight:750;
-    }
-    .bullet{
-      width:8px;height:8px;border-radius:99px;
-      background: rgba(255,255,255,.35);
-      box-shadow: 0 0 0 5px rgba(255,255,255,.06);
-    }
-    .c-telegram{background: #39b8ff; box-shadow: 0 0 0 5px rgba(57,184,255,.14)}
-    .c-linkedin{background: #5b7cff; box-shadow: 0 0 0 5px rgba(91,124,255,.14)}
-    .c-email{background: #ffd36a; box-shadow: 0 0 0 5px rgba(255,211,106,.14)}
-    .c-x{background: #cfcfcf; box-shadow: 0 0 0 5px rgba(207,207,207,.12)}
+    .b-ok{border-color: rgba(53,194,122,.45); background: rgba(53,194,122,.12)}
+    .b-warn{border-color: rgba(242,201,76,.45); background: rgba(242,201,76,.12)}
+    .b-bad{border-color: rgba(255,90,106,.45); background: rgba(255,90,106,.12)}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
 
-    /* Doctrine */
-    .stack{display:flex;flex-direction:column;gap:10px}
-    .mini{
-      padding:12px;border-radius:16px;
+    .doctrine .row{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
+      padding:12px 12px;
       border:1px solid rgba(255,255,255,.08);
-      background: rgba(10,12,15,.25);
+      border-radius:14px;
+      background: rgba(255,255,255,.02);
+      margin-bottom:10px;
     }
-    .mini b{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:13px}
-    .mini p{margin:6px 0 0;color:var(--muted);font-size:12px;line-height:1.45}
+    .doctrine .row:last-child{margin-bottom:0}
+    .doctrine .h{font-weight:800; font-size:13px}
+    .doctrine .p{color:var(--muted2); font-size:12px; line-height:1.45; margin-top:4px}
     .count{
-      min-width:34px;
-      display:inline-flex;align-items:center;justify-content:center;
-      padding:4px 10px;border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(18,22,28,.50);
-      color:var(--text);
+      min-width:28px;
+      height:28px;
+      border-radius:10px;
+      border:1px solid var(--stroke);
+      display:grid;
+      place-items:center;
       font-weight:800;
-      font-size:12px;
+      color: rgba(255,255,255,.88);
+      background: rgba(255,255,255,.03);
     }
 
-    /* Footer */
     .footer{
       margin-top:14px;
-      padding:14px 6px;
-      display:flex;align-items:center;justify-content:space-between;
-      color:var(--muted2);
+      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
+      color: var(--muted2);
       font-size:12px;
+      padding: 12px 4px 0;
     }
-    .footer a{color:var(--muted); text-decoration:underline; text-decoration-color: rgba(255,255,255,.18)}
-    .footer a:hover{color:var(--text)}
-    .footlinks{display:flex;gap:12px;flex-wrap:wrap;justify-content:flex-end}
-
-    /* Note */
-    .note{
-      margin-top:10px;
-      color:var(--muted2);
-      font-size:12px;
-    }
+    .footlinks{display:flex; gap:12px; flex-wrap:wrap}
+    .footlinks a{color: rgba(255,255,255,.72); text-decoration:underline; text-underline-offset:3px}
   </style>
 </head>
 
 <body>
-  <div class="topbar">
-    <div class="topbar-inner">
-      <a class="brand" href="/">
-        <div class="mark">⦿</div>
-        <div class="brand-txt">
-          <b>TVEVT</b>
-          <span>Governance Console</span>
-        </div>
+  <div class="wrap">
+
+    <header class="topbar">
+      <a class="brand" href="/?x=1">
+        <span class="mark"><img src="/tvevt-favicon.svg" alt="TVEVT"></span>
+        <span>
+          <div class="t1">TVEVT</div>
+          <div class="t2">Governance Console</div>
+        </span>
       </a>
 
       <nav class="nav" aria-label="Top navigation">
-        <a href="/app.html?x=1">Console</a>
-        <a class="active" href="/log.html?x=1">Log</a>
-
-        <!-- IMPORTANT: Packages must always go to MAIN PAGE pricing section -->
-        <a href="/#pricing">Packages</a>
-
-        <a class="primary" href="https://leads.tvevt.com/?intent=access" target="_blank" rel="noopener">Request Access</a>
+        <a class="pill" href="/app.html?x=1">Console</a>
+        <a class="pill active" href="/log.html?x=1">Log</a>
+        <a class="pill" href="/#pricing">Packages</a>
+        <a class="cta" href="/request-access.html?x=1">Request Access</a>
       </nav>
-    </div>
-  </div>
+    </header>
 
-  <div class="wrap">
-    <section class="hero" aria-label="Execution Log">
+    <section class="hero">
       <div class="kicker"><span class="dot"></span> Immutable record • Proof of execution • Governance surface</div>
       <h1>Execution Log — immutable by design.</h1>
-      <p class="sub">
-        This page demonstrates the doctrine: <b>no deletions</b>, no silent edits — only append.
-        It answers one question that every organization eventually asks:
-        <b>what was executed, where, and when?</b>
+      <p class="lead">
+        This page demonstrates the doctrine: <b>no deletions, no silent edits</b> — only append.
+        It answers one question every organization eventually asks: <b>what was executed, where, and when?</b>
       </p>
 
       <div class="actions">
         <a class="btn primary" href="/app.html?x=1">Open Console</a>
-        <button class="btn" id="btnExport">Export (JSON)</button>
-        <button class="btn" id="btnSeed">Seed demo entries</button>
-        <button class="btn ghost" id="btnReset">Reset demo (local)</button>
+        <button class="btn" id="exportBtn" type="button">Export (JSON)</button>
+        <button class="btn" id="seedBtn" type="button">Seed demo entries</button>
+        <button class="btn" id="resetBtn" type="button">Reset demo (local)</button>
       </div>
 
       <div class="note">
-        Note: this is a UI demo. It stores entries in your browser (localStorage) to simulate immutability.
-        In v1.1 the same logic maps to KV/DB (append-only).
+        Note: this is a UI demo. It stores entries in your browser (<span class="mono">localStorage</span>) to simulate immutability.
+        In v1.1 this maps to KV/DB (append-only) + retention by plan.
       </div>
     </section>
 
     <section class="grid">
-      <div class="card" aria-label="Log table">
-        <h3>Filters</h3>
-
-        <div class="filters" id="filters">
-          <span class="chip on" data-filter="all">All</span>
-          <span class="chip" data-filter="telegram">Telegram</span>
-          <span class="chip" data-filter="linkedin">LinkedIn</span>
-          <span class="chip" data-filter="email">Email</span>
-          <span class="chip" data-filter="x">X</span>
-          <span class="chip" data-filter="sent">Sent</span>
-          <span class="chip" data-filter="planned">Planned</span>
-          <span class="chip" data-filter="failed">Failed</span>
+      <div class="card">
+        <div class="hd">
+          <div class="title">Filters</div>
+          <div class="filters" id="filters"></div>
         </div>
 
-        <table class="table" aria-label="Execution log list">
-          <thead>
-            <tr>
-              <th style="width:170px;">Time</th>
-              <th style="width:190px;">Channel</th>
-              <th>Payload</th>
-              <th style="width:160px;">Status</th>
-            </tr>
-          </thead>
-          <tbody id="tbody">
-            <!-- rows injected -->
-          </tbody>
-        </table>
-      </div>
-
-      <div class="card" aria-label="Doctrine">
-        <h3>Doctrine</h3>
-
-        <div class="stack">
-          <div class="mini">
-            <b>Append-only log <span class="count" id="cAll">0</span></b>
-            <p>Entries can be added. Not removed. Not silently edited.</p>
-          </div>
-
-          <div class="mini">
-            <b>Proof surface <span class="count" id="cSent">0</span></b>
-            <p>Execution becomes verifiable output: channel + time + payload + status.</p>
-          </div>
-
-          <div class="mini">
-            <b>Governance link <span class="count" id="cPlanned">0</span></b>
-            <p>Approvals determine what reaches “sent”. Plans remain “planned”.</p>
-          </div>
-
-          <div class="mini">
-            <b>Audit mindset <span class="count" id="cFailed">0</span></b>
-            <p>In v1.1 this becomes immutable storage + retention by plan.</p>
-          </div>
-
-          <div class="mini">
-            <b>Governance Console <span class="count">v1.1</span></b>
-            <p>Workspace + roles + drafts + approvals + immutable log = sellable control.</p>
-          </div>
-        </div>
-
-        <div style="height:10px"></div>
-
-        <div class="mini">
-          <b>Packages</b>
-          <p>Packages live on the main site. This page only demonstrates the execution proof layer.</p>
-          <div class="actions" style="margin-top:10px">
-            <!-- IMPORTANT: always go to MAIN PAGE pricing -->
-            <a class="btn" href="/#pricing">View Packages</a>
-            <a class="btn primary" href="https://leads.tvevt.com/?intent=access" target="_blank" rel="noopener">Request Access</a>
-          </div>
+        <div class="bd">
+          <table aria-label="Execution log table">
+            <thead>
+              <tr>
+                <th style="width:170px;">TIME</th>
+                <th style="width:110px;">CHANNEL</th>
+                <th>PAYLOAD</th>
+                <th style="width:130px;">STATUS</th>
+              </tr>
+            </thead>
+            <tbody id="tbody">
+              <tr><td colspan="4" class="empty">No entries yet. Click “Seed demo entries”.</td></tr>
+            </tbody>
+          </table>
         </div>
       </div>
+
+      <aside class="card doctrine">
+        <div class="hd">
+          <div class="title">Doctrine</div>
+          <div class="badge mono">v1.1</div>
+        </div>
+        <div class="bd">
+          <div class="row">
+            <div>
+              <div class="h">Append-only log</div>
+              <div class="p">Entries can be added. Not removed. Not silently edited.</div>
+            </div>
+            <div class="count" id="c_all">0</div>
+          </div>
+
+          <div class="row">
+            <div>
+              <div class="h">Proof surface</div>
+              <div class="p">Execution becomes verifiable output: channel + time + payload + status.</div>
+            </div>
+            <div class="count" id="c_sent">0</div>
+          </div>
+
+          <div class="row">
+            <div>
+              <div class="h">Governance link</div>
+              <div class="p">Approvals determine what reaches “sent”. Plans remain “planned”.</div>
+            </div>
+            <div class="count" id="c_planned">0</div>
+          </div>
+
+          <div class="row">
+            <div>
+              <div class="h">Audit mindset</div>
+              <div class="p">In v1.1 this becomes immutable storage + retention by plan.</div>
+            </div>
+            <div class="count" id="c_failed">0</div>
+          </div>
+
+          <div class="row">
+            <div>
+              <div class="h">Governance Console</div>
+              <div class="p">Workspace + roles + drafts + approvals + immutable log = sellable control.</div>
+            </div>
+            <div class="count">✓</div>
+          </div>
+        </div>
+      </aside>
     </section>
 
     <div class="footer">
       <div>© 2026 TVEVT — Governance Console</div>
       <div class="footlinks">
-        <a href="/">Home</a>
+        <a href="/#pricing">Packages</a>
         <a href="/app.html?x=1">Console</a>
         <a href="/log.html?x=1">Log</a>
-        <a href="/#pricing">Packages</a>
-        <a href="https://leads.tvevt.com/?intent=access" target="_blank" rel="noopener">Request Access</a>
+        <a href="/request-access.html?x=1">Request Access</a>
       </div>
     </div>
+
   </div>
 
   <script>
-    // ===== Execution Log demo (local-only) =====
-    const KEY = "tvevt_execution_log_v1_1";
-    let activeFilter = "all";
+    // ===== TVEVT Execution Log (Demo) =====
+    const KEY = "tvevt_execution_log_v1";
+    const filtersEl = document.getElementById("filters");
+    const tbody = document.getElementById("tbody");
 
-    function nowISO(){
-      return new Date().toISOString().slice(0,19) + "Z";
-    }
+    const cAll = document.getElementById("c_all");
+    const cSent = document.getElementById("c_sent");
+    const cPlanned = document.getElementById("c_planned");
+    const cFailed = document.getElementById("c_failed");
+
+    const FILTERS = [
+      { id:"all", label:"All" },
+      { id:"Telegram", label:"Telegram" },
+      { id:"LinkedIn", label:"LinkedIn" },
+      { id:"Email", label:"Email" },
+      { id:"X", label:"X" },
+      { id:"Sent", label:"Sent" },
+      { id:"Planned", label:"Planned" },
+      { id:"Failed", label:"Failed" },
+    ];
+
+    let state = { filter: "all" };
 
     function load(){
       try{
-        return JSON.parse(localStorage.getItem(KEY) || "[]");
+        const raw = localStorage.getItem(KEY);
+        return raw ? JSON.parse(raw) : [];
       }catch(e){
         return [];
       }
@@ -470,58 +409,94 @@
 
     function save(items){
       localStorage.setItem(KEY, JSON.stringify(items));
-      render();
     }
 
-    function append(entry){
-      const items = load();
-      items.unshift(entry); // newest first
-      save(items);
+    function badgeForStatus(s){
+      if(s === "Sent") return `<span class="badge b-ok">${s}</span>`;
+      if(s === "Planned") return `<span class="badge b-warn">${s}</span>`;
+      if(s === "Failed") return `<span class="badge b-bad">${s}</span>`;
+      return `<span class="badge">${s}</span>`;
+    }
+
+    function renderFilters(){
+      filtersEl.innerHTML = FILTERS.map(f => {
+        const active = (state.filter === f.id) ? "active" : "";
+        return `<span class="chip ${active}" data-id="${f.id}">${f.label}</span>`;
+      }).join("");
+
+      filtersEl.querySelectorAll(".chip").forEach(ch => {
+        ch.addEventListener("click", () => {
+          state.filter = ch.getAttribute("data-id");
+          renderFilters();
+          renderTable();
+        });
+      });
+    }
+
+    function applyFilter(items){
+      const f = state.filter;
+      if(f === "all") return items;
+
+      // channel filters
+      if(["Telegram","LinkedIn","Email","X"].includes(f)){
+        return items.filter(x => x.channel === f);
+      }
+      // status filters
+      if(["Sent","Planned","Failed"].includes(f)){
+        return items.filter(x => x.status === f);
+      }
+      return items;
+    }
+
+    function renderCounts(items){
+      cAll.textContent = items.length;
+      cSent.textContent = items.filter(x => x.status === "Sent").length;
+      cPlanned.textContent = items.filter(x => x.status === "Planned").length;
+      cFailed.textContent = items.filter(x => x.status === "Failed").length;
+    }
+
+    function renderTable(){
+      const items = load().sort((a,b) => (b.time||"").localeCompare(a.time||""));
+      renderCounts(items);
+
+      const view = applyFilter(items);
+      if(view.length === 0){
+        tbody.innerHTML = `<tr><td colspan="4" class="empty">No entries match this filter.</td></tr>`;
+        return;
+      }
+
+      tbody.innerHTML = view.map(x => {
+        const payload = (x.payload || "").replaceAll("<","&lt;").replaceAll(">","&gt;");
+        return `
+          <tr>
+            <td class="mono">${x.time || "—"}</td>
+            <td>${x.channel || "—"}</td>
+            <td>${payload || "—"}</td>
+            <td>${badgeForStatus(x.status || "—")}</td>
+          </tr>
+        `;
+      }).join("");
     }
 
     function seed(){
-      const base = [
-        {
-          time: new Date(Date.now()-1000*60*6).toISOString(),
-          channel:"telegram",
-          actor:"owner",
-          payload:"Weekly update: governance console shipping. Console → Log → Packages. No deletions, append-only proof.",
-          status:"sent"
-        },
-        {
-          time: new Date(Date.now()-1000*60*18).toISOString(),
-          channel:"linkedin",
-          actor:"editor",
-          payload:"Announcement draft: First Governance Console for controlled publishing. Awaiting approval.",
-          status:"planned"
-        },
-        {
-          time: new Date(Date.now()-1000*60*40).toISOString(),
-          channel:"email",
-          actor:"approver",
-          payload:"Client note: We can prove what was executed, where, and when — with immutable logging.",
-          status:"planned"
-        },
-        {
-          time: new Date(Date.now()-1000*60*55).toISOString(),
-          channel:"x",
-          actor:"system",
-          payload:"Execution blocked: connector not configured (demo).",
-          status:"failed"
-        }
+      const now = Date.now();
+      const demo = [
+        { time: new Date(now-1000*60*18).toISOString(), channel:"Telegram", payload:"Weekly update: governance console shipping. Console → Log → Packages. No deletions, append-only proof.", status:"Sent" },
+        { time: new Date(now-1000*60*16).toISOString(), channel:"LinkedIn", payload:"Announcement draft: First in the world Governance Console for controlled publishing. Awaiting approval.", status:"Planned" },
+        { time: new Date(now-1000*60*14).toISOString(), channel:"Email", payload:"Client note: we can prove what was executed, where, and when — with immutable logging.", status:"Planned" },
+        { time: new Date(now-1000*60*12).toISOString(), channel:"X", payload:"Execution blocked: connector not configured (demo).", status:"Failed" }
       ];
-      const items = load();
-      if(items.length) return;
-      localStorage.setItem(KEY, JSON.stringify(base));
-      render();
+      const current = load();
+      save(current.concat(demo));
+      renderTable();
     }
 
     function reset(){
       localStorage.removeItem(KEY);
-      render();
+      renderTable();
     }
 
-    function exportJSON(){
+    function exportJson(){
       const items = load();
       const blob = new Blob([JSON.stringify(items, null, 2)], {type:"application/json"});
       const url = URL.createObjectURL(blob);
@@ -534,127 +509,12 @@
       URL.revokeObjectURL(url);
     }
 
-    function matchesFilter(item){
-      if(activeFilter === "all") return true;
+    document.getElementById("seedBtn").addEventListener("click", seed);
+    document.getElementById("resetBtn").addEventListener("click", reset);
+    document.getElementById("exportBtn").addEventListener("click", exportJson);
 
-      // channel filters
-      if(["telegram","linkedin","email","x"].includes(activeFilter)){
-        return item.channel === activeFilter;
-      }
-
-      // status filters
-      if(["sent","planned","failed"].includes(activeFilter)){
-        return item.status === activeFilter;
-      }
-      return true;
-    }
-
-    function badgeFor(status){
-      if(status === "sent") return `<span class="badge b-sent">sent</span>`;
-      if(status === "planned") return `<span class="badge b-planned">planned</span>`;
-      if(status === "failed") return `<span class="badge b-failed">failed</span>`;
-      return `<span class="badge b-blocked">${status}</span>`;
-    }
-
-    function chanDot(channel){
-      if(channel === "telegram") return `<span class="bullet c-telegram"></span>`;
-      if(channel === "linkedin") return `<span class="bullet c-linkedin"></span>`;
-      if(channel === "email") return `<span class="bullet c-email"></span>`;
-      if(channel === "x") return `<span class="bullet c-x"></span>`;
-      return `<span class="bullet"></span>`;
-    }
-
-    function prettyTime(iso){
-      try{
-        const d = new Date(iso);
-        return d.toISOString().replace("T"," ").slice(0,19);
-      }catch(e){
-        return iso || "—";
-      }
-    }
-
-    function render(){
-      const items = load().filter(matchesFilter);
-      const allItems = load();
-
-      // counters
-      const sent = allItems.filter(x=>x.status==="sent").length;
-      const planned = allItems.filter(x=>x.status==="planned").length;
-      const failed = allItems.filter(x=>x.status==="failed").length;
-
-      document.getElementById("cAll").textContent = allItems.length;
-      document.getElementById("cSent").textContent = sent;
-      document.getElementById("cPlanned").textContent = planned;
-      document.getElementById("cFailed").textContent = failed;
-
-      const tbody = document.getElementById("tbody");
-      tbody.innerHTML = "";
-
-      if(items.length === 0){
-        tbody.innerHTML = `
-          <tr class="row">
-            <td class="muted">—</td>
-            <td class="muted">—</td>
-            <td class="small">No entries yet. Click <b>“Seed demo entries”</b>.</td>
-            <td class="muted">—</td>
-          </tr>
-        `;
-        return;
-      }
-
-      for(const it of items){
-        const row = document.createElement("tr");
-        row.className = "row";
-        row.innerHTML = `
-          <td class="mono muted">${prettyTime(it.time)}</td>
-          <td>
-            <div class="chan">
-              ${chanDot(it.channel)}
-              <span style="text-transform:capitalize">${it.channel}</span>
-            </div>
-            <div class="small">by <span class="mono">${it.actor || "—"}</span></div>
-          </td>
-          <td class="payload">${escapeHTML(it.payload || "")}</td>
-          <td>${badgeFor(it.status || "blocked")}</td>
-        `;
-        tbody.appendChild(row);
-      }
-    }
-
-    function escapeHTML(s){
-      return (s||"")
-        .replaceAll("&","&amp;")
-        .replaceAll("<","&lt;")
-        .replaceAll(">","&gt;")
-        .replaceAll('"',"&quot;")
-        .replaceAll("'","&#039;");
-    }
-
-    // filter controls
-    document.getElementById("filters").addEventListener("click", (e)=>{
-      const chip = e.target.closest(".chip");
-      if(!chip) return;
-
-      document.querySelectorAll(".chip").forEach(x=>x.classList.remove("on"));
-      chip.classList.add("on");
-
-      const f = chip.getAttribute("data-filter");
-      activeFilter = f || "all";
-      render();
-    });
-
-    // buttons
-    document.getElementById("btnExport").addEventListener("click", exportJSON);
-    document.getElementById("btnSeed").addEventListener("click", ()=>{
-      if(load().length === 0) seed();
-      else alert("Demo entries already exist (local).");
-    });
-    document.getElementById("btnReset").addEventListener("click", ()=>{
-      if(confirm("Reset local demo log? This clears localStorage only.")) reset();
-    });
-
-    // init
-    render();
+    renderFilters();
+    renderTable();
   </script>
 </body>
 </html>
