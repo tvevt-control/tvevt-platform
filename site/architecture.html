@@ -1,519 +1,402 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>TVEVT — Architecture</title>
-  <meta name="description" content="TVEVT Architecture — Control Layer doctrine, limits, governance, and execution log." />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="dark"/>
 
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg" />
+  <title>TVEVT — Architecture</title>
+  <meta name="description" content="TVEVT Architecture: control layer doctrine, limits, governance surface, enforcement, retention, and execution proof." />
+
+  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg?v=2026-02-25">
+  <link rel="shortcut icon" href="/tvevt-favicon.svg?v=2026-02-25">
+  <meta name="theme-color" content="#0b0d10"/>
 
   <style>
     :root{
-      --bg-0:#0b0c0f;
-      --bg-1:#101218;
-      --bg-2:#141824;
-      --card:#151a24;
-      --card-2:#111521;
-      --stroke:rgba(255,255,255,.08);
-      --stroke-2:rgba(255,255,255,.12);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.65);
-      --muted2:rgba(255,255,255,.52);
-      --accent:#ff8a1e;      /* TVEVT orange */
-      --accent2:#ffb15a;
-      --shadow: 0 18px 55px rgba(0,0,0,.55);
-      --radius:18px;
-      --radius2:14px;
-      --max:1180px;
+      --bg0:#07090c;
+      --bg1:#0b0d10;
+      --stroke: rgba(255,255,255,.12);
+      --text:#eef2f6;
+      --muted: rgba(238,242,246,.72);
+      --muted2: rgba(238,242,246,.56);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --orange1:#ff8a00;
+      --orange2:#ff4d00;
+      --radius: 18px;
     }
-
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
       margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       background:
-        radial-gradient(1200px 600px at 15% -10%, rgba(255,138,30,.12), transparent 60%),
-        radial-gradient(900px 500px at 90% 0%, rgba(255,138,30,.08), transparent 55%),
-        radial-gradient(1000px 700px at 50% 120%, rgba(255,255,255,.06), transparent 60%),
-        linear-gradient(180deg, var(--bg-0), var(--bg-1));
+        radial-gradient(1200px 700px at 15% 10%, rgba(255,138,0,.18), transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, rgba(255,77,0,.12), transparent 60%),
+        radial-gradient(900px 700px at 60% 95%, rgba(255,255,255,.06), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
       overflow-x:hidden;
     }
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:1120px; margin:0 auto; padding:28px 18px 70px; }
 
-    a{color:inherit; text-decoration:none}
-    .wrap{max-width:var(--max); margin:0 auto; padding:0 22px}
-
-    /* Top bar */
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      position:sticky; top:0;
+      padding:16px 0;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index:50;
+    }
     .topbar{
-      position:sticky; top:0; z-index:50;
-      padding:14px 0;
-      backdrop-filter: blur(10px);
-      background: linear-gradient(180deg, rgba(12,13,16,.78), rgba(12,13,16,.40));
-      border-bottom:1px solid rgba(255,255,255,.06);
-    }
-    .nav{
-      display:flex; align-items:center; justify-content:space-between; gap:14px;
-    }
-    .brand{
-      display:flex; align-items:center; gap:12px;
-      padding:10px 12px;
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:999px;
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      width:100%;
+      padding:14px 14px;
+      border:1px solid var(--stroke);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius: 22px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.35);
     }
-    .brand .mark{
-      width:26px; height:26px; border-radius:8px;
+    .brand{ display:flex; align-items:center; gap:12px; min-width:260px; }
+    .mark{
+      width:34px; height:34px;
       display:grid; place-items:center;
-      border:1px solid rgba(255,255,255,.12);
-      background: radial-gradient(circle at 30% 30%, rgba(255,138,30,.35), rgba(255,138,30,.08));
-    }
-    .brand .mark svg{width:16px; height:16px; opacity:.95}
-    .brand .t{
-      display:flex; flex-direction:column; line-height:1.05;
-    }
-    .brand .t b{font-size:14px; letter-spacing:.3px}
-    .brand .t span{font-size:11px; color:var(--muted2)}
-
-    .navlinks{display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end}
-    .pill{
-      display:inline-flex; align-items:center; justify-content:center;
-      height:36px; padding:0 14px;
-      border-radius:999px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
       border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color:rgba(255,255,255,.86);
+    }
+    .word{ display:flex; flex-direction:column; line-height:1.05; }
+    .word b{ font-size:16px; letter-spacing:.7px; }
+    .word span{ font-size:12px; color:var(--muted2); }
+
+    .nav{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius: 999px;
       font-size:13px;
-      transition: all .15s ease;
+      letter-spacing:.2px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
       white-space:nowrap;
     }
-    .pill:hover{border-color:rgba(255,255,255,.18); background:rgba(255,255,255,.05)}
-    .pill.active{
-      border-color:rgba(255,138,30,.40);
-      background: rgba(255,138,30,.10);
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.07);
     }
-    .pill.primary{
-      border-color:rgba(255,138,30,.35);
-      background: linear-gradient(180deg, rgba(255,138,30,.95), rgba(255,138,30,.70));
-      color:#121212;
-      font-weight:700;
-      box-shadow: 0 10px 30px rgba(255,138,30,.15);
+    .btn:active{ transform: translateY(0px); }
+
+    .btn-primary{
+      border:1px solid rgba(255,138,0,.35);
+      background: linear-gradient(135deg, rgba(255,138,0,.95), rgba(255,77,0,.92));
+      color:#1a120a;
+      font-weight:900;
+      box-shadow: 0 14px 40px rgba(255,138,0,.14);
+    }
+    .btn-primary:hover{ box-shadow: 0 18px 60px rgba(255,138,0,.18); }
+
+    .btn-active{
+      border-color: rgba(255,138,0,.35);
+      background: rgba(255,138,0,.10);
     }
 
-    /* Hero */
-    .hero{padding:34px 0 16px}
-    .heroGrid{
-      display:grid; grid-template-columns: 1.2fr .8fr; gap:16px;
-    }
-    .panel{
-      border:1px solid var(--stroke);
+    .hero{
+      margin-top:18px;
       border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
       box-shadow: var(--shadow);
+      padding:26px 22px 18px;
+      position:relative;
+      overflow:hidden;
     }
-    .heroMain{padding:26px 26px 22px}
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 280px at 18% 0%, rgba(255,138,0,.18), transparent 55%),
+        radial-gradient(600px 260px at 78% 10%, rgba(255,77,0,.12), transparent 60%);
+      pointer-events:none;
+      z-index:0;
+    }
+    .hero > *{ position:relative; z-index:1; }
+
     .kicker{
-      display:inline-flex; align-items:center; gap:10px;
-      padding:7px 12px;
+      display:inline-flex; gap:10px; align-items:center;
+      padding:7px 10px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background: rgba(255,255,255,.03);
-      color:rgba(255,255,255,.75);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color:rgba(238,242,246,.78);
       font-size:12px;
     }
     .dot{
-      width:8px; height:8px; border-radius:99px;
-      background: rgba(255,138,30,.9);
-      box-shadow: 0 0 0 4px rgba(255,138,30,.12);
+      width:8px; height:8px; border-radius:50%;
+      background: linear-gradient(135deg, var(--orange1), var(--orange2));
+      box-shadow: 0 10px 30px rgba(255,138,0,.18);
     }
     h1{
-      margin:14px 0 10px;
-      font-size:44px;
-      line-height:1.05;
-      letter-spacing:-.8px;
-    }
-    .sub{
-      margin:0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.55;
-      max-width:62ch;
-    }
-    .heroAside{padding:18px}
-    .asideCard{
-      border:1px solid rgba(255,255,255,.10);
-      border-radius: var(--radius2);
-      background: rgba(0,0,0,.18);
-      padding:14px 14px 12px;
-    }
-    .asideCard + .asideCard{margin-top:10px}
-    .asideCard b{display:block; font-size:13px; margin-bottom:6px}
-    .asideCard p{margin:0; color:var(--muted2); font-size:12.5px; line-height:1.45}
-
-    /* Content sections */
-    .sections{padding:18px 0 40px}
-    .grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
-    .grid1{display:grid; grid-template-columns:1fr; gap:14px}
-    .card{
-      border:1px solid var(--stroke);
-      border-radius: var(--radius);
-      background: linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.015));
-      box-shadow: 0 18px 55px rgba(0,0,0,.35);
-      padding:18px;
-    }
-    .card h2{
-      margin:0 0 10px;
-      font-size:16px;
-      letter-spacing:.2px;
-    }
-    .card p{
-      margin:0;
-      color:var(--muted);
-      font-size:13.5px;
-      line-height:1.55;
-    }
-
-    .list{
       margin:12px 0 0;
-      padding:0;
-      list-style:none;
-      display:grid;
-      gap:10px;
+      font-size:46px;
+      letter-spacing:-1px;
+      line-height:1.05;
+      text-shadow: 0 8px 30px rgba(0,0,0,.55);
     }
-    .li{
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
-      padding:12px 12px;
-      background: rgba(0,0,0,.14);
+    .lead{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.75;
+      max-width: 980px;
     }
-    .li .t{display:flex; align-items:center; justify-content:space-between; gap:12px}
-    .li .t b{font-size:13px}
-    .li .t span{
-      font-size:12px;
-      color:rgba(255,255,255,.70);
-      border:1px solid rgba(255,255,255,.10);
-      padding:4px 10px;
-      border-radius:999px;
-      background: rgba(255,255,255,.03);
-      white-space:nowrap;
-    }
-    .li p{margin:8px 0 0; color:var(--muted2); font-size:12.8px}
 
-    .specTable{
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    .card{
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      padding:14px;
+    }
+    .card b{ display:block; margin-bottom:8px; font-size:14px; }
+    .card p{ margin:0; color:var(--muted); font-size:13px; line-height:1.65; }
+    .list{
+      margin:10px 0 0;
+      padding-left:18px;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.75;
+    }
+    .table{
       width:100%;
       border-collapse:separate;
       border-spacing:0;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
       background: rgba(0,0,0,.14);
       margin-top:12px;
     }
-    .specTable th,
-    .specTable td{
+    .table th, .table td{
       padding:12px 12px;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      font-size:12.8px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
       vertical-align:top;
+      font-size:13px;
     }
-    .specTable th{
+    .table th{
       text-align:left;
-      color:rgba(255,255,255,.82);
-      font-weight:700;
-      background: rgba(255,255,255,.03);
+      color: rgba(238,242,246,.70);
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      background: rgba(255,255,255,.04);
     }
-    .specTable tr:last-child td{border-bottom:none}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    .table tr:last-child td{ border-bottom:none; }
 
-    .callout{
-      border:1px solid rgba(255,138,30,.22);
-      background: rgba(255,138,30,.08);
-      border-radius: var(--radius);
-      padding:14px 14px;
-      margin-top:12px;
-    }
-    .callout b{display:block; margin-bottom:6px}
-    .callout p{margin:0; color:rgba(255,255,255,.78)}
-
-    /* Footer */
-    .footer{
-      padding:18px 0 28px;
-      color:rgba(255,255,255,.55);
+    footer{
+      margin-top:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      color:rgba(238,242,246,.52);
       font-size:12px;
+      padding:18px 6px 0;
     }
-    .footerRow{
-      display:flex; align-items:center; justify-content:space-between; gap:10px;
-      border-top:1px solid rgba(255,255,255,.08);
-      padding-top:14px;
-      flex-wrap:wrap;
-    }
-    .footLinks{display:flex; gap:12px; flex-wrap:wrap}
-    .footLinks a{color:rgba(255,255,255,.62)}
-    .footLinks a:hover{color:rgba(255,255,255,.85)}
+    .footlinks{ display:flex; gap:12px; flex-wrap:wrap; }
+    .footlinks a{ color:rgba(238,242,246,.62); text-decoration:underline; text-underline-offset:3px; }
+    .footlinks a:hover{ color:rgba(255,200,140,.95); }
 
-    @media (max-width: 960px){
-      .heroGrid{grid-template-columns:1fr}
-      h1{font-size:38px}
-    }
-    @media (max-width: 520px){
-      h1{font-size:32px}
-      .navlinks{gap:8px}
-      .pill{height:34px; padding:0 12px}
+    @media (max-width: 980px){
+      h1{ font-size:36px; }
+      .grid{ grid-template-columns: 1fr; }
+      .brand{ min-width:0; }
     }
   </style>
 </head>
 
 <body>
-  <header class="topbar">
-    <div class="wrap">
-      <div class="nav">
-        <a class="brand" href="/index.html">
-          <span class="mark" aria-hidden="true">
-            <!-- simple icon -->
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M7 7h10v10H7z" stroke="rgba(255,255,255,.85)" stroke-width="1.6" />
-              <path d="M9 12h6" stroke="rgba(255,138,30,.9)" stroke-width="1.8" stroke-linecap="round"/>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <a class="brand" href="/index.html" aria-label="TVEVT Home">
+          <div class="mark" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="22" height="22">
+              <defs>
+                <linearGradient id="tvevtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ff8a00"/>
+                  <stop offset="100%" stop-color="#ff4d00"/>
+                </linearGradient>
+              </defs>
+              <rect x="20" y="25" width="65" height="50" rx="14" fill="none" stroke="url(#tvevtGradient)" stroke-width="6"/>
+              <rect x="45" y="40" width="65" height="50" rx="14" fill="none" stroke="url(#tvevtGradient)" stroke-width="6"/>
+              <polygon points="30,75 42,75 32,90" fill="url(#tvevtGradient)"/>
             </svg>
-          </span>
-          <span class="t">
+          </div>
+          <div class="word">
             <b>TVEVT</b>
             <span>Influence Infrastructure</span>
-          </span>
+          </div>
         </a>
 
-        <nav class="navlinks">
-          <a class="pill" href="/index.html#pricing">Packages</a>
-          <a class="pill active" href="/architecture.html">Architecture</a>
-          <a class="pill" href="/app.html?x=1">Console</a>
-          <a class="pill" href="/log.html?x=1">Execution Log</a>
-          <a class="pill primary" href="/request-access.html?x=1">Request Access</a>
+        <nav class="nav" aria-label="Top navigation">
+          <a class="btn" href="/index.html#pricing">Packages</a>
+          <a class="btn btn-active" href="/architecture.html">Architecture</a>
+          <a class="btn" href="/about.html">About</a>
+          <a class="btn" href="/call.html">Book a Call</a>
+          <a class="btn" href="/app.html?x=1">Console</a>
+          <a class="btn" href="/log.html?x=1">Log</a>
+          <a class="btn btn-primary" href="https://leads.tvevt.com/?intent=access" target="_blank" rel="noopener">Request Access</a>
         </nav>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <main>
-    <section class="hero">
-      <div class="wrap">
-        <div class="heroGrid">
-          <div class="panel heroMain">
-            <div class="kicker"><span class="dot"></span> Control Layer doctrine • limits • governance surface</div>
-            <h1>Architecture — the control layer.</h1>
-            <p class="sub">
-              TVEVT is not a posting tool. It is infrastructure for signal governance and distribution authority:
-              <span class="mono">Draft → Governance → Execution Immutable Log</span>.
-              This page defines what the system is, what it enforces, and what “proof” means in v1.
+    <main>
+      <section class="hero">
+        <span class="kicker"><span class="dot"></span> Control Layer doctrine • limits • governance surface</span>
+        <h1>Architecture — the control layer.</h1>
+        <p class="lead">
+          TVEVT is not a posting tool. It is infrastructure for signal governance and distribution authority:
+          <b>Draft → Governance → Execution Immutable Log</b>.
+          This page defines what the system is, what it enforces, and what “proof” means in v1.
+        </p>
+
+        <div class="grid">
+          <div class="card">
+            <b>Canonical doctrine</b>
+            <p>
+              The Signal Journey is the product: drafting discipline, governance gates, and immutable execution proof.
+              Anything that bypasses governance is “noise”, not infrastructure.
             </p>
-
-            <div class="callout">
-              <b>Canonical doctrine</b>
-              <p>
-                The Signal Journey is the product: drafting discipline, governance gates, and immutable execution proof.
-                Anything that bypasses governance is “noise”, not infrastructure.
-              </p>
-            </div>
           </div>
-
-          <div class="panel heroAside">
-            <div class="asideCard">
-              <b>Infrastructure (not UX)</b>
-              <p>Rules, approvals, retention, auditability. UX is the interface; control is the product.</p>
-            </div>
-            <div class="asideCard">
-              <b>Embedded AI (operational)</b>
-              <p>AI strengthens preparation and policy checks. Not decoration. Not “auto-posting”.</p>
-            </div>
-            <div class="asideCard">
-              <b>Immutable execution log</b>
-              <p>A verifiable record: who executed what, where, and when — as a permanent standard.</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section class="sections">
-      <div class="wrap">
-
-        <div class="grid2">
           <div class="card">
-            <h2>1) The Signal Journey</h2>
-            <p>Every output travels through three surfaces. This is the system boundary.</p>
-
+            <b>Three pillars</b>
             <ul class="list">
-              <li class="li">
-                <div class="t"><b>Drafting</b><span>Preparation</span></div>
-                <p>Message creation, tone discipline, channel-ready variants, and deterministic formatting rules.</p>
-              </li>
-              <li class="li">
-                <div class="t"><b>Governance</b><span>Enforcement</span></div>
-                <p>Approvals, policies, role gates, and plan-based controls before anything can be executed.</p>
-              </li>
-              <li class="li">
-                <div class="t"><b>Execution Log</b><span>Proof</span></div>
-                <p>Append-only proof surface: channel + time + payload + status. No silent edits.</p>
-              </li>
-            </ul>
-          </div>
-
-          <div class="card">
-            <h2>2) What “Governance Console” means</h2>
-            <p>Governance is a control plane for authority: who can publish, what goes out, when and where.</p>
-
-            <table class="specTable">
-              <thead>
-                <tr>
-                  <th style="width:34%">Control surface</th>
-                  <th>What it enforces</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><b>Roles & permissions</b></td>
-                  <td>Owner / Editor / Approver gates. Prevents accidental or unauthorized output.</td>
-                </tr>
-                <tr>
-                  <td><b>Approvals</b></td>
-                  <td>Single-step or multi-step approvals (by tier). Nothing goes out without passing gates.</td>
-                </tr>
-                <tr>
-                  <td><b>Execution rules</b></td>
-                  <td>Channel constraints, allowed formats, scheduling windows, and policy checks.</td>
-                </tr>
-                <tr>
-                  <td><b>Retention & proof</b></td>
-                  <td>Immutable log retention by plan. Auditability becomes an infrastructure standard.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="grid2" style="margin-top:14px;">
-          <div class="card">
-            <h2>3) Package limits (conceptual)</h2>
-            <p>Operational tiers scale execution volume; strategic tiers scale enforcement, retention, and institutional control.</p>
-
-            <table class="specTable">
-              <thead>
-                <tr>
-                  <th style="width:30%">Plan class</th>
-                  <th>Primary scaling axis</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><b>Operational (monthly)</b></td>
-                  <td>Executions / AI credits / connectors / log retention depth.</td>
-                </tr>
-                <tr>
-                  <td><b>Strategic (annual)</b></td>
-                  <td>Enforcement, cross-channel consistency, longer retention, governance depth, enterprise controls.</td>
-                </tr>
-                <tr>
-                  <td><b>Enterprise+</b></td>
-                  <td>SSO/SCIM, SLA, dedicated support, extended proof surface, custom policy layer.</td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div class="callout">
-              <b>Overage doctrine</b>
-              <p>
-                Extra executions are billed ($1–$2 by tier). AI credits in packs ($20 / 100). Smart upgrade triggers when overage exceeds plan delta.
-              </p>
-            </div>
-          </div>
-
-          <div class="card">
-            <h2>4) Execution Log — what makes it “proof”</h2>
-            <p>The log becomes a verifiable record only if entries are append-only and tied to governance state.</p>
-
-            <ul class="list">
-              <li class="li">
-                <div class="t"><b>Append-only</b><span>Immutability</span></div>
-                <p>Entries can be added, not removed. No silent edits. This creates institutional trust.</p>
-              </li>
-              <li class="li">
-                <div class="t"><b>Proof surface</b><span>Verification</span></div>
-                <p>Execution becomes verifiable: <span class="mono">output channel + time + payload + status</span>.</p>
-              </li>
-              <li class="li">
-                <div class="t"><b>Governance link</b><span>Accountability</span></div>
-                <p>Approvals determine what reaches “sent”. Plans can remain “planned”. Failures remain recorded.</p>
-              </li>
-              <li class="li">
-                <div class="t"><b>Audit mindset</b><span>Retention</span></div>
-                <p>In v1.1 this maps to KV/DB (append-only) with retention by plan.</p>
-              </li>
+              <li><b>Infrastructure (not UX):</b> control is the product.</li>
+              <li><b>Embedded AI (operational):</b> preparation + policy checks (not “auto-posting”).</li>
+              <li><b>Immutable execution log:</b> proof of what happened, where and when.</li>
             </ul>
           </div>
         </div>
+      </section>
 
-        <div class="grid1" style="margin-top:14px;">
-          <div class="card">
-            <h2>5) Navigation rules</h2>
-            <p>So users never get lost and you never have “old vs new” chaos again.</p>
+      <section class="hero" style="margin-top:14px;">
+        <span class="kicker"><span class="dot"></span> System boundary</span>
+        <h1 style="font-size:28px; letter-spacing:-.4px;">1) The Signal Journey</h1>
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:22%;">Surface</th>
+              <th>What it is</th>
+              <th style="width:26%;">Output</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Drafting</b></td>
+              <td>Message creation, tone discipline, channel-ready variants, deterministic formatting rules.</td>
+              <td>Prepared payload variants</td>
+            </tr>
+            <tr>
+              <td><b>Governance</b></td>
+              <td>Approvals, policies, role gates, and plan-based controls before anything can be executed.</td>
+              <td>Authorized release</td>
+            </tr>
+            <tr>
+              <td><b>Execution Log</b></td>
+              <td>Append-only proof: channel + time + payload + status. No silent edits, no deletions.</td>
+              <td>Immutable record</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
 
-            <table class="specTable">
-              <thead>
-                <tr>
-                  <th style="width:34%">Button</th>
-                  <th>Always goes to</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><b>Packages</b></td>
-                  <td><span class="mono">/index.html#pricing</span> (the main site pricing section)</td>
-                </tr>
-                <tr>
-                  <td><b>Architecture</b></td>
-                  <td><span class="mono">/architecture.html</span></td>
-                </tr>
-                <tr>
-                  <td><b>Console</b></td>
-                  <td><span class="mono">/app.html?x=1</span></td>
-                </tr>
-                <tr>
-                  <td><b>Execution Log</b></td>
-                  <td><span class="mono">/log.html?x=1</span></td>
-                </tr>
-                <tr>
-                  <td><b>Request Access</b></td>
-                  <td><span class="mono">/request-access.html?x=1</span></td>
-                </tr>
-              </tbody>
-            </table>
+      <section class="hero" style="margin-top:14px;">
+        <span class="kicker"><span class="dot"></span> Product mechanics</span>
+        <h1 style="font-size:28px; letter-spacing:-.4px;">2) What “Governance Console” means</h1>
 
-            <div class="callout">
-              <b>Important</b>
-              <p>
-                We do not link to <span class="mono">leads.tvevt.com</span> from the platform site anymore.
-                That prevents “old vs new” split-brain navigation.
-              </p>
-            </div>
-          </div>
+        <table class="table">
+          <thead>
+            <tr>
+              <th style="width:30%;">Control surface</th>
+              <th>What it enforces</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><b>Roles & permissions</b></td>
+              <td>Owner / Editor / Approver gates. Prevent accidental or unauthorized output.</td>
+            </tr>
+            <tr>
+              <td><b>Approvals</b></td>
+              <td>Single-step or multi-step approvals (by tier). Nothing goes out without passing gates.</td>
+            </tr>
+            <tr>
+              <td><b>Execution rules</b></td>
+              <td>Channel constraints, allowed formats, scheduling windows, and policy checks.</td>
+            </tr>
+            <tr>
+              <td><b>Retention & proof</b></td>
+              <td>Immutable log retention by plan. Auditability becomes a product property.</td>
+            </tr>
+            <tr>
+              <td><b>Connectors</b></td>
+              <td>Per-channel integration + enforcement. “Can publish” is a permissioned capability.</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section class="hero" style="margin-top:14px;">
+        <span class="kicker"><span class="dot"></span> Limits by tier</span>
+        <h1 style="font-size:28px; letter-spacing:-.4px;">3) Limits model (v1)</h1>
+        <p class="lead">
+          Limits are not pricing decoration. They are governance boundaries: executions, approvals, retention, connectors, storage, API/webhooks.
+        </p>
+        <div class="card" style="margin-top:12px;">
+          <b>Limits that matter</b>
+          <ul class="list">
+            <li><b>Executions/mo</b> (append-only log entries)</li>
+            <li><b>AI credits</b> (variant generation / policy checks)</li>
+            <li><b>Approval depth</b> (1-step / 2-step / multi-level)</li>
+            <li><b>Log retention</b> (30d → 7y)</li>
+            <li><b>Connectors</b> (channel integrations)</li>
+            <li><b>API/Webhooks</b> (read → write; enforcement hooks)</li>
+            <li><b>SSO/SCIM</b> and <b>SLA</b> (enterprise governance)</li>
+          </ul>
         </div>
+      </section>
 
-        <div class="footer">
-          <div class="wrap">
-            <div class="footerRow">
-              <div>© 2026 TVEVT — Architecture</div>
-              <div class="footLinks">
-                <a href="/index.html#pricing">Packages</a>
-                <a href="/about.html">About</a>
-                <a href="/call.html">Book a Call</a>
-                <a href="/request-access.html?x=1">Request Access</a>
-              </div>
-            </div>
-          </div>
+      <footer>
+        <div>©️ 2026 TVEVT — Influence Infrastructure</div>
+        <div class="footlinks">
+          <a href="/index.html#pricing">Packages</a>
+          <a href="/architecture.html">Architecture</a>
+          <a href="/about.html">About</a>
+          <a href="/call.html">Call</a>
+          <a href="/app.html?x=1">Console</a>
+          <a href="/log.html?x=1">Log</a>
         </div>
-
-      </div>
-    </section>
-  </main>
+      </footer>
+    </main>
+  </div>
 </body>
 </html>
