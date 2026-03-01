@@ -1,19 +1,348 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="robots" content="noindex,nofollow" />
-  <meta http-equiv="refresh" content="0; url=https://leads.tvevt.com/?intent=access" />
-  <title>Redirecting…</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="dark"/>
+
+  <title>TVEVT — Request Access</title>
+  <meta name="description" content="Request access to TVEVT — First in the world Governance Console." />
+
+  <!-- Canon favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/brand/tvevt-favicon.svg?v=2026-03-01">
+  <link rel="shortcut icon" href="/assets/brand/tvevt-favicon.svg?v=2026-03-01">
+  <meta name="theme-color" content="#0b0d10"/>
+
+  <style>
+    :root{
+      --bg0:#07090c;
+      --bg1:#0b0d10;
+      --stroke: rgba(255,255,255,.12);
+      --text:#eef2f6;
+      --muted: rgba(238,242,246,.72);
+      --muted2: rgba(238,242,246,.56);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --orange1:#ff8a00;
+      --orange2:#ff4d00;
+      --radius: 18px;
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(255,138,0,.18), transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, rgba(255,77,0,.12), transparent 60%),
+        radial-gradient(900px 700px at 60% 95%, rgba(255,255,255,.06), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+
+    /* Nav is injected by /assets/nav.js */
+    .wrap{ max-width:1120px; margin:0 auto; padding:18px 18px 70px; }
+
+    .hero{
+      margin-top:18px;
+      border-radius: var(--radius);
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding:26px 22px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 280px at 18% 0%, rgba(255,138,0,.18), transparent 55%),
+        radial-gradient(600px 260px at 78% 10%, rgba(255,77,0,.12), transparent 60%);
+      pointer-events:none;
+      z-index:0;
+    }
+    .hero > *{ position:relative; z-index:1; }
+
+    .kicker{
+      display:inline-flex; gap:10px; align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color:rgba(238,242,246,.78);
+      font-size:12px;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: linear-gradient(135deg, var(--orange1), var(--orange2));
+      box-shadow: 0 10px 30px rgba(255,138,0,.18);
+    }
+    h1{
+      margin:12px 0 0;
+      font-size:46px;
+      letter-spacing:-1px;
+      line-height:1.05;
+      text-shadow: 0 8px 30px rgba(0,0,0,.55);
+    }
+    .lead{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.75;
+      max-width: 980px;
+    }
+
+    .grid{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:14px;
+      align-items:stretch;
+    }
+    .card{
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      padding:16px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.22);
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:16px;
+      letter-spacing:.2px;
+    }
+    .muted{ color: var(--muted); }
+    .list{
+      margin:10px 0 0;
+      padding-left:18px;
+      color: var(--muted);
+      font-size:13px;
+      line-height:1.75;
+    }
+    .list li{ margin:7px 0; }
+
+    .form{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    label{ font-size:12px; color:var(--muted); display:block; margin: 0 0 6px; }
+    input, select, textarea{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      color: var(--text);
+      padding:10px 12px;
+      outline:none;
+    }
+    textarea{ min-height: 120px; resize: vertical; grid-column: 1 / -1; }
+    .full{ grid-column: 1 / -1; }
+
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius: 999px;
+      font-size:13px;
+      letter-spacing:.2px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.07);
+    }
+    .btn-primary{
+      border:1px solid rgba(255,138,0,.35);
+      background: linear-gradient(135deg, rgba(255,138,0,.95), rgba(255,77,0,.92));
+      color:#1a120a;
+      font-weight:900;
+      box-shadow: 0 14px 40px rgba(255,138,0,.14);
+    }
+    .btn-primary:hover{ box-shadow: 0 18px 60px rgba(255,138,0,.18); }
+
+    .actions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:12px;
+      align-items:center;
+    }
+    .ok{
+      display:none;
+      margin-top:12px;
+      border:1px solid rgba(255,138,0,.22);
+      background: rgba(255,138,0,.06);
+      border-radius: 14px;
+      padding:12px;
+      color: var(--muted);
+      font-size:13px;
+    }
+
+    footer{
+      margin-top:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      color:rgba(238,242,246,.52);
+      font-size:12px;
+      padding:18px 6px 0;
+    }
+    .footlinks{ display:flex; gap:12px; flex-wrap:wrap; }
+    .footlinks a{ color:rgba(238,242,246,.62); text-decoration:underline; text-underline-offset:3px; }
+    .footlinks a:hover{ color:rgba(255,200,140,.95); }
+
+    @media (max-width: 980px){
+      h1{ font-size:36px; }
+      .grid{ grid-template-columns: 1fr; }
+      .form{ grid-template-columns: 1fr; }
+    }
+  </style>
 </head>
+
 <body>
+  <div class="wrap">
+    <main>
+      <section class="hero">
+        <span class="kicker"><span class="dot"></span> Request Access • governance-first onboarding</span>
+        <h1>Request Access.</h1>
+        <p class="lead">
+          TVEVT is the first in the world <b>Governance Console</b> — infrastructure for Strategic Signal Control &amp; Distribution.
+          Submit your details and we’ll route you to the correct onboarding path.
+        </p>
+        <p class="lead" id="planLine" style="display:none;"><b>Selected plan:</b> <span id="planValue"></span></p>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <h2>What happens next</h2>
+          <p class="muted" style="margin:0;">
+            We review your request, confirm governance requirements, and recommend the correct rollout:
+            workspaces, roles, approvals, retention, and connectors.
+          </p>
+          <ul class="list">
+            <li><b>Response:</b> as soon as possible (manual review)</li>
+            <li><b>Outcome:</b> access path + package alignment</li>
+            <li><b>We never ask:</b> passwords or channel credentials here</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>Access request</h2>
+          <p class="muted" style="margin:0;">
+            This form submits to our intake endpoint and redirects you to a confirmation page.
+          </p>
+
+          <form id="leadForm" class="form" method="post" action="https://leads.tvevt.com/submit">
+            <input type="hidden" name="intent" id="intent" value="access"/>
+            <input type="hidden" name="plan" id="plan" value=""/>
+            <input type="hidden" name="source" id="source" value=""/>
+
+            <div>
+              <label for="name">Full name</label>
+              <input id="name" name="name" placeholder="Your name" />
+            </div>
+
+            <div>
+              <label for="email">Work email *</label>
+              <input id="email" name="email" placeholder="name@company.com" required />
+            </div>
+
+            <div class="full">
+              <label for="company">Company / organization</label>
+              <input id="company" name="company" placeholder="Company / organization" />
+            </div>
+
+            <div>
+              <label for="role">Role</label>
+              <select id="role" name="role">
+                <option>Owner / Founder</option>
+                <option>CEO / President</option>
+                <option>COO / Ops</option>
+                <option>CMO / Marketing</option>
+                <option>Head of Comms / PR</option>
+                <option>IR / Investor Relations</option>
+                <option>Legal / Compliance</option>
+                <option>Security / IT</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div>
+              <label for="planSelect">Package interest</label>
+              <select id="planSelect" name="planSelect">
+                <option value="">Not sure</option>
+                <option>Foundation</option>
+                <option>Control</option>
+                <option>Scale</option>
+                <option>Tier I</option>
+                <option>Tier II</option>
+                <option>Tier III</option>
+                <option>Enterprise</option>
+              </select>
+            </div>
+
+            <textarea id="notes" name="notes" placeholder="What are you controlling? (channels, approvals, risks, workflows)"></textarea>
+
+            <div class="actions full">
+              <button type="submit" class="btn btn-primary">Submit request</button>
+              <a class="btn" href="/index.html#pricing">View Packages</a>
+            </div>
+
+            <div class="ok full" id="okBox">Sending…</div>
+          </form>
+        </div>
+      </section>
+
+      <footer>
+        <div>©️ 2026 TVEVT — Governance Console</div>
+        <div class="footlinks">
+          <a href="/index.html#pricing">Packages</a>
+          <a href="/architecture.html">Architecture</a>
+          <a href="/about.html">About</a>
+          <a href="/call.html">Call</a>
+          <a href="/app.html?x=1">Console</a>
+          <a href="/log.html?x=1">Log</a>
+          <a href="/request-access.html?intent=access">Request Access</a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
   <script>
-    window.location.replace("https://leads.tvevt.com/?intent=access");
+    (function(){
+      const qs = new URLSearchParams(location.search);
+      const intent = (qs.get("intent") || "access").toString();
+      const plan = (qs.get("plan") || "").toString();
+
+      document.getElementById("intent").value = intent;
+      document.getElementById("plan").value = plan;
+      document.getElementById("source").value = location.href;
+
+      if(plan){
+        document.getElementById("planValue").textContent = plan;
+        document.getElementById("planLine").style.display = "block";
+      }
+
+      const form = document.getElementById("leadForm");
+      const ok = document.getElementById("okBox");
+      form.addEventListener("submit", () => { ok.style.display = "block"; });
+    })();
   </script>
-  <p>
-    Redirecting to Request Access…
-    <a href="https://leads.tvevt.com/?intent=access">Continue</a>
-  </p>
+
+  <!-- Canon shared nav injector -->
+  <script src="/assets/nav.js?v=2026-03-01" defer></script>
 </body>
 </html>
