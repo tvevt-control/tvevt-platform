@@ -6,10 +6,11 @@
   <meta name="color-scheme" content="dark"/>
 
   <title>TVEVT — Influence Infrastructure</title>
-  <meta name="description" content="TVEVT is influence infrastructure: a centralized control layer for strategic signal orchestration across channels, with embedded AI for content preparation and signal governance." />
+  <meta name="description" content="TVEVT is influence infrastructure: a centralized control layer for strategic signal signal orchestration across channels, with embedded AI for content preparation and signal governance." />
 
-  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg?v=2026-02-25">
-  <link rel="shortcut icon" href="/tvevt-favicon.svg?v=2026-02-25">
+  <!-- Brand assets (canonical) -->
+  <link rel="icon" type="image/svg+xml" href="/assets/brand/tvevt-favicon.svg?v=2026-03-01">
+  <link rel="shortcut icon" href="/assets/brand/tvevt-favicon.svg?v=2026-03-01">
   <meta name="theme-color" content="#0b0d10"/>
 
   <meta property="og:title" content="TVEVT — Influence Infrastructure"/>
@@ -44,41 +45,13 @@
       overflow-x:hidden;
     }
     a{ color:inherit; text-decoration:none; }
+
+    /* NOTE:
+      Header/Nav is injected by /assets/nav.js.
+      This page intentionally does NOT render its own header.
+    */
+
     .wrap{ max-width:1120px; margin:0 auto; padding:28px 18px 70px; }
-
-    /* header */
-    header{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:14px;
-      position:sticky; top:0;
-      padding:16px 0;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      z-index:50;
-    }
-    .topbar{
-      display:flex; align-items:center; justify-content:space-between;
-      gap:14px;
-      width:100%;
-      padding:14px 14px;
-      border:1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border-radius: 22px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.35);
-    }
-    .brand{ display:flex; align-items:center; gap:12px; min-width:260px; }
-    .mark{
-      width:34px; height:34px;
-      display:grid; place-items:center;
-      border-radius: 12px;
-      background: rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.10);
-    }
-    .word{ display:flex; flex-direction:column; line-height:1.05; }
-    .word b{ font-size:16px; letter-spacing:.7px; }
-    .word span{ font-size:12px; color:var(--muted2); }
-
-    .nav{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
 
     .btn{
       appearance:none;
@@ -406,47 +379,12 @@
       .grid4{ grid-template-columns: 1fr; }
       .journeyGrid{ grid-template-columns: 1fr; }
       .arrow{ display:none; }
-      .brand{ min-width: 0; }
     }
   </style>
 </head>
 
 <body>
   <div class="wrap">
-    <header>
-      <div class="topbar">
-        <a class="brand" href="/index.html" aria-label="TVEVT Home">
-          <div class="mark" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="22" height="22">
-              <defs>
-                <linearGradient id="tvevtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#ff8a00"/>
-                  <stop offset="100%" stop-color="#ff4d00"/>
-                </linearGradient>
-              </defs>
-              <rect x="20" y="25" width="65" height="50" rx="14" fill="none" stroke="url(#tvevtGradient)" stroke-width="6"/>
-              <rect x="45" y="40" width="65" height="50" rx="14" fill="none" stroke="url(#tvevtGradient)" stroke-width="6"/>
-              <polygon points="30,75 42,75 32,90" fill="url(#tvevtGradient)"/>
-            </svg>
-          </div>
-          <div class="word">
-            <b>TVEVT</b>
-            <span>Influence Infrastructure</span>
-          </div>
-        </a>
-
-        <nav class="nav" aria-label="Top navigation">
-          <a class="btn btn-ghost" href="#pricing">Packages</a>
-          <a class="btn btn-ghost" href="/architecture.html">Architecture</a>
-          <a class="btn btn-ghost" href="/about.html">About</a>
-          <a class="btn btn-ghost" href="/call.html">Book a Call</a>
-          <a class="btn btn-ghost" href="/app.html?x=1">Console</a>
-          <a class="btn btn-ghost" href="/log.html?x=1">Log</a>
-          <a class="btn btn-primary" href="/request-access.html?x=1">Request Access</a>
-        </nav>
-      </div>
-    </header>
-
     <main>
       <section class="hero" aria-label="Hero">
         <div class="hero-grid">
@@ -696,6 +634,8 @@
       });
     });
   </script>
+
+  <!-- Shared nav injection (canonical) -->
   <script src="/assets/nav.js?v=2026-03-01" defer></script>
 </body>
 </html>
