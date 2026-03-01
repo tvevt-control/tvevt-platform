@@ -1,87 +1,128 @@
 /* TVEVT shared navigation injector
    Canon v2026-03-01
-   Single source of truth: /assets/nav.js
-   Canonical Request Access: https://leads.tvevt.com/?intent=access
-   Brand assets: /assets/brand/
+   - Single nav injected from /assets/nav.js
+   - Canonical Request Access: https://leads.tvevt.com/?intent=access
+   - Brand assets from /assets/brand/
+   - Safety: rewrites ANY legacy /request-access links + forces same-tab behavior
 */
 
 (() => {
   const CANON = {
     requestAccess: "https://leads.tvevt.com/?intent=access",
     links: [
-      { key: "packages", label: "Packages", href: "/index.html#pricing" },
-      { key: "architecture", label: "Architecture", href: "/architecture.html" },
-      { key: "about", label: "About", href: "/about.html" },
-      { key: "call", label: "Book a Call", href: "/call.html" },
-      { key: "console", label: "Console", href: "/app.html?x=1" },
-      { key: "log", label: "Log", href: "/log.html?x=1" },
+      { label: "Packages", href: "/index.html#pricing" },
+      { label: "Architecture", href: "/architecture.html" },
+      { label: "About", href: "/about.html" },
+      { label: "Book a Call", href: "/call.html" },
+      { label: "Console", href: "/app.html?x=1" },
+      { label: "Log", href: "/log.html?x=1" },
     ],
   };
 
-  // ---------- 1) Canonicalize ANY legacy Request Access links on the page ----------
+  // Helper: build canonical access URL and optionally preserve ?plan=...
+  function buildAccessUrlFromOldHref(oldHref) {
+    try {
+      const u = new URL(oldHref, window.location.origin);
+      const plan = u.searchParams.get("plan");
+
+      const canon = new URL(CANON.requestAccess);
+      if (plan) canon.searchParams.set("plan", plan);
+
+      return canon.toString();
+    } catch (e) {
+      return CANON.requestAccess;
+    }
+  }
+
+  // Rewrite ALL request-access links on the page to canonical
+  // + force same-tab behavior (remove target/_blank, rel, onclick)
   function canonicalizeAccessLinks(root = document) {
     const anchors = root.querySelectorAll("a[href]");
     anchors.forEach((a) => {
       const href = (a.getAttribute("href") || "").trim();
       if (!href) return;
 
-      const h = href.toLowerCase();
+      const normalized = href.toLowerCase();
 
-      // Legacy patterns we want to eliminate forever
       const isLegacy =
-        h === "/request-access" ||
-        h === "/request-access.html" ||
-        h.startsWith("/request-access?") ||
-        h.startsWith("/request-access.html?") ||
-        h === "request-access" ||
-        h === "request-access.html" ||
-        h.startsWith("request-access?") ||
-        h.startsWith("request-access.html?");
+        normalized.includes("/request-access") ||
+        normalized.includes("request-access.html") ||
+        normalized === "request-access" ||
+        normalized === "request-access.html";
 
-      if (!isLegacy) return;
+      const isCanon =
+        normalized.startsWith(CANON.requestAccess.toLowerCase());
 
-      // Replace with canonical external URL
-      a.setAttribute("href", CANON.requestAccess);
-      // Keep same-tab behavior (canonical). If you want new tab, set target manually in nav only.
-      a.removeAttribute("target");
-      a.removeAttribute("rel");
+      // If it’s the canonical URL OR legacy path -> enforce canonical + same-tab
+      if (isCanon || isLegacy) {
+        // Set canonical URL (preserve ?plan= if legacy had it)
+        a.setAttribute("href", isCanon ? CANON.requestAccess : buildAccessUrlFromOldHref(href));
+
+        // FORCE same-tab behavior (this is what fixes About opening a new tab)
+        a.removeAttribute("target");
+        a.removeAttribute("rel");
+        a.removeAttribute("onclick");
+        try { a.onclick = null; } catch (_) {}
+
+        return;
+      }
+
+      // Also catch any absolute URL variants of /request-access on tvevt.com
+      // (rare but happens)
+      if (normalized.includes("tvevt.com/request-access")) {
+        a.setAttribute("href", buildAccessUrlFromOldHref(href));
+        a.removeAttribute("target");
+        a.removeAttribute("rel");
+        a.removeAttribute("onclick");
+        try { a.onclick = null; } catch (_) {}
+      }
     });
   }
 
-  // Run immediately (fixes old footer buttons etc.)
-  canonicalizeAccessLinks();
-  document.addEventListener("DOMContentLoaded", () => canonicalizeAccessLinks());
+  // Guard: do not inject twice
+  if (document.querySelector("[data-tvevt-nav='1']")) {
+    canonicalizeAccessLinks();
+    document.addEventListener("DOMContentLoaded", () => canonicalizeAccessLinks());
+    return;
+  }
 
-  // ---------- 2) Guard: do not inject twice ----------
-  if (document.querySelector("[data-tvevt-nav='1']")) return;
-
-  // ---------- 3) Hide legacy header/topbar (conservative) ----------
-  function hideLegacyIfItLooksLikeSiteNav() {
+  // Hide legacy headers/nav to prevent duplicates (conservative)
+  function hideLegacyNavIfPresent() {
     const header = document.querySelector("header");
-    if (header) {
-      const t = (header.innerText || "").toLowerCase();
-      const looksLike =
-        t.includes("tvevt") &&
-        (t.includes("packages") || t.includes("architecture") || t.includes("request access") || t.includes("request"));
-      if (looksLike) header.style.display = "none";
+    if (!header) return;
+
+    const txt = (header.innerText || "").toLowerCase();
+    const looksLikeTvevt =
+      txt.includes("tvevt") &&
+      (txt.includes("packages") || txt.includes("architecture") || txt.includes("request"));
+
+    if (looksLikeTvevt) {
+      header.style.display = "none";
+      return;
     }
 
-    // Also hide obvious legacy blocks if present
     const topbar = document.querySelector(".topbar");
-    if (topbar) {
-      const t2 = (topbar.innerText || "").toLowerCase();
-      if (t2.includes("packages") || t2.includes("request")) topbar.style.display = "none";
+    if (topbar && (topbar.innerText || "").toLowerCase().includes("request")) {
+      topbar.style.display = "none";
     }
   }
-  hideLegacyIfItLooksLikeSiteNav();
 
-  // ---------- 4) Inject styles ----------
+  hideLegacyNavIfPresent();
+
+  // Minimal styles (only for injected nav)
   const css = `
+    :root{
+      --tvevt-stroke: rgba(255,255,255,.12);
+      --tvevt-text:#eef2f6;
+      --tvevt-muted2: rgba(238,242,246,.56);
+    }
+
     .tvevt-nav-wrap{
       max-width:1120px;
       margin:0 auto;
       padding:16px 18px 0;
     }
+
     .tvevt-header{
       position:sticky;
       top:0;
@@ -90,6 +131,7 @@
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
     }
+
     .tvevt-topbar{
       display:flex;
       align-items:center;
@@ -97,19 +139,21 @@
       gap:14px;
       width:100%;
       padding:14px 14px;
-      border:1px solid rgba(255,255,255,.12);
+      border:1px solid var(--tvevt-stroke);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border-radius: 22px;
       box-shadow: 0 10px 40px rgba(0,0,0,.35);
     }
+
     .tvevt-brand{
       display:flex;
       align-items:center;
       gap:12px;
       min-width:260px;
       text-decoration:none;
-      color:#eef2f6;
+      color: var(--tvevt-text);
     }
+
     .tvevt-mark{
       width:34px;
       height:34px;
@@ -120,6 +164,7 @@
       border:1px solid rgba(255,255,255,.10);
       overflow:hidden;
     }
+
     .tvevt-word{
       display:flex;
       flex-direction:column;
@@ -131,8 +176,9 @@
     }
     .tvevt-word span{
       font-size:12px;
-      color: rgba(238,242,246,.56);
+      color: var(--tvevt-muted2);
     }
+
     .tvevt-nav{
       display:flex;
       align-items:center;
@@ -140,11 +186,12 @@
       flex-wrap:wrap;
       justify-content:flex-end;
     }
+
     .tvevt-btn{
       appearance:none;
       border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.05);
-      color:#eef2f6;
+      color: var(--tvevt-text);
       padding:10px 14px;
       border-radius: 999px;
       font-size:13px;
@@ -153,6 +200,7 @@
       display:inline-flex;
       align-items:center;
       justify-content:center;
+      gap:8px;
       user-select:none;
       transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
       white-space:nowrap;
@@ -163,10 +211,8 @@
       border-color: rgba(255,255,255,.22);
       background: rgba(255,255,255,.07);
     }
-    .tvevt-btn-active{
-      border-color: rgba(255,138,0,.35);
-      background: rgba(255,138,0,.10);
-    }
+    .tvevt-btn:active{ transform: translateY(0px); }
+
     .tvevt-btn-primary{
       border:1px solid rgba(255,138,0,.35);
       background: linear-gradient(135deg, rgba(255,138,0,.95), rgba(255,77,0,.92));
@@ -177,18 +223,20 @@
     .tvevt-btn-primary:hover{
       box-shadow: 0 18px 60px rgba(255,138,0,.18);
     }
+
     @media (max-width: 980px){
       .tvevt-brand{ min-width: 0; }
       .tvevt-nav{ justify-content:flex-start; }
       .tvevt-nav-wrap{ padding:12px 12px 0; }
     }
   `;
+
   const style = document.createElement("style");
   style.setAttribute("data-tvevt-nav-style", "1");
   style.textContent = css;
   document.head.appendChild(style);
 
-  // ---------- 5) Build nav DOM ----------
+  // Build injected nav DOM
   const wrap = document.createElement("div");
   wrap.className = "tvevt-nav-wrap";
   wrap.setAttribute("data-tvevt-nav", "1");
@@ -220,21 +268,9 @@
   nav.className = "tvevt-nav";
   nav.setAttribute("aria-label", "Top navigation");
 
-  // active detection (simple + stable)
-  const path = (window.location.pathname || "").toLowerCase();
-
-  function isActiveLink(href) {
-    // only mark active for same-page anchors and same pathname pages
-    const target = href.split("#")[0].toLowerCase();
-    if (target === "/index.html" || target === "/index.html#pricing") {
-      return path === "/" || path.endsWith("/index.html");
-    }
-    return target && path.endsWith(target);
-  }
-
   for (const l of CANON.links) {
     const a = document.createElement("a");
-    a.className = "tvevt-btn" + (isActiveLink(l.href) ? " tvevt-btn-active" : "");
+    a.className = "tvevt-btn";
     a.href = l.href;
     a.textContent = l.label;
     nav.appendChild(a);
@@ -251,13 +287,14 @@
   header.appendChild(topbar);
   wrap.appendChild(header);
 
-  // ---------- 6) Insert at top of body ----------
+  // Insert at top of body
   if (document.body.firstChild) {
     document.body.insertBefore(wrap, document.body.firstChild);
   } else {
     document.body.appendChild(wrap);
   }
 
-  // Final safety pass (after inject)
+  // Canonicalize links now + after DOM ready
   canonicalizeAccessLinks();
+  document.addEventListener("DOMContentLoaded", () => canonicalizeAccessLinks());
 })();
