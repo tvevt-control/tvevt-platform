@@ -1,61 +1,126 @@
 /* TVEVT shared navigation injector
    Canon v2026-03-01
-   - Single nav injected from /assets/nav.js
-   - Canonical Request Access: https://leads.tvevt.com/?intent=access
-   - Brand assets from /assets/brand/
+
+   CANONS / STANDARDS:
+   1) Single nav injected from /assets/nav.js (this file)
+      Include on every page:
+      <script src="/assets/nav.js?v=2026-03-01" defer></script>
+
+   2) Canonical NAV links:
+      - Request Access  -> https://leads.tvevt.com/?intent=access   (ALWAYS)
+      - Packages        -> /index.html#pricing
+      - Architecture    -> /architecture.html
+      - About           -> /about.html
+      - Book a Call     -> /call.html
+      - Console         -> /app.html?x=1
+      - Log             -> /log.html?x=1
+
+   3) Brand assets live in /assets/brand/ (repo: site/assets/brand/)
+      - tvevt-favicon.svg
+      - tvevt-icon.svg
+      - tvevt-logo-horizontal.svg
+      - tvevt-wordmark.svg
+
+   4) This file also:
+      - Prevents duplicate nav injection
+      - Hides ONLY legacy TVEVT topbar/header blocks (safe rule)
+      - Canonicalizes legacy Request Access links site-wide
+      - Redirects /request-access.html to leads (soft-redirect)
 */
 
 (() => {
+  const VERSION = "2026-03-01";
+
   const CANON = {
     requestAccess: "https://leads.tvevt.com/?intent=access",
     links: [
-      { label: "Packages", href: "/index.html#pricing", cls: "btn btn-ghost" },
-      { label: "Architecture", href: "/architecture.html", cls: "btn btn-ghost" },
-      { label: "About", href: "/about.html", cls: "btn btn-ghost" },
-      { label: "Book a Call", href: "/call.html", cls: "btn btn-ghost" },
-      { label: "Console", href: "/app.html?x=1", cls: "btn btn-ghost" },
-      { label: "Log", href: "/log.html?x=1", cls: "btn btn-ghost" },
+      { key: "packages", label: "Packages", href: "/index.html#pricing" },
+      { key: "architecture", label: "Architecture", href: "/architecture.html" },
+      { key: "about", label: "About", href: "/about.html" },
+      { key: "call", label: "Book a Call", href: "/call.html" },
+      { key: "console", label: "Console", href: "/app.html?x=1" },
+      { key: "log", label: "Log", href: "/log.html?x=1" },
     ],
+    brand: {
+      icon: `/assets/brand/tvevt-icon.svg?v=${VERSION}`,
+      wordmark: `/assets/brand/tvevt-wordmark.svg?v=${VERSION}`,
+      logoHorizontal: `/assets/brand/tvevt-logo-horizontal.svg?v=${VERSION}`,
+      favicon: `/assets/brand/tvevt-favicon.svg?v=${VERSION}`,
+    },
   };
 
-  // 1) Guard: do not inject twice
+  // 0) Guard: do not inject twice
   if (document.querySelector("[data-tvevt-nav='1']")) return;
 
-  // 2) If the page already has a legacy header/topbar, hide it to prevent duplicates
-  //    (We won't delete user HTML; we just hide common legacy selectors.)
-  const legacySelectors = [
-    "header .topbar",
-    "header .nav",
-    "header",
-    ".topbar",
-    ".nav",
-  ];
-  // Hide only if it looks like the old TVEVT topbar (to avoid breaking other layouts)
-  // We check for presence of TVEVT text or Request Access button in the existing header area.
-  const existingHeader = document.querySelector("header");
-  if (existingHeader) {
-    const headerText = (existingHeader.innerText || "").toLowerCase();
-    const hasTvevt = headerText.includes("tvevt");
-    const hasRequest = headerText.includes("request access") || headerText.includes("access");
-    if (hasTvevt && hasRequest) {
-      existingHeader.style.display = "none";
+  // 0.1) Soft-redirect legacy request-access page to canonical leads URL
+  //      (keeps old links working even if they exist somewhere)
+  try {
+    const path = (location.pathname || "").toLowerCase();
+    if (path.endsWith("/request-access.html") || path === "/request-access") {
+      const target = CANON.requestAccess + (location.search || "");
+      location.replace(target);
+      return;
     }
-  } else {
-    // If no <header>, try hiding common legacy topbar blocks if present
-    for (const sel of legacySelectors) {
-      const el = document.querySelector(sel);
-      if (el) el.style.display = "none";
-    }
+  } catch (_) {
+    // ignore
   }
 
-  // 3) Minimal styles (only for injected nav)
+  // 1) Inject favicon canonically (non-breaking; only adds/updates if possible)
+  try {
+    const upsertLink = (rel, href, type) => {
+      let el = document.querySelector(`link[rel="${rel}"][data-tvevt-favicon="1"]`);
+      if (!el) {
+        el = document.createElement("link");
+        el.setAttribute("rel", rel);
+        el.setAttribute("data-tvevt-favicon", "1");
+        document.head.appendChild(el);
+      }
+      if (type) el.setAttribute("type", type);
+      el.setAttribute("href", href);
+    };
+    upsertLink("icon", CANON.brand.favicon, "image/svg+xml");
+    upsertLink("shortcut icon", CANON.brand.favicon);
+  } catch (_) {
+    // ignore
+  }
+
+  // 2) Hide legacy header/topbar safely (ONLY if it matches the old structure)
+  //    We hide:
+  //    - header that contains ".topbar" AND ".nav" (your legacy pattern)
+  //    - OR ".topbar" blocks that clearly look like the old nav bar
+  const hideLegacy = () => {
+    const legacyHeaders = Array.from(document.querySelectorAll("header"));
+    for (const h of legacyHeaders) {
+      const hasTopbar = !!h.querySelector(".topbar");
+      const hasNav = !!h.querySelector(".nav");
+      if (hasTopbar && hasNav) {
+        h.style.display = "none";
+      }
+    }
+
+    // Also hide standalone legacy topbars if they exist outside <header>
+    const legacyTopbars = Array.from(document.querySelectorAll(".topbar"));
+    for (const tb of legacyTopbars) {
+      // If it's already inside a hidden header, skip
+      if (tb.closest("header") && tb.closest("header").style.display === "none") continue;
+
+      const hasBrand = !!tb.querySelector(".brand") || (tb.innerText || "").toLowerCase().includes("tvevt");
+      const hasNav = !!tb.querySelector(".nav");
+      if (hasBrand && hasNav) {
+        tb.style.display = "none";
+      }
+    }
+  };
+
+  // 3) Minimal styles only for injected nav
   const css = `
     :root{
-      --tvevt-bg0:#07090c;
-      --tvevt-bg1:#0b0d10;
       --tvevt-stroke: rgba(255,255,255,.12);
       --tvevt-text:#eef2f6;
       --tvevt-muted2: rgba(238,242,246,.56);
+      --tvevt-orange1:#ff8a00;
+      --tvevt-orange2:#ff4d00;
+      --tvevt-shadow: 0 10px 40px rgba(0,0,0,.35);
     }
 
     .tvevt-nav-wrap{
@@ -83,7 +148,7 @@
       border:1px solid var(--tvevt-stroke);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border-radius: 22px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.35);
+      box-shadow: var(--tvevt-shadow);
     }
 
     .tvevt-brand{
@@ -165,6 +230,11 @@
       box-shadow: 0 18px 60px rgba(255,138,0,.18);
     }
 
+    .tvevt-btn-active{
+      border-color: rgba(255,138,0,.35);
+      background: rgba(255,138,0,.10);
+    }
+
     @media (max-width: 980px){
       .tvevt-brand{ min-width: 0; }
       .tvevt-nav{ justify-content:flex-start; }
@@ -196,8 +266,7 @@
   const mark = document.createElement("div");
   mark.className = "tvevt-mark";
   mark.setAttribute("aria-hidden", "true");
-  // Use brand icon SVG
-  mark.innerHTML = `<img src="/assets/brand/tvevt-icon.svg?v=2026-03-01" alt="" width="22" height="22" style="display:block;opacity:.95">`;
+  mark.innerHTML = `<img src="${CANON.brand.icon}" alt="" width="22" height="22" style="display:block;opacity:.95">`;
 
   const word = document.createElement("div");
   word.className = "tvevt-word";
@@ -210,20 +279,42 @@
   nav.className = "tvevt-nav";
   nav.setAttribute("aria-label", "Top navigation");
 
+  // Helper: determine active link by pathname
+  const pathname = (() => {
+    try { return (location.pathname || "/").toLowerCase(); } catch { return "/"; }
+  })();
+
+  const isActive = (href) => {
+    // Packages is special: /index.html#pricing should be active only on index
+    if (href.startsWith("/index.html#pricing")) {
+      return pathname === "/" || pathname.endsWith("/index.html");
+    }
+    // Match pathname for other internal pages
+    try {
+      const u = new URL(href, location.origin);
+      return (u.pathname || "").toLowerCase() === pathname;
+    } catch (_) {
+      return false;
+    }
+  };
+
   // Normal links
   for (const l of CANON.links) {
     const a = document.createElement("a");
     a.className = "tvevt-btn";
     a.href = l.href;
     a.textContent = l.label;
+    if (isActive(l.href)) a.className += " tvevt-btn-active";
     nav.appendChild(a);
   }
 
-  // Request Access (canonical)
+  // Request Access (canonical, ALWAYS external)
   const access = document.createElement("a");
   access.className = "tvevt-btn tvevt-btn-primary";
   access.href = CANON.requestAccess;
   access.textContent = "Request Access";
+  access.target = "_blank";
+  access.rel = "noopener";
   nav.appendChild(access);
 
   topbar.appendChild(brand);
@@ -231,10 +322,58 @@
   header.appendChild(topbar);
   wrap.appendChild(header);
 
-  // 5) Insert at top of body
-  if (document.body.firstChild) {
-    document.body.insertBefore(wrap, document.body.firstChild);
+  // 5) Insert injected nav at top of body
+  const mount = () => {
+    hideLegacy();
+    if (document.body.firstChild) {
+      document.body.insertBefore(wrap, document.body.firstChild);
+    } else {
+      document.body.appendChild(wrap);
+    }
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", mount, { once: true });
   } else {
-    document.body.appendChild(wrap);
+    mount();
+  }
+
+  // 6) Canonicalize legacy Request Access links site-wide
+  //    This fixes buttons inside pages WITHOUT rewriting all HTML files.
+  //    Converts:
+  //      /request-access.html
+  //      /request-access.html?x=1
+  //      request-access.html
+  //      request-access.html?...
+  //    -> https://leads.tvevt.com/?intent=access
+  try {
+    const rewriteLegacyAccessLinks = () => {
+      const anchors = document.querySelectorAll("a[href]");
+      anchors.forEach((a) => {
+        const href = (a.getAttribute("href") || "").trim();
+        if (!href) return;
+
+        const h = href.toLowerCase();
+
+        const legacy =
+          h === "/request-access.html" ||
+          h.startsWith("/request-access.html?") ||
+          h === "request-access.html" ||
+          h.startsWith("request-access.html?");
+
+        if (legacy) {
+          a.setAttribute("href", CANON.requestAccess);
+          a.setAttribute("target", "_blank");
+          a.setAttribute("rel", "noopener");
+        }
+      });
+    };
+
+    // run now + after a short delay (for pages that render content after load)
+    rewriteLegacyAccessLinks();
+    setTimeout(rewriteLegacyAccessLinks, 250);
+    setTimeout(rewriteLegacyAccessLinks, 1200);
+  } catch (_) {
+    // ignore
   }
 })();
