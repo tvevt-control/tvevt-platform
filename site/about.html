@@ -1,0 +1,351 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>About — TVEVT</title>
+  <meta name="description" content="TVEVT is the first in the world Governance Console — infrastructure for strategic signal control & distribution." />
+
+  <style>
+    :root{
+      --bg:#0c0d10;
+      --card:#14161b;
+      --card2:#101218;
+      --text:#e9edf2;
+      --muted:#b7bec8;
+      --line:rgba(255,255,255,.08);
+      --accent:#ff8a2a;
+      --accent2:#ffb14a;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --radius:18px;
+      --radius2:14px;
+      --w:1100px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 600px at 20% 0%, rgba(255,138,42,.10), transparent 55%),
+        radial-gradient(900px 500px at 85% 10%, rgba(255,177,74,.08), transparent 60%),
+        radial-gradient(900px 500px at 50% 110%, rgba(255,255,255,.05), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.45;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:var(--w); margin:0 auto; padding:34px 18px 64px; }
+
+    /* Top bar */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:12px 14px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      padding-left:4px;
+      min-width: 220px;
+    }
+    .brandMark{
+      width:26px; height:26px; border-radius:8px;
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+    }
+    .brandText{ display:flex; flex-direction:column; line-height:1.05; }
+    .brandText b{ letter-spacing:.6px; }
+    .brandText span{ font-size:12px; color:var(--muted); opacity:.95; }
+
+    .nav{
+      display:flex; gap:8px; flex-wrap:wrap;
+      justify-content:center;
+    }
+    .pill{
+      padding:8px 12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      border-radius:999px;
+      font-size:13px;
+      color:var(--muted);
+      transition: all .15s ease;
+      white-space:nowrap;
+    }
+    .pill:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); color:var(--text); }
+    .pill.active{ color:var(--text); border-color: rgba(255,138,42,.35); background: rgba(255,138,42,.08); }
+
+    .cta{
+      display:flex; gap:8px; align-items:center;
+      min-width: 220px;
+      justify-content:flex-end;
+      padding-right:4px;
+    }
+    .btn{
+      padding:9px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      font-size:13px;
+      cursor:pointer;
+      transition: all .15s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.20); }
+    .btn.primary{
+      border-color: rgba(255,138,42,.45);
+      background: linear-gradient(180deg, rgba(255,138,42,.95), rgba(255,138,42,.70));
+      color:#1a120b;
+      font-weight:700;
+    }
+    .btn.primary:hover{ filter: brightness(1.03); }
+
+    /* Hero */
+    .hero{
+      margin-top:22px;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .heroInner{
+      padding:26px 22px;
+    }
+    .kicker{
+      display:flex; align-items:center; gap:10px;
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:10px;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255,138,42,.16);
+    }
+    h1{
+      margin:0 0 10px;
+      font-size: 42px;
+      letter-spacing:-.8px;
+    }
+    .lead{
+      margin:0;
+      color:var(--muted);
+      font-size:15px;
+      max-width: 860px;
+    }
+    .quote{
+      margin-top:16px;
+      padding:14px 14px;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radius2);
+      background: rgba(0,0,0,.18);
+      color: var(--text);
+    }
+    .quote b{ color: var(--accent2); }
+
+    /* Sections */
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap:14px;
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
+      box-shadow: var(--shadow);
+      padding:18px;
+    }
+    .card h2{
+      margin:0 0 10px;
+      font-size:16px;
+      letter-spacing:.2px;
+    }
+    .muted{ color: var(--muted); }
+    .list{
+      margin:10px 0 0;
+      padding-left:18px;
+      color: var(--muted);
+    }
+    .list li{ margin:7px 0; }
+
+    .callout{
+      border:1px solid rgba(255,138,42,.22);
+      background: rgba(255,138,42,.06);
+      border-radius: var(--radius2);
+      padding:14px;
+      margin-top:12px;
+    }
+    .callout .title{
+      font-weight:700;
+      color: var(--text);
+      margin-bottom:6px;
+    }
+    .callout .body{
+      color: var(--muted);
+      font-size:13px;
+    }
+
+    .stack{ display:flex; flex-direction:column; gap:14px; }
+
+    /* Footer */
+    .footer{
+      margin-top:16px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      color: var(--muted);
+      font-size:12px;
+      padding: 10px 4px;
+    }
+    .footer a{ color: var(--muted); border-bottom: 1px dotted rgba(255,255,255,.25); }
+    .footer a:hover{ color: var(--text); }
+
+    @media (max-width: 940px){
+      .brand, .cta{ min-width: auto; }
+      .grid{ grid-template-columns: 1fr; }
+      h1{ font-size: 34px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="brand">
+        <div class="brandMark" aria-hidden="true">
+          <!-- simple mark -->
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M6 8.5C6 6.6 7.6 5 9.5 5h5C16.4 5 18 6.6 18 8.5v7C18 17.4 16.4 19 14.5 19h-5C7.6 19 6 17.4 6 15.5v-7Z" stroke="rgba(255,255,255,.72)" stroke-width="1.4"/>
+            <path d="M9 10h6" stroke="rgba(255,138,42,.95)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M9 13.5h4.2" stroke="rgba(255,177,74,.9)" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="brandText">
+          <b>TVEVT</b>
+          <span>Influence Infrastructure</span>
+        </div>
+      </div>
+
+      <div class="nav">
+        <a class="pill" href="/#pricing">Packages</a>
+        <a class="pill" href="/architecture.html">Architecture</a>
+        <a class="pill active" href="/about.html">About</a>
+        <a class="pill" href="/app.html?x=1">Console</a>
+        <a class="pill" href="/log.html?x=1">Log</a>
+      </div>
+
+      <div class="cta">
+        <a class="btn primary" href="/request-access.html?x=1">Request Access</a>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="heroInner">
+        <div class="kicker"><span class="dot"></span> About — what TVEVT is, and why it exists</div>
+        <h1>First in the world Governance Console.</h1>
+        <p class="lead">
+          TVEVT is <span class="muted">infrastructure for Strategic Signal Control & Distribution</span> —
+          a control layer for who can publish, what goes out, when and where — with approvals, enforcement,
+          and an immutable execution record.
+        </p>
+
+        <div class="quote">
+          Not a “posting tool”. <b>A control layer and accountability standard.</b>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTENT -->
+    <div class="grid">
+      <div class="card">
+        <h2>The problem TVEVT solves</h2>
+        <p class="muted" style="margin:0;">
+          The modern organization is forced to publish across many channels — with many people involved.
+          That reality creates a gap: production happens fast, but governance is weak.
+          The result is inconsistency, reputational risk, and invisible mistakes.
+        </p>
+
+        <ul class="list">
+          <li><b>Ownership is unclear:</b> who is allowed to publish, and on whose authority?</li>
+          <li><b>Consistency breaks:</b> the same message mutates across channels and teams.</li>
+          <li><b>Approvals are informal:</b> decisions live in chats, not in enforceable rules.</li>
+          <li><b>No proof layer:</b> when something goes wrong, there’s no clean record of execution.</li>
+        </ul>
+
+        <div class="callout">
+          <div class="title">What “signal governance” means here</div>
+          <div class="body">
+            Governance is not a document. It’s a system: rules + roles + approvals + logs.
+            TVEVT turns governance into a product surface — and makes distribution controllable.
+          </div>
+        </div>
+      </div>
+
+      <div class="stack">
+        <div class="card">
+          <h2>Core doctrine</h2>
+          <ul class="list" style="margin-top:0;">
+            <li><b>Governance-first:</b> control before scale.</li>
+            <li><b>Execution proof:</b> immutable log is part of the product, not a “nice to have”.</li>
+            <li><b>Institutional tone:</b> consistency is a requirement, not a preference.</li>
+            <li><b>Infrastructure mindset:</b> TVEVT is a layer you build on, not a tool you “use”.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h2>How TVEVT is different</h2>
+          <p class="muted" style="margin:0;">
+            Most products optimize for publishing speed. TVEVT optimizes for <b>control</b>.
+            It treats distribution like a governed surface — like finance, compliance, or security.
+          </p>
+
+          <ul class="list">
+            <li><b>Workspaces + roles</b> (Owner / Editor / Approver)</li>
+            <li><b>Approval gates</b> by plan and by policy</li>
+            <li><b>Immutable log</b> as a proof surface</li>
+            <li><b>Cross-channel consistency</b> as an enforceable constraint</li>
+          </ul>
+
+          <div class="callout">
+            <div class="title">Think “control layer”</div>
+            <div class="body">
+              TVEVT is the missing layer between intention (strategy) and output (channels).
+              It makes “who can say what” programmable.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div>© 2026 TVEVT — Governance Console</div>
+      <div style="display:flex; gap:14px; align-items:center;">
+        <a href="/#pricing">Packages</a>
+        <a href="/architecture.html">Architecture</a>
+        <a href="/app.html?x=1">Console</a>
+        <a href="/log.html?x=1">Log</a>
+        <a href="/request-access.html?x=1">Request Access</a>
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>
