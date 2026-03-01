@@ -8,8 +8,9 @@
   <title>TVEVT — Book a Call</title>
   <meta name="description" content="Book a call with TVEVT. Governance Console — infrastructure for strategic signal control & distribution." />
 
-  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg?v=2026-02-25">
-  <link rel="shortcut icon" href="/tvevt-favicon.svg?v=2026-02-25">
+  <!-- Brand assets -->
+  <link rel="icon" type="image/svg+xml" href="/assets/brand/tvevt-favicon.svg?v=2026-03-01">
+  <link rel="shortcut icon" href="/assets/brand/tvevt-favicon.svg?v=2026-03-01">
   <meta name="theme-color" content="#0b0d10"/>
 
   <style>
@@ -269,7 +270,7 @@
     <header>
       <div class="topbar">
 
-        <!-- OUR LOGO + CLICKABLE HOME -->
+        <!-- BRAND -->
         <a class="brand" href="/index.html" aria-label="TVEVT Home">
           <div class="mark" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="22" height="22">
@@ -286,7 +287,7 @@
           </div>
           <div class="word">
             <b>TVEVT</b>
-            <span>Influence Infrastructure</span>
+            <span>Governance Console</span>
           </div>
         </a>
 
@@ -298,7 +299,9 @@
           <a class="btn btn-active" href="/call.html">Book a Call</a>
           <a class="btn" href="/app.html?x=1">Console</a>
           <a class="btn" href="/log.html?x=1">Log</a>
-          <a class="btn btn-primary" href="https://leads.tvevt.com/?intent=access" target="_blank" rel="noopener">Request Access</a>
+
+          <!-- FIXED: goes to NEW request-access page on same site -->
+          <a class="btn btn-primary" href="/request-access.html?x=1">Request Access</a>
         </nav>
 
       </div>
@@ -398,7 +401,10 @@
 
             <div class="actions full">
               <button type="button" class="btn btn-primary" id="sendBtn">Generate email</button>
-              <a class="btn" href="https://leads.tvevt.com/?intent=access" target="_blank" rel="noopener">Or Request Access</a>
+
+              <!-- FIXED: goes to NEW request-access page (same tab) -->
+              <a class="btn" href="/request-access.html?x=1">Or Request Access</a>
+
               <a class="btn" href="/index.html#pricing">View Packages</a>
             </div>
 
@@ -414,7 +420,7 @@
       </section>
 
       <footer>
-        <div>©️ 2026 TVEVT — Influence Infrastructure</div>
+        <div>©️ 2026 TVEVT — Governance Console</div>
         <div class="footlinks">
           <a href="/index.html#pricing">Packages</a>
           <a href="/architecture.html">Architecture</a>
@@ -422,6 +428,7 @@
           <a href="/call.html">Call</a>
           <a href="/app.html?x=1">Console</a>
           <a href="/log.html?x=1">Log</a>
+          <a href="/request-access.html?x=1">Request Access</a>
         </div>
       </footer>
     </main>
@@ -459,13 +466,13 @@
           "Preferred time windows (optional):",
           "-",
           "",
+          `Requested from: ${location.href}`,
+          "",
           "Thank you."
         ];
 
         const body = encodeURIComponent(bodyLines.join("\n"));
-        const mailto = `mailto:social@tvevt.com?subject=${subject}&body=${body}`;
-
-        window.location.href = mailto;
+        window.location.href = `mailto:social@tvevt.com?subject=${subject}&body=${body}`;
         $("okBox").style.display = "block";
       });
     })();
