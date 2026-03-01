@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Book a Call — TVEVT</title>
+  <meta name="description" content="Book a call with TVEVT. Governance Console — infrastructure for strategic signal control & distribution." />
+
+  <style>
+    :root{
+      --bg:#0c0d10;
+      --card:#14161b;
+      --card2:#101218;
+      --text:#e9edf2;
+      --muted:#b7bec8;
+      --line:rgba(255,255,255,.08);
+      --accent:#ff8a2a;
+      --accent2:#ffb14a;
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --radius:18px;
+      --radius2:14px;
+      --w:1100px;
+    }
+
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 600px at 20% 0%, rgba(255,138,42,.10), transparent 55%),
+        radial-gradient(900px 500px at 85% 10%, rgba(255,177,74,.08), transparent 60%),
+        radial-gradient(900px 500px at 50% 110%, rgba(255,255,255,.05), transparent 60%),
+        var(--bg);
+      color:var(--text);
+      line-height:1.45;
+    }
+
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:var(--w); margin:0 auto; padding:34px 18px 64px; }
+
+    /* Top bar */
+    .topbar{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:12px 14px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(255,255,255,.04);
+      backdrop-filter: blur(10px);
+      box-shadow: var(--shadow);
+    }
+    .brand{
+      display:flex; align-items:center; gap:10px;
+      padding-left:4px;
+      min-width: 220px;
+    }
+    .brandMark{
+      width:26px; height:26px; border-radius:8px;
+      display:grid; place-items:center;
+      border:1px solid rgba(255,255,255,.12);
+      background:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+    }
+    .brandText{ display:flex; flex-direction:column; line-height:1.05; }
+    .brandText b{ letter-spacing:.6px; }
+    .brandText span{ font-size:12px; color:var(--muted); opacity:.95; }
+
+    .nav{
+      display:flex; gap:8px; flex-wrap:wrap;
+      justify-content:center;
+    }
+    .pill{
+      padding:8px 12px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      border-radius:999px;
+      font-size:13px;
+      color:var(--muted);
+      transition: all .15s ease;
+      white-space:nowrap;
+    }
+    .pill:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.18); color:var(--text); }
+    .pill.active{ color:var(--text); border-color: rgba(255,138,42,.35); background: rgba(255,138,42,.08); }
+
+    .cta{
+      display:flex; gap:8px; align-items:center;
+      min-width: 220px;
+      justify-content:flex-end;
+      padding-right:4px;
+    }
+    .btn{
+      padding:9px 14px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(255,255,255,.05);
+      color:var(--text);
+      font-size:13px;
+      cursor:pointer;
+      transition: all .15s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.20); }
+    .btn.primary{
+      border-color: rgba(255,138,42,.45);
+      background: linear-gradient(180deg, rgba(255,138,42,.95), rgba(255,138,42,.70));
+      color:#1a120b;
+      font-weight:700;
+    }
+    .btn.primary:hover{ filter: brightness(1.03); }
+
+    /* Hero */
+    .hero{
+      margin-top:22px;
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .heroInner{ padding:26px 22px; }
+
+    .kicker{
+      display:flex; align-items:center; gap:10px;
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:10px;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:999px;
+      background: var(--accent);
+      box-shadow: 0 0 0 3px rgba(255,138,42,.16);
+    }
+    h1{ margin:0 0 10px; font-size: 42px; letter-spacing:-.8px; }
+    .lead{ margin:0; color:var(--muted); font-size:15px; max-width: 860px; }
+
+    /* Layout */
+    .grid{
+      margin-top:18px;
+      display:grid;
+      grid-template-columns: 1.05fr .95fr;
+      gap:14px;
+    }
+    .card{
+      border:1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(255,255,255,.04);
+      box-shadow: var(--shadow);
+      padding:18px;
+    }
+    .card h2{ margin:0 0 10px; font-size:16px; letter-spacing:.2px; }
+    .muted{ color: var(--muted); }
+    .list{ margin:10px 0 0; padding-left:18px; color: var(--muted); }
+    .list li{ margin:7px 0; }
+
+    /* Form */
+    .form{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:10px;
+      margin-top:10px;
+    }
+    label{ font-size:12px; color:var(--muted); display:block; margin: 0 0 6px; }
+    input, select, textarea{
+      width:100%;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.22);
+      color: var(--text);
+      padding:10px 12px;
+      outline:none;
+    }
+    textarea{ min-height: 120px; resize: vertical; grid-column: 1 / -1; }
+    .full{ grid-column: 1 / -1; }
+
+    .actions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:12px;
+      align-items:center;
+    }
+    .note{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:12px;
+      opacity:.95;
+    }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size:12px;
+      color: rgba(233,237,242,.92);
+    }
+    .ok{
+      display:none;
+      margin-top:12px;
+      border:1px solid rgba(255,138,42,.22);
+      background: rgba(255,138,42,.06);
+      border-radius: 14px;
+      padding:12px;
+      color: var(--muted);
+      font-size:13px;
+    }
+
+    /* Footer */
+    .footer{
+      margin-top:16px;
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      align-items:center;
+      color: var(--muted);
+      font-size:12px;
+      padding: 10px 4px;
+    }
+    .footer a{ color: var(--muted); border-bottom: 1px dotted rgba(255,255,255,.25); }
+    .footer a:hover{ color: var(--text); }
+
+    @media (max-width: 980px){
+      .brand, .cta{ min-width:auto; }
+      .grid{ grid-template-columns: 1fr; }
+      .form{ grid-template-columns: 1fr; }
+      h1{ font-size: 34px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+
+    <!-- TOP BAR -->
+    <div class="topbar">
+      <div class="brand">
+        <div class="brandMark" aria-hidden="true">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M6 8.5C6 6.6 7.6 5 9.5 5h5C16.4 5 18 6.6 18 8.5v7C18 17.4 16.4 19 14.5 19h-5C7.6 19 6 17.4 6 15.5v-7Z" stroke="rgba(255,255,255,.72)" stroke-width="1.4"/>
+            <path d="M9 10h6" stroke="rgba(255,138,42,.95)" stroke-width="1.6" stroke-linecap="round"/>
+            <path d="M9 13.5h4.2" stroke="rgba(255,177,74,.9)" stroke-width="1.6" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="brandText">
+          <b>TVEVT</b>
+          <span>Influence Infrastructure</span>
+        </div>
+      </div>
+
+      <div class="nav">
+        <a class="pill" href="/#pricing">Packages</a>
+        <a class="pill" href="/architecture.html">Architecture</a>
+        <a class="pill" href="/about.html">About</a>
+        <a class="pill active" href="/call.html">Book a Call</a>
+        <a class="pill" href="/app.html?x=1">Console</a>
+        <a class="pill" href="/log.html?x=1">Log</a>
+      </div>
+
+      <div class="cta">
+        <a class="btn primary" href="/request-access.html?x=1">Request Access</a>
+      </div>
+    </div>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="heroInner">
+        <div class="kicker"><span class="dot"></span> Book a Call — strategic onboarding</div>
+        <h1>Talk to us.</h1>
+        <p class="lead">
+          Use this page for Tier II / Tier III / Enterprise onboarding, compliance-sensitive teams,
+          and any case where publishing authority must be governed.
+        </p>
+      </div>
+    </div>
+
+    <div class="grid">
+
+      <!-- LEFT: context -->
+      <div class="card">
+        <h2>What the call is for</h2>
+        <p class="muted" style="margin:0;">
+          We use calls to align on your governance requirements — who approves, what must be enforced,
+          which channels are in scope, and what “immutable proof” means for your organization.
+        </p>
+
+        <ul class="list">
+          <li><b>Use case:</b> multi-team publishing, brand authority, regulated comms, investor relations.</li>
+          <li><b>Outcome:</b> a recommended package + rollout plan (workspaces, roles, approvals, retention).</li>
+          <li><b>Time:</b> 20–30 minutes.</li>
+        </ul>
+
+        <div style="height:12px"></div>
+
+        <h2>Fast path (if you prefer email)</h2>
+        <p class="muted" style="margin:0;">
+          Send a short note to <span class="mono">social@tvevt.com</span> with:
+          organization, channels, risk level, and who approves.
+        </p>
+
+        <div class="note">
+          If you don’t see a scheduling widget here yet — that’s normal. We’ll add Calendly or a direct
+          slot picker after you confirm the flow you want.
+        </div>
+      </div>
+
+      <!-- RIGHT: form -->
+      <div class="card">
+        <h2>Call request</h2>
+        <p class="muted" style="margin:0;">
+          This form is a v1 placeholder. It generates a pre-filled email to <span class="mono">social@tvevt.com</span>.
+        </p>
+
+        <form id="callForm" class="form" autocomplete="on">
+          <div>
+            <label for="name">Full name</label>
+            <input id="name" name="name" placeholder="Your name" />
+          </div>
+
+          <div>
+            <label for="email">Work email</label>
+            <input id="email" name="email" placeholder="name@company.com" />
+          </div>
+
+          <div class="full">
+            <label for="company">Company / organization</label>
+            <input id="company" name="company" placeholder="Company / organization" />
+          </div>
+
+          <div>
+            <label for="role">Role</label>
+            <select id="role" name="role">
+              <option>Owner / Founder</option>
+              <option>CEO / President</option>
+              <option>COO / Ops</option>
+              <option>CMO / Marketing</option>
+              <option>Head of Comms / PR</option>
+              <option>IR / Investor Relations</option>
+              <option>Legal / Compliance</option>
+              <option>Security / IT</option>
+              <option>Other</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="tier">Target package</label>
+            <select id="tier" name="tier">
+              <option>Not sure</option>
+              <option>Tier I (annual)</option>
+              <option>Tier II (annual)</option>
+              <option>Tier III (annual)</option>
+              <option>Enterprise</option>
+              <option>Operational (monthly)</option>
+            </select>
+          </div>
+
+          <textarea id="notes" name="notes" placeholder="What are you controlling? (channels, approvals, risks, workflows)"></textarea>
+
+          <div class="actions full">
+            <button type="button" class="btn primary" id="sendBtn">Generate email</button>
+            <a class="btn" href="/request-access.html?x=1">Or Request Access</a>
+            <a class="btn" href="/#pricing">View Packages</a>
+          </div>
+
+          <div class="ok" id="okBox">
+            Email draft opened. If it didn’t open, email us directly: <span class="mono">social@tvevt.com</span>.
+          </div>
+        </form>
+
+        <div class="note">
+          We never ask for passwords. We discuss governance, permissions, retention, and rollout.
+        </div>
+      </div>
+    </div>
+
+    <!-- FOOTER -->
+    <div class="footer">
+      <div>© 2026 TVEVT — Governance Console</div>
+      <div style="display:flex; gap:14px; align-items:center;">
+        <a href="/#pricing">Packages</a>
+        <a href="/architecture.html">Architecture</a>
+        <a href="/about.html">About</a>
+        <a href="/app.html?x=1">Console</a>
+        <a href="/log.html?x=1">Log</a>
+        <a href="/request-access.html?x=1">Request Access</a>
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    (function(){
+      const $ = (id)=>document.getElementById(id);
+
+      function safe(v){ return (v||"").toString().trim(); }
+
+      $("sendBtn").addEventListener("click", function(){
+        const name = safe($("name").value);
+        const email = safe($("email").value);
+        const company = safe($("company").value);
+        const role = safe($("role").value);
+        const tier = safe($("tier").value);
+        const notes = safe($("notes").value);
+
+        const subject = encodeURIComponent("TVEVT — Book a Call");
+        const bodyLines = [
+          "Hello TVEVT team,",
+          "",
+          "I’d like to book a call regarding governance-first signal control & distribution.",
+          "",
+          "Details:",
+          `• Name: ${name || "-"}`,
+          `• Work email: ${email || "-"}`,
+          `• Company: ${company || "-"}`,
+          `• Role: ${role || "-"}`,
+          `• Target package: ${tier || "-"}`,
+          "",
+          "Context / requirements:",
+          notes ? notes : "-",
+          "",
+          "Preferred time windows (optional):",
+          "-",
+          "",
+          "Thank you."
+        ];
+
+        const body = encodeURIComponent(bodyLines.join("\n"));
+        const mailto = `mailto:social@tvevt.com?subject=${subject}&body=${body}`;
+        window.location.href = mailto;
+        $("okBox").style.display = "block";
+      });
+    })();
+  </script>
+</body>
+</html>
