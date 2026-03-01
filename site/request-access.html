@@ -1,137 +1,188 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="dark"/>
+
   <title>TVEVT — Request Access</title>
-  <meta name="description" content="Request access to TVEVT Governance Console." />
-  <link rel="icon" href="/tvevt-favicon.svg" type="image/svg+xml" />
+  <meta name="description" content="Request access to TVEVT — the first in the world Governance Console. Governance-first signal control & distribution." />
+
+  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg?v=2026-02-25">
+  <link rel="shortcut icon" href="/tvevt-favicon.svg?v=2026-02-25">
+  <meta name="theme-color" content="#0b0d10"/>
 
   <style>
     :root{
-      --bg0:#0b0d10;
-      --bg1:#0f1217;
-      --panel:#12161d;
-      --stroke:rgba(255,255,255,.10);
-      --stroke2:rgba(255,255,255,.14);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.68);
-      --muted2:rgba(255,255,255,.54);
-      --accent:#f39a2b;
-      --shadow: 0 20px 60px rgba(0,0,0,.45);
+      --bg0:#07090c;
+      --bg1:#0b0d10;
+      --stroke: rgba(255,255,255,.12);
+      --text:#eef2f6;
+      --muted: rgba(238,242,246,.72);
+      --muted2: rgba(238,242,246,.56);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --orange1:#ff8a00;
+      --orange2:#ff4d00;
       --radius: 18px;
       --radius2: 14px;
-      --max: 1120px;
+      --max:1120px;
       --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
       margin:0;
-      font-family:var(--font);
       color:var(--text);
+      font-family: var(--font);
       background:
-        radial-gradient(900px 500px at 20% 15%, rgba(243,154,43,.18), transparent 60%),
-        radial-gradient(900px 500px at 85% 25%, rgba(122,167,255,.16), transparent 60%),
+        radial-gradient(1200px 700px at 15% 10%, rgba(255,138,0,.18), transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, rgba(255,77,0,.12), transparent 60%),
+        radial-gradient(900px 700px at 60% 95%, rgba(255,255,255,.06), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
     }
-    a{color:inherit; text-decoration:none}
-    .wrap{max-width:var(--max); margin:0 auto; padding:22px 18px 40px}
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:var(--max); margin:0 auto; padding:28px 18px 70px; }
 
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      position:sticky; top:0;
+      padding:16px 0;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index:50;
+    }
     .topbar{
       display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      width:100%;
       padding:14px 14px;
       border:1px solid var(--stroke);
       background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
       border-radius: 22px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 12px;
-      z-index: 10;
+      box-shadow: 0 10px 40px rgba(0,0,0,.35);
     }
-    .brand{display:flex; align-items:center; gap:10px; padding:6px 10px}
+    .brand{ display:flex; align-items:center; gap:12px; min-width:260px; }
     .mark{
-      width:34px; height:34px; border-radius:12px;
-      border:1px solid var(--stroke2);
-      background: radial-gradient(circle at 30% 30%, rgba(243,154,43,.35), rgba(243,154,43,.10) 60%, rgba(255,255,255,.02));
-      display:grid; place-items:center; overflow:hidden;
+      width:34px; height:34px;
+      display:grid; place-items:center;
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
     }
-    .mark img{width:22px; height:22px; opacity:.95}
-    .brand .t1{font-weight:800; letter-spacing:.3px; line-height:1}
-    .brand .t2{font-size:12px; color:var(--muted2); margin-top:2px}
-    .nav{display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end}
-    .pill{
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
-      color: rgba(255,255,255,.82);
-      font-size:13px;
-      line-height:1;
-    }
-    .pill:hover{border-color: rgba(255,255,255,.18)}
-    .pill.active{
-      border-color: rgba(243,154,43,.45);
-      background: rgba(243,154,43,.14);
-      color: rgba(255,255,255,.92);
-    }
-    .cta{
+    .word{ display:flex; flex-direction:column; line-height:1.05; }
+    .word b{ font-size:16px; letter-spacing:.7px; }
+    .word span{ font-size:12px; color:var(--muted2); }
+
+    .nav{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color:var(--text);
       padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(243,154,43,.55);
-      background: linear-gradient(180deg, rgba(243,154,43,.95), rgba(243,154,43,.78));
-      color:#20170a;
-      font-weight:800;
+      border-radius: 999px;
       font-size:13px;
-      line-height:1;
-      box-shadow: 0 10px 24px rgba(243,154,43,.18);
+      letter-spacing:.2px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.07);
+    }
+    .btn:active{ transform: translateY(0px); }
+
+    .btn-primary{
+      border:1px solid rgba(255,138,0,.35);
+      background: linear-gradient(135deg, rgba(255,138,0,.95), rgba(255,77,0,.92));
+      color:#1a120a;
+      font-weight:900;
+      box-shadow: 0 14px 40px rgba(255,138,0,.14);
+    }
+    .btn-primary:hover{ box-shadow: 0 18px 60px rgba(255,138,0,.18); }
+
+    .btn-active{
+      border-color: rgba(255,138,0,.35);
+      background: rgba(255,138,0,.10);
     }
 
-    .panel{
+    .hero{
       margin-top:18px;
-      border:1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
       border-radius: var(--radius);
-      padding:20px;
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
       box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      padding:26px 22px 18px;
+      position:relative;
+      overflow:hidden;
     }
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 280px at 18% 0%, rgba(255,138,0,.18), transparent 55%),
+        radial-gradient(600px 260px at 78% 10%, rgba(255,77,0,.12), transparent 60%);
+      pointer-events:none;
+      z-index:0;
+    }
+    .hero > *{ position:relative; z-index:1; }
+
     .kicker{
       display:inline-flex; gap:10px; align-items:center;
-      color: var(--muted);
-      font-size:12px;
-      padding:6px 10px;
-      border:1px solid var(--stroke);
+      padding:7px 10px;
       border-radius:999px;
-      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color:rgba(238,242,246,.78);
+      font-size:12px;
     }
-    .dot{width:8px;height:8px;border-radius:99px;background:var(--accent)}
-    h1{margin:12px 0 8px; font-size:42px; line-height:1.05; letter-spacing:-.6px}
-    .lead{color:var(--muted); max-width: 900px; line-height:1.55}
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: linear-gradient(135deg, var(--orange1), var(--orange2));
+      box-shadow: 0 10px 30px rgba(255,138,0,.18);
+    }
+    h1{
+      margin:12px 0 0;
+      font-size:46px;
+      letter-spacing:-1px;
+      line-height:1.05;
+      text-shadow: 0 8px 30px rgba(0,0,0,.55);
+    }
+    .lead{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.75;
+      max-width: 980px;
+    }
 
     .grid{
       margin-top:14px;
       display:grid;
       grid-template-columns: 1.15fr .85fr;
       gap:14px;
+      align-items:start;
     }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-      h1{font-size:34px}
-      .topbar{position:relative; top:auto}
-    }
-
     .card{
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
-      border-radius: var(--radius2);
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
       padding:14px;
     }
-    .card h3{margin:0 0 8px; font-size:14px; letter-spacing:.2px}
-    .card p{margin:0; color:var(--muted2); font-size:13px; line-height:1.5}
+    .card b{ display:block; margin-bottom:8px; font-size:14px; }
+    .card p{ margin:0; color:var(--muted); font-size:13px; line-height:1.65; }
 
-    label{display:block; margin:10px 0 6px; color:var(--muted2); font-size:12px}
+    label{display:block; margin:10px 0 6px; color:var(--muted2); font-size:12px;}
     input, select, textarea{
       width:100%;
       padding:10px 10px;
@@ -144,172 +195,233 @@
       font-size:13px;
     }
     textarea{min-height:92px; resize:vertical}
-
     .row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-    @media (max-width: 720px){ .row{grid-template-columns:1fr} }
-
     .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
-    .btn{
+
+    .btn2{
       display:inline-flex; align-items:center; justify-content:center;
       padding:10px 12px;
       border-radius:12px;
       border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.03);
       color: rgba(255,255,255,.88);
-      font-weight:700;
+      font-weight:800;
       font-size:13px;
       cursor:pointer;
       min-width:140px;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
     }
-    .btn.primary{
-      border-color: rgba(243,154,43,.50);
-      background: rgba(243,154,43,.14);
-    }
-    .hint{margin-top:10px; color:var(--muted2); font-size:12px; line-height:1.45}
-    .hint a{color: rgba(255,255,255,.80); text-decoration:underline; text-underline-offset:3px}
+    .btn2:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.06); }
+    .btn2:active{ transform: translateY(0px); }
 
-    .footer{
-      margin-top:14px;
-      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
-      color: var(--muted2);
-      font-size:12px;
-      padding: 12px 4px 0;
+    .btn2.primary{
+      border-color: rgba(255,138,0,.45);
+      background: linear-gradient(135deg, rgba(255,138,0,.22), rgba(255,77,0,.14));
     }
-    .footlinks{display:flex; gap:12px; flex-wrap:wrap}
-    .footlinks a{color: rgba(255,255,255,.72); text-decoration:underline; text-underline-offset:3px}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+
+    .hint{
+      margin-top:10px;
+      color:var(--muted2);
+      font-size:12px;
+      line-height:1.45
+    }
+    .hint a{color: rgba(238,242,246,.86); text-decoration:underline; text-underline-offset:3px}
+
+    footer{
+      margin-top:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      color:rgba(238,242,246,.52);
+      font-size:12px;
+      padding:18px 6px 0;
+    }
+    .footlinks{ display:flex; gap:12px; flex-wrap:wrap; }
+    .footlinks a{ color:rgba(238,242,246,.62); text-decoration:underline; text-underline-offset:3px; }
+    .footlinks a:hover{ color:rgba(255,200,140,.95); }
+
+    @media (max-width: 980px){
+      h1{ font-size:36px; }
+      .grid{ grid-template-columns: 1fr; }
+      .brand{ min-width:0; }
+      .row{ grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
+    <header>
+      <div class="topbar">
+        <a class="brand" href="/index.html" aria-label="TVEVT Home">
+          <div class="mark" aria-hidden="true">
+            <!-- TVEVT mark (OUR logo style) -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="22" height="22">
+              <defs>
+                <linearGradient id="tvevtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ff8a00"/>
+                  <stop offset="100%" stop-color="#ff4d00"/>
+                </linearGradient>
+              </defs>
+              <rect x="20" y="25" width="65" height="50" rx="14" fill="none" stroke="url(#tvevtGradient)" stroke-width="6"/>
+              <rect x="45" y="40" width="65" height="50" rx="14" fill="none" stroke="url(#tvevtGradient)" stroke-width="6"/>
+              <polygon points="30,75 42,75 32,90" fill="url(#tvevtGradient)"/>
+            </svg>
+          </div>
+          <div class="word">
+            <b>TVEVT</b>
+            <span>Governance Console</span>
+          </div>
+        </a>
 
-    <header class="topbar">
-      <a class="brand" href="/?x=1">
-        <span class="mark"><img src="/tvevt-favicon.svg" alt="TVEVT"></span>
-        <span>
-          <div class="t1">TVEVT</div>
-          <div class="t2">Governance Console</div>
-        </span>
-      </a>
-
-      <nav class="nav" aria-label="Top navigation">
-        <a class="pill" href="/#pricing">Packages</a>
-        <a class="pill" href="/architecture.html">Architecture</a>
-        <a class="pill" href="/app.html?x=1">Console</a>
-        <a class="pill" href="/log.html?x=1">Log</a>
-        <a class="cta active" href="/request-access.html?x=1">Request Access</a>
-      </nav>
+        <nav class="nav" aria-label="Top navigation">
+          <a class="btn" href="/index.html#pricing">Packages</a>
+          <a class="btn" href="/architecture.html">Architecture</a>
+          <a class="btn" href="/about.html">About</a>
+          <a class="btn" href="/call.html">Book a Call</a>
+          <a class="btn" href="/app.html?x=1">Console</a>
+          <a class="btn" href="/log.html?x=1">Log</a>
+          <a class="btn btn-primary btn-active" href="/request-access.html?x=1">Request Access</a>
+        </nav>
+      </div>
     </header>
 
-    <section class="panel">
-      <div class="kicker"><span class="dot"></span> Access request • Governance-first • No AI required</div>
-      <h1>Request access to TVEVT.</h1>
-      <p class="lead">
-        TVEVT is the <b>first in the world Governance Console</b> — a control layer for <b>who</b> can publish,
-        <b>what</b> goes out, <b>when</b> and <b>where</b> — with approvals and an immutable execution record.
-      </p>
+    <main>
+      <section class="hero">
+        <span class="kicker"><span class="dot"></span> Access request • Governance-first • No AI required</span>
+        <h1>Request access to TVEVT.</h1>
+        <p class="lead">
+          TVEVT is the <b>first in the world Governance Console</b> — a control layer for <b>who</b> can publish,
+          <b>what</b> goes out, <b>when</b> and <b>where</b> — with approvals and an immutable execution record.
+        </p>
 
-      <div class="grid">
-        <div class="card">
-          <h3>Request form</h3>
-          <p>Submit the minimum details. We reply with onboarding steps and the right package for your team.</p>
+        <div class="grid">
+          <div class="card">
+            <b>Request form</b>
+            <p>Submit the minimum details. We reply with onboarding steps and the right package for your team.</p>
 
-          <form id="form" autocomplete="on">
-            <div class="row">
-              <div>
-                <label for="name">Full name</label>
-                <input id="name" name="name" placeholder="Your name" />
+            <form id="form" autocomplete="on">
+              <div class="row">
+                <div>
+                  <label for="name">Full name</label>
+                  <input id="name" name="name" placeholder="Your name" />
+                </div>
+                <div>
+                  <label for="email">Work email</label>
+                  <input id="email" name="email" placeholder="name@company.com" />
+                </div>
               </div>
-              <div>
-                <label for="email">Work email</label>
-                <input id="email" name="email" placeholder="name@company.com" />
+
+              <div class="row">
+                <div>
+                  <label for="company">Company</label>
+                  <input id="company" name="company" placeholder="Company / organization" />
+                </div>
+                <div>
+                  <label for="role">Role</label>
+                  <select id="role" name="role">
+                    <option>Owner / Founder</option>
+                    <option>CEO / President</option>
+                    <option>CMO / Marketing Lead</option>
+                    <option>COO / Operations</option>
+                    <option>Legal / Compliance</option>
+                    <option>Security / IT</option>
+                    <option>Agency / Partner</option>
+                    <option>Other</option>
+                  </select>
+                </div>
               </div>
-            </div>
 
-            <div class="row">
-              <div>
-                <label for="company">Company</label>
-                <input id="company" name="company" placeholder="Company / organization" />
+              <label for="risk">What risk are you controlling?</label>
+              <textarea id="risk" name="risk" placeholder="e.g., approvals for brand accounts, multi-team publishing, audit trail, preventing mistakes…"></textarea>
+
+              <div class="actions">
+                <button class="btn2 primary" type="submit">Send request</button>
+                <a class="btn2" href="/app.html?x=1">View Console demo</a>
+                <a class="btn2" href="/log.html?x=1">View Log demo</a>
               </div>
-              <div>
-                <label for="role">Role</label>
-                <select id="role" name="role">
-                  <option>Owner / Founder</option>
-                  <option>CMO / Marketing Lead</option>
-                  <option>COO / Operations</option>
-                  <option>Legal / Compliance</option>
-                  <option>Agency / Partner</option>
-                  <option>Other</option>
-                </select>
+
+              <div class="hint">
+                If the form doesn’t submit (endpoint not connected yet), email us:
+                <a href="mailto:social@tvevt.com">social@tvevt.com</a>
               </div>
-            </div>
+            </form>
+          </div>
 
-            <label for="risk">What risk are you controlling?</label>
-            <textarea id="risk" name="risk" placeholder="e.g., approvals for brand accounts, multi-team publishing, audit trail, preventing mistakes…"></textarea>
+          <div class="card">
+            <b>What you get in v1.1</b>
+            <p>
+              Workspace + roles (Owner/Editor/Approver), draft creation, channel selection, optional approval by plan,
+              immutable execution log, message version history, and plan limits. This is sellable control.
+            </p>
 
-            <div class="actions">
-              <button class="btn primary" type="submit">Send request</button>
-              <a class="btn" href="/app.html?x=1">View Console demo</a>
-              <a class="btn" href="/log.html?x=1">View Log demo</a>
-            </div>
+            <div style="height:12px"></div>
 
-            <div class="hint">
-              If the form doesn’t submit (endpoint not connected yet), email us:
-              <a href="mailto:social@tvevt.com">social@tvevt.com</a>
-            </div>
-          </form>
+            <b>Navigation rule</b>
+            <p>
+              “Packages” always opens the main site section: <span style="opacity:.92">/index.html#pricing</span><br/>
+              Console: <span style="opacity:.92">/app.html?x=1</span><br/>
+              Log: <span style="opacity:.92">/log.html?x=1</span>
+            </p>
+          </div>
         </div>
+      </section>
 
-        <div class="card">
-          <h3>What you get in v1.1</h3>
-          <p>
-            Workspace + roles (Owner/Editor/Approver), draft creation, channel selection, optional approval by plan,
-            immutable execution log, message version history, and plan limits. This is sellable control.
-          </p>
-
-          <div style="height:12px"></div>
-
-          <h3>Navigation rule</h3>
-          <p>
-            “Packages” always opens the main site section: <span class="mono">/#pricing</span><br/>
-            Console: <span class="mono">/app.html?x=1</span><br/>
-            Log: <span class="mono">/log.html?x=1</span>
-          </p>
-        </div>
-      </div>
-
-      <div class="footer">
-        <div>© 2026 TVEVT — Governance Console</div>
+      <footer>
+        <div>©️ 2026 TVEVT — Governance Console</div>
         <div class="footlinks">
-          <a href="/#pricing">Packages</a>
+          <a href="/index.html#pricing">Packages</a>
+          <a href="/architecture.html">Architecture</a>
+          <a href="/about.html">About</a>
+          <a href="/call.html">Call</a>
           <a href="/app.html?x=1">Console</a>
           <a href="/log.html?x=1">Log</a>
           <a href="/request-access.html?x=1">Request Access</a>
         </div>
-      </div>
-
-    </section>
+      </footer>
+    </main>
   </div>
 
   <script>
     // Demo submit: compose email (until endpoint exists)
-    const form = document.getElementById("form");
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const name = document.getElementById("name").value.trim();
-      const email = document.getElementById("email").value.trim();
-      const company = document.getElementById("company").value.trim();
-      const role = document.getElementById("role").value.trim();
-      const risk = document.getElementById("risk").value.trim();
+    (function(){
+      const form = document.getElementById("form");
+      const safe = (v)=> (v||"").toString().trim();
 
-      const subject = encodeURIComponent("TVEVT — Access Request");
-      const body = encodeURIComponent(
-        `Name: ${name}\nEmail: ${email}\nCompany: ${company}\nRole: ${role}\n\nRisk / Use case:\n${risk}\n\nRequested from: ${location.href}\n`
-      );
+      form.addEventListener("submit", (e) => {
+        e.preventDefault();
 
-      window.location.href = `mailto:social@tvevt.com?subject=${subject}&body=${body}`;
-    });
+        const name = safe(document.getElementById("name").value);
+        const email = safe(document.getElementById("email").value);
+        const company = safe(document.getElementById("company").value);
+        const role = safe(document.getElementById("role").value);
+        const risk = safe(document.getElementById("risk").value);
+
+        const subject = encodeURIComponent("TVEVT — Access Request");
+        const bodyLines = [
+          "Hello TVEVT team,",
+          "",
+          "I’d like to request access to TVEVT (Governance Console).",
+          "",
+          "Details:",
+          `• Name: ${name || "-"}`,
+          `• Work email: ${email || "-"}`,
+          `• Company: ${company || "-"}`,
+          `• Role: ${role || "-"}`,
+          "",
+          "Risk / use case:",
+          risk ? risk : "-",
+          "",
+          `Requested from: ${location.href}`,
+          "",
+          "Thank you."
+        ];
+
+        const body = encodeURIComponent(bodyLines.join("\n"));
+        window.location.href = `mailto:social@tvevt.com?subject=${subject}&body=${body}`;
+      });
+    })();
   </script>
 </body>
 </html>
