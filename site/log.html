@@ -1,325 +1,331 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="dark"/>
+
   <title>TVEVT — Execution Log</title>
   <meta name="description" content="Execution Log — immutable by design. Append-only proof of execution." />
-  <link rel="icon" href="/tvevt-favicon.svg?v=2026-02-25" type="image/svg+xml" />
+
+  <!-- Canon favicon -->
+  <link rel="icon" type="image/svg+xml" href="/assets/brand/tvevt-favicon.svg?v=2026-03-01">
+  <link rel="shortcut icon" href="/assets/brand/tvevt-favicon.svg?v=2026-03-01">
   <meta name="theme-color" content="#0b0d10"/>
-  <meta name="color-scheme" content="dark"/>
 
   <style>
     :root{
-      --bg0:#0b0d10;
-      --bg1:#0f1217;
-      --panel:#12161d;
-      --panel2:#10141a;
-      --stroke:rgba(255,255,255,.10);
-      --stroke2:rgba(255,255,255,.14);
-      --text:rgba(255,255,255,.92);
-      --muted:rgba(255,255,255,.68);
-      --muted2:rgba(255,255,255,.54);
-
-      /* TVEVT ORANGE (brand) */
+      --bg0:#07090c;
+      --bg1:#0b0d10;
+      --stroke: rgba(255,255,255,.12);
+      --text:#eef2f6;
+      --muted: rgba(238,242,246,.72);
+      --muted2: rgba(238,242,246,.56);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
       --orange1:#ff8a00;
       --orange2:#ff4d00;
-
-      --accent: var(--orange1);
-      --accent2: var(--orange2);
-
-      --ok:#35c27a;
-      --warn:#f2c94c;
-      --bad:#ff5a6a;
-      --shadow: 0 20px 60px rgba(0,0,0,.45);
       --radius: 18px;
-      --radius2: 14px;
-      --max: 1120px;
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    }
 
-    *{box-sizing:border-box}
-    html,body{height:100%}
+      --ok: rgba(70,220,140,.95);
+      --warn: rgba(255,200,90,.95);
+      --bad: rgba(255,110,110,.95);
+      --chip: rgba(0,0,0,.20);
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
     body{
       margin:0;
-      font-family:var(--font);
       color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       background:
-        radial-gradient(900px 500px at 20% 15%, rgba(255,138,0,.18), transparent 60%),
-        radial-gradient(900px 500px at 85% 25%, rgba(255,77,0,.12), transparent 60%),
+        radial-gradient(1200px 700px at 15% 10%, rgba(255,138,0,.16), transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, rgba(255,77,0,.10), transparent 60%),
+        radial-gradient(900px 700px at 60% 95%, rgba(255,255,255,.05), transparent 55%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
     }
+    a{ color:inherit; text-decoration:none; }
 
-    a{color:inherit; text-decoration:none}
-    .wrap{max-width:var(--max); margin:0 auto; padding:22px 18px 40px}
+    /* Note:
+       Nav is injected by /assets/nav.js at top of <body>. */
+    .wrap{ max-width:1120px; margin:0 auto; padding:18px 18px 70px; }
 
-    /* Top bar */
-    .topbar{
-      display:flex; align-items:center; justify-content:space-between;
-      padding:14px 14px;
-      border:1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border-radius: 22px;
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 12px;
-      z-index: 10;
-    }
-    .brand{display:flex; align-items:center; gap:10px; padding:6px 10px}
-    .mark{
-      width:34px; height:34px; border-radius:12px;
-      border:1px solid var(--stroke2);
-      background:
-        radial-gradient(circle at 30% 30%, rgba(255,138,0,.35), rgba(255,77,0,.10) 60%, rgba(255,255,255,.02));
-      display:grid; place-items:center;
-      overflow:hidden;
-    }
-    .mark img{width:22px; height:22px; opacity:.95}
-    .brand .t1{font-weight:800; letter-spacing:.3px; line-height:1}
-    .brand .t2{font-size:12px; color:var(--muted2); margin-top:2px}
-
-    .nav{display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end}
-    .pill{
-      padding:9px 12px;
-      border-radius:999px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
-      color: rgba(255,255,255,.82);
-      font-size:13px;
-      line-height:1;
-      user-select:none;
-    }
-    .pill:hover{border-color: rgba(255,255,255,.18)}
-    .pill.active{
-      border-color: rgba(255,138,0,.45);
-      background: rgba(255,138,0,.12);
-      color: rgba(255,255,255,.92);
-    }
-
-    .cta{
+    /* shared button */
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color:var(--text);
       padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,138,0,.40);
+      border-radius: 999px;
+      font-size:13px;
+      letter-spacing:.2px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.07);
+    }
+    .btn:active{ transform: translateY(0px); }
+
+    .btn-primary{
+      border:1px solid rgba(255,138,0,.35);
       background: linear-gradient(135deg, rgba(255,138,0,.95), rgba(255,77,0,.92));
       color:#1a120a;
       font-weight:900;
-      font-size:13px;
-      line-height:1;
       box-shadow: 0 14px 40px rgba(255,138,0,.14);
     }
-    .cta:hover{ box-shadow: 0 18px 60px rgba(255,138,0,.18); }
+    .btn-primary:hover{ box-shadow: 0 18px 60px rgba(255,138,0,.18); }
 
-    /* Hero */
+    /* hero */
     .hero{
       margin-top:18px;
-      border:1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.02));
       border-radius: var(--radius);
-      padding:20px 20px 18px;
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
       box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
+      padding:26px 22px 18px;
+      position:relative;
+      overflow:hidden;
     }
+    .hero::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 280px at 18% 0%, rgba(255,138,0,.18), transparent 55%),
+        radial-gradient(600px 260px at 78% 10%, rgba(255,77,0,.12), transparent 60%);
+      pointer-events:none;
+      z-index:0;
+    }
+    .hero > *{ position:relative; z-index:1; }
+
     .kicker{
       display:inline-flex; gap:10px; align-items:center;
-      color: var(--muted);
-      font-size:12px;
-      padding:6px 10px;
-      border:1px solid var(--stroke);
+      padding:7px 10px;
       border-radius:999px;
-      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color:rgba(238,242,246,.78);
+      font-size:12px;
     }
-    .dot{width:8px;height:8px;border-radius:99px;background: linear-gradient(135deg, var(--orange1), var(--orange2));}
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: linear-gradient(135deg, var(--orange1), var(--orange2));
+      box-shadow: 0 10px 30px rgba(255,138,0,.18);
+    }
     h1{
-      margin:12px 0 8px;
+      margin:12px 0 0;
       font-size:44px;
+      letter-spacing:-1px;
       line-height:1.05;
-      letter-spacing:-.6px;
+      text-shadow: 0 8px 30px rgba(0,0,0,.55);
     }
-    .lead{color:var(--muted); max-width: 900px; line-height:1.55}
-    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:14px}
-    .btn{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
-      color: rgba(255,255,255,.88);
-      font-weight:650;
-      font-size:13px;
-      cursor:pointer;
+    .lead{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.7;
+      max-width: 980px;
     }
-    .btn:hover{border-color: rgba(255,255,255,.18)}
-    .btn.primary{
-      border-color: rgba(255,138,0,.40);
-      background: rgba(255,138,0,.12);
+    .actions{
+      display:flex; gap:10px; flex-wrap:wrap;
+      margin-top:14px;
+      align-items:center;
     }
-    .note{margin-top:10px; color:var(--muted2); font-size:12px; line-height:1.45}
+    .note{
+      margin-top:10px;
+      color:var(--muted2);
+      font-size:12px;
+      line-height:1.45;
+    }
+    .mono{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
 
-    /* Grid */
+    /* layout */
     .grid{
-      margin-top:16px;
+      margin-top:14px;
       display:grid;
       grid-template-columns: 1.4fr .8fr;
       gap:14px;
+      align-items:start;
     }
-    @media (max-width: 980px){
-      .grid{grid-template-columns:1fr}
-      h1{font-size:36px}
-      .topbar{position:relative; top:auto}
-    }
-
     .card{
-      border:1px solid var(--stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-      border-radius: var(--radius2);
-      box-shadow: var(--shadow);
-      overflow:hidden;
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      padding:16px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.22);
     }
-    .card .hd{
-      padding:14px 14px 10px;
-      border-bottom:1px solid var(--stroke);
-      display:flex; align-items:center; justify-content:space-between;
+    .cardhead{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
       gap:10px;
+      margin-bottom:10px;
     }
-    .card .hd .title{font-weight:800}
-    .card .bd{padding:14px}
+    .cardhead b{ font-size:14px; }
+    .filters{ display:flex; flex-wrap:wrap; gap:8px; justify-content:flex-end; }
 
-    .filters{display:flex; flex-wrap:wrap; gap:8px}
     .chip{
       padding:8px 10px;
       border-radius:999px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
       font-size:12px;
-      color: rgba(255,255,255,.82);
+      color: rgba(238,242,246,.82);
       cursor:pointer;
       user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      white-space:nowrap;
+    }
+    .chip:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.07);
     }
     .chip.active{
-      border-color: rgba(255,138,0,.40);
-      background: rgba(255,138,0,.12);
+      border-color: rgba(255,138,0,.35);
+      background: rgba(255,138,0,.10);
+      color: rgba(238,242,246,.92);
     }
 
-    table{
+    .table{
       width:100%;
-      border-collapse:collapse;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius: 14px;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.14);
+      margin-top:10px;
+    }
+    .table th, .table td{
+      padding:12px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+      vertical-align:top;
       font-size:13px;
     }
-    th,td{padding:10px 10px; border-bottom:1px solid rgba(255,255,255,.08); vertical-align:top}
-    th{color:var(--muted2); font-weight:700; text-align:left; font-size:12px; letter-spacing:.2px}
-    .empty{color:var(--muted2); padding:14px; font-size:13px}
+    .table th{
+      text-align:left;
+      color: rgba(238,242,246,.70);
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      background: rgba(255,255,255,.04);
+    }
+    .table tr:last-child td{ border-bottom:none; }
+    .empty{ color: var(--muted2); }
 
     .badge{
       display:inline-flex;
       padding:6px 10px;
       border-radius:999px;
       font-size:12px;
-      border:1px solid var(--stroke);
-      background: rgba(255,255,255,.03);
-      color: rgba(255,255,255,.85);
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color: rgba(238,242,246,.85);
       white-space:nowrap;
+      font-weight:800;
+      letter-spacing:.2px;
     }
-    .b-ok{border-color: rgba(53,194,122,.45); background: rgba(53,194,122,.12)}
-    .b-warn{border-color: rgba(242,201,76,.45); background: rgba(242,201,76,.12)}
-    .b-bad{border-color: rgba(255,90,106,.45); background: rgba(255,90,106,.12)}
-    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
+    .b-ok{ border-color: rgba(70,220,140,.35); color: var(--ok); background: rgba(70,220,140,.10); }
+    .b-warn{ border-color: rgba(255,200,90,.35); color: var(--warn); background: rgba(255,200,90,.10); }
+    .b-bad{ border-color: rgba(255,110,110,.35); color: var(--bad); background: rgba(255,110,110,.10); }
 
-    .doctrine .row{
+    /* doctrine */
+    .row{
       display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
       padding:12px 12px;
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
       border-radius:14px;
-      background: rgba(255,255,255,.02);
+      background: rgba(255,255,255,.03);
       margin-bottom:10px;
     }
-    .doctrine .row:last-child{margin-bottom:0}
-    .doctrine .h{font-weight:800; font-size:13px}
-    .doctrine .p{color:var(--muted2); font-size:12px; line-height:1.45; margin-top:4px}
+    .row:last-child{ margin-bottom:0; }
+    .h{ font-weight:900; font-size:13px; }
+    .p{ color: var(--muted2); font-size:12px; line-height:1.45; margin-top:4px; }
     .count{
       min-width:28px;
       height:28px;
       border-radius:10px;
-      border:1px solid var(--stroke);
+      border:1px solid rgba(255,255,255,.14);
       display:grid;
       place-items:center;
-      font-weight:800;
-      color: rgba(255,255,255,.88);
-      background: rgba(255,255,255,.03);
+      font-weight:900;
+      color: rgba(238,242,246,.88);
+      background: rgba(255,255,255,.05);
     }
 
-    .footer{
-      margin-top:14px;
-      display:flex; justify-content:space-between; gap:10px; flex-wrap:wrap;
-      color: var(--muted2);
+    /* footer */
+    footer{
+      margin-top:18px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      color:rgba(238,242,246,.52);
       font-size:12px;
-      padding: 12px 4px 0;
+      padding:18px 6px 0;
     }
-    .footlinks{display:flex; gap:12px; flex-wrap:wrap}
-    .footlinks a{color: rgba(255,255,255,.72); text-decoration:underline; text-underline-offset:3px}
-    .footlinks a:hover{color: rgba(255,200,140,.95);}
+    .footlinks{ display:flex; gap:12px; flex-wrap:wrap; }
+    .footlinks a{ color:rgba(238,242,246,.62); text-decoration:underline; text-underline-offset:3px; }
+    .footlinks a:hover{ color:rgba(255,200,140,.95); }
+
+    @media (max-width: 980px){
+      h1{ font-size:36px; }
+      .grid{ grid-template-columns: 1fr; }
+      .table th:nth-child(1), .table td:nth-child(1){ display:none; } /* hide time on small screens */
+    }
   </style>
 </head>
 
 <body>
   <div class="wrap">
+    <main>
+      <section class="hero">
+        <span class="kicker"><span class="dot"></span> Immutable record • Proof of execution • Governance surface</span>
+        <h1>Execution Log — immutable by design.</h1>
+        <p class="lead">
+          This page demonstrates the doctrine: <b>no deletions, no silent edits</b> — only append.
+          It answers one question every organization eventually asks: <b>what was executed, where, and when?</b>
+        </p>
 
-    <header class="topbar">
-      <a class="brand" href="/index.html" aria-label="TVEVT Home">
-        <span class="mark"><img src="/tvevt-favicon.svg?v=2026-02-25" alt="TVEVT"></span>
-        <span>
-          <div class="t1">TVEVT</div>
-          <div class="t2">Governance Console</div>
-        </span>
-      </a>
-
-      <nav class="nav" aria-label="Top navigation">
-        <a class="pill" href="/app.html?x=1">Console</a>
-        <a class="pill active" href="/log.html?x=1">Log</a>
-        <a class="pill" href="/architecture.html">Architecture</a>
-        <a class="pill" href="/about.html">About</a>
-        <a class="pill" href="/call.html">Book a Call</a>
-        <a class="pill" href="/index.html#pricing">Packages</a>
-        <a class="cta" href="/request-access.html?x=1">Request Access</a>
-      </nav>
-    </header>
-
-    <section class="hero">
-      <div class="kicker"><span class="dot"></span> Immutable record • Proof of execution • Governance surface</div>
-      <h1>Execution Log — immutable by design.</h1>
-      <p class="lead">
-        This page demonstrates the doctrine: <b>no deletions, no silent edits</b> — only append.
-        It answers one question every organization eventually asks: <b>what was executed, where, and when?</b>
-      </p>
-
-      <div class="actions">
-        <a class="btn primary" href="/app.html?x=1">Open Console</a>
-        <button class="btn" id="exportBtn" type="button">Export (JSON)</button>
-        <button class="btn" id="seedBtn" type="button">Seed demo entries</button>
-        <button class="btn" id="resetBtn" type="button">Reset demo (local)</button>
-      </div>
-
-      <div class="note">
-        Note: this is a UI demo. It stores entries in your browser (<span class="mono">localStorage</span>) to simulate immutability.
-        In v1.1 this maps to KV/DB (append-only) + retention by plan.
-      </div>
-    </section>
-
-    <section class="grid">
-      <div class="card">
-        <div class="hd">
-          <div class="title">Filters</div>
-          <div class="filters" id="filters"></div>
+        <div class="actions">
+          <a class="btn" href="/app.html?x=1">Open Console</a>
+          <button class="btn" id="exportBtn" type="button">Export (JSON)</button>
+          <button class="btn" id="seedBtn" type="button">Seed demo entries</button>
+          <button class="btn" id="resetBtn" type="button">Reset demo (local)</button>
         </div>
 
-        <div class="bd">
-          <table aria-label="Execution log table">
+        <div class="note">
+          Note: this is a UI demo. It stores entries in your browser (<span class="mono">localStorage</span>) to simulate immutability.
+          In v1.1 this maps to KV/DB (append-only) + retention by plan.
+        </div>
+      </section>
+
+      <section class="grid">
+        <div class="card">
+          <div class="cardhead">
+            <b>Filters</b>
+            <div class="filters" id="filters"></div>
+          </div>
+
+          <table class="table" aria-label="Execution log table">
             <thead>
               <tr>
-                <th style="width:170px;">TIME</th>
-                <th style="width:110px;">CHANNEL</th>
+                <th style="width:180px;">TIME</th>
+                <th style="width:120px;">CHANNEL</th>
                 <th>PAYLOAD</th>
-                <th style="width:130px;">STATUS</th>
+                <th style="width:140px;">STATUS</th>
               </tr>
             </thead>
             <tbody id="tbody">
@@ -327,14 +333,13 @@
             </tbody>
           </table>
         </div>
-      </div>
 
-      <aside class="card doctrine">
-        <div class="hd">
-          <div class="title">Doctrine</div>
-          <div class="badge mono">v1.1</div>
-        </div>
-        <div class="bd">
+        <aside class="card" aria-label="Doctrine">
+          <div class="cardhead">
+            <b>Doctrine</b>
+            <span class="badge mono">v1.1</span>
+          </div>
+
           <div class="row">
             <div>
               <div class="h">Append-only log</div>
@@ -374,23 +379,22 @@
             </div>
             <div class="count">✓</div>
           </div>
+        </aside>
+      </section>
+
+      <footer>
+        <div>©️ 2026 TVEVT — Governance Console</div>
+        <div class="footlinks">
+          <a href="/index.html#pricing">Packages</a>
+          <a href="/architecture.html">Architecture</a>
+          <a href="/about.html">About</a>
+          <a href="/call.html">Call</a>
+          <a href="/app.html?x=1">Console</a>
+          <a href="/log.html?x=1">Log</a>
+          <a href="https://leads.tvevt.com/?intent=access">Request Access</a>
         </div>
-      </aside>
-    </section>
-
-    <div class="footer">
-      <div>©️ 2026 TVEVT — Governance Console</div>
-      <div class="footlinks">
-        <a href="/index.html#pricing">Packages</a>
-        <a href="/architecture.html">Architecture</a>
-        <a href="/about.html">About</a>
-        <a href="/call.html">Book a Call</a>
-        <a href="/app.html?x=1">Console</a>
-        <a href="/log.html?x=1">Log</a>
-        <a href="/request-access.html?x=1">Request Access</a>
-      </div>
-    </div>
-
+      </footer>
+    </main>
   </div>
 
   <script>
@@ -456,11 +460,9 @@
       const f = state.filter;
       if(f === "all") return items;
 
-      // channel filters
       if(["Telegram","LinkedIn","Email","X"].includes(f)){
         return items.filter(x => x.channel === f);
       }
-      // status filters
       if(["Sent","Planned","Failed"].includes(f)){
         return items.filter(x => x.status === f);
       }
@@ -485,7 +487,11 @@
       }
 
       tbody.innerHTML = view.map(x => {
-        const payload = (x.payload || "").replaceAll("<","&lt;").replaceAll(">","&gt;");
+        const payload = (x.payload || "")
+          .replaceAll("&","&amp;")
+          .replaceAll("<","&lt;")
+          .replaceAll(">","&gt;");
+
         return `
           <tr>
             <td class="mono">${x.time || "—"}</td>
@@ -535,5 +541,8 @@
     renderFilters();
     renderTable();
   </script>
+
+  <!-- Canon shared nav injector (single source of truth) -->
+  <script src="/assets/nav.js?v=2026-03-01" defer></script>
 </body>
 </html>
