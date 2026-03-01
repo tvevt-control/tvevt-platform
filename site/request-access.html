@@ -6,10 +6,11 @@
   <meta name="color-scheme" content="dark"/>
 
   <title>TVEVT — Request Access</title>
-  <meta name="description" content="Request access to TVEVT — the first in the world Governance Console. Governance-first signal control & distribution." />
+  <meta name="description" content="Request access to TVEVT — Governance Console. Governance-first signal control & distribution authority." />
 
-  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg?v=2026-02-25">
-  <link rel="shortcut icon" href="/tvevt-favicon.svg?v=2026-02-25">
+  <!-- Brand assets (recommended path) -->
+  <link rel="icon" type="image/svg+xml" href="/assets/brand/tvevt-favicon.svg?v=2026-03-01">
+  <link rel="shortcut icon" href="/assets/brand/tvevt-favicon.svg?v=2026-03-01">
   <meta name="theme-color" content="#0b0d10"/>
 
   <style>
@@ -25,15 +26,14 @@
       --orange2:#ff4d00;
       --radius: 18px;
       --radius2: 14px;
-      --max:1120px;
-      --font: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
     }
+
     *{ box-sizing:border-box; }
     html,body{ height:100%; }
     body{
       margin:0;
       color:var(--text);
-      font-family: var(--font);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
       background:
         radial-gradient(1200px 700px at 15% 10%, rgba(255,138,0,.18), transparent 60%),
         radial-gradient(900px 600px at 85% 20%, rgba(255,77,0,.12), transparent 60%),
@@ -42,8 +42,9 @@
       overflow-x:hidden;
     }
     a{ color:inherit; text-decoration:none; }
-    .wrap{ max-width:var(--max); margin:0 auto; padding:28px 18px 70px; }
+    .wrap{ max-width:1120px; margin:0 auto; padding:28px 18px 70px; }
 
+    /* Header */
     header{
       display:flex; align-items:center; justify-content:space-between;
       gap:14px;
@@ -116,6 +117,7 @@
       background: rgba(255,138,0,.10);
     }
 
+    /* Hero / panels */
     .hero{
       margin-top:18px;
       border-radius: var(--radius);
@@ -171,10 +173,10 @@
       display:grid;
       grid-template-columns: 1.15fr .85fr;
       gap:14px;
-      align-items:start;
+      align-items:stretch;
     }
     .card{
-      border-radius: 16px;
+      border-radius: var(--radius2);
       border:1px solid rgba(255,255,255,.12);
       background: rgba(0,0,0,.16);
       padding:14px;
@@ -182,7 +184,7 @@
     .card b{ display:block; margin-bottom:8px; font-size:14px; }
     .card p{ margin:0; color:var(--muted); font-size:13px; line-height:1.65; }
 
-    label{display:block; margin:10px 0 6px; color:var(--muted2); font-size:12px;}
+    label{display:block; margin:10px 0 6px; color:rgba(238,242,246,.62); font-size:12px}
     input, select, textarea{
       width:100%;
       padding:10px 10px;
@@ -195,9 +197,11 @@
       font-size:13px;
     }
     textarea{min-height:92px; resize:vertical}
-    .row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
-    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
 
+    .row{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    @media (max-width: 720px){ .row{grid-template-columns:1fr} }
+
+    .actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
     .btn2{
       display:inline-flex; align-items:center; justify-content:center;
       padding:10px 12px;
@@ -205,27 +209,18 @@
       border:1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.03);
       color: rgba(255,255,255,.88);
-      font-weight:800;
+      font-weight:700;
       font-size:13px;
       cursor:pointer;
       min-width:140px;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
     }
-    .btn2:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); background: rgba(255,255,255,.06); }
-    .btn2:active{ transform: translateY(0px); }
-
     .btn2.primary{
-      border-color: rgba(255,138,0,.45);
-      background: linear-gradient(135deg, rgba(255,138,0,.22), rgba(255,77,0,.14));
+      border-color: rgba(255,138,0,.40);
+      background: rgba(255,138,0,.14);
     }
-
-    .hint{
-      margin-top:10px;
-      color:var(--muted2);
-      font-size:12px;
-      line-height:1.45
-    }
-    .hint a{color: rgba(238,242,246,.86); text-decoration:underline; text-underline-offset:3px}
+    .hint{margin-top:10px; color:rgba(238,242,246,.62); font-size:12px; line-height:1.45}
+    .hint a{color: rgba(238,242,246,.82); text-decoration:underline; text-underline-offset:3px}
+    .mono{font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;}
 
     footer{
       margin-top:18px;
@@ -241,11 +236,33 @@
     .footlinks a{ color:rgba(238,242,246,.62); text-decoration:underline; text-underline-offset:3px; }
     .footlinks a:hover{ color:rgba(255,200,140,.95); }
 
+    /* Toast */
+    .toast{
+      position: fixed;
+      left: 18px;
+      bottom: 18px;
+      max-width: 560px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      color: rgba(238,242,246,.86);
+      font-size: 13px;
+      box-shadow: 0 18px 60px rgba(0,0,0,.55);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity .18s ease, transform .18s ease;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .toast.show{ opacity: 1; transform: translateY(0px); }
+
     @media (max-width: 980px){
       h1{ font-size:36px; }
       .grid{ grid-template-columns: 1fr; }
       .brand{ min-width:0; }
-      .row{ grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -256,7 +273,7 @@
       <div class="topbar">
         <a class="brand" href="/index.html" aria-label="TVEVT Home">
           <div class="mark" aria-hidden="true">
-            <!-- TVEVT mark (OUR logo style) -->
+            <!-- TVEVT mark (inline, so it always works even if assets move) -->
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="22" height="22">
               <defs>
                 <linearGradient id="tvevtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -301,7 +318,7 @@
             <b>Request form</b>
             <p>Submit the minimum details. We reply with onboarding steps and the right package for your team.</p>
 
-            <form id="form" autocomplete="on">
+            <form id="form" autocomplete="on" style="margin-top:10px;">
               <div class="row">
                 <div>
                   <label for="name">Full name</label>
@@ -326,7 +343,6 @@
                     <option>CMO / Marketing Lead</option>
                     <option>COO / Operations</option>
                     <option>Legal / Compliance</option>
-                    <option>Security / IT</option>
                     <option>Agency / Partner</option>
                     <option>Other</option>
                   </select>
@@ -360,36 +376,44 @@
 
             <b>Navigation rule</b>
             <p>
-              “Packages” always opens the main site section: <span style="opacity:.92">/index.html#pricing</span><br/>
-              Console: <span style="opacity:.92">/app.html?x=1</span><br/>
-              Log: <span style="opacity:.92">/log.html?x=1</span>
+              “Packages” always opens: <span class="mono">/index.html#pricing</span><br/>
+              Console: <span class="mono">/app.html?x=1</span><br/>
+              Log: <span class="mono">/log.html?x=1</span>
             </p>
           </div>
         </div>
-      </section>
 
-      <footer>
-        <div>©️ 2026 TVEVT — Governance Console</div>
-        <div class="footlinks">
-          <a href="/index.html#pricing">Packages</a>
-          <a href="/architecture.html">Architecture</a>
-          <a href="/about.html">About</a>
-          <a href="/call.html">Call</a>
-          <a href="/app.html?x=1">Console</a>
-          <a href="/log.html?x=1">Log</a>
-          <a href="/request-access.html?x=1">Request Access</a>
-        </div>
-      </footer>
+        <footer>
+          <div>©️ 2026 TVEVT — Governance Console</div>
+          <div class="footlinks">
+            <a href="/index.html#pricing">Packages</a>
+            <a href="/architecture.html">Architecture</a>
+            <a href="/about.html">About</a>
+            <a href="/call.html">Book a Call</a>
+            <a href="/app.html?x=1">Console</a>
+            <a href="/log.html?x=1">Log</a>
+            <a href="/request-access.html?x=1">Request Access</a>
+          </div>
+        </footer>
+      </section>
     </main>
   </div>
 
+  <div class="toast" id="toast">Email draft opened. If it didn’t open, email us directly: <span class="mono">social@tvevt.com</span>.</div>
+
   <script>
-    // Demo submit: compose email (until endpoint exists)
     (function(){
       const form = document.getElementById("form");
-      const safe = (v)=> (v||"").toString().trim();
+      const toast = document.getElementById("toast");
 
-      form.addEventListener("submit", (e) => {
+      function safe(v){ return (v||"").toString().trim(); }
+      function showToast(){
+        toast.classList.add("show");
+        window.clearTimeout(showToast._t);
+        showToast._t = window.setTimeout(()=>toast.classList.remove("show"), 4500);
+      }
+
+      form.addEventListener("submit", function(e){
         e.preventDefault();
 
         const name = safe(document.getElementById("name").value);
@@ -400,26 +424,20 @@
 
         const subject = encodeURIComponent("TVEVT — Access Request");
         const bodyLines = [
-          "Hello TVEVT team,",
+          `Name: ${name || "-"}`,
+          `Email: ${email || "-"}`,
+          `Company: ${company || "-"}`,
+          `Role: ${role || "-"}`,
           "",
-          "I’d like to request access to TVEVT (Governance Console).",
+          "Risk / Use case:",
+          risk || "-",
           "",
-          "Details:",
-          `• Name: ${name || "-"}`,
-          `• Work email: ${email || "-"}`,
-          `• Company: ${company || "-"}`,
-          `• Role: ${role || "-"}`,
-          "",
-          "Risk / use case:",
-          risk ? risk : "-",
-          "",
-          `Requested from: ${location.href}`,
-          "",
-          "Thank you."
+          `Requested from: ${location.href}`
         ];
-
         const body = encodeURIComponent(bodyLines.join("\n"));
         window.location.href = `mailto:social@tvevt.com?subject=${subject}&body=${body}`;
+
+        showToast();
       });
     })();
   </script>
