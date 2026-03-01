@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 100 100">
+  <defs>
+    <linearGradient id="tvevtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff8a00"/>
+      <stop offset="100%" stop-color="#ff4d00"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon centered for favicon -->
+  <g transform="translate(0,0)">
+    <rect x="10" y="18" width="58" height="48" rx="12"
+          fill="none" stroke="url(#tvevtGradient)" stroke-width="7"/>
+    <polygon points="26,66 40,66 29,83"
+             fill="url(#tvevtGradient)"/>
+    <rect x="40" y="28" width="50" height="50" rx="12"
+          fill="none" stroke="url(#tvevtGradient)" stroke-width="7"/>
+  </g>
+</svg>
