@@ -13,7 +13,7 @@
   <meta name="theme-color" content="#0b0d10"/>
 
   <meta property="og:title" content="TVEVT — Influence Infrastructure"/>
-  <meta property="og:description" content="A central console for controlled publishing: who/what/when/where — by rules, with approvals, and an immutable execution log."/>
+  <meta property="og:description" content="Control your digital signal. Orchestrate distribution across channels. AI strengthens preparation + governance. Immutable execution log."/>
   <meta property="og:type" content="website"/>
   <meta property="og:url" content="https://tvevt.com/"/>
 
@@ -46,6 +46,7 @@
     a{ color:inherit; text-decoration:none; }
     .wrap{ max-width:1120px; margin:0 auto; padding:28px 18px 70px; }
 
+    /* header */
     header{
       display:flex; align-items:center; justify-content:space-between;
       gap:14px;
@@ -121,6 +122,7 @@
       -webkit-backdrop-filter: blur(10px);
     }
 
+    /* hero */
     .hero{
       margin-top:18px;
       border-radius: var(--radius);
@@ -202,6 +204,7 @@
     .note b{ display:block; font-size:14px; margin-bottom:6px; }
     .note p{ margin:0; color:var(--muted); font-size:13px; line-height:1.55; }
 
+    /* sections */
     .section{
       margin-top:22px;
       border-radius: var(--radius);
@@ -231,6 +234,7 @@
       max-width: 980px;
     }
 
+    /* signal journey */
     .journey{
       margin-top:14px;
       border-radius:16px;
@@ -290,6 +294,7 @@
       background: rgba(0,0,0,.10);
     }
 
+    /* pricing */
     .pricing h3{
       margin:0;
       font-size:34px;
@@ -379,6 +384,7 @@
     .labelRow b{ font-size:12px; letter-spacing:.14em; text-transform:uppercase; color:rgba(238,242,246,.72); }
     .labelRow span{ font-size:12px; color:rgba(238,242,246,.52); }
 
+    /* footer */
     footer{
       margin-top:22px;
       display:flex;
@@ -432,19 +438,18 @@
         <nav class="nav" aria-label="Top navigation">
           <a class="btn btn-ghost" href="#pricing">Packages</a>
           <a class="btn btn-ghost" href="/architecture.html">Architecture</a>
-          <a class="btn btn-ghost" href="/execution-log.html">Execution Log</a>
+          <a class="btn btn-ghost" href="/app.html?x=1">Console</a>
+          <a class="btn btn-ghost" href="/log.html?x=1">Log</a>
           <a class="btn btn-primary" href="https://leads.tvevt.com/?intent=access" target="_blank" rel="noopener">Request Access</a>
         </nav>
       </div>
     </header>
 
     <main>
-      <!-- UPDATED: HERO + 3 SIDE BLOCKS -->
       <section class="hero" aria-label="Hero">
         <div class="hero-grid">
           <div>
             <span class="kicker"><span class="dot"></span> Control Console • Rules • Proof</span>
-
             <h1>One central console<br/>for controlled publishing.</h1>
 
             <p class="lead">
@@ -458,10 +463,11 @@
             <div class="cta-row">
               <a class="btn btn-primary" href="https://leads.tvevt.com/?intent=access" target="_blank" rel="noopener">Request Access</a>
               <a class="btn btn-ghost" href="#pricing">View Packages</a>
+              <a class="btn btn-ghost" href="/app.html?x=1">Open Console</a>
             </div>
 
             <div class="mini">
-              Operational packages build discipline and repeatability.
+              Operational packages build discipline and repeatability.<br/>
               Strategic packages add enforcement, institutional governance, and long-retention proof.
             </div>
 
@@ -473,7 +479,7 @@
 
               <div class="journeyGrid">
                 <div class="step">
-                  <div class="icon">🧩</div>
+                  <div class="icon">🧾</div>
                   <div class="t">Drafting</div>
                   <p class="p">Prepare one message. Generate channel-ready variants (rules today, AI later).</p>
                 </div>
@@ -481,7 +487,7 @@
                 <div class="arrow">→</div>
 
                 <div class="step">
-                  <div class="icon">✅</div>
+                  <div class="icon">⚖️</div>
                   <div class="t">Governance</div>
                   <p class="p">Approvals, policies, and (by tier) enforcement gates before anything goes out.</p>
                 </div>
@@ -514,18 +520,16 @@
         </div>
       </section>
 
-      <!-- UPDATED: WHY NOW -->
-      <section class="section" id="what">
+      <section class="section" id="why-now">
         <h2>Why now</h2>
         <div class="title">Because the cost of one mistake is now structural.</div>
         <p class="text">
-          <b>1) Risk exploded.</b> One wrong post can trigger reputational loss, legal exposure, or contract damage.<br/>
-          <b>2) Teams are distributed.</b> Many people, many channels — without a control layer, drift is guaranteed.<br/>
-          <b>3) AI accelerates mistakes.</b> AI speeds production, but also speeds errors. TVEVT makes AI and publishing governable.
+          1) Risk exploded. One wrong post can trigger reputational loss, legal exposure, or contract damage.<br/>
+          2) Teams are distributed. Many people, many channels — without a control layer, drift is guaranteed.<br/>
+          3) AI accelerates mistakes. AI speeds production, but also speeds errors. TVEVT makes AI and publishing governable.
         </p>
       </section>
 
-      <!-- Pricing / Packages (UNCHANGED) -->
       <section class="section pricing" id="pricing" aria-label="Pricing">
         <h3>7 Packages — One Architecture</h3>
         <p class="sub">
@@ -657,10 +661,11 @@
       <section class="section" id="final-cta">
         <h2>Next step</h2>
         <div class="title">Regain control of your signal.</div>
-        <p class="text">Apply for access, or book a strategic call for Tier I–Enterprise deployment.</p>
+        <p class="text">Apply for access, or open the Console + Log demo pages.</p>
         <div class="cta-row">
           <a class="btn btn-primary" href="https://leads.tvevt.com/?intent=access" target="_blank" rel="noopener">Request Access</a>
-          <a class="btn btn-ghost" href="/call.html">Book a Call</a>
+          <a class="btn btn-ghost" href="/app.html?x=1">Open Console</a>
+          <a class="btn btn-ghost" href="/log.html?x=1">Open Log</a>
         </div>
       </section>
 
@@ -669,7 +674,8 @@
         <div class="footlinks">
           <a href="/about.html">About</a>
           <a href="/architecture.html">Architecture</a>
-          <a href="/execution-log.html">Execution Log</a>
+          <a href="/app.html?x=1">Console</a>
+          <a href="/log.html?x=1">Log</a>
           <a href="/call.html">Call</a>
         </div>
       </footer>
@@ -677,6 +683,7 @@
   </div>
 
   <script>
+    // Smooth scroll for internal anchors
     document.querySelectorAll('a[href^="#"]').forEach(a=>{
       a.addEventListener('click', (e)=>{
         const id = a.getAttribute('href');
