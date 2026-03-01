@@ -1,0 +1,711 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="dark"/>
+
+  <title>TVEVT — Execution Log</title>
+  <meta name="description" content="TVEVT Execution Log: immutable record of what was executed, where, and when. Audit-proof signal accountability." />
+
+  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg?v=2026-02-25">
+  <link rel="shortcut icon" href="/tvevt-favicon.svg?v=2026-02-25">
+  <meta name="theme-color" content="#0b0d10"/>
+
+  <meta property="og:title" content="TVEVT — Execution Log"/>
+  <meta property="og:description" content="Immutable execution log: who executed what, where, and when — as infrastructure proof."/>
+  <meta property="og:type" content="website"/>
+  <meta property="og:url" content="https://tvevt.com/log.html"/>
+
+  <style>
+    :root{
+      --bg0:#07090c;
+      --bg1:#0b0d10;
+      --stroke: rgba(255,255,255,.12);
+      --text:#eef2f6;
+      --muted: rgba(238,242,246,.72);
+      --muted2: rgba(238,242,246,.56);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --orange1:#ff8a00;
+      --orange2:#ff4d00;
+      --radius: 18px;
+      --ok: rgba(70, 210, 140, .9);
+      --warn: rgba(255, 200, 90, .95);
+      --bad: rgba(255, 110, 110, .95);
+      --info: rgba(140, 190, 255, .95);
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(255,138,0,.16), transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, rgba(255,77,0,.10), transparent 60%),
+        radial-gradient(900px 700px at 60% 95%, rgba(255,255,255,.06), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:1120px; margin:0 auto; padding:28px 18px 70px; }
+
+    /* header */
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      position:sticky; top:0;
+      padding:16px 0;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index:50;
+    }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      width:100%;
+      padding:14px 14px;
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius: 22px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.35);
+    }
+    .brand{ display:flex; align-items:center; gap:12px; min-width:260px; }
+    .mark{
+      width:34px; height:34px;
+      display:grid; place-items:center;
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .word{ display:flex; flex-direction:column; line-height:1.05; }
+    .word b{ font-size:16px; letter-spacing:.7px; }
+    .word span{ font-size:12px; color:var(--muted2); }
+
+    .nav{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
+
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius: 999px;
+      font-size:13px;
+      letter-spacing:.2px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.07);
+    }
+    .btn:active{ transform: translateY(0px); }
+
+    .btn-primary{
+      border:1px solid rgba(255,138,0,.35);
+      background: linear-gradient(135deg, rgba(255,138,0,.95), rgba(255,77,0,.92));
+      color:#1a120a;
+      font-weight:900;
+      box-shadow: 0 14px 40px rgba(255,138,0,.14);
+    }
+    .btn-primary:hover{ box-shadow: 0 18px 60px rgba(255,138,0,.18); }
+
+    .btn-ghost{
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.14);
+      color:var(--text);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+    }
+
+    /* page hero */
+    .panel{
+      margin-top:18px;
+      border-radius: var(--radius);
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding:22px 22px 18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .panel::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 280px at 18% 0%, rgba(255,138,0,.18), transparent 55%),
+        radial-gradient(600px 260px at 78% 10%, rgba(255,77,0,.12), transparent 60%);
+      pointer-events:none;
+      z-index:0;
+    }
+    .panel-inner{ position:relative; z-index:3; }
+    .kicker{
+      display:inline-flex; gap:10px; align-items:center;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color:rgba(238,242,246,.78);
+      font-size:12px;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: linear-gradient(135deg, var(--orange1), var(--orange2));
+      box-shadow: 0 10px 30px rgba(255,138,0,.18);
+    }
+    h1{
+      margin:12px 0 0;
+      font-size:42px;
+      letter-spacing:-.9px;
+      line-height:1.05;
+      text-shadow: 0 8px 30px rgba(0,0,0,.55);
+    }
+    .lead{
+      margin-top:10px;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.7;
+      max-width: 900px;
+    }
+    .row{
+      display:flex; gap:12px; flex-wrap:wrap;
+      margin-top:14px;
+      align-items:center;
+    }
+
+    /* controls + stats */
+    .grid2{
+      margin-top:16px;
+      display:grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap:14px;
+      align-items:start;
+    }
+    .card{
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.05);
+      padding:16px;
+      box-shadow: 0 14px 40px rgba(0,0,0,.32);
+    }
+    .card h2{
+      margin:0 0 10px 0;
+      font-size:12px;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:rgba(238,242,246,.72);
+    }
+    .filters{
+      display:flex; gap:10px; flex-wrap:wrap; align-items:center;
+    }
+    .chip{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding:8px 12px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.16);
+      color:rgba(238,242,246,.80);
+      font-size:12px;
+      cursor:pointer;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .chip:hover{ transform: translateY(-1px); border-color: rgba(255,255,255,.22); background: rgba(0,0,0,.22); }
+    .chip.active{
+      border-color: rgba(255,138,0,.35);
+      background: linear-gradient(135deg, rgba(255,138,0,.22), rgba(255,77,0,.16));
+      color: rgba(255,235,215,.96);
+    }
+
+    .stat{
+      display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+      padding:12px;
+      border-radius:16px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.16);
+      margin-top:10px;
+    }
+    .stat b{ display:block; font-size:13px; margin-bottom:4px; }
+    .stat span{ color:var(--muted); font-size:12px; line-height:1.5; }
+    .num{
+      font-size:22px;
+      font-weight:900;
+      letter-spacing:-.4px;
+      color: rgba(255,235,215,.96);
+    }
+
+    /* table */
+    .tableWrap{
+      margin-top:14px;
+      border-radius: 18px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.14);
+      overflow:hidden;
+    }
+    table{
+      width:100%;
+      border-collapse: collapse;
+      font-size:13px;
+    }
+    thead th{
+      text-align:left;
+      padding:12px 14px;
+      color: rgba(238,242,246,.72);
+      font-size:12px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      border-bottom:1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.18);
+      white-space:nowrap;
+    }
+    tbody td{
+      padding:12px 14px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      color: rgba(238,242,246,.78);
+      vertical-align:top;
+    }
+    tbody tr:hover td{
+      background: rgba(255,255,255,.03);
+    }
+    .muted{ color: rgba(238,242,246,.56); font-size:12px; }
+    .payload{
+      max-width: 520px;
+      color: rgba(238,242,246,.74);
+      line-height:1.55;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    .badge{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      padding:6px 10px;
+      border-radius:999px;
+      font-weight:800;
+      font-size:11px;
+      letter-spacing:.35px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+      white-space:nowrap;
+    }
+    .b-sent{ border-color: rgba(70,210,140,.35); color: rgba(200,255,225,.95); }
+    .b-planned{ border-color: rgba(140,190,255,.28); color: rgba(215,235,255,.95); }
+    .b-failed{ border-color: rgba(255,110,110,.30); color: rgba(255,220,220,.95); }
+
+    .chan{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      font-weight:800;
+    }
+    .cDot{
+      width:8px; height:8px; border-radius:50%;
+      background: rgba(255,255,255,.35);
+      box-shadow: 0 10px 30px rgba(0,0,0,.30);
+    }
+    .tg{ background: rgba(80, 180, 255, .9); }
+    .li{ background: rgba(110, 140, 255, .9); }
+    .em{ background: rgba(255, 200, 90, .95); }
+    .xx{ background: rgba(200, 200, 200, .75); }
+
+    /* footer */
+    footer{
+      margin-top:22px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      color:rgba(238,242,246,.52);
+      font-size:12px;
+      padding:18px 6px 0;
+    }
+    .footlinks{ display:flex; gap:12px; flex-wrap:wrap; }
+    .footlinks a{ color:rgba(238,242,246,.62); text-decoration:underline; text-underline-offset:3px; }
+    .footlinks a:hover{ color:rgba(255,200,140,.95); }
+
+    @media (max-width: 980px){
+      h1{ font-size:34px; }
+      .grid2{ grid-template-columns: 1fr; }
+      .brand{ min-width: 0; }
+      thead{ display:none; }
+      table, tbody, tr, td{ display:block; width:100%; }
+      tbody td{ border-bottom: none; padding:10px 14px; }
+      tbody tr{ border-bottom:1px solid rgba(255,255,255,.10); }
+      tbody td::before{
+        content: attr(data-label);
+        display:block;
+        color: rgba(238,242,246,.56);
+        font-size:11px;
+        letter-spacing:.12em;
+        text-transform:uppercase;
+        margin-bottom:6px;
+      }
+      .payload{ max-width: 100%; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <a class="brand" href="/index.html" aria-label="TVEVT Home">
+          <div class="mark" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="22" height="22">
+              <defs>
+                <linearGradient id="tvevtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ff8a00"/>
+                  <stop offset="100%" stop-color="#ff4d00"/>
+                </linearGradient>
+              </defs>
+              <rect x="20" y="25" width="65" height="50" rx="14" fill="none" stroke="url(#tvevtGradient)" stroke-width="6"/>
+              <rect x="45" y="40" width="65" height="50" rx="14" fill="none" stroke="url(#tvevtGradient)" stroke-width="6"/>
+              <polygon points="30,75 42,75 32,90" fill="url(#tvevtGradient)"/>
+            </svg>
+          </div>
+          <div class="word">
+            <b>TVEVT</b>
+            <span>Governance Console</span>
+          </div>
+        </a>
+
+        <nav class="nav" aria-label="Top navigation">
+          <a class="btn btn-ghost" href="/app.html">Console</a>
+          <a class="btn btn-primary" href="/log.html" aria-current="page">Log</a>
+          <a class="btn btn-ghost" href="#packages">Packages</a>
+          <a class="btn btn-ghost" href="https://leads.tvevt.com/?intent=access" target="_blank" rel="noopener">Request Access</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel" aria-label="Execution Log">
+        <div class="panel-inner">
+          <span class="kicker"><span class="dot"></span> Immutable record • Proof of execution • Governance surface</span>
+          <h1>Execution Log — immutable by design.</h1>
+          <p class="lead">
+            This page demonstrates the doctrine: <b>no deletions</b>, no silent edits — only append.
+            It answers one question that every organization eventually asks: <b>what was executed, where, and when?</b>
+          </p>
+
+          <div class="row">
+            <a class="btn btn-primary" href="/app.html">Open Console</a>
+            <button class="btn btn-ghost" id="btnExport">Export (JSON)</button>
+            <button class="btn btn-ghost" id="btnSeed">Seed demo entries</button>
+            <button class="btn btn-ghost" id="btnClear">Reset demo (local)</button>
+          </div>
+
+          <p class="lead" style="margin-top:10px; color:rgba(238,242,246,.56); font-size:13px;">
+            Note: this is a UI demo. It stores entries in your browser (localStorage) to simulate immutability. In v1.1 the same logic maps to KV/DB (append-only).
+          </p>
+        </div>
+      </section>
+
+      <section class="grid2" aria-label="Log controls and stats">
+        <div class="card">
+          <h2>Filters</h2>
+          <div class="filters" id="filters">
+            <span class="chip active" data-filter="all">All</span>
+            <span class="chip" data-filter="telegram">Telegram</span>
+            <span class="chip" data-filter="linkedin">LinkedIn</span>
+            <span class="chip" data-filter="email">Email</span>
+            <span class="chip" data-filter="x">X</span>
+            <span class="chip" data-filter="sent">Sent</span>
+            <span class="chip" data-filter="planned">Planned</span>
+            <span class="chip" data-filter="failed">Failed</span>
+          </div>
+
+          <div class="tableWrap" aria-label="Execution table">
+            <table>
+              <thead>
+                <tr>
+                  <th style="width:170px;">Time</th>
+                  <th style="width:140px;">Channel</th>
+                  <th>Payload</th>
+                  <th style="width:140px;">Status</th>
+                </tr>
+              </thead>
+              <tbody id="tbody">
+                <!-- rows injected -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <aside class="card" aria-label="Stats and doctrine">
+          <h2>Doctrine</h2>
+
+          <div class="stat">
+            <div>
+              <b>Append-only log</b>
+              <span>Entries can be added. Not removed. Not silently edited.</span>
+            </div>
+            <div class="num" id="statTotal">0</div>
+          </div>
+
+          <div class="stat">
+            <div>
+              <b>Proof surface</b>
+              <span>Execution becomes verifiable output: channel + time + payload + status.</span>
+            </div>
+            <div class="num" id="statSent">0</div>
+          </div>
+
+          <div class="stat">
+            <div>
+              <b>Governance link</b>
+              <span>Approvals determine what reaches “sent”. Plans remain “planned”.</span>
+            </div>
+            <div class="num" id="statPlanned">0</div>
+          </div>
+
+          <div class="stat">
+            <div>
+              <b>Audit mindset</b>
+              <span>In v1.1 this becomes immutable storage + retention by plan.</span>
+            </div>
+            <div class="num" id="statFailed">0</div>
+          </div>
+
+          <div class="stat" style="border-color: rgba(255,138,0,.22); background: linear-gradient(180deg, rgba(255,138,0,.06), rgba(0,0,0,.16));">
+            <div>
+              <b>Governance Console</b>
+              <span>Workspace + roles + drafts + approvals + immutable log = sellable control.</span>
+            </div>
+            <div class="num">v1.1</div>
+          </div>
+        </aside>
+      </section>
+
+      <section class="card" id="packages" aria-label="Packages">
+        <h2>Packages</h2>
+        <p class="lead" style="margin:0;">
+          Packages live on the main site. This page only demonstrates the <b>execution proof layer</b>.
+        </p>
+        <div class="row" style="margin-top:12px;">
+          <a class="btn btn-ghost" href="/index.html#pricing">View Packages</a>
+          <a class="btn btn-primary" href="https://leads.tvevt.com/?intent=access" target="_blank" rel="noopener">Request Access</a>
+        </div>
+      </section>
+
+      <footer>
+        <div>©️ 2026 TVEVT — Governance Console</div>
+        <div class="footlinks">
+          <a href="/index.html">Home</a>
+          <a href="/app.html">Console</a>
+          <a href="/log.html">Log</a>
+          <a href="https://leads.tvevt.com/?intent=access" target="_blank" rel="noopener">Request Access</a>
+        </div>
+      </footer>
+    </main>
+  </div>
+
+  <script>
+    (function(){
+      const KEY = "tvevt_demo_log_v1";
+      const tbody = document.getElementById("tbody");
+      const filters = document.getElementById("filters");
+      const statTotal = document.getElementById("statTotal");
+      const statSent = document.getElementById("statSent");
+      const statPlanned = document.getElementById("statPlanned");
+      const statFailed = document.getElementById("statFailed");
+
+      const btnExport = document.getElementById("btnExport");
+      const btnSeed = document.getElementById("btnSeed");
+      const btnClear = document.getElementById("btnClear");
+
+      let active = "all";
+
+      function nowISO(){
+        return new Date().toISOString();
+      }
+
+      function load(){
+        try{
+          const raw = localStorage.getItem(KEY);
+          return raw ? JSON.parse(raw) : [];
+        }catch(e){
+          return [];
+        }
+      }
+
+      function save(items){
+        localStorage.setItem(KEY, JSON.stringify(items));
+      }
+
+      function append(entry){
+        const items = load();
+        items.push(entry); // append-only
+        save(items);
+      }
+
+      function channelDotClass(ch){
+        if(ch === "telegram") return "cDot tg";
+        if(ch === "linkedin") return "cDot li";
+        if(ch === "email") return "cDot em";
+        if(ch === "x") return "cDot xx";
+        return "cDot";
+      }
+
+      function channelLabel(ch){
+        if(ch === "telegram") return "Telegram";
+        if(ch === "linkedin") return "LinkedIn";
+        if(ch === "email") return "Email";
+        if(ch === "x") return "X";
+        return ch;
+      }
+
+      function statusBadge(status){
+        if(status === "sent") return '<span class="badge b-sent">sent</span>';
+        if(status === "planned") return '<span class="badge b-planned">planned</span>';
+        if(status === "failed") return '<span class="badge b-failed">failed</span>';
+        return '<span class="badge">unknown</span>';
+      }
+
+      function fmtTime(iso){
+        // Keep it readable; ISO is also acceptable as proof
+        // We show ISO, but shorten milliseconds
+        return iso.replace(/\.\d{3}Z$/, "Z");
+      }
+
+      function applyFilter(items){
+        if(active === "all") return items;
+        if(active === "telegram" || active === "linkedin" || active === "email" || active === "x"){
+          return items.filter(x => x.channel === active);
+        }
+        if(active === "sent" || active === "planned" || active === "failed"){
+          return items.filter(x => x.status === active);
+        }
+        return items;
+      }
+
+      function render(){
+        const items = load();
+        const view = applyFilter(items).slice().reverse(); // newest first
+
+        // stats
+        statTotal.textContent = items.length;
+        statSent.textContent = items.filter(x=>x.status==="sent").length;
+        statPlanned.textContent = items.filter(x=>x.status==="planned").length;
+        statFailed.textContent = items.filter(x=>x.status==="failed").length;
+
+        // table
+        tbody.innerHTML = "";
+
+        if(view.length === 0){
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td data-label="Time" class="muted">—</td>
+            <td data-label="Channel" class="muted">—</td>
+            <td data-label="Payload" class="muted">No entries yet. Click “Seed demo entries”.</td>
+            <td data-label="Status" class="muted">—</td>
+          `;
+          tbody.appendChild(tr);
+          return;
+        }
+
+        view.forEach(item=>{
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td data-label="Time">${fmtTime(item.time)}</td>
+            <td data-label="Channel">
+              <span class="chan"><span class="${channelDotClass(item.channel)}"></span>${channelLabel(item.channel)}</span>
+              <div class="muted">${item.actor || "system"}</div>
+            </td>
+            <td data-label="Payload"><div class="payload">${escapeHtml(item.payload || "")}</div></td>
+            <td data-label="Status">${statusBadge(item.status)}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      function escapeHtml(str){
+        return String(str)
+          .replaceAll("&", "&amp;")
+          .replaceAll("<", "&lt;")
+          .replaceAll(">", "&gt;")
+          .replaceAll('"', "&quot;")
+          .replaceAll("'", "&#039;");
+      }
+
+      // events
+      filters.addEventListener("click", (e)=>{
+        const chip = e.target.closest(".chip");
+        if(!chip) return;
+        active = chip.getAttribute("data-filter") || "all";
+        document.querySelectorAll(".chip").forEach(c=>c.classList.remove("active"));
+        chip.classList.add("active");
+        render();
+      });
+
+      btnSeed.addEventListener("click", ()=>{
+        // seed a few realistic entries (append-only)
+        const demo = [
+          {
+            time: nowISO(),
+            channel: "telegram",
+            status: "sent",
+            actor: "owner",
+            payload: "Weekly update: governance console shipping. Console → Log → Packages. No deletions; append-only proof."
+          },
+          {
+            time: new Date(Date.now()-1000*60*22).toISOString(),
+            channel: "linkedin",
+            status: "planned",
+            actor: "editor",
+            payload: "Announcement draft: First Governance Console for controlled publishing. Awaiting approval."
+          },
+          {
+            time: new Date(Date.now()-1000*60*55).toISOString(),
+            channel: "email",
+            status: "planned",
+            actor: "approver",
+            payload: "Client note: We can prove what was executed, where, and when — with immutable logging."
+          },
+          {
+            time: new Date(Date.now()-1000*60*80).toISOString(),
+            channel: "x",
+            status: "failed",
+            actor: "system",
+            payload: "Execution blocked: connector not configured (demo)."
+          }
+        ];
+        demo.reverse().forEach(x=>append(x));
+        render();
+      });
+
+      btnClear.addEventListener("click", ()=>{
+        // Reset demo only (for your browser)
+        localStorage.removeItem(KEY);
+        render();
+      });
+
+      btnExport.addEventListener("click", ()=>{
+        const items = load();
+        const blob = new Blob([JSON.stringify(items, null, 2)], {type:"application/json"});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "tvevt-execution-log.json";
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        URL.revokeObjectURL(url);
+      });
+
+      // initial
+      render();
+    })();
+  </script>
+</body>
+</html>
