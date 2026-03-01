@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 200">
+  <defs>
+    <linearGradient id="tvevtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff8a00"/>
+      <stop offset="100%" stop-color="#ff4d00"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Icon -->
+  <rect x="20" y="50" width="80" height="70" rx="18"
+        fill="none" stroke="url(#tvevtGradient)" stroke-width="10"/>
+  <polygon points="40,120 65,120 45,150"
+           fill="url(#tvevtGradient)"/>
+  <rect x="70" y="70" width="90" height="70" rx="18"
+        fill="none" stroke="url(#tvevtGradient)" stroke-width="10"/>
+
+  <!-- Wordmark -->
+  <text x="220" y="120"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="90"
+        letter-spacing="12"
+        fill="#111111">
+    TVEVT
+  </text>
+</svg>
