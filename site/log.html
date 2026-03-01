@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>TVEVT — Execution Log</title>
   <meta name="description" content="Execution Log — immutable by design. Append-only proof of execution." />
-  <link rel="icon" href="/tvevt-favicon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/tvevt-favicon.svg?v=2026-02-25" type="image/svg+xml" />
+  <meta name="theme-color" content="#0b0d10"/>
+  <meta name="color-scheme" content="dark"/>
 
   <style>
     :root{
@@ -18,8 +20,14 @@
       --text:rgba(255,255,255,.92);
       --muted:rgba(255,255,255,.68);
       --muted2:rgba(255,255,255,.54);
-      --accent:#f39a2b;
-      --accent2:#f7b04f;
+
+      /* TVEVT ORANGE (brand) */
+      --orange1:#ff8a00;
+      --orange2:#ff4d00;
+
+      --accent: var(--orange1);
+      --accent2: var(--orange2);
+
       --ok:#35c27a;
       --warn:#f2c94c;
       --bad:#ff5a6a;
@@ -37,8 +45,8 @@
       font-family:var(--font);
       color:var(--text);
       background:
-        radial-gradient(900px 500px at 20% 15%, rgba(243,154,43,.18), transparent 60%),
-        radial-gradient(900px 500px at 85% 25%, rgba(122,167,255,.16), transparent 60%),
+        radial-gradient(900px 500px at 20% 15%, rgba(255,138,0,.18), transparent 60%),
+        radial-gradient(900px 500px at 85% 25%, rgba(255,77,0,.12), transparent 60%),
         linear-gradient(180deg, var(--bg0), var(--bg1));
     }
 
@@ -62,13 +70,15 @@
     .mark{
       width:34px; height:34px; border-radius:12px;
       border:1px solid var(--stroke2);
-      background: radial-gradient(circle at 30% 30%, rgba(243,154,43,.35), rgba(243,154,43,.10) 60%, rgba(255,255,255,.02));
+      background:
+        radial-gradient(circle at 30% 30%, rgba(255,138,0,.35), rgba(255,77,0,.10) 60%, rgba(255,255,255,.02));
       display:grid; place-items:center;
       overflow:hidden;
     }
     .mark img{width:22px; height:22px; opacity:.95}
     .brand .t1{font-weight:800; letter-spacing:.3px; line-height:1}
     .brand .t2{font-size:12px; color:var(--muted2); margin-top:2px}
+
     .nav{display:flex; gap:8px; align-items:center; flex-wrap:wrap; justify-content:flex-end}
     .pill{
       padding:9px 12px;
@@ -82,21 +92,23 @@
     }
     .pill:hover{border-color: rgba(255,255,255,.18)}
     .pill.active{
-      border-color: rgba(243,154,43,.45);
-      background: rgba(243,154,43,.14);
+      border-color: rgba(255,138,0,.45);
+      background: rgba(255,138,0,.12);
       color: rgba(255,255,255,.92);
     }
+
     .cta{
       padding:10px 14px;
       border-radius:999px;
-      border:1px solid rgba(243,154,43,.55);
-      background: linear-gradient(180deg, rgba(243,154,43,.95), rgba(243,154,43,.78));
-      color:#20170a;
-      font-weight:800;
+      border:1px solid rgba(255,138,0,.40);
+      background: linear-gradient(135deg, rgba(255,138,0,.95), rgba(255,77,0,.92));
+      color:#1a120a;
+      font-weight:900;
       font-size:13px;
       line-height:1;
-      box-shadow: 0 10px 24px rgba(243,154,43,.18);
+      box-shadow: 0 14px 40px rgba(255,138,0,.14);
     }
+    .cta:hover{ box-shadow: 0 18px 60px rgba(255,138,0,.18); }
 
     /* Hero */
     .hero{
@@ -117,7 +129,7 @@
       border-radius:999px;
       background: rgba(255,255,255,.03);
     }
-    .dot{width:8px;height:8px;border-radius:99px;background:var(--accent)}
+    .dot{width:8px;height:8px;border-radius:99px;background: linear-gradient(135deg, var(--orange1), var(--orange2));}
     h1{
       margin:12px 0 8px;
       font-size:44px;
@@ -139,8 +151,8 @@
     }
     .btn:hover{border-color: rgba(255,255,255,.18)}
     .btn.primary{
-      border-color: rgba(243,154,43,.50);
-      background: rgba(243,154,43,.14);
+      border-color: rgba(255,138,0,.40);
+      background: rgba(255,138,0,.12);
     }
     .note{margin-top:10px; color:var(--muted2); font-size:12px; line-height:1.45}
 
@@ -185,8 +197,8 @@
       user-select:none;
     }
     .chip.active{
-      border-color: rgba(243,154,43,.45);
-      background: rgba(243,154,43,.14);
+      border-color: rgba(255,138,0,.40);
+      background: rgba(255,138,0,.12);
     }
 
     table{
@@ -245,6 +257,7 @@
     }
     .footlinks{display:flex; gap:12px; flex-wrap:wrap}
     .footlinks a{color: rgba(255,255,255,.72); text-decoration:underline; text-underline-offset:3px}
+    .footlinks a:hover{color: rgba(255,200,140,.95);}
   </style>
 </head>
 
@@ -252,8 +265,8 @@
   <div class="wrap">
 
     <header class="topbar">
-      <a class="brand" href="/?x=1">
-        <span class="mark"><img src="/tvevt-favicon.svg" alt="TVEVT"></span>
+      <a class="brand" href="/index.html" aria-label="TVEVT Home">
+        <span class="mark"><img src="/tvevt-favicon.svg?v=2026-02-25" alt="TVEVT"></span>
         <span>
           <div class="t1">TVEVT</div>
           <div class="t2">Governance Console</div>
@@ -263,7 +276,10 @@
       <nav class="nav" aria-label="Top navigation">
         <a class="pill" href="/app.html?x=1">Console</a>
         <a class="pill active" href="/log.html?x=1">Log</a>
-        <a class="pill" href="/#pricing">Packages</a>
+        <a class="pill" href="/architecture.html">Architecture</a>
+        <a class="pill" href="/about.html">About</a>
+        <a class="pill" href="/call.html">Book a Call</a>
+        <a class="pill" href="/index.html#pricing">Packages</a>
         <a class="cta" href="/request-access.html?x=1">Request Access</a>
       </nav>
     </header>
@@ -363,9 +379,12 @@
     </section>
 
     <div class="footer">
-      <div>© 2026 TVEVT — Governance Console</div>
+      <div>©️ 2026 TVEVT — Governance Console</div>
       <div class="footlinks">
-        <a href="/#pricing">Packages</a>
+        <a href="/index.html#pricing">Packages</a>
+        <a href="/architecture.html">Architecture</a>
+        <a href="/about.html">About</a>
+        <a href="/call.html">Book a Call</a>
         <a href="/app.html?x=1">Console</a>
         <a href="/log.html?x=1">Log</a>
         <a href="/request-access.html?x=1">Request Access</a>
