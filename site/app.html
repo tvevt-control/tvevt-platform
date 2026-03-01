@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="dark"/>
+
+  <title>TVEVT Console</title>
+  <meta name="description" content="TVEVT Console — Workspace, roles, drafts, approvals, immutable log." />
+
+  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg?v=2026-02-25">
+  <link rel="shortcut icon" href="/tvevt-favicon.svg?v=2026-02-25">
+  <meta name="theme-color" content="#0b0d10"/>
+
+  <style>
+    :root{
+      --bg0:#07090c;
+      --bg1:#0b0d10;
+      --stroke: rgba(255,255,255,.12);
+      --text:#eef2f6;
+      --muted: rgba(238,242,246,.72);
+      --muted2: rgba(238,242,246,.56);
+      --shadow: 0 18px 60px rgba(0,0,0,.55);
+      --orange1:#ff8a00;
+      --orange2:#ff4d00;
+      --radius: 18px;
+      --good: rgba(110,255,170,.18);
+      --warn: rgba(255,210,110,.18);
+      --bad: rgba(255,110,110,.18);
+    }
+    *{ box-sizing:border-box; }
+    html,body{ height:100%; }
+    body{
+      margin:0;
+      color:var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
+      background:
+        radial-gradient(1200px 700px at 15% 10%, rgba(255,138,0,.18), transparent 60%),
+        radial-gradient(900px 600px at 85% 20%, rgba(255,77,0,.12), transparent 60%),
+        radial-gradient(900px 700px at 60% 95%, rgba(255,255,255,.06), transparent 55%),
+        linear-gradient(180deg, var(--bg0), var(--bg1));
+      overflow-x:hidden;
+    }
+    a{ color:inherit; text-decoration:none; }
+    .wrap{ max-width:1120px; margin:0 auto; padding:28px 18px 70px; }
+
+    /* topbar (same visual language as index) */
+    header{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      position:sticky; top:0;
+      padding:16px 0;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      z-index:50;
+    }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:14px;
+      width:100%;
+      padding:14px 14px;
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border-radius: 22px;
+      box-shadow: 0 10px 40px rgba(0,0,0,.35);
+    }
+    .brand{ display:flex; align-items:center; gap:12px; min-width:240px; }
+    .mark{
+      width:34px; height:34px;
+      display:grid; place-items:center;
+      border-radius: 12px;
+      background: rgba(255,255,255,.04);
+      border:1px solid rgba(255,255,255,.10);
+    }
+    .word{ display:flex; flex-direction:column; line-height:1.05; }
+    .word b{ font-size:16px; letter-spacing:.7px; }
+    .word span{ font-size:12px; color:var(--muted2); }
+
+    .right{
+      display:flex; align-items:center; gap:10px; flex-wrap:wrap; justify-content:flex-end;
+    }
+    .pill{
+      display:inline-flex; align-items:center; gap:10px;
+      padding:10px 12px;
+      border-radius: 999px;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: rgba(238,242,246,.82);
+      font-size:13px;
+      white-space:nowrap;
+    }
+    .dot{
+      width:8px; height:8px; border-radius:50%;
+      background: linear-gradient(135deg, var(--orange1), var(--orange2));
+      box-shadow: 0 10px 30px rgba(255,138,0,.18);
+    }
+    .btn{
+      appearance:none;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.05);
+      color:var(--text);
+      padding:10px 14px;
+      border-radius: 999px;
+      font-size:13px;
+      letter-spacing:.2px;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      user-select:none;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
+      white-space:nowrap;
+    }
+    .btn:hover{
+      transform: translateY(-1px);
+      border-color: rgba(255,255,255,.22);
+      background: rgba(255,255,255,.07);
+    }
+    .btn:active{ transform: translateY(0px); }
+    .btn-primary{
+      border:1px solid rgba(255,138,0,.35);
+      background: linear-gradient(135deg, rgba(255,138,0,.95), rgba(255,77,0,.92));
+      color:#1a120a;
+      font-weight:900;
+      box-shadow: 0 14px 40px rgba(255,138,0,.14);
+    }
+
+    /* page */
+    .panel{
+      margin-top:18px;
+      border-radius: var(--radius);
+      border:1px solid var(--stroke);
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(255,255,255,.03));
+      box-shadow: var(--shadow);
+      padding:18px;
+      position:relative;
+      overflow:hidden;
+    }
+    .panel::before{
+      content:"";
+      position:absolute; inset:-2px;
+      background:
+        radial-gradient(700px 280px at 18% 0%, rgba(255,138,0,.16), transparent 55%),
+        radial-gradient(600px 260px at 78% 10%, rgba(255,77,0,.10), transparent 60%);
+      pointer-events:none;
+      z-index:0;
+    }
+    .panel > *{ position:relative; z-index:2; }
+
+    .row{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px; flex-wrap:wrap;
+      padding:6px 6px 14px;
+    }
+    h1{
+      margin:0;
+      font-size:18px;
+      letter-spacing:.3px;
+    }
+    .sub{
+      margin:6px 0 0;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.55;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap:12px;
+    }
+
+    /* drafts table */
+    .table{
+      width:100%;
+      border-collapse:separate;
+      border-spacing:0;
+      overflow:hidden;
+      border-radius:14px;
+      border:1px solid rgba(255,255,255,.12);
+      background: rgba(0,0,0,.18);
+    }
+    .table th, .table td{
+      padding:12px 12px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      font-size:13px;
+      text-align:left;
+      vertical-align:middle;
+    }
+    .table th{
+      color: rgba(238,242,246,.70);
+      font-weight:800;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      font-size:11px;
+      background: rgba(255,255,255,.03);
+    }
+    .table tr:last-child td{ border-bottom:none; }
+
+    .status{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:7px 10px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.12);
+      font-weight:800;
+      font-size:12px;
+      letter-spacing:.2px;
+      white-space:nowrap;
+    }
+    .s-pending{ background: var(--warn); }
+    .s-approved{ background: var(--good); }
+    .s-published{ background: rgba(255,255,255,.06); }
+    .s-rejected{ background: var(--bad); }
+
+    .muted{ color: var(--muted); }
+    .mono{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+
+    /* footer note */
+    .note{
+      margin-top:12px;
+      border-radius:14px;
+      border:1px dashed rgba(255,255,255,.12);
+      background: rgba(0,0,0,.10);
+      padding:12px;
+      color: rgba(238,242,246,.70);
+      font-size:12px;
+      line-height:1.55;
+    }
+
+    @media (max-width: 760px){
+      .brand{ min-width: 0; }
+      .table th:nth-child(3),
+      .table td:nth-child(3){ display:none; } /* hide owner column on mobile */
+    }
+  </style>
+</head>
+
+<body>
+  <div class="wrap">
+    <header>
+      <div class="topbar">
+        <a class="brand" href="/index.html" aria-label="TVEVT Home">
+          <div class="mark" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="22" height="22">
+              <defs>
+                <linearGradient id="tvevtGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ff8a00"/>
+                  <stop offset="100%" stop-color="#ff4d00"/>
+                </linearGradient>
+              </defs>
+              <rect x="20" y="25" width="65" height="50" rx="14" fill="none" stroke="url(#tvevtGradient)" stroke-width="6"/>
+              <rect x="45" y="40" width="65" height="50" rx="14" fill="none" stroke="url(#tvevtGradient)" stroke-width="6"/>
+              <polygon points="30,75 42,75 32,90" fill="url(#tvevtGradient)"/>
+            </svg>
+          </div>
+          <div class="word">
+            <b>TVEVT</b>
+            <span>Governance Console</span>
+          </div>
+        </a>
+
+        <div class="right">
+          <span class="pill" title="Workspace (company)">
+            <span class="dot"></span>
+            Workspace: <b>FinCIB</b>
+          </span>
+          <span class="pill" title="Current role">
+            Role: <b>Owner</b>
+          </span>
+          <a class="btn" href="/index.html#pricing" title="Packages">Packages</a>
+          <a class="btn btn-primary" href="#" title="Create a new draft (stub)" onclick="return false;">+ New Draft</a>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="panel" aria-label="Console">
+        <div class="row">
+          <div>
+            <h1>Console</h1>
+            <p class="sub">
+              This is the product surface: workspace, roles, drafts, approvals, and execution proof.
+              No AI, no enterprise — just the governance skeleton.
+            </p>
+          </div>
+        </div>
+
+        <div class="grid">
+          <table class="table" aria-label="Drafts table">
+            <thead>
+              <tr>
+                <th style="width:44%;">Draft</th>
+                <th style="width:20%;">Status</th>
+                <th style="width:18%;">Owner</th>
+                <th style="width:18%;">Last update</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <div><b>Q1 Investor Update</b></div>
+                  <div class="muted">Channel set: LinkedIn, Email</div>
+                </td>
+                <td><span class="status s-pending">Pending approval</span></td>
+                <td class="mono">owner</td>
+                <td class="mono">2026-03-01</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div><b>Hiring Announcement</b></div>
+                  <div class="muted">Channel set: LinkedIn</div>
+                </td>
+                <td><span class="status s-approved">Approved</span></td>
+                <td class="mono">editor</td>
+                <td class="mono">2026-03-01</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div><b>Product Launch</b></div>
+                  <div class="muted">Channel set: Telegram, LinkedIn</div>
+                </td>
+                <td><span class="status s-published">Published</span></td>
+                <td class="mono">owner</td>
+                <td class="mono">2026-02-28</td>
+              </tr>
+
+              <tr>
+                <td>
+                  <div><b>Correction Notice</b></div>
+                  <div class="muted">Channel set: X</div>
+                </td>
+                <td><span class="status s-rejected">Rejected</span></td>
+                <td class="mono">approver</td>
+                <td class="mono">2026-02-27</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="note">
+            <b>Next build (v1.1):</b>
+            Workspace creation • Roles (Owner/Editor/Approver) • Draft creation • Channel selection • Optional approval by plan • Immutable execution log • Message version history • Plan limits.
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+</body>
+</html>
