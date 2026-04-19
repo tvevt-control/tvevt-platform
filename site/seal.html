@@ -22,6 +22,7 @@
       --accent-2:#ff9a3d;
       --success:#24c36b;
       --danger:#ff5f56;
+      --warn:#ffb347;
       --shadow:0 20px 60px rgba(0,0,0,.35);
       --radius-xl:30px;
       --radius-lg:22px;
@@ -50,7 +51,6 @@
       margin:24px auto 72px;
     }
 
-    .shell-card,
     .hero-card,
     .section-card,
     .result-card{
@@ -69,6 +69,52 @@
     .section-card{padding:24px;margin-top:22px}
     .result-card{padding:22px;margin-top:22px;display:none}
     .result-card.show{display:block}
+
+    .brand-row{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:20px;
+    }
+
+    .brand-mark{
+      width:52px;
+      height:52px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      overflow:hidden;
+      flex:0 0 52px;
+    }
+
+    .brand-mark img{
+      width:32px;
+      height:32px;
+      object-fit:contain;
+      display:block;
+    }
+
+    .brand-copy{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+
+    .brand-copy strong{
+      font-size:18px;
+      line-height:1;
+      letter-spacing:-.02em;
+    }
+
+    .brand-copy span{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.2;
+    }
 
     .eyebrow{
       display:inline-flex;
@@ -139,6 +185,7 @@
       font-weight:700;
       transition:.18s ease;
       text-decoration:none;
+      font-family:inherit;
     }
 
     .btn-primary{
@@ -278,8 +325,17 @@
       background:rgba(255,255,255,.02);
     }
 
-    .mini-item strong{display:block;font-size:15px}
-    .mini-item span{display:block;margin-top:6px;color:var(--muted);font-size:14px}
+    .mini-item strong{
+      display:block;
+      font-size:15px;
+    }
+
+    .mini-item span{
+      display:block;
+      margin-top:6px;
+      color:var(--muted);
+      font-size:14px;
+    }
 
     .result-top{
       display:flex;
@@ -385,12 +441,23 @@
       .btn{width:100%}
       .hero-actions,.composer-actions,.result-actions{flex-direction:column}
       textarea{min-height:220px}
+      .brand-row{align-items:flex-start}
     }
   </style>
 </head>
 <body>
   <main class="page">
     <section class="hero-card">
+      <div class="brand-row">
+        <div class="brand-mark">
+          <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT logo">
+        </div>
+        <div class="brand-copy">
+          <strong>TVEVT</strong>
+          <span>Governance Console</span>
+        </div>
+      </div>
+
       <div class="eyebrow">Free MVP • Seal → Proof → Share Anywhere</div>
       <h1>Seal a statement.</h1>
       <p class="lead">
@@ -402,7 +469,7 @@
       </p>
       <div class="hero-actions">
         <a href="#seal-form" class="btn btn-primary">Start sealing</a>
-        <a href="/log.html" class="btn btn-secondary">View current log concept</a>
+        <a href="/record.html" class="btn btn-secondary">Open verification page</a>
       </div>
     </section>
 
@@ -575,7 +642,7 @@
     function showResult(record) {
       latestVerificationUrl =
         record.verification_url ||
-        (record.id ? `${window.location.origin}/record/${record.id}` : "");
+        (record.id ? `${window.location.origin}/record.html?id=${encodeURIComponent(record.id)}` : "");
 
       resultId.textContent = record.id || "—";
       resultTimestamp.textContent = record.timestamp || "—";
