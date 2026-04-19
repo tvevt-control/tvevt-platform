@@ -1,47 +1,48 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TVEVT | Seal Record</title>
     <style>
-        body { background: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { max-width: 600px; width: 90%; text-align: center; border: 1px solid #222; padding: 60px 40px; border-radius: 24px; background: linear-gradient(145deg, #0a0a0a, #111); box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        body { background: #000; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .container { max-width: 600px; width: 90%; text-align: center; border: 1px solid #1a1a1a; padding: 60px 40px; border-radius: 4px; background: #050505; }
         
-        /* Стили для логотипа */
-        .logo { width: 120px; margin-bottom: 30px; opacity: 0.9; }
+        .logo { width: 80px; margin-bottom: 40px; opacity: 1; filter: grayscale(100%); }
         
-        h1 { font-weight: 300; letter-spacing: -1px; margin-bottom: 10px; font-size: 28px; }
-        p { color: #666; font-size: 14px; margin-bottom: 30px; line-height: 1.5; }
-        textarea { width: 100%; height: 160px; background: #000; border: 1px solid #333; border-radius: 12px; color: #fff; padding: 20px; font-size: 16px; resize: none; box-sizing: border-box; outline: none; transition: 0.3s; }
-        textarea:focus { border-color: #ff4500; } /* Оранжевый акцент как на твоем сайте */
+        h1 { font-weight: 400; letter-spacing: -0.05em; margin-bottom: 12px; font-size: 32px; color: #ffffff; }
+        p { color: #555; font-size: 14px; margin-bottom: 40px; line-height: 1.6; text-transform: uppercase; letter-spacing: 0.1em; }
         
-        .btn { background: #ff4500; color: #fff; border: none; padding: 18px 45px; border-radius: 40px; font-weight: 600; font-size: 16px; cursor: pointer; margin-top: 30px; transition: 0.3s; box-shadow: 0 10px 20px rgba(255, 69, 0, 0.2); }
-        .btn:hover { background: #ff5722; transform: translateY(-2px); box-shadow: 0 15px 30px rgba(255, 69, 0, 0.3); }
+        textarea { width: 100%; height: 180px; background: #000; border: 1px solid #222; border-radius: 0; color: #fff; padding: 20px; font-size: 15px; resize: none; box-sizing: border-box; outline: none; transition: 0.2s; font-family: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, monospace; }
+        textarea:focus { border-color: #fff; } 
         
-        .footer-link { margin-top: 40px; display: block; color: #444; text-decoration: none; font-size: 12px; text-transform: uppercase; letter-spacing: 2px; }
+        .btn { background: #fff; color: #000; border: 1px solid #fff; padding: 20px 50px; border-radius: 0; font-weight: 600; font-size: 14px; cursor: pointer; margin-top: 40px; transition: 0.3s; text-transform: uppercase; letter-spacing: 0.2em; width: 100%; }
+        .btn:hover { background: #000; color: #fff; }
+        
+        .footer-link { margin-top: 50px; display: block; color: #333; text-decoration: none; font-size: 11px; text-transform: uppercase; letter-spacing: 0.3em; transition: 0.3s; }
+        .footer-link:hover { color: #fff; }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="assets/tvevt-favicon.svg" alt="TVEVT" class="logo">
+        <img src="assets/tvevt-favicon.svg" alt="TVEVT Logo" class="logo">
         
-        <h1>Say it once. Prove it forever.</h1>
-        <p>Ваше сообщение будет запечатано в неизменяемый реестр TVEVT. <br>Это действие нельзя отменить.</p>
+        <h1>SAY IT ONCE. PROVE IT FOREVER.</h1>
+        <p>Immutable Strategic Signal Ledger</p>
         
-        <textarea id="msg" placeholder="Введите текст вашего заявления..."></textarea>
+        <textarea id="msg" placeholder="ENTER YOUR STATEMENT..."></textarea>
         
-        <button class="btn" onclick="sealIt()">[ Seal Record ]</button>
+        <button class="btn" onclick="sealIt()">Seal Record</button>
         
-        <a href="index.html" class="footer-link">Back to Vision</a>
+        <a href="index.html" class="footer-link">Archive / Vision</a>
     </div>
 
     <script>
         function sealIt() {
             const text = document.getElementById('msg').value;
-            if(!text) return alert('Поле не может быть пустым.');
-            if(confirm('Внимание: текст будет зафиксирован навсегда. Вы уверены?')) {
-                alert('Инициализация протокола Alpha... (База данных будет подключена в следующем шаге)');
+            if(!text) return alert('Field is empty.');
+            if(confirm('Final verification: This action is irreversible. Record this signal?')) {
+                alert('TVEVT Alpha Protocol: Connection pending...');
             }
         }
     </script>
