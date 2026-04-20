@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Proof Layer — TVEVT</title>
+  <meta name="description" content="Understand how TVEVT proof works: sealing, hash, timestamp, and verification." />
+  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg" />
+  <script src="/assets/nav.js?v=2026-03-01"></script>
+  <style>
+    :root{
+      --bg:#090b10;
+      --bg-2:#0d1017;
+      --card:#11141c;
+      --card-2:#161a24;
+      --line:rgba(255,255,255,.12);
+      --line-strong:rgba(255,255,255,.18);
+      --text:#f4f1ea;
+      --muted:rgba(244,241,234,.72);
+      --soft:rgba(244,241,234,.56);
+      --accent:#ff7a00;
+      --accent-2:#ff9a3d;
+      --success:#24c36b;
+      --danger:#ff5f56;
+      --warn:#ffb347;
+      --shadow:0 20px 60px rgba(0,0,0,.35);
+      --radius-xl:30px;
+      --radius-lg:22px;
+      --radius-md:16px;
+      --radius-sm:12px;
+      --max:1180px;
+    }
+
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    body{
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color:var(--text);
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255,122,0,.18), transparent 32%),
+        radial-gradient(circle at 85% 18%, rgba(255,122,0,.14), transparent 28%),
+        linear-gradient(180deg, #090b10 0%, #0b0f17 58%, #090b10 100%);
+      min-height:100vh;
+      line-height:1.45;
+    }
+
+    a{color:inherit;text-decoration:none}
+
+    .page{
+      width:min(var(--max), calc(100% - 32px));
+      margin:24px auto 72px;
+    }
+
+    .hero-card,
+    .section-card{
+      position:relative;
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02)),
+        radial-gradient(circle at 18% 0%, rgba(255,122,0,.16), transparent 44%),
+        linear-gradient(180deg, rgba(16,18,25,.92), rgba(11,14,20,.96));
+      box-shadow:var(--shadow);
+      overflow:hidden;
+    }
+
+    .hero-card{padding:26px 24px 24px;margin-top:22px}
+    .section-card{padding:24px;margin-top:22px}
+
+    .brand-row{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      margin-bottom:20px;
+    }
+
+    .brand-mark{
+      width:52px;
+      height:52px;
+      border-radius:14px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.03);
+      overflow:hidden;
+      flex:0 0 52px;
+    }
+
+    .brand-mark img{
+      width:32px;
+      height:32px;
+      object-fit:contain;
+      display:block;
+    }
+
+    .brand-copy{
+      display:flex;
+      flex-direction:column;
+      gap:2px;
+      min-width:0;
+    }
+
+    .brand-copy strong{
+      font-size:18px;
+      line-height:1;
+      letter-spacing:-.02em;
+    }
+
+    .brand-copy span{
+      font-size:14px;
+      color:var(--muted);
+      line-height:1.2;
+    }
+
+    .eyebrow{
+      display:inline-flex;
+      align-items:center;
+      gap:12px;
+      padding:10px 16px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:var(--muted);
+      font-size:14px;
+      letter-spacing:.01em;
+      background:rgba(255,255,255,.02);
+    }
+
+    .eyebrow::before{
+      content:"";
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      background:var(--accent);
+      box-shadow:0 0 20px rgba(255,122,0,.55);
+      flex:0 0 12px;
+    }
+
+    h1{
+      margin:18px 0 0;
+      font-size:clamp(42px, 7vw, 82px);
+      line-height:.98;
+      letter-spacing:-.04em;
+      max-width:980px;
+    }
+
+    .lead{
+      margin:20px 0 0;
+      max-width:900px;
+      color:var(--muted);
+      font-size:clamp(18px, 2vw, 28px);
+      line-height:1.4;
+    }
+
+    .sublead{
+      margin:16px 0 0;
+      max-width:840px;
+      color:var(--soft);
+      font-size:16px;
+    }
+
+    .hero-actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:28px;
+    }
+
+    .btn{
+      appearance:none;
+      border:none;
+      outline:none;
+      cursor:pointer;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      min-height:58px;
+      padding:0 24px;
+      border-radius:999px;
+      font-size:18px;
+      font-weight:700;
+      transition:.18s ease;
+      text-decoration:none;
+      font-family:inherit;
+    }
+
+    .btn-primary{
+      color:#16110b;
+      background:linear-gradient(180deg, var(--accent-2), var(--accent));
+      box-shadow:0 12px 32px rgba(255,122,0,.28);
+    }
+
+    .btn-primary:hover{transform:translateY(-1px)}
+    .btn-secondary{
+      color:var(--text);
+      background:rgba(255,255,255,.03);
+      border:1px solid var(--line-strong);
+    }
+
+    .btn-secondary:hover{background:rgba(255,255,255,.06)}
+
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:22px;
+      margin-top:22px;
+    }
+
+    .grid-single{
+      display:grid;
+      grid-template-columns:1fr;
+      gap:22px;
+      margin-top:22px;
+    }
+
+    .panel-title{
+      margin:0 0 8px;
+      font-size:30px;
+      line-height:1.05;
+      letter-spacing:-.03em;
+    }
+
+    .panel-copy{
+      margin:0;
+      color:var(--muted);
+      font-size:16px;
+    }
+
+    .mini-list{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:20px;
+    }
+
+    .mini-item{
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:14px 16px;
+      background:rgba(255,255,255,.02);
+    }
+
+    .mini-item strong{
+      display:block;
+      font-size:15px;
+    }
+
+    .mini-item span{
+      display:block;
+      margin-top:6px;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .steps{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:14px;
+      margin-top:20px;
+    }
+
+    .step{
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
+      background:rgba(255,255,255,.02);
+    }
+
+    .step-number{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      background:rgba(255,122,0,.14);
+      border:1px solid rgba(255,122,0,.28);
+      color:#ffd8b3;
+      font-weight:700;
+      margin-bottom:12px;
+    }
+
+    .step h3{
+      margin:0;
+      font-size:20px;
+      letter-spacing:-.02em;
+    }
+
+    .step p{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.55;
+    }
+
+    .proof-box{
+      margin-top:18px;
+      border:1px solid var(--line);
+      border-radius:22px;
+      padding:18px;
+      background:rgba(255,255,255,.02);
+      overflow:auto;
+    }
+
+    .proof-box pre{
+      margin:0;
+      white-space:pre-wrap;
+      word-break:break-word;
+      color:#f6d9c2;
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size:13px;
+      line-height:1.6;
+    }
+
+    .note{
+      margin-top:16px;
+      color:var(--soft);
+      font-size:14px;
+      line-height:1.55;
+    }
+
+    .compare-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .compare-card{
+      border:1px solid var(--line);
+      border-radius:20px;
+      padding:18px;
+      background:rgba(255,255,255,.02);
+    }
+
+    .compare-card h3{
+      margin:0;
+      font-size:20px;
+      letter-spacing:-.02em;
+    }
+
+    .compare-card ul{
+      margin:14px 0 0;
+      padding-left:18px;
+      color:var(--muted);
+    }
+
+    .compare-card li{
+      margin:8px 0;
+      line-height:1.5;
+    }
+
+    .footer-links{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    code.inline{
+      font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+      font-size:13px;
+      color:#f6d9c2;
+      background:rgba(255,255,255,.04);
+      border:1px solid var(--line);
+      border-radius:10px;
+      padding:3px 8px;
+    }
+
+    @media (max-width: 980px){
+      .grid{grid-template-columns:1fr}
+      .steps{grid-template-columns:1fr}
+      .compare-grid{grid-template-columns:1fr}
+    }
+
+    @media (max-width: 720px){
+      .page{width:min(var(--max), calc(100% - 18px)); margin:14px auto 44px;}
+      .hero-card,.section-card{padding:20px 16px}
+      .btn{width:100%}
+      .hero-actions,.footer-links{flex-direction:column}
+      .brand-row{align-items:flex-start}
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <section class="hero-card">
+      <div class="brand-row">
+        <div class="brand-mark">
+          <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT logo">
+        </div>
+        <div class="brand-copy">
+          <strong>TVEVT</strong>
+          <span>Governance Console</span>
+        </div>
+      </div>
+
+      <div class="eyebrow">Proof layer • Verification doctrine • Trust surface</div>
+      <h1>Why a TVEVT record can be trusted.</h1>
+      <p class="lead">
+        A TVEVT record is not just a text page. It is a fixed proof artifact with a timestamp,
+        a hash, and a verification surface.
+      </p>
+      <p class="sublead">
+        This page explains what a sealed record means, what it proves, and what it does not claim.
+      </p>
+
+      <div class="hero-actions">
+        <a href="/seal.html" class="btn btn-primary">Seal a statement</a>
+        <a href="/record.html" class="btn btn-secondary">Open verification page</a>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="section-card">
+        <p class="panel-title">What happens when you seal a statement</p>
+        <p class="panel-copy">
+          The system takes your text and converts it into a record that can be checked later.
+        </p>
+
+        <div class="steps">
+          <div class="step">
+            <div class="step-number">1</div>
+            <h3>Seal</h3>
+            <p>
+              The exact statement text is submitted as a payload. At this point,
+              the system creates a fixed record basis.
+            </p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">2</div>
+            <h3>Proof</h3>
+            <p>
+              The record receives an ID, timestamp, and hash. These fields make
+              the record referenceable and checkable.
+            </p>
+          </div>
+
+          <div class="step">
+            <div class="step-number">3</div>
+            <h3>Verify</h3>
+            <p>
+              Anyone with the record ID or link can open the verification page
+              and inspect the proof fields tied to that statement.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <p class="panel-title">What the proof is actually saying</p>
+        <p class="panel-copy">
+          A TVEVT record makes a narrow and important claim.
+        </p>
+
+        <div class="mini-list">
+          <div class="mini-item">
+            <strong>This text was sealed as a record.</strong>
+            <span>
+              The system keeps a reference point for the statement in the form shown at the time of sealing.
+            </span>
+          </div>
+
+          <div class="mini-item">
+            <strong>This record has proof fields.</strong>
+            <span>
+              Record ID, timestamp, current hash, previous hash, and sequence create a verifiable surface.
+            </span>
+          </div>
+
+          <div class="mini-item">
+            <strong>This is not “trust me.”</strong>
+            <span>
+              The point is not opinion. The point is that the record can be inspected and referenced later.
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid-single">
+      <div class="section-card">
+        <p class="panel-title">What you can verify</p>
+        <p class="panel-copy">
+          On the record page, a user can inspect the key fields that define the proof surface.
+        </p>
+
+        <div class="proof-box">
+<pre>{
+  "id": "TVE-123ABC",
+  "timestamp": "2026-04-20T12:34:56Z",
+  "sequence": 14,
+  "prev_hash": "7f83b1657ff1fc53b92dc18148a1d65dfa135014...",
+  "hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4...",
+  "author_id": "example-source",
+  "content": {
+    "text": "This is the sealed statement.",
+    "type": "text/plain"
+  },
+  "metadata": {}
+}</pre>
+        </div>
+
+        <p class="note">
+          If the sealed payload changes, the hash changes too. That is why the proof surface matters.
+        </p>
+      </div>
+    </section>
+
+    <section class="grid">
+      <div class="section-card">
+        <p class="panel-title">What TVEVT proof does not claim</p>
+        <p class="panel-copy">
+          Trust grows when claims stay precise.
+        </p>
+
+        <div class="mini-list">
+          <div class="mini-item">
+            <strong>It does not claim legal notarization.</strong>
+            <span>
+              A TVEVT record is a proof artifact, not a replacement for every formal legal process.
+            </span>
+          </div>
+
+          <div class="mini-item">
+            <strong>It does not prove truth of content.</strong>
+            <span>
+              It proves that a specific statement was sealed in a specific record context.
+            </span>
+          </div>
+
+          <div class="mini-item">
+            <strong>It does not replace judgment.</strong>
+            <span>
+              It provides reference, integrity, and traceability — not interpretation for the viewer.
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <p class="panel-title">Why this still matters</p>
+        <p class="panel-copy">
+          Even a narrow proof claim is powerful in the real world.
+        </p>
+
+        <div class="mini-list">
+          <div class="mini-item">
+            <strong>It reduces ambiguity.</strong>
+            <span>
+              Instead of arguing from memory, people can point to a specific record.
+            </span>
+          </div>
+
+          <div class="mini-item">
+            <strong>It creates a stable reference point.</strong>
+            <span>
+              The record becomes the canonical place to inspect what was sealed.
+            </span>
+          </div>
+
+          <div class="mini-item">
+            <strong>It gives digital statements weight.</strong>
+            <span>
+              A link with proof fields carries more credibility than an ordinary plain-text message.
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid-single">
+      <div class="section-card">
+        <p class="panel-title">Free MVP vs later trust layers</p>
+        <p class="panel-copy">
+          The current free MVP focuses on fixation and proof. Later layers add identity and governance.
+        </p>
+
+        <div class="compare-grid">
+          <div class="compare-card">
+            <h3>Free MVP</h3>
+            <ul>
+              <li>Seal a statement</li>
+              <li>Get a proof link</li>
+              <li>Open a verification page</li>
+              <li>Share the link anywhere yourself</li>
+              <li>No channels, no workflows, no packages</li>
+            </ul>
+          </div>
+
+          <div class="compare-card">
+            <h3>Later trust / paid layers</h3>
+            <ul>
+              <li>Official source identity</li>
+              <li>Personalized or branded proof surfaces</li>
+              <li>Verified origin</li>
+              <li>Governance controls</li>
+              <li>Decision memory and institutional trust</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="footer-links">
+          <a href="/seal.html" class="btn btn-primary">Try the free MVP</a>
+          <a href="/record.html" class="btn btn-secondary">Inspect a record</a>
+        </div>
+
+        <p class="note">
+          Current MVP path:
+          <code class="inline">seal.html</code>
+          →
+          <code class="inline">record.html?id=RECORD_ID</code>
+          →
+          <code class="inline">proof.html</code>
+        </p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
