@@ -11,9 +11,12 @@ export async function onRequestGet(context) {
       });
     }
 
-    return new Response(record, {
+    const parsed = JSON.parse(record);
+
+    return new Response(JSON.stringify(parsed), {
       headers: { "Content-Type": "application/json" }
     });
+
   } catch (e) {
     return new Response(JSON.stringify({ error: e.message }), {
       status: 500,
