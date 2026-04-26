@@ -1,38 +1,222 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>TVEVT — Say it once. Prove it forever.</title>
   <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg">
+
   <style>
-    :root{--bg:#07090c;--text:#f4f6f8;--muted:rgba(244,246,248,.55);--line:rgba(255,255,255,.12);--orange:#ff7a1a;--orange2:#ffb14a}
-    *{box-sizing:border-box} body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% 20%,rgba(255,122,26,.16),transparent 34%),linear-gradient(180deg,#10131a,#07090c);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif}
-    .page{min-height:100vh;padding:34px;display:flex;flex-direction:column}
-    header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:28px}
-    .brand{display:flex;align-items:center;gap:14px;color:var(--text);text-decoration:none}.brand img{width:42px}.brand strong{letter-spacing:.16em}.brand span span{display:block;margin-top:4px;color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-    nav{display:flex;gap:10px} nav a{color:var(--text);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:12px 18px;font-size:13px;text-transform:uppercase;letter-spacing:.1em;background:rgba(255,255,255,.03)}
-    main{flex:1;display:flex;align-items:center;justify-content:center;text-align:center}
-    h1{margin:0;font-size:clamp(50px,8vw,108px);line-height:.92;letter-spacing:-.07em}
-    p{max-width:650px;margin:26px auto 0;color:var(--muted);font-size:20px;line-height:1.5}
-    .cta{margin-top:38px;display:inline-flex;align-items:center;justify-content:center;min-height:62px;padding:0 30px;border-radius:999px;background:linear-gradient(135deg,var(--orange2),var(--orange));color:#170900;text-decoration:none;font-weight:850;letter-spacing:.14em;text-transform:uppercase;box-shadow:0 18px 50px rgba(255,122,26,.22)}
-    footer{text-align:center;color:rgba(244,246,248,.32);font-size:11px;letter-spacing:.22em;text-transform:uppercase}
-    @media(max-width:760px){.page{padding:22px}nav{display:none}h1{font-size:52px}}
+    :root{
+      --bg:#07090c;
+      --text:#f4f6f8;
+      --muted:rgba(244,246,248,.56);
+      --soft:rgba(244,246,248,.34);
+      --line:rgba(255,255,255,.12);
+      --orange:#ff7a1a;
+      --orange2:#ffb14a;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 50% 20%,rgba(255,122,26,.16),transparent 34%),
+        radial-gradient(circle at 80% 20%,rgba(255,255,255,.045),transparent 28%),
+        linear-gradient(180deg,#10131a,#07090c);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif;
+    }
+
+    .page{
+      min-height:100vh;
+      padding:34px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-bottom:1px solid var(--line);
+      padding-bottom:28px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      color:var(--text);
+      text-decoration:none;
+    }
+
+    .brand img{
+      width:42px;
+      height:42px;
+    }
+
+    .brand strong{
+      display:block;
+      letter-spacing:.16em;
+      font-size:16px;
+    }
+
+    .brand span span{
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    nav{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    nav a{
+      color:var(--text);
+      text-decoration:none;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:12px 18px;
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      background:rgba(255,255,255,.03);
+    }
+
+    main{
+      flex:1;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+    }
+
+    .hero{
+      width:min(900px,100%);
+      margin:0 auto;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(50px,8vw,108px);
+      line-height:.92;
+      letter-spacing:-.07em;
+    }
+
+    .lead{
+      max-width:660px;
+      margin:26px auto 0;
+      color:var(--muted);
+      font-size:20px;
+      line-height:1.5;
+    }
+
+    .actions{
+      margin-top:38px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:16px;
+    }
+
+    .primary{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:62px;
+      padding:0 32px;
+      border-radius:999px;
+      background:linear-gradient(135deg,var(--orange2),var(--orange));
+      color:#170900;
+      text-decoration:none;
+      font-weight:850;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      box-shadow:0 18px 50px rgba(255,122,26,.22);
+    }
+
+    .instant{
+      color:var(--soft);
+      font-size:13px;
+      letter-spacing:.06em;
+    }
+
+    .secondary{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:13px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      border-bottom:1px solid rgba(244,246,248,.22);
+      padding-bottom:4px;
+    }
+
+    .secondary:hover{
+      color:var(--text);
+      border-bottom-color:var(--orange2);
+    }
+
+    footer{
+      text-align:center;
+      color:rgba(244,246,248,.32);
+      font-size:11px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+    }
+
+    @media(max-width:760px){
+      .page{padding:22px}
+      nav{display:none}
+      h1{font-size:52px}
+      .lead{font-size:18px}
+      .primary{width:100%}
+    }
   </style>
 </head>
+
 <body>
-<div class="page">
-  <header>
-    <a class="brand" href="/"><img src="/assets/brand/tvevt-icon.svg" alt="TVEVT"><span><strong>TVEVT</strong><span>Governance Console</span></span></a>
-    <nav><a href="/proof.html">Proof</a><a href="/record.html">Verify</a></nav>
-  </header>
-  <main>
-    <section>
-      <h1>Say it once.<br>Prove it forever.</h1>
-      <p>TVEVT turns a statement into a sealed verification artifact: timestamped, hashed, stored, and shareable by link.</p>
-      <a class="cta" href="/seal.html">Start Sealing</a>
-    </section>
-  </main>
-  <footer>Verified Organizational Signals Protocol</footer>
-</div>
+  <div class="page">
+    <header>
+      <a class="brand" href="/">
+        <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT" onerror="this.style.display='none'">
+        <span>
+          <strong>TVEVT</strong>
+          <span>Governance Console</span>
+        </span>
+      </a>
+
+      <nav>
+        <a href="/proof.html">Proof</a>
+        <a href="/record.html">Verify</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="hero">
+        <h1>Say it once.<br>Prove it forever.</h1>
+
+        <p class="lead">
+          TVEVT turns a statement into a sealed verification artifact:
+          timestamped, hashed, stored, and shareable by link.
+        </p>
+
+        <div class="actions">
+          <a class="primary" href="/seal.html">Start Sealing</a>
+          <div class="instant">Start instantly. No account required.</div>
+          <a class="secondary" href="/request-access.html">Request extended access</a>
+        </div>
+      </section>
+    </main>
+
+    <footer>Verified Organizational Signals Protocol</footer>
+  </div>
 </body>
 </html>
