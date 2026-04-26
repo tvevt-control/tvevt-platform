@@ -1,91 +1,345 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <title>TVEVT Leads</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TVEVT — Leads</title>
+  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg">
 
   <style>
-    body {
-      background: #0b0b0c;
-      color: #fff;
-      font-family: Arial, sans-serif;
-      padding: 40px;
+    :root{
+      --bg:#07090c;
+      --panel:#10141c;
+      --card:#141922;
+      --text:#f4f6f8;
+      --muted:rgba(244,246,248,.58);
+      --line:rgba(255,255,255,.12);
+      --orange:#ff7a1a;
+      --orange2:#ffb14a;
+      --green:#7ff0a5;
+      --red:#ff6a5f;
     }
 
-    h1 {
-      margin-bottom: 20px;
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 18% 0%,rgba(255,122,26,.12),transparent 32%),
+        linear-gradient(180deg,#10131a,var(--bg));
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif;
+      padding:34px;
     }
 
-    .lead {
-      background: #141416;
-      border-radius: 12px;
-      padding: 20px;
-      margin-bottom: 15px;
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-bottom:1px solid var(--line);
+      padding-bottom:26px;
+      margin-bottom:42px;
     }
 
-    .status {
-      font-weight: bold;
-      margin-top: 10px;
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      color:var(--text);
+      text-decoration:none;
     }
 
-    button {
-      margin-top: 10px;
-      margin-right: 10px;
-      padding: 8px 12px;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
+    .brand img{width:42px;height:42px}
+
+    .brand strong{
+      display:block;
+      letter-spacing:.16em;
+      font-size:16px;
     }
 
-    .approve {
-      background: green;
-      color: white;
+    .brand span span{
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
     }
 
-    .reject {
-      background: red;
-      color: white;
+    .nav{
+      display:flex;
+      gap:10px;
+    }
+
+    .nav a{
+      color:var(--text);
+      text-decoration:none;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:12px 18px;
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+
+    main{
+      max-width:980px;
+      margin:0 auto;
+    }
+
+    h1{
+      margin:0;
+      font-size:56px;
+      letter-spacing:-.06em;
+      line-height:.95;
+    }
+
+    .lead-text{
+      margin:14px 0 32px;
+      color:var(--muted);
+      font-size:18px;
+      line-height:1.5;
+    }
+
+    .toolbar{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      margin-bottom:24px;
+    }
+
+    .filter{
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      color:var(--text);
+      border-radius:999px;
+      padding:11px 16px;
+      cursor:pointer;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+    }
+
+    .filter.active{
+      background:linear-gradient(135deg,var(--orange2),var(--orange));
+      color:#170900;
+      border-color:transparent;
+    }
+
+    .list{
+      display:flex;
+      flex-direction:column;
+      gap:14px;
+    }
+
+    .lead{
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:22px;
+      background:rgba(255,255,255,.045);
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:18px;
+      align-items:center;
+    }
+
+    .id{
+      color:var(--orange2);
+      font-size:12px;
+      letter-spacing:.14em;
+      font-weight:800;
+      text-transform:uppercase;
+      margin-bottom:8px;
+    }
+
+    .name{
+      font-size:22px;
+      font-weight:800;
+      margin-bottom:6px;
+    }
+
+    .email,.time{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+    }
+
+    .status{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-width:120px;
+      border-radius:999px;
+      padding:11px 14px;
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.1em;
+      text-transform:uppercase;
+      border:1px solid var(--line);
+    }
+
+    .status.NEW{color:var(--orange2)}
+    .status.APPROVED{color:var(--green)}
+    .status.REJECTED{color:var(--red)}
+
+    .actions{
+      display:flex;
+      gap:10px;
+      margin-top:16px;
+    }
+
+    button{
+      border:0;
+      border-radius:999px;
+      padding:10px 15px;
+      cursor:pointer;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:12px;
+    }
+
+    .approve{background:#1f8f4d;color:white}
+    .reject{background:#b8342b;color:white}
+
+    .empty{
+      border:1px solid var(--line);
+      border-radius:24px;
+      padding:30px;
+      color:var(--muted);
+      background:rgba(255,255,255,.04);
+    }
+
+    footer{
+      margin-top:40px;
+      text-align:center;
+      color:rgba(244,246,248,.32);
+      font-size:11px;
+      letter-spacing:.2em;
+      text-transform:uppercase;
+    }
+
+    @media(max-width:700px){
+      body{padding:22px}
+      header{align-items:flex-start;gap:18px;flex-direction:column}
+      h1{font-size:42px}
+      .lead{grid-template-columns:1fr}
+      .status{width:max-content}
     }
   </style>
 </head>
 
 <body>
 
-<h1>TVEVT Leads</h1>
+<header>
+  <a class="brand" href="/">
+    <img src="/assets/brand/tvevt-icon.svg" alt="">
+    <span>
+      <strong>TVEVT</strong>
+      <span>Governance Console</span>
+    </span>
+  </a>
 
-<div id="leads"></div>
+  <nav class="nav">
+    <a href="/request-access.html">Access</a>
+    <a href="/seal.html">Console</a>
+  </nav>
+</header>
+
+<main>
+  <h1>Leads control.</h1>
+  <p class="lead-text">
+    Access requests captured through TVEVT. Review, approve, or reject incoming signals.
+  </p>
+
+  <div class="toolbar">
+    <button class="filter active" data-filter="ALL">All</button>
+    <button class="filter" data-filter="NEW">New</button>
+    <button class="filter" data-filter="APPROVED">Approved</button>
+    <button class="filter" data-filter="REJECTED">Rejected</button>
+  </div>
+
+  <div id="leads" class="list"></div>
+</main>
+
+<footer>Say it once. Prove it forever.</footer>
 
 <script>
-async function loadLeads() {
-  const res = await fetch('/api/leads');
-  const data = await res.json();
+let allLeads = [];
+let currentFilter = "ALL";
 
-  const container = document.getElementById('leads');
-  container.innerHTML = '';
+function formatDate(value){
+  if (!value) return "—";
+  try {
+    return new Date(value).toLocaleString();
+  } catch {
+    return value;
+  }
+}
 
-  data.forEach(lead => {
-    const div = document.createElement('div');
-    div.className = 'lead';
+async function loadLeads(){
+  const res = await fetch("/api/leads");
+  allLeads = await res.json();
+  renderLeads();
+}
 
-    div.innerHTML = `
-      <div><b>ID:</b> ${lead.id}</div>
-      <div><b>Name:</b> ${lead.name}</div>
-      <div><b>Email:</b> ${lead.email}</div>
-      <div class="status">Status: ${lead.status}</div>
+function renderLeads(){
+  const container = document.getElementById("leads");
+  container.innerHTML = "";
 
-      <button class="approve" onclick="update('${lead.id}','APPROVED')">Approve</button>
-      <button class="reject" onclick="update('${lead.id}','REJECTED')">Reject</button>
+  const visible = currentFilter === "ALL"
+    ? allLeads
+    : allLeads.filter(item => item.status === currentFilter);
+
+  if (!visible.length) {
+    container.innerHTML = `<div class="empty">No leads in this view.</div>`;
+    return;
+  }
+
+  visible.forEach(lead => {
+    const card = document.createElement("div");
+    card.className = "lead";
+
+    const showActions = lead.status === "NEW";
+
+    card.innerHTML = `
+      <div>
+        <div class="id">${lead.id}</div>
+        <div class="name">${lead.name || "—"}</div>
+        <div class="email">${lead.email || "—"}</div>
+        <div class="time">Created: ${formatDate(lead.createdAt)}</div>
+        ${lead.updatedAt ? `<div class="time">Updated: ${formatDate(lead.updatedAt)}</div>` : ""}
+        ${showActions ? `
+          <div class="actions">
+            <button class="approve" onclick="updateLead('${lead.id}','APPROVED')">Approve</button>
+            <button class="reject" onclick="updateLead('${lead.id}','REJECTED')">Reject</button>
+          </div>
+        ` : ""}
+      </div>
+
+      <div class="status ${lead.status}">${lead.status}</div>
     `;
 
-    container.appendChild(div);
+    container.appendChild(card);
   });
 }
 
-async function update(id, status) {
-  await fetch(`/api/lead-action?id=${id}&status=${status}`);
-  loadLeads();
+async function updateLead(id, status){
+  await fetch(`/lead-action?id=${id}&status=${status}`);
+  await loadLeads();
 }
+
+document.querySelectorAll(".filter").forEach(button => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
+    button.classList.add("active");
+    currentFilter = button.dataset.filter;
+    renderLeads();
+  });
+});
 
 loadLeads();
 </script>
