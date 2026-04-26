@@ -6,29 +6,33 @@
   <title>TVEVT | Signal Records</title>
   <link rel="icon" type="image/svg+xml" href="assets/brand/tvevt-favicon.svg" />
   <style>
-    :root{ --bg:#080808; --panel:#0a0a0a; --border:rgba(255,255,255,0.05); --text:#ffffff; --accent:#ff7a00; --muted:#333; }
+    :root{ --bg:#080808; --panel:#0d0d0d; --border:rgba(255,255,255,0.1); --text:#ffffff; --accent:#ff7a00; }
     *{box-sizing:border-box}
     body{ margin:0; background:#080808; color:var(--text); font-family:'Inter', sans-serif; display:flex; height:100vh; overflow:hidden; }
     .console{ flex:1; display:flex; flex-direction:column; border:1px solid var(--border); margin:20px; border-radius:12px; background:var(--panel); }
     header{ height:80px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; padding:0 35px; }
     .brand{ display:flex; align-items:center; gap:16px; text-decoration:none; color:#fff; }
     .brand img{ width:38px; height:38px; }
-    .console-title { font-size:17px; font-weight:800; letter-spacing:4px; margin-bottom:1px; }
-    .console-sub { font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); }
     
-    .main-ui{ flex:1; padding:60px 40px; overflow-y:auto; }
-    .ledger-container{ width:100%; max-width:1000px; margin:0 auto; }
-    h2{ font-size:10px; text-transform:uppercase; letter-spacing:4px; color:#444; margin-bottom:40px; }
+    .main-ui{ flex:1; padding:40px; overflow-y:auto; }
+    .records-list { max-width:900px; margin:0 auto; }
+    .record-card { 
+      background:#000; border:1px solid #222; padding:25px; 
+      margin-bottom:20px; border-radius:8px; display:flex; 
+      justify-content:space-between; align-items:center;
+      transition: 0.3s;
+    }
+    .record-card:hover { border-color: var(--accent); }
+    .record-info { display:flex; flex-direction:column; gap:8px; }
+    .record-date { font-size:10px; color:var(--accent); letter-spacing:1px; text-transform:uppercase; }
+    .record-text { font-size:15px; font-weight:500; color:#eee; }
+    .record-meta { font-size:11px; color:#555; }
     
-    table { width: 100%; border-collapse: collapse; font-size: 13px; }
-    th { text-align: left; padding: 15px; border-bottom: 1px solid #1a1a1a; color: #444; text-transform: uppercase; font-size: 10px; letter-spacing: 2px; }
-    td { padding: 20px 15px; border-bottom: 1px solid #111; color: #888; }
-    .signal-preview { color: #eee; font-family: monospace; font-size: 12px; }
-    .status-tag { font-size: 9px; padding: 4px 8px; border: 1px solid #222; border-radius: 2px; text-transform: uppercase; }
-    .action-link { color: #fff; text-decoration: none; border-bottom: 1px solid #444; padding-bottom: 2px; transition: 0.3s; }
-    .action-link:hover { color: var(--accent); border-color: var(--accent); }
-
-    footer{ height:50px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:9px; color:#222; letter-spacing:3px; text-transform:uppercase; }
+    .status-tag { 
+      font-size:10px; padding:6px 12px; border:1px solid #333; 
+      color:#aaa; border-radius:4px; text-transform:uppercase; letter-spacing:1px;
+    }
+    footer{ height:50px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:10px; color:#444; letter-spacing:3px; text-transform:uppercase; }
   </style>
 </head>
 <body>
@@ -36,41 +40,23 @@
     <header>
       <a href="index.html" class="brand">
         <img src="assets/brand/tvevt-favicon.svg" alt="TVEVT">
-        <div>
-          <div class="console-title">TVEVT</div>
-          <div class="console-sub">Governance Console</div>
-        </div>
+        <div style="font-size:17px; font-weight:800; letter-spacing:4px;">RECORDS</div>
       </a>
-      <div style="font-size:9px; color:#1a1a1a; letter-spacing:2px;">LEDGER ACCESS // ACTIVE</div>
+      <a href="seal.html" style="color:#fff; text-decoration:none; font-size:11px; border:1px solid #333; padding:8px 15px; border-radius:4px;">+ NEW SIGNAL</a>
     </header>
-    
     <div class="main-ui">
-      <div class="ledger-container">
-        <h2>Verified Signal Ledger</h2>
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Signal Preview</th>
-              <th>Recipient</th>
-              <th>Status</th>
-              <th>Verification</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>2026-04-26</td>
-              <td class="signal-preview">Strategic Partnership Protocol...</td>
-              <td>partner@global.com</td>
-              <td><span class="status-tag">Sealed</span></td>
-              <td><a href="proof.html" class="action-link">View Proof</a></td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+      <div class="records-list">
+        <div class="record-card">
+          <div class="record-info">
+            <div class="record-date">April 26, 2026 // 13:45</div>
+            <div class="record-text">Board Decision: Q2 Strategic Pivot</div>
+            <div class="record-meta">Origin: m.mikhailov@company.com • Sent to: partner@inc.com</div>
+          </div>
+          <div class="status-tag">Verified</div>
+        </div>
+        </div>
     </div>
-    
-    <footer>Verified Organizational Signals Protocol</footer>
+    <footer>Immutable Organizational Records Archive</footer>
   </div>
 </body>
 </html>
