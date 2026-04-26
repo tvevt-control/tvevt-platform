@@ -11,22 +11,19 @@ export async function onRequestPost(context) {
     }
 
     const id = "REQ-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+    const createdAt = new Date().toISOString();
 
     const record = {
       id,
       name: name || "",
       email,
       status: "NEW",
-      createdAt: new Date().toISOString()
+      createdAt
     };
 
-    if (context.env.STORE) {
-      await context.env.STORE.put(id, JSON.stringify(record));
-    }
+    const origin = new URL(context.request.url).origin;
 
     if (context.env.TG_TOKEN && context.env.TG_CHAT_ID) {
-      const origin = new URL(context.request.url).origin;
-
       const text =
 `🚀 NEW TVEVT ACCESS REQUEST
 
@@ -34,9 +31,9 @@ ID: ${id}
 Name: ${name || "—"}
 Email: ${email}
 Status: NEW
-Time: ${record.createdAt}`;
+Time: ${createdAt}`;
 
-      await fetch(`https://api.telegram.org/bot${context.env.TG_TOKEN}/sendMessage`, {
+      const tgRes = await fetch(`https://api.telegram.org/bot${context.env.TG_TOKEN}/sendMessage`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -52,6 +49,15 @@ Time: ${record.createdAt}`;
           }
         })
       });
+
+      const tgData = await tgRes.json();
+      if (tgData.ok && tgData.result && tgData.result.message_id) {
+        record.telegramMessageId = tgData.result.message_id;
+      }
+    }
+
+    if (context.env.STORE) {
+      await context.env.STORE.put(id, JSON.stringify(record));
     }
 
     return new Response(JSON.stringify({ success: true, id }), {
