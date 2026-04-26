@@ -3,32 +3,31 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TVEVT | Seal Terminal</title>
+  <title>TVEVT | Governance Console</title>
   <link rel="icon" type="image/svg+xml" href="assets/brand/tvevt-favicon.svg" />
   <style>
-    :root{ --bg:#090909; --panel:#111; --border:#1a1a1a; --text:#eee; --accent:#fff; }
+    :root{ --bg:#000; --panel:#0a0a0a; --border:#1a1a1a; --text:#eee; --accent:#fff; }
     *{box-sizing:border-box}
     body{ margin:0; background:#000; color:var(--text); font-family:Inter, sans-serif; display:flex; height:100vh; overflow:hidden; }
-    .console{ flex:1; display:flex; flex-direction:column; border:1px solid var(--border); margin:15px; border-radius:12px; background:var(--panel); }
-    header{ height:65px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; padding:0 25px; }
-    .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff; font-weight:700; font-size:14px; letter-spacing:2px; }
-    .brand img{ width:30px; height:30px; }
+    .console{ flex:1; display:flex; flex-direction:column; border:1px solid var(--border); margin:15px; border-radius:16px; background:var(--panel); }
+    header{ height:70px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; padding:0 30px; }
+    .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff; font-weight:700; }
+    .brand img{ width:32px; height:32px; }
     .main-ui{ flex:1; display:flex; justify-content:center; align-items:center; padding:40px; position:relative; overflow-y:auto; }
     .terminal{ width:100%; max-width:700px; }
-    h2{ font-size:10px; text-transform:uppercase; letter-spacing:4px; color:#444; margin-bottom:30px; text-align:center; }
     label{ display:block; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:#333; margin-bottom:10px; }
     textarea, input { 
-      width:100%; background:#000; border:1px solid var(--border); padding:18px; color:#fff; 
-      font-family:monospace; font-size:14px; margin-bottom:20px; outline:none;
+      width:100%; background:#000; border:1px solid var(--border); padding:20px; color:#fff; 
+      font-family:monospace; font-size:14px; margin-bottom:25px; outline:none; border-radius:4px;
     }
-    textarea{ height:200px; resize:none; }
-    .grid{ display:grid; grid-template-columns:1fr 1fr; gap:20px; }
+    textarea{ height:240px; resize:none; line-height:1.6; }
+    .grid{ display:grid; grid-template-columns:1fr 1fr; gap:25px; }
     .btn{ 
-      width:100%; background:var(--accent); color:#000; padding:22px; border:none; 
-      font-weight:700; text-transform:uppercase; letter-spacing:5px; cursor:pointer; transition:.3s;
+      width:100%; background:var(--accent); color:#000; padding:24px; border:none; 
+      font-weight:800; text-transform:uppercase; letter-spacing:5px; cursor:pointer; transition:.3s;
     }
     .btn:hover{ background:#000; color:#fff; box-shadow:0 0 0 1px #fff; }
-    footer{ height:45px; border-top:1px solid var(--border); display:flex; align-items:center; padding:0 25px; font-size:9px; color:#222; letter-spacing:2px; text-transform:uppercase; }
+    footer{ height:45px; border-top:1px solid var(--border); display:flex; align-items:center; padding:0 30px; font-size:9px; color:#222; letter-spacing:2px; text-transform:uppercase; }
   </style>
 </head>
 <body>
@@ -36,29 +35,31 @@
     <header>
       <a href="index.html" class="brand">
         <img src="assets/brand/tvevt-favicon.svg" alt="TVEVT">
-        <span>TVEVT | SEAL TERMINAL</span>
+        <div>
+          <div style="font-size:14px; letter-spacing:2px;">TVEVT</div>
+          <div style="font-size:8px; font-weight:300; opacity:0.4;">Governance Console</div>
+        </div>
       </a>
-      <div style="font-size:9px; color:#222">PROTOCOL READY</div>
+      <div style="font-size:9px; color:#222; letter-spacing:2px;">TERMINAL ACTIVE</div>
     </header>
     <div class="main-ui">
       <div class="terminal">
-        <h2>Strategic Signal Entry</h2>
-        <label>Statement / Protocol Content</label>
-        <textarea placeholder="Write the exact statement to seal..."></textarea>
+        <label>Strategic Signal Content</label>
+        <textarea placeholder="Enter the text of your protocol or statement..."></textarea>
         <div class="grid">
           <div>
-            <label>Your ID (Email)</label>
-            <input type="email" placeholder="author@company.com">
+            <label>Originator Email</label>
+            <input type="email" placeholder="you@company.com">
           </div>
           <div>
-            <label>Recipient ID (Email)</label>
+            <label>Recipient Email (Auto-Transmit)</label>
             <input type="email" placeholder="partner@company.com">
           </div>
         </div>
         <button class="btn">[ SEAL & TRANSMIT ]</button>
       </div>
     </div>
-    <footer>Transmission Protocol Active</footer>
+    <footer>Immutable Organizational Records Infrastructure</footer>
   </div>
 </body>
 </html>
