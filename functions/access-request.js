@@ -16,20 +16,24 @@ export async function onRequestPost(context) {
       id,
       name: name || "",
       email,
+      status: "NEW",
       createdAt: new Date().toISOString()
     };
 
-    if (context.env.LOG_STORE) {
-      await context.env.LOG_STORE.put(id, JSON.stringify(record));
+    if (context.env.STORE) {
+      await context.env.STORE.put(id, JSON.stringify(record));
     }
 
     if (context.env.TG_TOKEN && context.env.TG_CHAT_ID) {
+      const origin = new URL(context.request.url).origin;
+
       const text =
 `🚀 NEW TVEVT ACCESS REQUEST
 
 ID: ${id}
 Name: ${name || "—"}
 Email: ${email}
+Status: NEW
 Time: ${record.createdAt}`;
 
       await fetch(`https://api.telegram.org/bot${context.env.TG_TOKEN}/sendMessage`, {
@@ -37,7 +41,15 @@ Time: ${record.createdAt}`;
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           chat_id: context.env.TG_CHAT_ID,
-          text
+          text,
+          reply_markup: {
+            inline_keyboard: [
+              [
+                { text: "✅ Approve", url: `${origin}/lead-action?id=${id}&status=APPROVED` },
+                { text: "❌ Reject", url: `${origin}/lead-action?id=${id}&status=REJECTED` }
+              ]
+            ]
+          }
         })
       });
     }
