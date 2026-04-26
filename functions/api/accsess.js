@@ -1,20 +1,31 @@
-export async function onRequest(context) {
+export async function onRequestGet(context) {
   try {
     const url = new URL(context.request.url);
-    const token = url.searchParams.get("token");
+
+    const token =
+      url.searchParams.get("token") ||
+      url.searchParams.get("access");
 
     if (!token) {
-      return new Response(JSON.stringify({ valid: false }), {
+      return new Response(JSON.stringify({ valid: false, reason: "NO_TOKEN" }), {
         headers: { "Content-Type": "application/json" }
       });
     }
 
-    const list = await context.env.STORE.list();
+    const store = context.env.STORE || context.env.LOG_STORE;
+
+    if (!store) {
+      return new Response(JSON.stringify({ valid: false, reason: "NO_STORE" }), {
+        headers: { "Content-Type": "application/json" }
+      });
+    }
+
+    const list = await store.list();
 
     for (const key of list.keys) {
       if (!key.name.startsWith("REQ-")) continue;
 
-      const raw = await context.env.STORE.get(key.name);
+      const raw = await store.get(key.name);
       if (!raw) continue;
 
       const lead = JSON.parse(raw);
@@ -22,8 +33,9 @@ export async function onRequest(context) {
       if (lead.accessToken === token && lead.status === "APPROVED") {
         return new Response(JSON.stringify({
           valid: true,
-          name: lead.name,
-          email: lead.email,
+          id: lead.id,
+          name: lead.name || "",
+          email: lead.email || "",
           status: lead.status
         }), {
           headers: { "Content-Type": "application/json" }
@@ -31,12 +43,16 @@ export async function onRequest(context) {
       }
     }
 
-    return new Response(JSON.stringify({ valid: false }), {
+    return new Response(JSON.stringify({ valid: false, reason: "NOT_FOUND" }), {
       headers: { "Content-Type": "application/json" }
     });
 
   } catch (err) {
-    return new Response(JSON.stringify({ valid: false }), {
+    return new Response(JSON.stringify({
+      valid: false,
+      reason: "ERROR",
+      message: err.message
+    }), {
       status: 500,
       headers: { "Content-Type": "application/json" }
     });
