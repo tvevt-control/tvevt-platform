@@ -18,17 +18,21 @@ export async function onRequestGet(context) {
     if (context.env.STORE) {
       const existing = await context.env.STORE.get(id);
       record = existing ? JSON.parse(existing) : { id };
+
       record.status = status;
       record.updatedAt = new Date().toISOString();
+
+      if (status === "APPROVED" && !record.accessToken) {
+        record.accessToken = "ACC-" + Math.random().toString(36).substring(2, 14).toUpperCase();
+      }
 
       await context.env.STORE.put(id, JSON.stringify(record));
     }
 
-    if (
-      context.env.TG_TOKEN &&
-      context.env.TG_CHAT_ID &&
-      record.telegramMessageId
-    ) {
+    const origin = url.origin;
+    const accessUrl = record.accessToken ? `${origin}/app.html?access=${record.accessToken}` : "";
+
+    if (context.env.TG_TOKEN && context.env.TG_CHAT_ID && record.telegramMessageId) {
       const icon = status === "APPROVED" ? "✅" : "❌";
 
       const text =
@@ -39,7 +43,10 @@ Name: ${record.name || "—"}
 Email: ${record.email || "—"}
 Status: ${status} ${icon}
 Created: ${record.createdAt || "—"}
-Updated: ${record.updatedAt}`;
+Updated: ${record.updatedAt || "—"}${accessUrl ? `
+
+Access link:
+${accessUrl}` : ""}`;
 
       await fetch(`https://api.telegram.org/bot${context.env.TG_TOKEN}/editMessageText`, {
         method: "POST",
@@ -60,25 +67,11 @@ Updated: ${record.updatedAt}`;
         <meta name="viewport" content="width=device-width,initial-scale=1">
         <title>TVEVT Lead Updated</title>
         <style>
-          body{
-            margin:0;
-            min-height:100vh;
-            display:flex;
-            align-items:center;
-            justify-content:center;
-            background:#07090c;
-            color:#f4f6f8;
-            font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-          }
-          .card{
-            max-width:520px;
-            padding:36px;
-            border:1px solid rgba(255,255,255,.12);
-            border-radius:28px;
-            background:rgba(255,255,255,.04);
-          }
+          body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#07090c;color:#f4f6f8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
+          .card{max-width:620px;padding:36px;border:1px solid rgba(255,255,255,.12);border-radius:28px;background:rgba(255,255,255,.04)}
           h1{margin:0 0 12px;font-size:34px}
           p{color:rgba(244,246,248,.65);line-height:1.5}
+          a{color:#ffb14a;word-break:break-all}
           strong{color:#ffb14a}
         </style>
       </head>
@@ -86,6 +79,7 @@ Updated: ${record.updatedAt}`;
         <div class="card">
           <h1>Lead ${status.toLowerCase()}.</h1>
           <p>Request <strong>${id}</strong> has been marked as <strong>${status}</strong>.</p>
+          ${accessUrl ? `<p>Access link:<br><a href="${accessUrl}">${accessUrl}</a></p>` : ""}
         </div>
       </body>
       </html>`,
