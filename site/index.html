@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TVEVT | Infrastructure for Verified Organizational Signals</title>
+    <style>
+        :root { --bg: #000; --panel: #0a0a0a; --border: #1a1a1a; --text: #eee; --accent: #fff; }
+        body { background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Inter", sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Единая Консоль */
+        .console-wrapper { display: flex; flex-direction: column; width: 100%; border: 1px solid var(--border); margin: 15px; border-radius: 12px; background: var(--panel); position: relative; box-shadow: 0 20px 50px rgba(0,0,0,0.5); }
+        
+        /* Верхняя панель */
+        .top-bar { height: 65px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; padding: 0 25px; }
+        .logo-section { display: flex; align-items: center; gap: 15px; text-decoration: none; color: inherit; }
+        .logo-img { width: 32px; height: 32px; }
+        .brand-name { font-weight: 600; letter-spacing: 2px; font-size: 16px; text-transform: uppercase; }
+        
+        /* Основной контент */
+        .main-content { flex: 1; display: flex; justify-content: center; align-items: center; position: relative; z-index: 2; }
+        .hero { text-align: center; max-width: 800px; padding: 20px; }
+        
+        h1 { font-size: clamp(32px, 7vw, 64px); font-weight: 200; letter-spacing: -2px; margin: 0 0 40px 0; line-height: 1.1; text-transform: uppercase; }
+        
+        /* Кнопка входа */
+        .btn-enter { 
+            background: var(--accent); color: #000; padding: 22px 50px; 
+            text-decoration: none; font-weight: 700; text-transform: uppercase; 
+            letter-spacing: 3px; transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1); 
+            display: inline-block; border: 1px solid var(--accent); 
+        }
+        .btn-enter:hover { background: #000; color: #fff; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(255,255,255,0.1); }
+
+        /* Сетка как на твоем скриншоте */
+        .grid-bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-image: radial-gradient(rgba(255,255,255,0.05) 1px, transparent 1px); background-size: 40px 40px; z-index: 1; pointer-events: none; }
+        
+        /* Нижняя панель */
+        .footer-bar { height: 45px; border-top: 1px solid var(--border); display: flex; align-items: center; padding: 0 25px; font-size: 9px; color: #444; letter-spacing: 2px; text-transform: uppercase; justify-content: space-between; }
+        .vision-link { color: #555; text-decoration: none; transition: 0.3s; }
+        .vision-link:hover { color: #fff; }
+    </style>
+</head>
+<body>
+    <div class="console-wrapper">
+        <div class="top-bar">
+            <a href="/" class="logo-section">
+                <img src="https://tvevt.com/favicon.png" alt="TVEVT" class="logo-img">
+                <span class="brand-name">TVEVT | TERMINAL</span>
+            </a>
+            <div style="font-size: 10px; color: #333; letter-spacing: 1px;">SYSTEM STATUS: ACTIVE // ALPHA 1.0</div>
+        </div>
+        
+        <div class="main-content">
+            <div class="grid-bg"></div>
+            <div class="hero">
+                <h1>SAY IT ONCE.<br>PROVE IT FOREVER.</h1>
+                <a href="seal.html" class="btn-enter">[ Open Signal Terminal ]</a>
+            </div>
+        </div>
+        
+        <div class="footer-bar">
+            <div>INFRASTRUCTURE FOR VERIFIED ORGANIZATIONAL SIGNALS</div>
+            <div><a href="vision.html" class="vision-link">Deep Vision & Architecture →</a></div>
+        </div>
+    </div>
+</body>
+</html>
