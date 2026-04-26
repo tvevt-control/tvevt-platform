@@ -9,8 +9,8 @@
   <style>
     :root{
       --text:#f4f6f8;
-      --muted:rgba(244,246,248,.58);
-      --soft:rgba(244,246,248,.34);
+      --muted:rgba(244,246,248,.62);
+      --soft:rgba(244,246,248,.36);
       --line:rgba(255,255,255,.12);
       --orange:#ff7a1a;
       --orange2:#ffb14a;
@@ -24,8 +24,8 @@
       margin:0;
       min-height:100vh;
       background:
-        radial-gradient(circle at 20% 0%,rgba(255,122,26,.13),transparent 32%),
-        radial-gradient(circle at 80% 20%,rgba(255,255,255,.045),transparent 30%),
+        radial-gradient(circle at 50% 0%,rgba(255,122,26,.16),transparent 34%),
+        radial-gradient(circle at 80% 22%,rgba(143,240,177,.06),transparent 28%),
         linear-gradient(180deg,#10131a,#07090c);
       color:var(--text);
       font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif;
@@ -54,7 +54,10 @@
       text-decoration:none;
     }
 
-    .brand img{width:42px;height:42px}
+    .brand img{
+      width:42px;
+      height:42px;
+    }
 
     .brand strong{
       display:block;
@@ -90,58 +93,68 @@
 
     main{
       flex:1;
-      width:min(900px,100%);
+      width:min(940px,100%);
       margin:56px auto 0;
     }
 
     .card{
       border:1px solid var(--line);
-      border-radius:34px;
+      border-radius:36px;
       background:
-        linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015)),
-        rgba(10,13,18,.74);
-      padding:42px;
-      box-shadow:0 30px 100px rgba(0,0,0,.30);
+        linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015)),
+        rgba(10,13,18,.78);
+      padding:44px;
+      box-shadow:0 30px 100px rgba(0,0,0,.32);
     }
 
-    .verified{
+    .status{
       display:none;
       align-items:center;
-      gap:12px;
-      margin-bottom:24px;
-      color:var(--green);
-      font-weight:850;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      font-size:13px;
+      gap:14px;
+      margin-bottom:28px;
     }
 
-    .check{
-      width:34px;
-      height:34px;
+    .seal{
+      width:52px;
+      height:52px;
       border-radius:50%;
-      display:inline-flex;
+      display:flex;
       align-items:center;
       justify-content:center;
       background:rgba(143,240,177,.12);
       border:1px solid rgba(143,240,177,.34);
       color:var(--green);
-      font-size:18px;
+      font-size:28px;
+      flex:0 0 auto;
+    }
+
+    .status-label{
+      color:var(--green);
+      font-size:13px;
+      font-weight:900;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+
+    .status-sub{
+      color:var(--muted);
+      margin-top:4px;
+      font-size:14px;
     }
 
     h1{
       margin:0;
-      font-size:clamp(48px,7vw,86px);
+      font-size:clamp(48px,7vw,88px);
       line-height:.94;
       letter-spacing:-.065em;
     }
 
     .lead{
       margin:18px 0 30px;
-      max-width:680px;
+      max-width:720px;
       color:var(--muted);
       font-size:20px;
-      line-height:1.45;
+      line-height:1.48;
     }
 
     .lookup{
@@ -206,6 +219,20 @@
       border-top:1px solid var(--line);
     }
 
+    .notice{
+      border:1px solid rgba(143,240,177,.22);
+      background:rgba(143,240,177,.06);
+      border-radius:22px;
+      padding:18px;
+      color:var(--muted);
+      line-height:1.5;
+      margin-bottom:24px;
+    }
+
+    .notice strong{
+      color:var(--text);
+    }
+
     .content-label{
       color:var(--soft);
       font-size:11px;
@@ -217,11 +244,11 @@
 
     .sealed-text{
       border:1px solid var(--line);
-      border-radius:24px;
-      background:rgba(0,0,0,.22);
-      padding:26px;
+      border-radius:26px;
+      background:rgba(0,0,0,.24);
+      padding:28px;
       white-space:pre-wrap;
-      line-height:1.58;
+      line-height:1.6;
       overflow-wrap:anywhere;
       font-size:20px;
       color:var(--text);
@@ -258,10 +285,6 @@
       line-height:1.45;
     }
 
-    .hash-row{
-      margin-top:14px;
-    }
-
     .technical{
       display:none;
       margin-top:14px;
@@ -280,9 +303,9 @@
 
     .growth{
       margin-top:28px;
-      padding:22px;
+      padding:24px;
       border:1px solid rgba(255,122,26,.22);
-      border-radius:24px;
+      border-radius:26px;
       background:rgba(255,122,26,.055);
       display:none;
     }
@@ -293,8 +316,8 @@
 
     .growth h2{
       margin:0 0 8px;
-      font-size:24px;
-      letter-spacing:-.04em;
+      font-size:26px;
+      letter-spacing:-.045em;
     }
 
     .growth p{
@@ -322,6 +345,7 @@
       button,.button{width:100%}
       .actions{flex-direction:column}
       .sealed-text{font-size:18px}
+      .status{align-items:flex-start}
     }
   </style>
 </head>
@@ -345,13 +369,18 @@
 
   <main>
     <section class="card">
-      <div class="verified" id="badge">
-        <span class="check">✓</span>
-        Record verified
+      <div class="status" id="badge">
+        <div class="seal">✓</div>
+        <div>
+          <div class="status-label">Verified Record</div>
+          <div class="status-sub">Immutable. Timestamped. Traceable.</div>
+        </div>
       </div>
 
       <h1 id="title">Verified record.</h1>
-      <p class="lead" id="lead">A sealed signal with a timestamp, hash, and fixed verification link.</p>
+      <p class="lead" id="lead">
+        A sealed signal with a timestamp, hash, and fixed verification link.
+      </p>
 
       <div class="lookup" id="lookup">
         <input id="recordInput" placeholder="Enter record ID, e.g. TVE-XXXXXX">
@@ -361,6 +390,11 @@
       <div class="msg" id="msg">Open a verification link or enter a record ID.</div>
 
       <div class="record" id="record">
+        <div class="notice">
+          <strong>This record cannot be altered without detection.</strong><br>
+          The content below is the sealed statement associated with this verification record.
+        </div>
+
         <div class="content-label">Sealed content</div>
         <div class="sealed-text" id="content">No record loaded.</div>
 
@@ -387,7 +421,7 @@
         </div>
 
         <div class="technical" id="technical">
-          <div class="field hash-row">
+          <div class="field" style="margin-top:14px;">
             <small>Hash</small>
             <b id="hash">—</b>
           </div>
@@ -395,13 +429,16 @@
 
         <div class="actions">
           <button id="copyLink">Copy Link</button>
+          <button id="shareProof">Share Proof</button>
           <button id="toggleTechnical">Show Hash</button>
           <a class="button orange" href="/seal.html">Seal New</a>
         </div>
 
         <div class="growth" id="growth">
           <h2>Protect your statements.</h2>
-          <p>Identity, account history, delivery, and team governance are the next control layer.</p>
+          <p>
+            Identity, account history, delivery, and team governance are the next control layer.
+          </p>
           <div class="actions">
             <a class="button orange" href="/request-access.html">Request Access</a>
           </div>
@@ -438,7 +475,7 @@ function reset(){
 function render(record){
   current = record;
 
-  $("badge").style.display = "inline-flex";
+  $("badge").style.display = "flex";
   $("record").style.display = "block";
   $("growth").classList.add("show");
 
@@ -492,6 +529,24 @@ $("copyLink").onclick = async () => {
   const link = location.origin + "/record.html?id=" + encodeURIComponent(current.id);
   await navigator.clipboard.writeText(link);
   $("msg").textContent = "Verification link copied.";
+};
+
+$("shareProof").onclick = async () => {
+  if(!current) return;
+
+  const link = location.origin + "/record.html?id=" + encodeURIComponent(current.id);
+  const text = `This signal has been verified in TVEVT.\nRecord: ${current.id}\n${link}`;
+
+  if (navigator.share) {
+    await navigator.share({
+      title: "TVEVT Verified Record",
+      text,
+      url: link
+    });
+  } else {
+    await navigator.clipboard.writeText(text);
+    $("msg").textContent = "Proof text copied.";
+  }
 };
 
 $("toggleTechnical").onclick = () => {
