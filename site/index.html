@@ -3,33 +3,32 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TVEVT | Signal Terminal</title>
+  <title>TVEVT | Governance Console</title>
   <link rel="icon" type="image/svg+xml" href="assets/brand/tvevt-favicon.svg" />
   <style>
-    :root{ --bg:#090909; --text:#f5f5f5; --muted:rgba(255,255,255,.35); --accent:#ff7a00; }
+    :root{ --bg:#090909; --text:#f5f5f5; --accent:#ff7a00; }
     *{box-sizing:border-box}
     body{
       margin:0; min-height:100vh; color:var(--text);
       font-family:Inter, -apple-system, sans-serif;
-      background: radial-gradient(circle at 50% 35%, rgba(255,122,0,.05), transparent 35%), #090909;
+      background: radial-gradient(circle at 50% 35%, rgba(255,122,0,.04), transparent 40%), #090909;
       display:flex; flex-direction:column;
     }
-    .page{ flex:1; display:flex; flex-direction:column; padding:40px; border:1px solid rgba(255,255,255,.05); margin:15px; border-radius:12px; position:relative; }
-    header{ display:flex; justify-content:space-between; align-items:center; font-size:11px; text-transform:uppercase; letter-spacing:.2em; }
-    .brand{ display:flex; align-items:center; gap:12px; font-weight:700; color:#fff; text-decoration:none; }
-    .brand img{ width:32px; height:32px; }
+    .page{ flex:1; display:flex; flex-direction:column; padding:40px; border:1px solid rgba(255,255,255,.03); margin:15px; border-radius:16px; position:relative; }
+    header{ display:flex; justify-content:space-between; align-items:center; }
+    .brand{ display:flex; align-items:center; gap:14px; font-weight:700; color:#fff; text-decoration:none; }
+    .brand img{ width:36px; height:36px; }
+    .console-label { font-size:11px; text-transform:uppercase; letter-spacing:2px; color:rgba(255,255,255,0.2); }
     main{ flex:1; display:flex; align-items:center; justify-content:center; text-align:center; }
-    h1{ font-size:clamp(40px, 8vw, 90px); line-height:0.95; font-weight:500; letter-spacing:-0.02em; margin-bottom:40px; }
+    h1{ font-size:clamp(40px, 8vw, 92px); line-height:0.95; font-weight:500; letter-spacing:-0.03em; margin-bottom:50px; text-transform:uppercase; }
     .cta{
-      display:inline-block; padding:22px 50px; background:#f3f1e8; color:#000;
-      text-decoration:none; font-size:13px; font-weight:700; letter-spacing:.3em;
-      text-transform:uppercase; transition:.3s;
+      display:inline-block; padding:24px 60px; background:#fff; color:#000;
+      text-decoration:none; font-size:14px; font-weight:800; letter-spacing:.3em;
+      text-transform:uppercase; transition:.4s cubic-bezier(0.16, 1, 0.3, 1);
     }
-    .cta:hover{ transform:translateY(-2px); box-shadow:0 10px 30px rgba(255,255,255,0.1); }
-    footer{ display:flex; justify-content:space-between; font-size:10px; text-transform:uppercase; letter-spacing:.15em; color:var(--muted); }
-    footer a{ color:inherit; text-decoration:none; transition:.3s; }
-    footer a:hover{ color:#fff; }
-    @media(max-width:720px){ .page{ padding:20px; margin:10px; } h1{ font-size:42px; } footer{ flex-direction:column; gap:20px; } }
+    .cta:hover{ transform:scale(1.02); box-shadow:0 20px 40px rgba(0,0,0,0.4); background:#f3f1e8; }
+    footer{ display:flex; justify-content:center; font-size:10px; text-transform:uppercase; letter-spacing:.2em; color:rgba(255,255,255,0.15); }
+    @media(max-width:720px){ .page{ padding:20px; margin:10px; } h1{ font-size:48px; } }
   </style>
 </head>
 <body>
@@ -37,19 +36,21 @@
     <header>
       <a href="/" class="brand">
         <img src="assets/brand/tvevt-favicon.svg" alt="TVEVT">
-        <span>TVEVT | TERMINAL</span>
+        <div>
+          <div style="font-size:16px; letter-spacing:3px;">TVEVT</div>
+          <div style="font-size:9px; font-weight:300; opacity:0.5; letter-spacing:1px;">Governance Console</div>
+        </div>
       </a>
-      <div>SYSTEM STATUS ACTIVE // ALPHA</div>
+      <div class="console-label">System Secured</div>
     </header>
     <main>
       <div class="hero">
         <h1>SAY IT ONCE.<br>PROVE IT FOREVER.</h1>
-        <a class="cta" href="seal.html">[ Open Signal Terminal ]</a>
+        <a class="cta" href="seal.html">[ Start Sealing ]</a>
       </div>
     </main>
     <footer>
-      <div>Infrastructure for verified organizational signals</div>
-      <a href="vision.html">Deep Vision & Architecture →</a>
+      Infrastructure for Verified Organizational Signals
     </footer>
   </div>
 </body>
