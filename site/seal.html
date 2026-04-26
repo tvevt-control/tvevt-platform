@@ -6,28 +6,55 @@
   <title>TVEVT | Governance Console</title>
   <link rel="icon" type="image/svg+xml" href="assets/brand/tvevt-favicon.svg" />
   <style>
-    :root{ --bg:#000; --panel:#0a0a0a; --border:#1a1a1a; --text:#eee; --accent:#fff; }
+    :root{ --bg:#080808; --panel:#0a0a0a; --border:rgba(255,255,255,0.05); --text:#ffffff; --accent:#ff7a00; --muted:#333; }
     *{box-sizing:border-box}
-    body{ margin:0; background:#000; color:var(--text); font-family:Inter, sans-serif; display:flex; height:100vh; overflow:hidden; }
-    .console{ flex:1; display:flex; flex-direction:column; border:1px solid var(--border); margin:15px; border-radius:16px; background:var(--panel); }
-    header{ height:70px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; padding:0 30px; }
-    .brand{ display:flex; align-items:center; gap:12px; text-decoration:none; color:#fff; font-weight:700; }
-    .brand img{ width:32px; height:32px; }
+    body{ 
+      margin:0; background:#080808; color:var(--text); 
+      font-family: 'Inter', -apple-system, sans-serif; 
+      display:flex; height:100vh; overflow:hidden; 
+    }
+    .console{ 
+      flex:1; display:flex; flex-direction:column; 
+      border:1px solid var(--border); margin:20px; 
+      border-radius:12px; background:var(--panel); 
+    }
+    header{ 
+      height:80px; border-bottom:1px solid var(--border); 
+      display:flex; justify-content:space-between; align-items:center; padding:0 35px; 
+    }
+    .brand{ display:flex; align-items:center; gap:16px; text-decoration:none; color:#fff; }
+    .brand img{ width:38px; height:38px; }
+    .console-title { font-size:17px; font-weight:800; letter-spacing:4px; margin-bottom:1px; }
+    .console-sub { font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); }
+    
     .main-ui{ flex:1; display:flex; justify-content:center; align-items:center; padding:40px; position:relative; overflow-y:auto; }
-    .terminal{ width:100%; max-width:700px; }
-    label{ display:block; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:#333; margin-bottom:10px; }
+    .terminal{ width:100%; max-width:750px; }
+    
+    label{ display:block; font-size:9px; text-transform:uppercase; letter-spacing:2px; color:#444; margin-bottom:12px; }
     textarea, input { 
-      width:100%; background:#000; border:1px solid var(--border); padding:20px; color:#fff; 
-      font-family:monospace; font-size:14px; margin-bottom:25px; outline:none; border-radius:4px;
+      width:100%; background:#000; border:1px solid var(--border); 
+      padding:22px; color:#fff; font-family: 'SF Mono', monospace; 
+      font-size:14px; margin-bottom:30px; outline:none; border-radius:4px;
+      transition: border-color 0.3s ease;
     }
-    textarea{ height:240px; resize:none; line-height:1.6; }
-    .grid{ display:grid; grid-template-columns:1fr 1fr; gap:25px; }
+    textarea:focus, input:focus { border-color: rgba(255,255,255,0.2); }
+    textarea{ height:260px; resize:none; line-height:1.6; }
+    
+    .grid{ display:grid; grid-template-columns:1fr 1fr; gap:30px; }
+    
     .btn{ 
-      width:100%; background:var(--accent); color:#000; padding:24px; border:none; 
-      font-weight:800; text-transform:uppercase; letter-spacing:5px; cursor:pointer; transition:.3s;
+      width:100%; background:#fff; color:#000; padding:24px; border:none; 
+      font-weight:700; text-transform:uppercase; letter-spacing:5px; 
+      cursor:pointer; transition:0.3s cubic-bezier(0.2, 1, 0.3, 1);
     }
-    .btn:hover{ background:#000; color:#fff; box-shadow:0 0 0 1px #fff; }
-    footer{ height:45px; border-top:1px solid var(--border); display:flex; align-items:center; padding:0 30px; font-size:9px; color:#222; letter-spacing:2px; text-transform:uppercase; }
+    .btn:hover{ background:var(--accent); color:#fff; }
+    
+    footer{ 
+      height:50px; border-top:1px solid var(--border); 
+      display:flex; align-items:center; justify-content:center;
+      padding:0 35px; font-size:9px; color:#222; 
+      letter-spacing:3px; text-transform:uppercase; 
+    }
   </style>
 </head>
 <body>
@@ -36,30 +63,34 @@
       <a href="index.html" class="brand">
         <img src="assets/brand/tvevt-favicon.svg" alt="TVEVT">
         <div>
-          <div style="font-size:14px; letter-spacing:2px;">TVEVT</div>
-          <div style="font-size:8px; font-weight:300; opacity:0.4;">Governance Console</div>
+          <div class="console-title">TVEVT</div>
+          <div class="console-sub">Governance Console</div>
         </div>
       </a>
-      <div style="font-size:9px; color:#222; letter-spacing:2px;">TERMINAL ACTIVE</div>
+      <div style="font-size:9px; color:#1a1a1a; letter-spacing:2px;">ENCRYPTED ACCESS</div>
     </header>
+    
     <div class="main-ui">
       <div class="terminal">
         <label>Strategic Signal Content</label>
         <textarea placeholder="Enter the text of your protocol or statement..."></textarea>
+        
         <div class="grid">
           <div>
             <label>Originator Email</label>
-            <input type="email" placeholder="you@company.com">
+            <input type="email" placeholder="author@company.com">
           </div>
           <div>
-            <label>Recipient Email (Auto-Transmit)</label>
+            <label>Recipient Email</label>
             <input type="email" placeholder="partner@company.com">
           </div>
         </div>
-        <button class="btn">[ SEAL & TRANSMIT ]</button>
+        
+        <button class="btn">SEAL & TRANSMIT</button>
       </div>
     </div>
-    <footer>Immutable Organizational Records Infrastructure</footer>
+    
+    <footer>Verified Organizational Signals Protocol</footer>
   </div>
 </body>
 </html>
