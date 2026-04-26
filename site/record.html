@@ -3,60 +3,580 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TVEVT | Signal Records</title>
-  <link rel="icon" type="image/svg+xml" href="assets/brand/tvevt-favicon.svg" />
+  <title>TVEVT — Record Verification</title>
+  <meta name="description" content="Verify a sealed TVEVT signal record." />
+  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg" />
+
   <style>
-    :root{ --bg:#080808; --panel:#0d0d0d; --border:rgba(255,255,255,0.1); --text:#ffffff; --accent:#ff7a00; }
+    :root{
+      --bg:#07090c;
+      --panel:#0d1117;
+      --text:#f4f6f8;
+      --muted:rgba(244,246,248,.58);
+      --soft:rgba(244,246,248,.34);
+      --line:rgba(255,255,255,.12);
+      --orange:#ff7a1a;
+      --orange2:#ffb14a;
+      --green:#8ff0b1;
+      --radius:24px;
+    }
+
     *{box-sizing:border-box}
-    body{ margin:0; background:#080808; color:var(--text); font-family:'Inter', sans-serif; display:flex; height:100vh; overflow:hidden; }
-    .console{ flex:1; display:flex; flex-direction:column; border:1px solid var(--border); margin:20px; border-radius:12px; background:var(--panel); }
-    header{ height:80px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; padding:0 35px; }
-    .brand{ display:flex; align-items:center; gap:16px; text-decoration:none; color:#fff; }
-    .brand img{ width:38px; height:38px; }
-    
-    .main-ui{ flex:1; padding:40px; overflow-y:auto; }
-    .records-list { max-width:900px; margin:0 auto; }
-    .record-card { 
-      background:#000; border:1px solid #222; padding:25px; 
-      margin-bottom:20px; border-radius:8px; display:flex; 
-      justify-content:space-between; align-items:center;
-      transition: 0.3s;
+
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 20% 0%, rgba(255,122,26,.13), transparent 32%),
+        radial-gradient(circle at 82% 18%, rgba(255,255,255,.055), transparent 30%),
+        linear-gradient(180deg,#10131a 0%,#07090c 100%);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif;
+      letter-spacing:-.01em;
     }
-    .record-card:hover { border-color: var(--accent); }
-    .record-info { display:flex; flex-direction:column; gap:8px; }
-    .record-date { font-size:10px; color:var(--accent); letter-spacing:1px; text-transform:uppercase; }
-    .record-text { font-size:15px; font-weight:500; color:#eee; }
-    .record-meta { font-size:11px; color:#555; }
-    
-    .status-tag { 
-      font-size:10px; padding:6px 12px; border:1px solid #333; 
-      color:#aaa; border-radius:4px; text-transform:uppercase; letter-spacing:1px;
+
+    .page{
+      min-height:100vh;
+      padding:34px;
+      display:flex;
+      flex-direction:column;
     }
-    footer{ height:50px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:10px; color:#444; letter-spacing:3px; text-transform:uppercase; }
+
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:20px;
+      padding-bottom:32px;
+      border-bottom:1px solid var(--line);
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      color:var(--text);
+      text-decoration:none;
+    }
+
+    .brand img{
+      width:42px;
+      height:42px;
+    }
+
+    .brand strong{
+      display:block;
+      font-size:17px;
+      letter-spacing:.16em;
+    }
+
+    .brand span span{
+      display:block;
+      margin-top:3px;
+      font-size:11px;
+      color:var(--muted);
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    .top-actions{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .top-actions a{
+      min-height:42px;
+      padding:0 18px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:var(--text);
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+      font-weight:700;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      background:rgba(255,255,255,.03);
+    }
+
+    .top-actions .orange{
+      color:#150903;
+      background:linear-gradient(135deg,var(--orange2),var(--orange));
+      border-color:rgba(255,122,26,.8);
+    }
+
+    main{
+      width:min(1180px,100%);
+      margin:54px auto 0;
+    }
+
+    .hero{
+      border:1px solid var(--line);
+      border-radius:30px;
+      background:
+        linear-gradient(135deg,rgba(255,122,26,.11),transparent 34%),
+        linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015)),
+        rgba(10,13,18,.78);
+      box-shadow:0 30px 100px rgba(0,0,0,.34);
+      padding:42px;
+      margin-bottom:22px;
+    }
+
+    .pill{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:9px 14px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      color:var(--muted);
+      font-size:13px;
+      margin-bottom:24px;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:var(--orange);
+      box-shadow:0 0 24px rgba(255,122,26,.75);
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(46px,6.8vw,90px);
+      line-height:.95;
+      letter-spacing:-.06em;
+    }
+
+    .lead{
+      margin:22px 0 0;
+      max-width:760px;
+      color:var(--muted);
+      font-size:22px;
+      line-height:1.45;
+    }
+
+    .lookup{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      margin-top:30px;
+    }
+
+    input{
+      height:60px;
+      padding:0 20px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(4,7,11,.62);
+      color:var(--text);
+      font:inherit;
+      font-size:16px;
+      outline:none;
+    }
+
+    button{
+      min-height:60px;
+      padding:0 26px;
+      border-radius:999px;
+      border:1px solid rgba(255,122,26,.8);
+      background:linear-gradient(135deg,var(--orange2),var(--orange));
+      color:#150903;
+      font-size:14px;
+      font-weight:850;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+
+    .message{
+      margin-top:14px;
+      color:var(--muted);
+      font-size:14px;
+      min-height:20px;
+    }
+
+    .grid{
+      display:grid;
+      grid-template-columns:1.05fr .95fr;
+      gap:22px;
+      margin-bottom:34px;
+    }
+
+    .panel{
+      border:1px solid var(--line);
+      border-radius:var(--radius);
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.012)),
+        rgba(10,13,18,.68);
+      padding:28px;
+    }
+
+    .panel h2{
+      margin:0 0 18px;
+      font-size:26px;
+      letter-spacing:-.04em;
+    }
+
+    .fields{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+    }
+
+    .field{
+      min-height:86px;
+      padding:16px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(0,0,0,.18);
+      overflow-wrap:anywhere;
+    }
+
+    .field small{
+      display:block;
+      margin-bottom:8px;
+      color:var(--soft);
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:800;
+    }
+
+    .field b{
+      font-size:15px;
+      line-height:1.4;
+    }
+
+    .wide{
+      grid-column:1 / -1;
+    }
+
+    .verified{
+      display:inline-flex;
+      align-items:center;
+      gap:9px;
+      padding:9px 12px;
+      border-radius:999px;
+      border:1px solid rgba(143,240,177,.3);
+      color:var(--green);
+      background:rgba(143,240,177,.075);
+      font-weight:800;
+      font-size:13px;
+      margin-bottom:18px;
+    }
+
+    pre{
+      margin:0;
+      white-space:pre-wrap;
+      word-break:break-word;
+      color:#f7f1e8;
+      font-size:13px;
+      line-height:1.55;
+      padding:20px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(0,0,0,.24);
+      max-height:460px;
+      overflow:auto;
+    }
+
+    .text-box{
+      min-height:170px;
+      padding:22px;
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(0,0,0,.18);
+      color:var(--text);
+      white-space:pre-wrap;
+      line-height:1.55;
+      overflow-wrap:anywhere;
+    }
+
+    .result-actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:18px;
+    }
+
+    .ghost{
+      min-height:48px;
+      padding:0 18px;
+      border-radius:999px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.035);
+      color:var(--text);
+      font-size:12px;
+      letter-spacing:.12em;
+    }
+
+    .explain{
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.55;
+      margin:0;
+    }
+
+    footer{
+      padding:24px 0 0;
+      color:rgba(244,246,248,.32);
+      text-align:center;
+      font-size:11px;
+      letter-spacing:.24em;
+      text-transform:uppercase;
+    }
+
+    @media(max-width:900px){
+      .page{padding:22px}
+      header{align-items:flex-start}
+      .top-actions{display:none}
+      main{margin-top:32px}
+      .hero{padding:30px}
+      .lookup{grid-template-columns:1fr}
+      .grid{grid-template-columns:1fr}
+      .fields{grid-template-columns:1fr}
+      button{width:100%}
+    }
   </style>
 </head>
+
 <body>
-  <div class="console">
+  <div class="page">
     <header>
-      <a href="index.html" class="brand">
-        <img src="assets/brand/tvevt-favicon.svg" alt="TVEVT">
-        <div style="font-size:17px; font-weight:800; letter-spacing:4px;">RECORDS</div>
+      <a class="brand" href="/">
+        <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT" onerror="this.style.display='none'">
+        <span>
+          <strong>TVEVT</strong>
+          <span>Governance Console</span>
+        </span>
       </a>
-      <a href="seal.html" style="color:#fff; text-decoration:none; font-size:11px; border:1px solid #333; padding:8px 15px; border-radius:4px;">+ NEW SIGNAL</a>
+
+      <div class="top-actions">
+        <a href="/proof.html">Proof</a>
+        <a class="orange" href="/seal.html">New Signal</a>
+      </div>
     </header>
-    <div class="main-ui">
-      <div class="records-list">
-        <div class="record-card">
-          <div class="record-info">
-            <div class="record-date">April 26, 2026 // 13:45</div>
-            <div class="record-text">Board Decision: Q2 Strategic Pivot</div>
-            <div class="record-meta">Origin: m.mikhailov@company.com • Sent to: partner@inc.com</div>
+
+    <main>
+      <section class="hero">
+        <div class="pill"><span class="dot"></span> Verification · Proof Surface · Immutable Record</div>
+        <h1>Record verification.</h1>
+        <p class="lead">
+          This page shows the record exactly as sealed, with its proof fields,
+          canonical payload, and verification state.
+        </p>
+
+        <div class="lookup">
+          <input id="recordInput" placeholder="Enter record ID, e.g. TVE-XXXXXX">
+          <button id="loadButton">Load Record</button>
+        </div>
+
+        <div class="message" id="message">Enter a record ID or open this page with a verification link.</div>
+      </section>
+
+      <section class="grid">
+        <div class="panel">
+          <div class="verified" id="verifiedBadge" style="display:none;">Record Loaded</div>
+          <h2>Verification artifact</h2>
+
+          <div class="fields">
+            <div class="field">
+              <small>Record ID</small>
+              <b id="recordId">—</b>
+            </div>
+
+            <div class="field">
+              <small>Timestamp</small>
+              <b id="timestamp">—</b>
+            </div>
+
+            <div class="field">
+              <small>Sequence</small>
+              <b id="sequence">—</b>
+            </div>
+
+            <div class="field">
+              <small>Author</small>
+              <b id="author">—</b>
+            </div>
+
+            <div class="field wide">
+              <small>Current Hash</small>
+              <b id="hash">—</b>
+            </div>
+
+            <div class="field">
+              <small>Previous Hash</small>
+              <b id="prevHash">—</b>
+            </div>
+
+            <div class="field">
+              <small>Anchor Status</small>
+              <b id="anchorStatus">—</b>
+            </div>
+
+            <div class="field">
+              <small>Version</small>
+              <b id="version">—</b>
+            </div>
           </div>
-          <div class="status-tag">Verified</div>
+
+          <h2 style="margin-top:28px;">Sealed content</h2>
+          <div class="text-box" id="sealedText">No record loaded.</div>
+
+          <div class="result-actions">
+            <button class="ghost" id="copyLink" type="button">Copy Verification Link</button>
+            <button class="ghost" id="copyPayload" type="button">Copy JSON Payload</button>
+          </div>
         </div>
+
+        <div class="panel">
+          <h2>Canonical payload</h2>
+          <pre id="payloadBox">No payload available.</pre>
+
+          <h2 style="margin-top:28px;">What this means</h2>
+          <p class="explain" id="meaningBox">
+            A valid TVEVT record gives you a fixed reference point for what was said
+            and when it was sealed. It does not edit records. It only shows what was sealed.
+          </p>
         </div>
-    </div>
-    <footer>Immutable Organizational Records Archive</footer>
+      </section>
+    </main>
+
+    <footer>Verified Organizational Signals Protocol</footer>
   </div>
+
+  <script>
+    const recordInput = document.getElementById("recordInput");
+    const loadButton = document.getElementById("loadButton");
+    const message = document.getElementById("message");
+    const verifiedBadge = document.getElementById("verifiedBadge");
+
+    const recordId = document.getElementById("recordId");
+    const timestamp = document.getElementById("timestamp");
+    const sequence = document.getElementById("sequence");
+    const author = document.getElementById("author");
+    const hash = document.getElementById("hash");
+    const prevHash = document.getElementById("prevHash");
+    const anchorStatus = document.getElementById("anchorStatus");
+    const version = document.getElementById("version");
+    const sealedText = document.getElementById("sealedText");
+    const payloadBox = document.getElementById("payloadBox");
+    const meaningBox = document.getElementById("meaningBox");
+
+    const copyLink = document.getElementById("copyLink");
+    const copyPayload = document.getElementById("copyPayload");
+
+    let currentPayload = null;
+
+    function getIdFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get("id") || "";
+    }
+
+    function resetRecord() {
+      verifiedBadge.style.display = "none";
+      recordId.textContent = "—";
+      timestamp.textContent = "—";
+      sequence.textContent = "—";
+      author.textContent = "—";
+      hash.textContent = "—";
+      prevHash.textContent = "—";
+      anchorStatus.textContent = "—";
+      version.textContent = "—";
+      sealedText.textContent = "No record loaded.";
+      payloadBox.textContent = "No payload available.";
+      currentPayload = null;
+    }
+
+    function renderRecord(record) {
+      currentPayload = record;
+
+      verifiedBadge.style.display = "inline-flex";
+      recordId.textContent = record.id || "—";
+      timestamp.textContent = record.timestamp || "—";
+      sequence.textContent = record.sequence ?? "—";
+      author.textContent = record.author_id || "anonymous";
+      hash.textContent = record.hash || "—";
+      prevHash.textContent = record.prev_hash || "0";
+      anchorStatus.textContent = record.anchor_status || "sealed";
+      version.textContent = record.version || "—";
+
+      sealedText.textContent =
+        record.content && record.content.text
+          ? record.content.text
+          : "No sealed text available.";
+
+      payloadBox.textContent = JSON.stringify(record, null, 2);
+
+      meaningBox.textContent =
+        "This record is presented as a fixed verification artifact. The timestamp shows when the record was sealed. The hash belongs to the sealed payload. The page is a verification surface, not an editor.";
+
+      message.textContent = "Record loaded successfully.";
+    }
+
+    async function loadRecord(id) {
+      const cleanId = (id || "").trim();
+
+      if (!cleanId) {
+        message.textContent = "Enter a record ID.";
+        return;
+      }
+
+      resetRecord();
+      recordInput.value = cleanId;
+      message.textContent = "Loading record...";
+
+      try {
+        const response = await fetch("/api/verify/" + encodeURIComponent(cleanId));
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.error || "Record not found.");
+        }
+
+        renderRecord(data);
+      } catch (error) {
+        resetRecord();
+        message.textContent = error.message;
+        sealedText.textContent = "Record not found.";
+        meaningBox.textContent = "The requested record could not be loaded.";
+      }
+    }
+
+    loadButton.addEventListener("click", () => {
+      loadRecord(recordInput.value);
+    });
+
+    recordInput.addEventListener("keydown", (event) => {
+      if (event.key === "Enter") {
+        loadRecord(recordInput.value);
+      }
+    });
+
+    copyLink.addEventListener("click", async () => {
+      const id = recordId.textContent;
+      if (!id || id === "—") return;
+      const link = window.location.origin + "/record.html?id=" + encodeURIComponent(id);
+      await navigator.clipboard.writeText(link);
+      message.textContent = "Verification link copied.";
+    });
+
+    copyPayload.addEventListener("click", async () => {
+      if (!currentPayload) return;
+      await navigator.clipboard.writeText(JSON.stringify(currentPayload, null, 2));
+      message.textContent = "Canonical payload copied.";
+    });
+
+    const initialId = getIdFromUrl();
+    if (initialId) {
+      loadRecord(initialId);
+    }
+  </script>
 </body>
 </html>
