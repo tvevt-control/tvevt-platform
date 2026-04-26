@@ -1,30 +1,26 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>TVEVT — Console Access</title>
-  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg">
-  <style>
-    body{margin:0;min-height:100vh;background:linear-gradient(180deg,#10131a,#07090c);color:#f4f6f8;font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Arial,sans-serif;display:flex;align-items:center;justify-content:center;padding:32px}
-    .card{max-width:680px;width:100%;border:1px solid rgba(255,255,255,.12);border-radius:32px;padding:40px;background:rgba(255,255,255,.045)}
-    .logo{display:flex;align-items:center;gap:14px;margin-bottom:42px}.logo img{width:42px;height:42px}.logo strong{letter-spacing:.16em;font-size:16px}.logo span{display:block;color:rgba(244,246,248,.55);font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
-    h1{margin:0 0 12px;font-size:48px;letter-spacing:-.05em}
-    p{color:rgba(244,246,248,.65);line-height:1.6;font-size:17px}
-    .status{margin-top:28px;padding:18px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
-    .button{display:inline-block;margin-top:28px;padding:14px 22px;border-radius:999px;text-decoration:none;color:#170900;background:linear-gradient(135deg,#ffb14a,#ff7a1a);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:13px}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TVEVT — Console Access</title>
+<link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg">
+<style>
+body{margin:0;min-height:100vh;background:linear-gradient(180deg,#10131a,#07090c);color:#f4f6f8;font-family:-apple-system,BlinkMacSystemFont,"Inter","Segoe UI",Arial,sans-serif;display:flex;align-items:center;justify-content:center;padding:32px}
+.card{max-width:680px;width:100%;border:1px solid rgba(255,255,255,.12);border-radius:32px;padding:40px;background:rgba(255,255,255,.045)}
+.logo{display:flex;align-items:center;gap:14px;margin-bottom:42px}.logo img{width:42px;height:42px}.logo strong{letter-spacing:.16em;font-size:16px}.logo span{display:block;color:rgba(244,246,248,.55);font-size:11px;letter-spacing:.12em;text-transform:uppercase;margin-top:4px}
+h1{margin:0 0 12px;font-size:48px;letter-spacing:-.05em}
+p{color:rgba(244,246,248,.65);line-height:1.6;font-size:17px}
+.status{margin-top:28px;padding:18px;border-radius:20px;background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1)}
+.button{display:inline-block;margin-top:28px;padding:14px 22px;border-radius:999px;text-decoration:none;color:#170900;background:linear-gradient(135deg,#ffb14a,#ff7a1a);font-weight:800;letter-spacing:.1em;text-transform:uppercase;font-size:13px}
+</style>
 </head>
 <body>
 <div class="card">
   <div class="logo">
     <img src="/assets/brand/tvevt-icon.svg" alt="">
-    <div>
-      <strong>TVEVT</strong>
-      <span>Governance Console</span>
-    </div>
+    <div><strong>TVEVT</strong><span>Governance Console</span></div>
   </div>
-
   <div id="content">
     <h1>Checking access.</h1>
     <p>Please wait while TVEVT verifies this access link.</p>
@@ -33,43 +29,36 @@
 
 <script>
 async function verify(){
-  const params = new URLSearchParams(window.location.search);
-  const token = params.get("access");
+  const token = new URLSearchParams(window.location.search).get("access");
   const content = document.getElementById("content");
 
   if (!token) {
-    content.innerHTML = `
-      <h1>Access required.</h1>
-      <p>This console requires an approved access link.</p>
-      <a class="button" href="/request-access.html">Request access</a>
-    `;
+    content.innerHTML = `<h1>Access required.</h1><p>This console requires an approved access link.</p><a class="button" href="/request-access.html">Request access</a>`;
     return;
   }
 
-  const res = await fetch("/api/access?token=" + encodeURIComponent(token));
-  const data = await res.json();
+  try {
+    const res = await fetch("/api/leads?access=" + encodeURIComponent(token));
+    const data = await res.json();
 
-  if (!data.valid) {
+    if (!data.valid) {
+      content.innerHTML = `<h1>Access not valid.</h1><p>This link is not approved or has expired.</p><a class="button" href="/request-access.html">Request access</a>`;
+      return;
+    }
+
     content.innerHTML = `
-      <h1>Access not valid.</h1>
-      <p>This link is not approved or has expired.</p>
-      <a class="button" href="/request-access.html">Request access</a>
+      <h1>Access approved.</h1>
+      <p>Welcome to the TVEVT Governance Console.</p>
+      <div class="status">
+        <strong>${data.name || "Approved user"}</strong><br>
+        ${data.email || ""}<br>
+        Status: ${data.status}
+      </div>
+      <a class="button" href="/seal.html">Open Console</a>
     `;
-    return;
+  } catch(e) {
+    content.innerHTML = `<h1>Access check failed.</h1><p>Please try again.</p>`;
   }
-
-  content.innerHTML = `
-    <h1>Access approved.</h1>
-    <p>Welcome to the TVEVT Governance Console.</p>
-
-    <div class="status">
-      <strong>${data.name || "Approved user"}</strong><br>
-      ${data.email || ""}<br>
-      Status: ${data.status}
-    </div>
-
-    <a class="button" href="/seal.html">Open Console</a>
-  `;
 }
 verify();
 </script>
