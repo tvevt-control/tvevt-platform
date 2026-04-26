@@ -3,36 +3,32 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TVEVT | Signal Verification</title>
+  <title>TVEVT | Signal Records</title>
   <link rel="icon" type="image/svg+xml" href="assets/brand/tvevt-favicon.svg" />
   <style>
-    :root{ --bg:#080808; --panel:#0a0a0a; --border:rgba(255,255,255,0.05); --text:#ffffff; --accent:#ff7a00; --muted:#444; }
+    :root{ --bg:#080808; --panel:#0a0a0a; --border:rgba(255,255,255,0.05); --text:#ffffff; --accent:#ff7a00; --muted:#333; }
     *{box-sizing:border-box}
-    body{ margin:0; background:#080808; color:var(--text); font-family:'Inter', sans-serif; display:flex; min-height:100vh; }
+    body{ margin:0; background:#080808; color:var(--text); font-family:'Inter', sans-serif; display:flex; height:100vh; overflow:hidden; }
     .console{ flex:1; display:flex; flex-direction:column; border:1px solid var(--border); margin:20px; border-radius:12px; background:var(--panel); }
     header{ height:80px; border-bottom:1px solid var(--border); display:flex; justify-content:space-between; align-items:center; padding:0 35px; }
-    .brand{ display:flex; align-items:center; gap:16px; text-decoration:none; color:#fff; font-weight:700; }
+    .brand{ display:flex; align-items:center; gap:16px; text-decoration:none; color:#fff; }
     .brand img{ width:38px; height:38px; }
-    .status-badge { font-size:10px; color:#00ff88; border:1px solid #00ff88; padding:4px 12px; border-radius:20px; letter-spacing:2px; text-transform:uppercase; }
+    .console-title { font-size:17px; font-weight:800; letter-spacing:4px; margin-bottom:1px; }
+    .console-sub { font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); }
     
-    .main-layout{ flex:1; display:grid; grid-template-columns: 1.5fr 1fr; gap:1px; background:var(--border); }
-    .content-area, .meta-area { background:var(--panel); padding:50px; }
+    .main-ui{ flex:1; padding:60px 40px; overflow-y:auto; }
+    .ledger-container{ width:100%; max-width:1000px; margin:0 auto; }
+    h2{ font-size:10px; text-transform:uppercase; letter-spacing:4px; color:#444; margin-bottom:40px; }
     
-    .record-id { font-size:11px; color:var(--muted); letter-spacing:3px; text-transform:uppercase; margin-bottom:20px; }
-    .signal-body { font-size:24px; line-height:1.5; font-weight:300; white-space: pre-wrap; margin-bottom:40px; color:#ddd; }
-    
-    .meta-item { margin-bottom:30px; }
-    .meta-label { font-size:9px; text-transform:uppercase; letter-spacing:2px; color:var(--muted); margin-bottom:8px; }
-    .meta-value { font-size:13px; font-family:'SF Mono', monospace; color:#888; word-break:break-all; }
-    
-    .btn-group { display:flex; gap:15px; margin-top:40px; }
-    .btn-outline { 
-      padding:15px 25px; border:1px solid var(--border); background:transparent; color:#fff; 
-      text-decoration:none; font-size:11px; font-weight:700; letter-spacing:2px; text-transform:uppercase; transition:0.3s;
-    }
-    .btn-outline:hover { background:#fff; color:#000; }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th { text-align: left; padding: 15px; border-bottom: 1px solid #1a1a1a; color: #444; text-transform: uppercase; font-size: 10px; letter-spacing: 2px; }
+    td { padding: 20px 15px; border-bottom: 1px solid #111; color: #888; }
+    .signal-preview { color: #eee; font-family: monospace; font-size: 12px; }
+    .status-tag { font-size: 9px; padding: 4px 8px; border: 1px solid #222; border-radius: 2px; text-transform: uppercase; }
+    .action-link { color: #fff; text-decoration: none; border-bottom: 1px solid #444; padding-bottom: 2px; transition: 0.3s; }
+    .action-link:hover { color: var(--accent); border-color: var(--accent); }
 
-    @media(max-width:900px){ .main-layout { grid-template-columns:1fr; } }
+    footer{ height:50px; border-top:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:9px; color:#222; letter-spacing:3px; text-transform:uppercase; }
   </style>
 </head>
 <body>
@@ -41,43 +37,40 @@
       <a href="index.html" class="brand">
         <img src="assets/brand/tvevt-favicon.svg" alt="TVEVT">
         <div>
-          <div style="font-size:17px; letter-spacing:4px;">TVEVT</div>
-          <div style="font-size:9px; text-transform:uppercase; letter-spacing:2px; color:#333;">Governance Console</div>
+          <div class="console-title">TVEVT</div>
+          <div class="console-sub">Governance Console</div>
         </div>
       </a>
-      <div class="status-badge">Verified Record</div>
+      <div style="font-size:9px; color:#1a1a1a; letter-spacing:2px;">LEDGER ACCESS // ACTIVE</div>
     </header>
     
-    <div class="main-layout">
-      <div class="content-area">
-        <div class="record-id">Identity: TVE-KILQG9</div>
-        <div class="signal-body">TVEVT MVP START</div>
-        
-        <div class="btn-group">
-          <a href="seal.html" class="btn-outline">Seal Another</a>
-          <button class="btn-outline" onclick="navigator.clipboard.writeText(window.location.href)">Copy Link</button>
-        </div>
-      </div>
-      
-      <div class="meta-area">
-        <div class="meta-item">
-          <div class="meta-label">Timestamp</div>
-          <div class="meta-value">2026-04-20 04:51:05 UTC</div>
-        </div>
-        <div class="meta-item">
-          <div class="meta-label">Originator</div>
-          <div class="meta-value">anonymous</div>
-        </div>
-        <div class="meta-item">
-          <div class="meta-label">Current Hash</div>
-          <div class="meta-value">abe67b8e13c17d42b30a065839d83f5d23fdb0a9675e9fd0f19da280567d04f2</div>
-        </div>
-        <div class="meta-item">
-          <div class="meta-label">Anchor Status</div>
-          <div class="meta-value" style="color:#00ff88;">IMMUTABLE</div>
-        </div>
+    <div class="main-ui">
+      <div class="ledger-container">
+        <h2>Verified Signal Ledger</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Signal Preview</th>
+              <th>Recipient</th>
+              <th>Status</th>
+              <th>Verification</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>2026-04-26</td>
+              <td class="signal-preview">Strategic Partnership Protocol...</td>
+              <td>partner@global.com</td>
+              <td><span class="status-tag">Sealed</span></td>
+              <td><a href="proof.html" class="action-link">View Proof</a></td>
+            </tr>
+          </tbody>
+        </table>
       </div>
     </div>
+    
+    <footer>Verified Organizational Signals Protocol</footer>
   </div>
 </body>
 </html>
