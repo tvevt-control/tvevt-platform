@@ -127,18 +127,19 @@
       color:#170900;
     }
 
-    .note{
-      margin-top:20px;
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.5;
-    }
-
     .success{
       display:none;
       margin-top:18px;
       color:#8ff0b1;
       font-size:14px;
+      line-height:1.5;
+    }
+
+    .note{
+      margin-top:20px;
+      font-size:13px;
+      color:var(--muted);
+      line-height:1.5;
     }
 
     footer{
@@ -169,8 +170,9 @@
     <div class="card">
 
       <h1>Request access</h1>
+
       <p class="lead">
-        Next layer of control: identity, account history, delivery, and team governance.
+        Identity. Account history. Delivery. Governance.
       </p>
 
       <form id="form">
@@ -198,9 +200,26 @@
 </div>
 
 <script>
-document.getElementById("form").onsubmit = function(e){
+document.getElementById("form").onsubmit = async function(e){
   e.preventDefault();
-  document.getElementById("success").style.display = "block";
+
+  const name = this.querySelector('input[type="text"]').value;
+  const email = this.querySelector('input[type="email"]').value;
+
+  const res = await fetch("/access-request", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ name, email })
+  });
+
+  const data = await res.json();
+
+  if (data.success) {
+    document.getElementById("success").style.display = "block";
+    this.reset();
+  }
 };
 </script>
 
