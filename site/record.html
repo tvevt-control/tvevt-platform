@@ -5,49 +5,355 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>TVEVT — Verified Record</title>
   <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg">
+
   <style>
-    :root{--text:#f4f6f8;--muted:rgba(244,246,248,.56);--soft:rgba(244,246,248,.34);--line:rgba(255,255,255,.12);--orange:#ff7a1a;--orange2:#ffb14a;--green:#8ff0b1}
+    :root{
+      --text:#f4f6f8;
+      --muted:rgba(244,246,248,.58);
+      --soft:rgba(244,246,248,.34);
+      --line:rgba(255,255,255,.12);
+      --orange:#ff7a1a;
+      --orange2:#ffb14a;
+      --green:#8ff0b1;
+      --bg:#07090c;
+    }
+
     *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 0%,rgba(255,122,26,.13),transparent 32%),linear-gradient(180deg,#10131a,#07090c);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif}
-    .page{min-height:100vh;padding:34px}
-    header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:28px}
-    .brand{display:flex;align-items:center;gap:14px;color:var(--text);text-decoration:none}.brand img{width:42px}.brand strong{letter-spacing:.16em}.brand span span{display:block;margin-top:4px;color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-    nav{display:flex;gap:10px}nav a{color:var(--text);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:12px 18px;font-size:13px;text-transform:uppercase;letter-spacing:.1em;background:rgba(255,255,255,.03)}
-    main{width:min(920px,100%);margin:58px auto 0}
-    .card{border:1px solid var(--line);border-radius:30px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015)),rgba(10,13,18,.72);padding:34px;box-shadow:0 30px 100px rgba(0,0,0,.28)}
-    .badge{display:none;width:max-content;margin-bottom:22px;padding:10px 14px;border-radius:999px;border:1px solid rgba(143,240,177,.3);background:rgba(143,240,177,.08);color:var(--green);font-weight:850;font-size:13px;letter-spacing:.08em;text-transform:uppercase}
-    h1{margin:0;font-size:clamp(46px,7vw,82px);line-height:.95;letter-spacing:-.06em}
-    .lead{margin:18px 0 28px;color:var(--muted);font-size:19px;line-height:1.45}
-    .lookup{display:grid;grid-template-columns:1fr auto;gap:12px;margin:26px 0 10px}
-    input{height:58px;border:1px solid var(--line);border-radius:999px;background:rgba(0,0,0,.22);color:var(--text);padding:0 20px;font:inherit}
-    button,.button{min-height:58px;border-radius:999px;padding:0 22px;border:1px solid var(--line);background:rgba(255,255,255,.035);color:var(--text);font-weight:850;letter-spacing:.12em;text-transform:uppercase;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
-    .orange{background:linear-gradient(135deg,var(--orange2),var(--orange));color:#170900;border-color:rgba(255,122,26,.8)}
-    .msg{color:var(--muted);font-size:14px;min-height:20px;margin:10px 0 26px}
-    .record{display:none;border-top:1px solid var(--line);padding-top:28px;margin-top:26px}
-    .meta{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:18px}
-    .field{border:1px solid var(--line);border-radius:18px;background:rgba(0,0,0,.18);padding:16px;overflow-wrap:anywhere}
-    .field small{display:block;color:var(--soft);font-size:11px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px}.field b{font-size:14px}
-    .wide{grid-column:1/-1}
-    .text{border:1px solid var(--line);border-radius:20px;background:rgba(0,0,0,.2);padding:22px;white-space:pre-wrap;line-height:1.55;overflow-wrap:anywhere;font-size:18px}
-    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
-    footer{text-align:center;color:rgba(244,246,248,.32);font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-top:30px}
-    @media(max-width:760px){.page{padding:22px}nav{display:none}main{margin-top:34px}.lookup,.meta{grid-template-columns:1fr}button,.button{width:100%}.actions{flex-direction:column}}
+
+    body{
+      margin:0;
+      min-height:100vh;
+      background:
+        radial-gradient(circle at 20% 0%,rgba(255,122,26,.13),transparent 32%),
+        radial-gradient(circle at 80% 20%,rgba(255,255,255,.045),transparent 30%),
+        linear-gradient(180deg,#10131a,#07090c);
+      color:var(--text);
+      font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif;
+    }
+
+    .page{
+      min-height:100vh;
+      padding:34px;
+      display:flex;
+      flex-direction:column;
+    }
+
+    header{
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      border-bottom:1px solid var(--line);
+      padding-bottom:28px;
+    }
+
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:14px;
+      color:var(--text);
+      text-decoration:none;
+    }
+
+    .brand img{width:42px;height:42px}
+
+    .brand strong{
+      display:block;
+      letter-spacing:.16em;
+      font-size:16px;
+    }
+
+    .brand span span{
+      display:block;
+      margin-top:4px;
+      color:var(--muted);
+      font-size:11px;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+    }
+
+    nav{
+      display:flex;
+      gap:10px;
+    }
+
+    nav a{
+      color:var(--text);
+      text-decoration:none;
+      border:1px solid var(--line);
+      border-radius:999px;
+      padding:12px 18px;
+      font-size:13px;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      background:rgba(255,255,255,.03);
+    }
+
+    main{
+      flex:1;
+      width:min(900px,100%);
+      margin:56px auto 0;
+    }
+
+    .card{
+      border:1px solid var(--line);
+      border-radius:34px;
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015)),
+        rgba(10,13,18,.74);
+      padding:42px;
+      box-shadow:0 30px 100px rgba(0,0,0,.30);
+    }
+
+    .verified{
+      display:none;
+      align-items:center;
+      gap:12px;
+      margin-bottom:24px;
+      color:var(--green);
+      font-weight:850;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      font-size:13px;
+    }
+
+    .check{
+      width:34px;
+      height:34px;
+      border-radius:50%;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background:rgba(143,240,177,.12);
+      border:1px solid rgba(143,240,177,.34);
+      color:var(--green);
+      font-size:18px;
+    }
+
+    h1{
+      margin:0;
+      font-size:clamp(48px,7vw,86px);
+      line-height:.94;
+      letter-spacing:-.065em;
+    }
+
+    .lead{
+      margin:18px 0 30px;
+      max-width:680px;
+      color:var(--muted);
+      font-size:20px;
+      line-height:1.45;
+    }
+
+    .lookup{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      margin:28px 0 10px;
+    }
+
+    input{
+      height:58px;
+      border:1px solid var(--line);
+      border-radius:999px;
+      background:rgba(0,0,0,.22);
+      color:var(--text);
+      padding:0 20px;
+      font:inherit;
+      outline:none;
+    }
+
+    input:focus{
+      border-color:rgba(255,122,26,.55);
+      box-shadow:0 0 0 4px rgba(255,122,26,.08);
+    }
+
+    button,.button{
+      min-height:58px;
+      border-radius:999px;
+      padding:0 22px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.035);
+      color:var(--text);
+      font-weight:850;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      cursor:pointer;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+    }
+
+    .orange{
+      background:linear-gradient(135deg,var(--orange2),var(--orange));
+      color:#170900;
+      border-color:rgba(255,122,26,.8);
+      box-shadow:0 18px 50px rgba(255,122,26,.20);
+    }
+
+    .msg{
+      color:var(--muted);
+      font-size:14px;
+      min-height:20px;
+      margin:10px 0 0;
+    }
+
+    .record{
+      display:none;
+      margin-top:34px;
+      padding-top:30px;
+      border-top:1px solid var(--line);
+    }
+
+    .content-label{
+      color:var(--soft);
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:850;
+      margin-bottom:12px;
+    }
+
+    .sealed-text{
+      border:1px solid var(--line);
+      border-radius:24px;
+      background:rgba(0,0,0,.22);
+      padding:26px;
+      white-space:pre-wrap;
+      line-height:1.58;
+      overflow-wrap:anywhere;
+      font-size:20px;
+      color:var(--text);
+      margin-bottom:18px;
+    }
+
+    .meta{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin-top:18px;
+    }
+
+    .field{
+      border:1px solid var(--line);
+      border-radius:18px;
+      background:rgba(0,0,0,.16);
+      padding:16px;
+      overflow-wrap:anywhere;
+    }
+
+    .field small{
+      display:block;
+      color:var(--soft);
+      font-size:11px;
+      letter-spacing:.15em;
+      text-transform:uppercase;
+      margin-bottom:7px;
+      font-weight:850;
+    }
+
+    .field b{
+      font-size:14px;
+      line-height:1.45;
+    }
+
+    .hash-row{
+      margin-top:14px;
+    }
+
+    .technical{
+      display:none;
+      margin-top:14px;
+    }
+
+    .technical.show{
+      display:block;
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:24px;
+    }
+
+    .growth{
+      margin-top:28px;
+      padding:22px;
+      border:1px solid rgba(255,122,26,.22);
+      border-radius:24px;
+      background:rgba(255,122,26,.055);
+      display:none;
+    }
+
+    .growth.show{
+      display:block;
+    }
+
+    .growth h2{
+      margin:0 0 8px;
+      font-size:24px;
+      letter-spacing:-.04em;
+    }
+
+    .growth p{
+      margin:0;
+      color:var(--muted);
+      line-height:1.5;
+      font-size:15px;
+    }
+
+    footer{
+      text-align:center;
+      color:rgba(244,246,248,.32);
+      font-size:11px;
+      letter-spacing:.22em;
+      text-transform:uppercase;
+      margin-top:30px;
+    }
+
+    @media(max-width:760px){
+      .page{padding:22px}
+      nav{display:none}
+      main{margin-top:34px}
+      .card{padding:28px}
+      .lookup,.meta{grid-template-columns:1fr}
+      button,.button{width:100%}
+      .actions{flex-direction:column}
+      .sealed-text{font-size:18px}
+    }
   </style>
 </head>
+
 <body>
 <div class="page">
   <header>
-    <a class="brand" href="/"><img src="/assets/brand/tvevt-icon.svg" alt="TVEVT"><span><strong>TVEVT</strong><span>Governance Console</span></span></a>
-    <nav><a href="/proof.html">Proof</a><a href="/seal.html">New Signal</a></nav>
+    <a class="brand" href="/">
+      <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT" onerror="this.style.display='none'">
+      <span>
+        <strong>TVEVT</strong>
+        <span>Governance Console</span>
+      </span>
+    </a>
+
+    <nav>
+      <a href="/proof.html">Proof</a>
+      <a href="/seal.html">New Signal</a>
+    </nav>
   </header>
 
   <main>
     <section class="card">
-      <div class="badge" id="badge">Record verified</div>
-      <h1>Verified record.</h1>
-      <p class="lead">A sealed signal with a timestamp, hash, and fixed verification link.</p>
+      <div class="verified" id="badge">
+        <span class="check">✓</span>
+        Record verified
+      </div>
 
-      <div class="lookup">
+      <h1 id="title">Verified record.</h1>
+      <p class="lead" id="lead">A sealed signal with a timestamp, hash, and fixed verification link.</p>
+
+      <div class="lookup" id="lookup">
         <input id="recordInput" placeholder="Enter record ID, e.g. TVE-XXXXXX">
         <button class="orange" id="load">Load</button>
       </div>
@@ -55,20 +361,50 @@
       <div class="msg" id="msg">Open a verification link or enter a record ID.</div>
 
       <div class="record" id="record">
+        <div class="content-label">Sealed content</div>
+        <div class="sealed-text" id="content">No record loaded.</div>
+
         <div class="meta">
-          <div class="field"><small>Record ID</small><b id="rid">—</b></div>
-          <div class="field"><small>Timestamp</small><b id="ts">—</b></div>
-          <div class="field wide"><small>Hash</small><b id="hash">—</b></div>
-          <div class="field"><small>Status</small><b id="status">sealed</b></div>
-          <div class="field"><small>Type</small><b>Verified Signal</b></div>
+          <div class="field">
+            <small>Record ID</small>
+            <b id="rid">—</b>
+          </div>
+
+          <div class="field">
+            <small>Timestamp</small>
+            <b id="ts">—</b>
+          </div>
+
+          <div class="field">
+            <small>Status</small>
+            <b id="status">sealed</b>
+          </div>
+
+          <div class="field">
+            <small>Type</small>
+            <b>Verified Signal</b>
+          </div>
         </div>
 
-        <div class="text" id="content">No record loaded.</div>
+        <div class="technical" id="technical">
+          <div class="field hash-row">
+            <small>Hash</small>
+            <b id="hash">—</b>
+          </div>
+        </div>
 
         <div class="actions">
           <button id="copyLink">Copy Link</button>
-          <button id="copyPayload">Copy Payload</button>
+          <button id="toggleTechnical">Show Hash</button>
           <a class="button orange" href="/seal.html">Seal New</a>
+        </div>
+
+        <div class="growth" id="growth">
+          <h2>Protect your statements.</h2>
+          <p>Identity, account history, delivery, and team governance are the next control layer.</p>
+          <div class="actions">
+            <a class="button orange" href="/request-access.html">Request Access</a>
+          </div>
         </div>
       </div>
     </section>
@@ -78,56 +414,97 @@
 </div>
 
 <script>
-const $=id=>document.getElementById(id);
-let current=null;
+const $ = id => document.getElementById(id);
+let current = null;
 
-function idFromUrl(){return new URLSearchParams(location.search).get("id")||""}
+function idFromUrl(){
+  return new URLSearchParams(location.search).get("id") || "";
+}
 
 function reset(){
-  $("badge").style.display="none";
-  $("record").style.display="none";
-  $("rid").textContent="—";
-  $("ts").textContent="—";
-  $("hash").textContent="—";
-  $("content").textContent="No record loaded.";
-  current=null;
+  $("badge").style.display = "none";
+  $("record").style.display = "none";
+  $("growth").classList.remove("show");
+  $("technical").classList.remove("show");
+  $("toggleTechnical").textContent = "Show Hash";
+  $("rid").textContent = "—";
+  $("ts").textContent = "—";
+  $("hash").textContent = "—";
+  $("status").textContent = "sealed";
+  $("content").textContent = "No record loaded.";
+  current = null;
 }
 
-function render(r){
-  current=r;
-  $("badge").style.display="inline-flex";
-  $("record").style.display="block";
-  $("rid").textContent=r.id||"—";
-  $("ts").textContent=r.timestamp||"—";
-  $("hash").textContent=r.hash||"—";
-  $("status").textContent=r.anchor_status||"sealed";
-  $("content").textContent=r.content?.text||"No sealed text available.";
-  $("msg").textContent="Record loaded successfully.";
+function render(record){
+  current = record;
+
+  $("badge").style.display = "inline-flex";
+  $("record").style.display = "block";
+  $("growth").classList.add("show");
+
+  $("rid").textContent = record.id || "—";
+  $("ts").textContent = record.timestamp || "—";
+  $("hash").textContent = record.hash || "—";
+  $("status").textContent = record.anchor_status || "sealed";
+  $("content").textContent = record.content?.text || "No sealed text available.";
+
+  $("title").textContent = "Record verified.";
+  $("lead").textContent = "This sealed signal matches its stored verification record.";
+  $("msg").textContent = "Record loaded successfully.";
 }
 
-async function load(id){
-  id=(id||"").trim();
-  if(!id){$("msg").textContent="Enter a record ID.";return}
+async function loadRecord(id){
+  id = (id || "").trim();
+
+  if(!id){
+    $("msg").textContent = "Enter a record ID.";
+    return;
+  }
+
   reset();
-  $("recordInput").value=id;
-  $("msg").textContent="Loading record...";
+  $("recordInput").value = id;
+  $("msg").textContent = "Loading record...";
+
   try{
-    const res=await fetch("/api/verify/"+encodeURIComponent(id));
-    const data=await res.json();
-    if(!res.ok) throw new Error(data.error||"Record not found.");
+    const response = await fetch("/api/verify/" + encodeURIComponent(id));
+    const data = await response.json();
+
+    if(!response.ok){
+      throw new Error(data.error || "Record not found.");
+    }
+
     render(data);
-  }catch(e){
-    $("msg").textContent=e.message;
+  }catch(error){
+    $("msg").textContent = error.message;
   }
 }
 
-$("load").onclick=()=>load($("recordInput").value);
-$("recordInput").onkeydown=e=>{if(e.key==="Enter")load($("recordInput").value)};
-$("copyLink").onclick=async()=>{if(current){await navigator.clipboard.writeText(location.origin+"/record.html?id="+encodeURIComponent(current.id));$("msg").textContent="Verification link copied."}};
-$("copyPayload").onclick=async()=>{if(current){await navigator.clipboard.writeText(JSON.stringify(current,null,2));$("msg").textContent="Payload copied."}};
+$("load").onclick = () => loadRecord($("recordInput").value);
 
-const initial=idFromUrl();
-if(initial) load(initial);
+$("recordInput").onkeydown = event => {
+  if(event.key === "Enter"){
+    loadRecord($("recordInput").value);
+  }
+};
+
+$("copyLink").onclick = async () => {
+  if(!current) return;
+  const link = location.origin + "/record.html?id=" + encodeURIComponent(current.id);
+  await navigator.clipboard.writeText(link);
+  $("msg").textContent = "Verification link copied.";
+};
+
+$("toggleTechnical").onclick = () => {
+  $("technical").classList.toggle("show");
+  $("toggleTechnical").textContent = $("technical").classList.contains("show") ? "Hide Hash" : "Show Hash";
+};
+
+const initialId = idFromUrl();
+
+if(initialId){
+  $("lookup").style.display = "none";
+  loadRecord(initialId);
+}
 </script>
 </body>
 </html>
