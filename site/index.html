@@ -10,7 +10,7 @@
     :root{
       --bg:#07090c;
       --text:#f4f6f8;
-      --muted:rgba(244,246,248,.56);
+      --muted:rgba(244,246,248,.58);
       --soft:rgba(244,246,248,.34);
       --line:rgba(255,255,255,.12);
       --orange:#ff7a1a;
@@ -24,8 +24,8 @@
       margin:0;
       min-height:100vh;
       background:
-        radial-gradient(circle at 50% 20%,rgba(255,122,26,.16),transparent 34%),
-        radial-gradient(circle at 80% 20%,rgba(255,255,255,.045),transparent 28%),
+        radial-gradient(circle at 50% 12%,rgba(255,122,26,.16),transparent 34%),
+        radial-gradient(circle at 80% 24%,rgba(143,240,177,.045),transparent 28%),
         linear-gradient(180deg,#10131a,#07090c);
       color:var(--text);
       font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif;
@@ -97,13 +97,13 @@
       display:flex;
       align-items:center;
       justify-content:center;
-      text-align:center;
       padding:56px 0;
     }
 
     .hero{
-      width:min(900px,100%);
+      width:min(940px,100%);
       margin:0 auto;
+      text-align:center;
     }
 
     h1{
@@ -114,67 +114,106 @@
     }
 
     .lead{
-      max-width:660px;
+      max-width:680px;
       margin:26px auto 0;
       color:var(--muted);
       font-size:20px;
       line-height:1.5;
     }
 
-    .actions{
-      margin-top:38px;
-      display:flex;
-      flex-direction:column;
-      align-items:center;
-      gap:16px;
+    .seal-box{
+      margin:44px auto 0;
+      max-width:720px;
+      border:1px solid var(--line);
+      border-radius:30px;
+      padding:24px;
+      background:
+        linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015)),
+        rgba(10,13,18,.72);
+      box-shadow:0 30px 100px rgba(0,0,0,.26);
+      text-align:left;
     }
 
-    .primary{
+    .seal-label{
+      color:var(--soft);
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      font-weight:850;
+      margin-bottom:12px;
+    }
+
+    textarea{
+      width:100%;
+      min-height:150px;
+      resize:vertical;
+      border:1px solid var(--line);
+      border-radius:22px;
+      background:rgba(0,0,0,.24);
+      color:var(--text);
+      outline:none;
+      padding:20px;
+      font:inherit;
+      font-size:18px;
+      line-height:1.55;
+    }
+
+    textarea:focus{
+      border-color:rgba(255,122,26,.55);
+      box-shadow:0 0 0 4px rgba(255,122,26,.08);
+    }
+
+    .actions{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      margin-top:18px;
+      flex-wrap:wrap;
+    }
+
+    button,.button{
+      min-height:56px;
+      border-radius:999px;
+      padding:0 24px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.035);
+      color:var(--text);
+      font-weight:850;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      cursor:pointer;
+      text-decoration:none;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      min-height:62px;
-      padding:0 32px;
-      border-radius:999px;
+      font-size:13px;
+    }
+
+    .primary{
+      flex:1;
       background:linear-gradient(135deg,var(--orange2),var(--orange));
       color:#170900;
-      text-decoration:none;
-      font-weight:850;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-      box-shadow:0 18px 50px rgba(255,122,26,.22);
+      border-color:rgba(255,122,26,.8);
+      box-shadow:0 18px 50px rgba(255,122,26,.20);
     }
 
-    .instant{
-      color:var(--soft);
-      font-size:13px;
-      letter-spacing:.06em;
-    }
-
-    .secondary{
-      color:var(--muted);
-      text-decoration:none;
-      font-size:13px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      border-bottom:1px solid rgba(244,246,248,.22);
-      padding-bottom:4px;
-    }
-
-    .secondary:hover{
-      color:var(--text);
-      border-bottom-color:var(--orange2);
+    .msg{
+      margin-top:14px;
+      color:var(--green);
+      min-height:22px;
+      font-size:14px;
+      font-weight:700;
+      text-align:center;
     }
 
     .example{
-      margin:64px auto 0;
-      max-width:680px;
+      margin:34px auto 0;
+      max-width:720px;
       border:1px solid var(--line);
-      border-radius:28px;
-      padding:26px;
-      background:rgba(255,255,255,.035);
+      border-radius:26px;
+      padding:22px;
+      background:rgba(255,255,255,.03);
       text-align:left;
-      box-shadow:0 22px 80px rgba(0,0,0,.22);
     }
 
     .example-label{
@@ -186,7 +225,7 @@
       font-weight:900;
       letter-spacing:.16em;
       text-transform:uppercase;
-      margin-bottom:14px;
+      margin-bottom:12px;
     }
 
     .dot{
@@ -201,8 +240,8 @@
       display:block;
       color:var(--text);
       text-decoration:none;
-      font-size:22px;
-      font-weight:800;
+      font-size:21px;
+      font-weight:850;
       letter-spacing:-.03em;
     }
 
@@ -211,6 +250,26 @@
       color:var(--muted);
       font-size:15px;
       line-height:1.5;
+    }
+
+    .quiet{
+      margin-top:20px;
+      color:var(--soft);
+      font-size:13px;
+      letter-spacing:.06em;
+      text-align:center;
+    }
+
+    .secondary{
+      color:var(--muted);
+      text-decoration:none;
+      font-size:13px;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      border-bottom:1px solid rgba(244,246,248,.22);
+      padding-bottom:4px;
+      display:inline-block;
+      margin-top:16px;
     }
 
     footer{
@@ -227,8 +286,8 @@
       main{padding:40px 0}
       h1{font-size:52px}
       .lead{font-size:18px}
-      .primary{width:100%}
-      .example{margin-top:46px}
+      .actions{flex-direction:column}
+      button,.button{width:100%}
     }
   </style>
 </head>
@@ -240,13 +299,14 @@
         <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT" onerror="this.style.display='none'">
         <span>
           <strong>TVEVT</strong>
-          <span>Governance Console</span>
+          <span>Verified Signals</span>
         </span>
       </a>
 
       <nav>
         <a href="/proof.html">Proof</a>
         <a href="/record.html">Verify</a>
+        <a href="/seal.html">Console</a>
       </nav>
     </header>
 
@@ -255,15 +315,26 @@
         <h1>Say it once.<br>Prove it forever.</h1>
 
         <p class="lead">
-          TVEVT turns a statement into a sealed verification artifact:
+          Turn any statement into a sealed verification record:
           timestamped, hashed, stored, and shareable by link.
         </p>
 
-        <div class="actions">
-          <a class="primary" href="/seal.html">Start Sealing</a>
-          <div class="instant">Start instantly. No account required.</div>
-          <a class="secondary" href="/request-access.html">Request extended access</a>
+        <div class="seal-box">
+          <form id="form">
+            <div class="seal-label">Seal a signal instantly</div>
+            <textarea id="text" placeholder="Write a statement you want to verify..." required></textarea>
+
+            <div class="actions">
+              <button class="primary" id="btn" type="submit">Seal Signal</button>
+              <a class="button" href="/seal.html">Open Full Console</a>
+            </div>
+
+            <div class="msg" id="msg"></div>
+          </form>
         </div>
+
+        <div class="quiet">Start instantly. No account required.</div>
+        <a class="secondary" href="/request-access.html">Request extended access</a>
 
         <div class="example">
           <div class="example-label">
@@ -284,5 +355,49 @@
 
     <footer>Verified Organizational Signals Protocol</footer>
   </div>
+
+<script>
+const form = document.getElementById("form");
+const text = document.getElementById("text");
+const btn = document.getElementById("btn");
+const msg = document.getElementById("msg");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  if (!text.value.trim()) {
+    msg.textContent = "Enter a signal before sealing.";
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = "Sealing...";
+  msg.textContent = "Creating verification record...";
+
+  try {
+    const response = await fetch("/publish", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ text: text.value.trim() })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.error || "Unable to seal signal.");
+    }
+
+    const recordLink = data.verification_url || (location.origin + "/record.html?id=" + encodeURIComponent(data.id));
+
+    msg.textContent = "Record created. Opening verification...";
+    window.location.href = recordLink;
+
+  } catch (err) {
+    msg.textContent = err.message || "Unable to seal signal.";
+    btn.disabled = false;
+    btn.textContent = "Seal Signal";
+  }
+});
+</script>
 </body>
 </html>
