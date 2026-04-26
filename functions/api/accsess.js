@@ -22,7 +22,6 @@ export async function onRequestGet(context) {
       if (lead.accessToken === token && lead.status === "APPROVED") {
         return new Response(JSON.stringify({
           valid: true,
-          id: lead.id,
           name: lead.name,
           email: lead.email,
           status: lead.status
@@ -37,7 +36,7 @@ export async function onRequestGet(context) {
     });
 
   } catch (err) {
-    return new Response(JSON.stringify({ valid: false, error: err.message }), {
+    return new Response(JSON.stringify({ valid: false }), {
       status: 500,
       headers: { "Content-Type": "application/json" }
     });
