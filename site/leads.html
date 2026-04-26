@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>TVEVT Leads</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    body {
+      background: #0b0b0c;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      padding: 40px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+    }
+
+    .lead {
+      background: #141416;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 15px;
+    }
+
+    .status {
+      font-weight: bold;
+      margin-top: 10px;
+    }
+
+    button {
+      margin-top: 10px;
+      margin-right: 10px;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .approve {
+      background: green;
+      color: white;
+    }
+
+    .reject {
+      background: red;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<h1>TVEVT Leads</h1>
+
+<div id="leads"></div>
+
+<script>
+async function loadLeads() {
+  const res = await fetch('/api/leads');
+  const data = await res.json();
+
+  const container = document.getElementById('leads');
+  container.innerHTML = '';
+
+  data.forEach(lead => {
+    const div = document.createElement('div');
+    div.className = 'lead';
+
+    div.innerHTML = `
+      <div><b>ID:</b> ${lead.id}</div>
+      <div><b>Name:</b> ${lead.name}</div>
+      <div><b>Email:</b> ${lead.email}</div>
+      <div class="status">Status: ${lead.status}</div>
+
+      <button class="approve" onclick="update('${lead.id}','APPROVED')">Approve</button>
+      <button class="reject" onclick="update('${lead.id}','REJECTED')">Reject</button>
+    `;
+
+    container.appendChild(div);
+  });
+}
+
+async function update(id, status) {
+  await fetch(`/api/lead-action?id=${id}&status=${status}`);
+  loadLeads();
+}
+
+loadLeads();
+</script>
+
+</body>
+</html>
