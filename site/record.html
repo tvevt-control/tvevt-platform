@@ -535,7 +535,15 @@ $("shareProof").onclick = async () => {
   if(!current) return;
 
   const link = location.origin + "/record.html?id=" + encodeURIComponent(current.id);
-  const text = `This signal has been verified in TVEVT.\nRecord: ${current.id}\n${link}`;
+
+  const text = `This signal has been verified in TVEVT.
+
+Record ID: ${current.id}
+Status: VERIFIED
+
+${link}
+
+Say it once. Prove it forever.`;
 
   if (navigator.share) {
     await navigator.share({
@@ -545,7 +553,7 @@ $("shareProof").onclick = async () => {
     });
   } else {
     await navigator.clipboard.writeText(text);
-    $("msg").textContent = "Proof text copied.";
+    $("msg").textContent = "Proof copied. Paste it anywhere.";
   }
 };
 
