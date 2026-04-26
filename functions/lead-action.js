@@ -9,12 +9,11 @@ export async function onRequestGet(context) {
     }
 
     const allowed = ["APPROVED", "REJECTED"];
-
     if (!allowed.includes(status)) {
       return new Response("Invalid status", { status: 400 });
     }
 
-    let record = null;
+    let record = { id };
 
     if (context.env.STORE) {
       const existing = await context.env.STORE.get(id);
@@ -23,6 +22,34 @@ export async function onRequestGet(context) {
       record.updatedAt = new Date().toISOString();
 
       await context.env.STORE.put(id, JSON.stringify(record));
+    }
+
+    if (
+      context.env.TG_TOKEN &&
+      context.env.TG_CHAT_ID &&
+      record.telegramMessageId
+    ) {
+      const icon = status === "APPROVED" ? "✅" : "❌";
+
+      const text =
+`🚀 TVEVT ACCESS REQUEST
+
+ID: ${record.id}
+Name: ${record.name || "—"}
+Email: ${record.email || "—"}
+Status: ${status} ${icon}
+Created: ${record.createdAt || "—"}
+Updated: ${record.updatedAt}`;
+
+      await fetch(`https://api.telegram.org/bot${context.env.TG_TOKEN}/editMessageText`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          chat_id: context.env.TG_CHAT_ID,
+          message_id: record.telegramMessageId,
+          text
+        })
+      });
     }
 
     return new Response(
@@ -62,9 +89,7 @@ export async function onRequestGet(context) {
         </div>
       </body>
       </html>`,
-      {
-        headers: { "Content-Type": "text/html" }
-      }
+      { headers: { "Content-Type": "text/html" } }
     );
 
   } catch (err) {
