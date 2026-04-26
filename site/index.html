@@ -15,6 +15,7 @@
       --line:rgba(255,255,255,.12);
       --orange:#ff7a1a;
       --orange2:#ffb14a;
+      --green:#8ff0b1;
     }
 
     *{box-sizing:border-box}
@@ -97,6 +98,7 @@
       align-items:center;
       justify-content:center;
       text-align:center;
+      padding:56px 0;
     }
 
     .hero{
@@ -164,6 +166,53 @@
       border-bottom-color:var(--orange2);
     }
 
+    .example{
+      margin:64px auto 0;
+      max-width:680px;
+      border:1px solid var(--line);
+      border-radius:28px;
+      padding:26px;
+      background:rgba(255,255,255,.035);
+      text-align:left;
+      box-shadow:0 22px 80px rgba(0,0,0,.22);
+    }
+
+    .example-label{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      color:var(--green);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      margin-bottom:14px;
+    }
+
+    .dot{
+      width:10px;
+      height:10px;
+      border-radius:50%;
+      background:var(--green);
+      box-shadow:0 0 22px rgba(143,240,177,.65);
+    }
+
+    .example a{
+      display:block;
+      color:var(--text);
+      text-decoration:none;
+      font-size:22px;
+      font-weight:800;
+      letter-spacing:-.03em;
+    }
+
+    .example p{
+      margin:10px 0 0;
+      color:var(--muted);
+      font-size:15px;
+      line-height:1.5;
+    }
+
     footer{
       text-align:center;
       color:rgba(244,246,248,.32);
@@ -175,9 +224,11 @@
     @media(max-width:760px){
       .page{padding:22px}
       nav{display:none}
+      main{padding:40px 0}
       h1{font-size:52px}
       .lead{font-size:18px}
       .primary{width:100%}
+      .example{margin-top:46px}
     }
   </style>
 </head>
@@ -212,6 +263,21 @@
           <a class="primary" href="/seal.html">Start Sealing</a>
           <div class="instant">Start instantly. No account required.</div>
           <a class="secondary" href="/request-access.html">Request extended access</a>
+        </div>
+
+        <div class="example">
+          <div class="example-label">
+            <span class="dot"></span>
+            Verified record example
+          </div>
+
+          <a href="/record.html?id=TVE-9Y34FC">
+            View a real immutable record →
+          </a>
+
+          <p>
+            This signal is sealed, timestamped, and cannot be altered without detection.
+          </p>
         </div>
       </section>
     </main>
