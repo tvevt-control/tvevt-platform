@@ -54,10 +54,7 @@
       text-decoration:none;
     }
 
-    .brand img{
-      width:42px;
-      height:42px;
-    }
+    .brand img{width:42px;height:42px}
 
     .brand strong{
       display:block;
@@ -175,11 +172,6 @@
       outline:none;
     }
 
-    input:focus{
-      border-color:rgba(255,122,26,.55);
-      box-shadow:0 0 0 4px rgba(255,122,26,.08);
-    }
-
     button,.button{
       min-height:58px;
       border-radius:999px;
@@ -206,10 +198,11 @@
     }
 
     .msg{
-      color:var(--muted);
+      color:var(--green);
       font-size:14px;
-      min-height:20px;
-      margin:10px 0 0;
+      min-height:22px;
+      margin:12px 0 0;
+      font-weight:700;
     }
 
     .record{
@@ -229,9 +222,7 @@
       margin-bottom:24px;
     }
 
-    .notice strong{
-      color:var(--text);
-    }
+    .notice strong{color:var(--text)}
 
     .content-label{
       color:var(--soft);
@@ -290,9 +281,7 @@
       margin-top:14px;
     }
 
-    .technical.show{
-      display:block;
-    }
+    .technical.show{display:block}
 
     .actions{
       display:flex;
@@ -310,9 +299,7 @@
       display:none;
     }
 
-    .growth.show{
-      display:block;
-    }
+    .growth.show{display:block}
 
     .growth h2{
       margin:0 0 8px;
@@ -345,7 +332,6 @@
       button,.button{width:100%}
       .actions{flex-direction:column}
       .sealed-text{font-size:18px}
-      .status{align-items:flex-start}
     }
   </style>
 </head>
@@ -464,6 +450,8 @@ function reset(){
   $("growth").classList.remove("show");
   $("technical").classList.remove("show");
   $("toggleTechnical").textContent = "Show Hash";
+  $("copyLink").textContent = "Copy Link";
+  $("shareProof").textContent = "Share Proof";
   $("rid").textContent = "—";
   $("ts").textContent = "—";
   $("hash").textContent = "—";
@@ -516,6 +504,17 @@ async function loadRecord(id){
   }
 }
 
+async function copyText(text, successMessage, button){
+  await navigator.clipboard.writeText(text);
+  $("msg").textContent = successMessage;
+
+  if(button){
+    const original = button.textContent;
+    button.textContent = "Copied ✓";
+    setTimeout(() => button.textContent = original, 1600);
+  }
+}
+
 $("load").onclick = () => loadRecord($("recordInput").value);
 
 $("recordInput").onkeydown = event => {
@@ -526,9 +525,9 @@ $("recordInput").onkeydown = event => {
 
 $("copyLink").onclick = async () => {
   if(!current) return;
+
   const link = location.origin + "/record.html?id=" + encodeURIComponent(current.id);
-  await navigator.clipboard.writeText(link);
-  $("msg").textContent = "Verification link copied.";
+  await copyText(link, "Copied ✓ Verification link copied.", $("copyLink"));
 };
 
 $("shareProof").onclick = async () => {
@@ -536,7 +535,8 @@ $("shareProof").onclick = async () => {
 
   const link = location.origin + "/record.html?id=" + encodeURIComponent(current.id);
 
-  const text = `This signal has been verified in TVEVT.
+  const text =
+`This signal has been verified in TVEVT.
 
 Record ID: ${current.id}
 Status: VERIFIED
@@ -548,12 +548,11 @@ Say it once. Prove it forever.`;
   if (navigator.share) {
     await navigator.share({
       title: "TVEVT Verified Record",
-      text,
-      url: link
+      text
     });
+    $("msg").textContent = "Share proof opened.";
   } else {
-    await navigator.clipboard.writeText(text);
-    $("msg").textContent = "Proof copied. Paste it anywhere.";
+    await copyText(text, "Copied ✓ Proof text copied.", $("shareProof"));
   }
 };
 
