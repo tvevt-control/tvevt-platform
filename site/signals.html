@@ -7,110 +7,71 @@
 <link rel="icon" href="/tvevt-favicon.svg">
 
 <style>
-body {
-  margin:0;
-  background:#0b0b0c;
-  color:#fff;
-  font-family:Arial, sans-serif;
-  padding:40px;
-}
-
-h1 {
-  margin-bottom:20px;
-}
-
-.search {
-  margin-bottom:20px;
-}
-
-input {
-  width:100%;
-  padding:12px;
-  border-radius:8px;
-  border:none;
-  background:#141416;
-  color:#fff;
-}
-
-.signal {
-  background:#141416;
-  border-radius:12px;
-  padding:20px;
-  margin-bottom:15px;
-}
-
-.meta {
-  font-size:12px;
-  color:#aaa;
-  margin-bottom:10px;
-}
-
-.text {
-  margin-bottom:10px;
-}
-
-.actions button {
-  margin-right:10px;
-  padding:8px 12px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.open {
-  background:#ff7a1a;
-  color:#000;
-}
-
-.copy {
-  background:#333;
-  color:#fff;
-}
+body{margin:0;background:#0b0b0c;color:#fff;font-family:Arial,sans-serif;padding:40px}
+h1{margin-bottom:8px}
+p{color:#aaa}
+input{width:100%;padding:14px;border-radius:10px;border:1px solid #333;background:#141416;color:#fff;margin:20px 0}
+.signal{background:#141416;border-radius:14px;padding:20px;margin-bottom:15px}
+.meta{font-size:12px;color:#aaa;margin-bottom:10px}
+.text{margin-bottom:12px;line-height:1.45}
+button{margin-right:10px;padding:9px 13px;border:none;border-radius:8px;cursor:pointer}
+.open{background:#ff9b3d;color:#000}
+.copy{background:#333;color:#fff}
+.error{color:#ff7a7a;margin-top:20px}
 </style>
 </head>
 
 <body>
 
 <h1>TVEVT Signals</h1>
+<p>Private signal library.</p>
 
-<div class="search">
-  <input id="search" placeholder="Search signals...">
-</div>
+<input id="search" placeholder="Search by ID, text, date, hash...">
 
-<div id="list"></div>
+<div id="list">Loading...</div>
 
 <script>
+const params = new URLSearchParams(location.search);
+const key = params.get("key") || "";
 const listEl = document.getElementById("list");
 const searchInput = document.getElementById("search");
 
-let all = [];
-
 async function load(q="") {
-  const res = await fetch("/api/signals?q=" + encodeURIComponent(q));
-  all = await res.json();
-  render(all);
+  if (!key) {
+    listEl.innerHTML = '<div class="error">Access key required.</div>';
+    return;
+  }
+
+  const res = await fetch("/api/signals?key=" + encodeURIComponent(key) + "&q=" + encodeURIComponent(q));
+  const data = await res.json();
+
+  if (!res.ok) {
+    listEl.innerHTML = '<div class="error">Unauthorized or unable to load signals.</div>';
+    return;
+  }
+
+  render(data);
 }
 
 function render(data) {
+  if (!data.length) {
+    listEl.innerHTML = "<p>No signals found.</p>";
+    return;
+  }
+
   listEl.innerHTML = "";
 
   data.forEach(s => {
     const div = document.createElement("div");
     div.className = "signal";
 
+    const preview = (s.text || "").slice(0, 220);
+
     div.innerHTML = `
-      <div class="meta">
-        ${s.id} | ${s.timestamp} | ${s.status}
-      </div>
-
-      <div class="text">
-        ${s.text.slice(0,150)}...
-      </div>
-
-      <div class="actions">
-        <button class="open" onclick="openSignal('${s.link}')">Open</button>
-        <button class="copy" onclick="copyLink('${s.link}', this)">Copy</button>
-      </div>
+      <div class="meta">${s.id} | ${s.timestamp} | ${s.status}</div>
+      <div class="text">${escapeHtml(preview)}${s.text && s.text.length > 220 ? "..." : ""}</div>
+      <button class="open" onclick="openSignal('${s.link}')">Open</button>
+      <button class="copy" onclick="copyLink('${s.link}', this)">Copy</button>
     `;
 
     listEl.appendChild(div);
@@ -124,11 +85,23 @@ function openSignal(link) {
 async function copyLink(link, btn) {
   await navigator.clipboard.writeText(location.origin + link);
   btn.innerText = "Copied ✓";
-  setTimeout(()=>btn.innerText="Copy",1500);
+  setTimeout(() => btn.innerText = "Copy", 1500);
 }
 
-searchInput.addEventListener("input", (e)=>{
-  load(e.target.value);
+function escapeHtml(str) {
+  return String(str).replace(/[&<>"']/g, m => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[m]));
+}
+
+let timer;
+searchInput.addEventListener("input", e => {
+  clearTimeout(timer);
+  timer = setTimeout(() => load(e.target.value), 250);
 });
 
 load();
