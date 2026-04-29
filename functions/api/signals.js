@@ -1,15 +1,14 @@
 export async function onRequestGet(context) {
   try {
     const store = context.env.STORE || context.env.LOG_STORE;
-    const adminKey = context.env.SIGNALS_ADMIN_KEY;
 
     const url = new URL(context.request.url);
     const key = url.searchParams.get("key") || "";
     const query = (url.searchParams.get("q") || "").toLowerCase().trim();
 
-    // защита
-    if (!adminKey || key !== adminKey) {
-      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+    // ❗ теперь просто проверяем, что key есть
+    if (!key) {
+      return new Response(JSON.stringify({ error: "Missing key" }), {
         status: 403,
         headers: { "Content-Type": "application/json" }
       });
@@ -31,8 +30,8 @@ export async function onRequestGet(context) {
         continue;
       }
 
-      // 🔥 НОВОЕ — фильтр по ключу
-      if (record.key && record.key !== key) continue;
+      // 🔥 главное изменение — фильтр по clientKey
+      if (record.key !== key) continue;
 
       const text = record.content?.text || record.text || "";
 
