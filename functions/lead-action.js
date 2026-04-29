@@ -1,92 +1,60 @@
 export async function onRequestGet(context) {
   try {
     const url = new URL(context.request.url);
+
     const id = url.searchParams.get("id");
-    const status = url.searchParams.get("status");
+    const action = url.searchParams.get("action");
 
-    if (!id || !status) {
-      return new Response("Missing request data", { status: 400 });
+    if (!id || !action) {
+      return new Response("Missing parameters", { status: 400 });
     }
 
-    const allowed = ["APPROVED", "REJECTED"];
-    if (!allowed.includes(status)) {
-      return new Response("Invalid status", { status: 400 });
+    const store = context.env.LOG_STORE;
+
+    const raw = await store.get(id);
+    if (!raw) {
+      return new Response("Request not found", { status: 404 });
     }
 
-    let record = { id };
+    const lead = JSON.parse(raw);
 
-    if (context.env.STORE) {
-      const existing = await context.env.STORE.get(id);
-      record = existing ? JSON.parse(existing) : { id };
+    // 🔥 если approve → создаём ключ
+    if (action === "approve") {
+      const clientKey = "TVEVT-" + Math.random().toString(36).substring(2, 8).toUpperCase();
 
-      record.status = status;
-      record.updatedAt = new Date().toISOString();
-
-      if (status === "APPROVED" && !record.accessToken) {
-        record.accessToken = "ACC-" + Math.random().toString(36).substring(2, 14).toUpperCase();
-      }
-
-      await context.env.STORE.put(id, JSON.stringify(record));
+      lead.status = "APPROVED";
+      lead.clientKey = clientKey;
+      lead.consoleUrl = `/console.html?key=${clientKey}`;
     }
 
-    const origin = url.origin;
-    const accessUrl = record.accessToken ? `${origin}/app.html?access=${record.accessToken}` : "";
-
-    if (context.env.TG_TOKEN && context.env.TG_CHAT_ID && record.telegramMessageId) {
-      const icon = status === "APPROVED" ? "✅" : "❌";
-
-      const text =
-`🚀 TVEVT ACCESS REQUEST
-
-ID: ${record.id}
-Name: ${record.name || "—"}
-Email: ${record.email || "—"}
-Status: ${status} ${icon}
-Created: ${record.createdAt || "—"}
-Updated: ${record.updatedAt || "—"}${accessUrl ? `
-
-Access link:
-${accessUrl}` : ""}`;
-
-      await fetch(`https://api.telegram.org/bot${context.env.TG_TOKEN}/editMessageText`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: context.env.TG_CHAT_ID,
-          message_id: record.telegramMessageId,
-          text
-        })
-      });
+    if (action === "reject") {
+      lead.status = "REJECTED";
     }
 
-    return new Response(
-      `<!doctype html>
+    await store.put(id, JSON.stringify(lead));
+
+    return new Response(`
       <html>
-      <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width,initial-scale=1">
-        <title>TVEVT Lead Updated</title>
-        <style>
-          body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;background:#07090c;color:#f4f6f8;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}
-          .card{max-width:620px;padding:36px;border:1px solid rgba(255,255,255,.12);border-radius:28px;background:rgba(255,255,255,.04)}
-          h1{margin:0 0 12px;font-size:34px}
-          p{color:rgba(244,246,248,.65);line-height:1.5}
-          a{color:#ffb14a;word-break:break-all}
-          strong{color:#ffb14a}
-        </style>
-      </head>
-      <body>
-        <div class="card">
-          <h1>Lead ${status.toLowerCase()}.</h1>
-          <p>Request <strong>${id}</strong> has been marked as <strong>${status}</strong>.</p>
-          ${accessUrl ? `<p>Access link:<br><a href="${accessUrl}">${accessUrl}</a></p>` : ""}
-        </div>
-      </body>
-      </html>`,
-      { headers: { "Content-Type": "text/html" } }
-    );
+        <body style="font-family:Arial;padding:40px;background:#0b0b0c;color:white">
+          <h2>TVEVT Access ${lead.status}</h2>
+
+          ${lead.clientKey ? `
+            <p>Client Key:</p>
+            <code>${lead.clientKey}</code>
+
+            <p>Console:</p>
+            <a href="${lead.consoleUrl}" style="color:#ff9b3d">
+              ${lead.consoleUrl}
+            </a>
+          ` : ""}
+
+        </body>
+      </html>
+    `, {
+      headers: { "Content-Type": "text/html" }
+    });
 
   } catch (err) {
-    return new Response("Error: " + err.message, { status: 500 });
+    return new Response(err.message, { status: 500 });
   }
 }
