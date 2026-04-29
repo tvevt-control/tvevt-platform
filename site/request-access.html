@@ -96,12 +96,11 @@ async function send() {
     return;
   }
 
-  // 🔒 блокируем кнопку
   btn.disabled = true;
   btn.innerText = "Sending...";
 
   try {
-    const res = await fetch("/api/request-access", {
+    const res = await fetch("/access-request", {
       method: "POST",
       headers: {"Content-Type":"application/json"},
       body: JSON.stringify({ name, email })
