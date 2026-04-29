@@ -1,226 +1,127 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>TVEVT — Request Access</title>
-  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Request Access — TVEVT</title>
 
-  <style>
-    :root{
-      --text:#f4f6f8;
-      --muted:rgba(244,246,248,.58);
-      --line:rgba(255,255,255,.12);
-      --orange:#ff7a1a;
-      --orange2:#ffb14a;
-    }
+<style>
+body{
+  margin:0;
+  background:#0b0b0c;
+  color:#fff;
+  font-family:Arial,sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  height:100vh;
+}
 
-    *{box-sizing:border-box}
+.box{
+  width:100%;
+  max-width:420px;
+  padding:30px;
+  background:#141416;
+  border-radius:12px;
+}
 
-    body{
-      margin:0;
-      min-height:100vh;
-      background:
-        radial-gradient(circle at 20% 0%,rgba(255,122,26,.13),transparent 32%),
-        linear-gradient(180deg,#10131a,#07090c);
-      color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif;
-    }
+h1{
+  margin-bottom:10px;
+}
 
-    .page{
-      min-height:100vh;
-      display:flex;
-      flex-direction:column;
-      padding:34px;
-    }
+p{
+  color:#aaa;
+  font-size:14px;
+}
 
-    header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      border-bottom:1px solid var(--line);
-      padding-bottom:28px;
-    }
+input{
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:8px;
+  border:1px solid #333;
+  background:#0b0b0c;
+  color:#fff;
+}
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      text-decoration:none;
-      color:var(--text);
-    }
+button{
+  width:100%;
+  margin-top:15px;
+  padding:14px;
+  border:none;
+  border-radius:10px;
+  background:#ff9b3d;
+  color:#000;
+  font-weight:bold;
+  cursor:pointer;
+}
 
-    .brand img{width:42px;height:42px}
+button:disabled{
+  opacity:0.6;
+  cursor:not-allowed;
+}
 
-    .brand strong{
-      letter-spacing:.16em;
-      font-size:16px;
-    }
-
-    .brand span span{
-      display:block;
-      margin-top:4px;
-      color:var(--muted);
-      font-size:11px;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-    }
-
-    main{
-      flex:1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-
-    .card{
-      width:100%;
-      max-width:560px;
-      border:1px solid var(--line);
-      border-radius:28px;
-      padding:36px;
-      background:rgba(10,13,18,.8);
-    }
-
-    h1{
-      margin:0;
-      font-size:36px;
-      letter-spacing:-.04em;
-    }
-
-    .lead{
-      margin:10px 0 26px;
-      color:var(--muted);
-      line-height:1.5;
-    }
-
-    form{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
-
-    input{
-      height:52px;
-      border-radius:999px;
-      border:1px solid var(--line);
-      background:rgba(0,0,0,.25);
-      color:var(--text);
-      padding:0 18px;
-      font:inherit;
-      outline:none;
-    }
-
-    input:focus{
-      border-color:rgba(255,122,26,.6);
-    }
-
-    button{
-      height:52px;
-      border-radius:999px;
-      border:none;
-      cursor:pointer;
-      font-weight:700;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      background:linear-gradient(135deg,var(--orange2),var(--orange));
-      color:#170900;
-    }
-
-    .success{
-      display:none;
-      margin-top:18px;
-      color:#8ff0b1;
-      font-size:14px;
-      line-height:1.5;
-    }
-
-    .note{
-      margin-top:20px;
-      font-size:13px;
-      color:var(--muted);
-      line-height:1.5;
-    }
-
-    footer{
-      text-align:center;
-      font-size:11px;
-      letter-spacing:.2em;
-      text-transform:uppercase;
-      color:rgba(244,246,248,.32);
-      margin-top:30px;
-    }
-  </style>
+.status{
+  margin-top:15px;
+  font-size:14px;
+  color:#00ff99;
+}
+</style>
 </head>
 
 <body>
-<div class="page">
 
-  <header>
-    <a class="brand" href="/">
-      <img src="/assets/brand/tvevt-icon.svg" alt="">
-      <span>
-        <strong>TVEVT</strong>
-        <span>Governance Console</span>
-      </span>
-    </a>
-  </header>
+<div class="box">
+  <h1>Request Access</h1>
+  <p>Private console access requires approval.</p>
 
-  <main>
-    <div class="card">
+  <input id="name" placeholder="Your name">
+  <input id="email" placeholder="Email">
 
-      <h1>Request access</h1>
+  <button id="btn" onclick="send()">Request Access</button>
 
-      <p class="lead">
-        Identity. Account history. Delivery. Governance.
-      </p>
-
-      <form id="form">
-        <input type="text" placeholder="Full name" required>
-        <input type="email" placeholder="Email address" required>
-        <button type="submit">Request Access</button>
-      </form>
-
-      <div class="success" id="success">
-        Access request received.<br>
-        We will contact you when identity and extended control features are available.
-      </div>
-
-      <div class="note">
-        Identity · Account history · Email delivery · Telegram delivery · Team governance
-      </div>
-
-    </div>
-  </main>
-
-  <footer>
-    Say it once. Prove it forever.
-  </footer>
-
+  <div id="status" class="status"></div>
 </div>
 
 <script>
-document.getElementById("form").onsubmit = async function(e){
-  e.preventDefault();
+async function send() {
+  const btn = document.getElementById("btn");
+  const status = document.getElementById("status");
 
-  const name = this.querySelector('input[type="text"]').value;
-  const email = this.querySelector('input[type="email"]').value;
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
 
-  const res = await fetch("/access-request", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ name, email })
-  });
-
-  const data = await res.json();
-
-  if (data.success) {
-    document.getElementById("success").style.display = "block";
-    this.reset();
+  if (!name || !email) {
+    status.innerText = "Fill all fields";
+    return;
   }
-};
+
+  // 🔒 блокируем кнопку
+  btn.disabled = true;
+  btn.innerText = "Sending...";
+
+  try {
+    const res = await fetch("/api/request-access", {
+      method: "POST",
+      headers: {"Content-Type":"application/json"},
+      body: JSON.stringify({ name, email })
+    });
+
+    if (res.ok) {
+      btn.innerText = "Request sent ✓";
+      status.innerText = "We received your request. Check your email soon.";
+    } else {
+      btn.disabled = false;
+      btn.innerText = "Try again";
+      status.innerText = "Error sending request";
+    }
+
+  } catch (e) {
+    btn.disabled = false;
+    btn.innerText = "Try again";
+    status.innerText = "Network error";
+  }
+}
 </script>
 
 </body>
