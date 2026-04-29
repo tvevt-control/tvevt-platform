@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TVEVT — Signals</title>
+<link rel="icon" href="/tvevt-favicon.svg">
+
+<style>
+body {
+  margin:0;
+  background:#0b0b0c;
+  color:#fff;
+  font-family:Arial, sans-serif;
+  padding:40px;
+}
+
+h1 {
+  margin-bottom:20px;
+}
+
+.search {
+  margin-bottom:20px;
+}
+
+input {
+  width:100%;
+  padding:12px;
+  border-radius:8px;
+  border:none;
+  background:#141416;
+  color:#fff;
+}
+
+.signal {
+  background:#141416;
+  border-radius:12px;
+  padding:20px;
+  margin-bottom:15px;
+}
+
+.meta {
+  font-size:12px;
+  color:#aaa;
+  margin-bottom:10px;
+}
+
+.text {
+  margin-bottom:10px;
+}
+
+.actions button {
+  margin-right:10px;
+  padding:8px 12px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+.open {
+  background:#ff7a1a;
+  color:#000;
+}
+
+.copy {
+  background:#333;
+  color:#fff;
+}
+</style>
+</head>
+
+<body>
+
+<h1>TVEVT Signals</h1>
+
+<div class="search">
+  <input id="search" placeholder="Search signals...">
+</div>
+
+<div id="list"></div>
+
+<script>
+const listEl = document.getElementById("list");
+const searchInput = document.getElementById("search");
+
+let all = [];
+
+async function load(q="") {
+  const res = await fetch("/api/signals?q=" + encodeURIComponent(q));
+  all = await res.json();
+  render(all);
+}
+
+function render(data) {
+  listEl.innerHTML = "";
+
+  data.forEach(s => {
+    const div = document.createElement("div");
+    div.className = "signal";
+
+    div.innerHTML = `
+      <div class="meta">
+        ${s.id} | ${s.timestamp} | ${s.status}
+      </div>
+
+      <div class="text">
+        ${s.text.slice(0,150)}...
+      </div>
+
+      <div class="actions">
+        <button class="open" onclick="openSignal('${s.link}')">Open</button>
+        <button class="copy" onclick="copyLink('${s.link}', this)">Copy</button>
+      </div>
+    `;
+
+    listEl.appendChild(div);
+  });
+}
+
+function openSignal(link) {
+  window.location.href = link;
+}
+
+async function copyLink(link, btn) {
+  await navigator.clipboard.writeText(location.origin + link);
+  btn.innerText = "Copied ✓";
+  setTimeout(()=>btn.innerText="Copy",1500);
+}
+
+searchInput.addEventListener("input", (e)=>{
+  load(e.target.value);
+});
+
+load();
+</script>
+
+</body>
+</html>
