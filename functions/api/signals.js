@@ -6,7 +6,6 @@ export async function onRequestGet(context) {
     const key = url.searchParams.get("key") || "";
     const query = (url.searchParams.get("q") || "").toLowerCase().trim();
 
-    // ❗ теперь просто проверяем, что key есть
     if (!key) {
       return new Response(JSON.stringify({ error: "Missing key" }), {
         status: 403,
@@ -30,16 +29,22 @@ export async function onRequestGet(context) {
         continue;
       }
 
-      // 🔥 главное изменение — фильтр по clientKey
-      if (record.key !== key) continue;
+      /*
+        ADMIN KEY:
+        TVEVT-MAX-2026 sees all existing signals.
+        Future client keys will see only records with matching key.
+      */
+      if (key !== "TVEVT-MAX-2026") {
+        if (record.key !== key) continue;
+      }
 
       const text = record.content?.text || record.text || "";
 
       const signal = {
         id: record.id || item.name,
-        timestamp: record.timestamp || "",
+        timestamp: record.timestamp || record.createdAt || "",
         hash: record.hash || "",
-        status: record.anchor_status || "sealed",
+        status: record.anchor_status || record.status || "sealed",
         text,
         link: `/record.html?id=${record.id || item.name}`
       };
@@ -59,7 +64,7 @@ export async function onRequestGet(context) {
       signals.push(signal);
     }
 
-    signals.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+    signals.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
 
     return new Response(JSON.stringify(signals), {
       headers: { "Content-Type": "application/json" }
