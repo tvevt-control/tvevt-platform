@@ -1,6 +1,18 @@
 export async function onRequestGet(context) {
   try {
     const store = context.env.STORE || context.env.LOG_STORE;
+    const adminKey = context.env.SIGNALS_ADMIN_KEY;
+
+    const url = new URL(context.request.url);
+    const key = url.searchParams.get("key") || "";
+    const query = (url.searchParams.get("q") || "").toLowerCase().trim();
+
+    if (!adminKey || key !== adminKey) {
+      return new Response(JSON.stringify({ error: "Unauthorized" }), {
+        status: 403,
+        headers: { "Content-Type": "application/json" }
+      });
+    }
 
     if (!store) {
       return new Response(JSON.stringify([]), {
@@ -8,16 +20,13 @@ export async function onRequestGet(context) {
       });
     }
 
-    const url = new URL(context.request.url);
-    const query = (url.searchParams.get("q") || "").toLowerCase().trim();
-
     const list = await store.list();
     const signals = [];
 
-    for (const key of list.keys) {
-      if (!key.name.startsWith("TVE-")) continue;
+    for (const item of list.keys) {
+      if (!item.name.startsWith("TVE-")) continue;
 
-      const raw = await store.get(key.name);
+      const raw = await store.get(item.name);
       if (!raw) continue;
 
       let record;
@@ -29,33 +38,31 @@ export async function onRequestGet(context) {
 
       const text = record.content?.text || record.text || "";
 
-      const item = {
-        id: record.id || key.name,
+      const signal = {
+        id: record.id || item.name,
         timestamp: record.timestamp || record.createdAt || "",
         hash: record.hash || "",
         status: record.anchor_status || "sealed",
         text,
-        link: `/record.html?id=${record.id || key.name}`
+        link: `/record.html?id=${record.id || item.name}`
       };
 
       if (query) {
         const haystack = [
-          item.id,
-          item.timestamp,
-          item.status,
-          item.hash,
-          item.text
+          signal.id,
+          signal.timestamp,
+          signal.status,
+          signal.hash,
+          signal.text
         ].join(" ").toLowerCase();
 
         if (!haystack.includes(query)) continue;
       }
 
-      signals.push(item);
+      signals.push(signal);
     }
 
-    signals.sort((a, b) => {
-      return new Date(b.timestamp || 0) - new Date(a.timestamp || 0);
-    });
+    signals.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
 
     return new Response(JSON.stringify(signals), {
       headers: { "Content-Type": "application/json" }
