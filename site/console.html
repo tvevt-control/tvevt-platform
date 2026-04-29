@@ -1,0 +1,116 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TVEVT — Console</title>
+<link rel="icon" href="/tvevt-favicon.svg">
+
+<style>
+body{
+  margin:0;
+  min-height:100vh;
+  background:linear-gradient(180deg,#10131a,#07090c);
+  color:#f4f6f8;
+  font-family:Arial,sans-serif;
+  padding:40px;
+}
+.card{
+  max-width:720px;
+  margin:80px auto;
+  background:#141416;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:28px;
+  padding:36px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:40px;
+}
+.brand img{width:44px}
+.brand strong{letter-spacing:.16em}
+.brand span{display:block;color:#aaa;font-size:12px;margin-top:4px}
+h1{font-size:46px;margin:0 0 12px}
+p{color:#aaa;line-height:1.5}
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:16px;
+  margin-top:30px;
+}
+a{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  min-height:70px;
+  border-radius:18px;
+  text-decoration:none;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.primary{
+  background:linear-gradient(135deg,#ffb14a,#ff7a1a);
+  color:#170900;
+}
+.secondary{
+  background:rgba(255,255,255,.06);
+  color:#f4f6f8;
+  border:1px solid rgba(255,255,255,.12);
+}
+.note{
+  margin-top:26px;
+  font-size:13px;
+  color:#777;
+}
+@media(max-width:700px){
+  body{padding:22px}
+  .actions{grid-template-columns:1fr}
+  h1{font-size:38px}
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+  <div class="brand">
+    <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
+    <div>
+      <strong>TVEVT</strong>
+      <span>Governance Console</span>
+    </div>
+  </div>
+
+  <h1>Signal Control.</h1>
+
+  <p>
+    Create verified signals, access your private signal library,
+    and manage proof records from one place.
+  </p>
+
+  <div class="actions">
+    <a class="primary" id="seal" href="#">Seal Signal</a>
+    <a class="secondary" id="signals" href="#">Signals Library</a>
+  </div>
+
+  <div class="note">
+    Private console access is controlled by access key.
+  </div>
+</div>
+
+<script>
+const params = new URLSearchParams(location.search);
+const key = params.get("key") || "TVEVT-MAX-2026";
+
+document.getElementById("seal").href =
+  "/seal.html?key=" + encodeURIComponent(key);
+
+document.getElementById("signals").href =
+  "/signals.html?key=" + encodeURIComponent(key);
+</script>
+
+</body>
+</html>
