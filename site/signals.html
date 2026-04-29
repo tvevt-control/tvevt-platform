@@ -3,61 +3,63 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TVEVT — Seal Signal</title>
-<link rel="icon" href="/tvevt-favicon.svg">
+<title>TVEVT Signals</title>
 
 <style>
-body{margin:0;background:#0b0b0c;color:#fff;font-family:Arial,sans-serif;padding:40px}
+body{margin:0;background:#0b0b0c;color:#fff;font-family:Arial;padding:40px}
 h1{margin-bottom:10px}
-textarea{width:100%;height:200px;padding:15px;border-radius:10px;border:1px solid #333;background:#141416;color:#fff}
-button{margin-top:15px;padding:14px 20px;border:none;border-radius:10px;background:#ff9b3d;color:#000;font-weight:bold;cursor:pointer}
-.result{margin-top:30px;padding:20px;background:#141416;border-radius:10px}
-.field{margin-bottom:10px;font-size:14px}
+input{width:100%;padding:14px;border-radius:10px;border:1px solid #333;background:#141416;color:#fff;margin-bottom:20px}
+.card{background:#141416;padding:15px;border-radius:10px;margin-bottom:15px}
 small{color:#aaa}
+button{margin-top:10px;margin-right:10px;padding:10px;border:none;border-radius:8px;background:#ff9b3d;color:#000;cursor:pointer}
+.error{color:#ff5a5a}
 </style>
 </head>
 
 <body>
 
-<h1>Seal Signal</h1>
+<h1>TVEVT Signals</h1>
+<p>Private signal library.</p>
 
-<textarea id="text" placeholder="Enter your statement..."></textarea>
+<input id="search" placeholder="Search by ID, text, date..." oninput="load()">
 
-<br>
-<button onclick="seal()">Seal Signal</button>
-
-<div id="result"></div>
+<div id="list"></div>
 
 <script>
-async function seal() {
-  const text = document.getElementById("text").value.trim();
-  if (!text) return;
-
+async function load() {
   const params = new URLSearchParams(location.search);
   const key = params.get("key") || "";
+  const q = document.getElementById("search").value;
 
-  const res = await fetch("/publish", {
-    method: "POST",
-    headers: {"Content-Type":"application/json"},
-    body: JSON.stringify({
-      text: text,
-      key: key
-    })
-  });
+  const res = await fetch(`/api/signals?key=${key}&q=${encodeURIComponent(q)}`);
+
+  if (!res.ok) {
+    document.getElementById("list").innerHTML =
+      '<div class="error">Unauthorized or unable to load signals.</div>';
+    return;
+  }
 
   const data = await res.json();
 
-  const link = data.verification_url || (location.origin + "/record.html?id=" + data.id);
-
-  document.getElementById("result").innerHTML = `
-    <div class="result">
-      <div class="field"><small>Record ID</small><br>${data.id}</div>
-      <div class="field"><small>Timestamp</small><br>${data.timestamp}</div>
-      <div class="field"><small>Hash</small><br>${data.hash}</div>
-      <div class="field"><small>Verification</small><br>${link}</div>
+  document.getElementById("list").innerHTML = data.map(s => `
+    <div class="card">
+      <small>${s.id} | ${s.timestamp} | ${s.status}</small>
+      <div>${s.text}</div>
+      <button onclick="openLink('${s.link}')">Open</button>
+      <button onclick="copyLink('${s.link}')">Copy</button>
     </div>
-  `;
+  `).join("");
 }
+
+function openLink(link) {
+  window.open(link, "_blank");
+}
+
+function copyLink(link) {
+  navigator.clipboard.writeText(location.origin + link);
+}
+
+load();
 </script>
 
 </body>
