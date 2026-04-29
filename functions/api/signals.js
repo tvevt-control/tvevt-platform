@@ -7,15 +7,10 @@ export async function onRequestGet(context) {
     const key = url.searchParams.get("key") || "";
     const query = (url.searchParams.get("q") || "").toLowerCase().trim();
 
+    // защита
     if (!adminKey || key !== adminKey) {
       return new Response(JSON.stringify({ error: "Unauthorized" }), {
         status: 403,
-        headers: { "Content-Type": "application/json" }
-      });
-    }
-
-    if (!store) {
-      return new Response(JSON.stringify([]), {
         headers: { "Content-Type": "application/json" }
       });
     }
@@ -36,11 +31,14 @@ export async function onRequestGet(context) {
         continue;
       }
 
+      // 🔥 НОВОЕ — фильтр по ключу
+      if (record.key && record.key !== key) continue;
+
       const text = record.content?.text || record.text || "";
 
       const signal = {
         id: record.id || item.name,
-        timestamp: record.timestamp || record.createdAt || "",
+        timestamp: record.timestamp || "",
         hash: record.hash || "",
         status: record.anchor_status || "sealed",
         text,
@@ -62,7 +60,7 @@ export async function onRequestGet(context) {
       signals.push(signal);
     }
 
-    signals.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+    signals.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
 
     return new Response(JSON.stringify(signals), {
       headers: { "Content-Type": "application/json" }
