@@ -51,7 +51,7 @@ async function send(){
   links.innerHTML="";
 
   try{
-    const res=await fetch("/api/access",{
+    const res=await fetch("/api/leads",{
       method:"POST",
       headers:{"Content-Type":"application/json"},
       body:JSON.stringify({name,email})
