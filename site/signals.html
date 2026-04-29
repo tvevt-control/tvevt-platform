@@ -3,108 +3,61 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TVEVT — Signals</title>
+<title>TVEVT — Seal Signal</title>
 <link rel="icon" href="/tvevt-favicon.svg">
 
 <style>
 body{margin:0;background:#0b0b0c;color:#fff;font-family:Arial,sans-serif;padding:40px}
-h1{margin-bottom:8px}
-p{color:#aaa}
-input{width:100%;padding:14px;border-radius:10px;border:1px solid #333;background:#141416;color:#fff;margin:20px 0}
-.signal{background:#141416;border-radius:14px;padding:20px;margin-bottom:15px}
-.meta{font-size:12px;color:#aaa;margin-bottom:10px}
-.text{margin-bottom:12px;line-height:1.45}
-button{margin-right:10px;padding:9px 13px;border:none;border-radius:8px;cursor:pointer}
-.open{background:#ff9b3d;color:#000}
-.copy{background:#333;color:#fff}
-.error{color:#ff7a7a;margin-top:20px}
+h1{margin-bottom:10px}
+textarea{width:100%;height:200px;padding:15px;border-radius:10px;border:1px solid #333;background:#141416;color:#fff}
+button{margin-top:15px;padding:14px 20px;border:none;border-radius:10px;background:#ff9b3d;color:#000;font-weight:bold;cursor:pointer}
+.result{margin-top:30px;padding:20px;background:#141416;border-radius:10px}
+.field{margin-bottom:10px;font-size:14px}
+small{color:#aaa}
 </style>
 </head>
 
 <body>
 
-<h1>TVEVT Signals</h1>
-<p>Private signal library.</p>
+<h1>Seal Signal</h1>
 
-<input id="search" placeholder="Search by ID, text, date, hash...">
+<textarea id="text" placeholder="Enter your statement..."></textarea>
 
-<div id="list">Loading...</div>
+<br>
+<button onclick="seal()">Seal Signal</button>
+
+<div id="result"></div>
 
 <script>
-const params = new URLSearchParams(location.search);
-const key = params.get("key") || "";
-const listEl = document.getElementById("list");
-const searchInput = document.getElementById("search");
+async function seal() {
+  const text = document.getElementById("text").value.trim();
+  if (!text) return;
 
-async function load(q="") {
-  if (!key) {
-    listEl.innerHTML = '<div class="error">Access key required.</div>';
-    return;
-  }
+  const params = new URLSearchParams(location.search);
+  const key = params.get("key") || "";
 
-  const res = await fetch("/api/signals?key=" + encodeURIComponent(key) + "&q=" + encodeURIComponent(q));
+  const res = await fetch("/publish", {
+    method: "POST",
+    headers: {"Content-Type":"application/json"},
+    body: JSON.stringify({
+      text: text,
+      key: key
+    })
+  });
+
   const data = await res.json();
 
-  if (!res.ok) {
-    listEl.innerHTML = '<div class="error">Unauthorized or unable to load signals.</div>';
-    return;
-  }
+  const link = data.verification_url || (location.origin + "/record.html?id=" + data.id);
 
-  render(data);
+  document.getElementById("result").innerHTML = `
+    <div class="result">
+      <div class="field"><small>Record ID</small><br>${data.id}</div>
+      <div class="field"><small>Timestamp</small><br>${data.timestamp}</div>
+      <div class="field"><small>Hash</small><br>${data.hash}</div>
+      <div class="field"><small>Verification</small><br>${link}</div>
+    </div>
+  `;
 }
-
-function render(data) {
-  if (!data.length) {
-    listEl.innerHTML = "<p>No signals found.</p>";
-    return;
-  }
-
-  listEl.innerHTML = "";
-
-  data.forEach(s => {
-    const div = document.createElement("div");
-    div.className = "signal";
-
-    const preview = (s.text || "").slice(0, 220);
-
-    div.innerHTML = `
-      <div class="meta">${s.id} | ${s.timestamp} | ${s.status}</div>
-      <div class="text">${escapeHtml(preview)}${s.text && s.text.length > 220 ? "..." : ""}</div>
-      <button class="open" onclick="openSignal('${s.link}')">Open</button>
-      <button class="copy" onclick="copyLink('${s.link}', this)">Copy</button>
-    `;
-
-    listEl.appendChild(div);
-  });
-}
-
-function openSignal(link) {
-  window.location.href = link;
-}
-
-async function copyLink(link, btn) {
-  await navigator.clipboard.writeText(location.origin + link);
-  btn.innerText = "Copied ✓";
-  setTimeout(() => btn.innerText = "Copy", 1500);
-}
-
-function escapeHtml(str) {
-  return String(str).replace(/[&<>"']/g, m => ({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    '"':"&quot;",
-    "'":"&#039;"
-  }[m]));
-}
-
-let timer;
-searchInput.addEventListener("input", e => {
-  clearTimeout(timer);
-  timer = setTimeout(() => load(e.target.value), 250);
-});
-
-load();
 </script>
 
 </body>
