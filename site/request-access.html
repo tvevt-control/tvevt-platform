@@ -1,12 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Request Access — TVEVT</title>
+  <link rel="icon" href="/tvevt-favicon.svg">
+
+  <style>
+    body{
+      margin:0;
+      min-height:100vh;
+      background:#0b0b0c;
+      color:#fff;
+      font-family:Arial,sans-serif;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:24px;
+    }
+    .box{
+      width:100%;
+      max-width:460px;
+      background:#141416;
+      border:1px solid rgba(255,255,255,.12);
+      border-radius:24px;
+      padding:34px;
+    }
+    h1{margin:0 0 12px;font-size:42px}
+    p{color:#aaa;line-height:1.5}
+    input{
+      width:100%;
+      box-sizing:border-box;
+      margin-top:12px;
+      padding:15px;
+      border-radius:12px;
+      border:1px solid #333;
+      background:#0b0b0c;
+      color:#fff;
+      font-size:16px;
+    }
+    button{
+      width:100%;
+      margin-top:18px;
+      padding:16px;
+      border:0;
+      border-radius:14px;
+      background:#ff9b3d;
+      color:#000;
+      font-weight:800;
+      cursor:pointer;
+    }
+    button:disabled{opacity:.6;cursor:not-allowed}
+    #status{margin-top:14px;color:#00ff99}
+  </style>
+</head>
+
+<body>
+  <div class="box">
+    <h1>Request Access</h1>
+    <p>Private console access requires approval.</p>
+
+    <input id="name" placeholder="Your name">
+    <input id="email" placeholder="Email">
+
+    <button id="btn" type="button" onclick="send()">Request Access</button>
+    <div id="status"></div>
+  </div>
+
 <script>
-async function send() {
+async function send(){
   const btn = document.getElementById("btn");
   const status = document.getElementById("status");
-
   const name = document.getElementById("name").value.trim();
   const email = document.getElementById("email").value.trim();
 
-  if (!name || !email) {
+  if(!name || !email){
     status.innerText = "Fill all fields";
     return;
   }
@@ -15,28 +83,22 @@ async function send() {
   btn.innerText = "Sending...";
   status.innerText = "";
 
-  const payload = { name, email };
+  const endpoints = ["/access-request", "/api/access-request", "/api/request-access"];
 
-  const endpoints = [
-    "/access-request",
-    "/api/access-request",
-    "/api/request-access"
-  ];
-
-  for (const endpoint of endpoints) {
-    try {
+  for(const endpoint of endpoints){
+    try{
       const res = await fetch(endpoint, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify(payload)
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({name,email})
       });
 
-      if (res.ok) {
+      if(res.ok){
         btn.innerText = "Request sent ✓";
         status.innerText = "We received your request.";
         return;
       }
-    } catch (e) {}
+    }catch(e){}
   }
 
   btn.disabled = false;
@@ -44,3 +106,5 @@ async function send() {
   status.innerText = "Error sending request";
 }
 </script>
+</body>
+</html>
