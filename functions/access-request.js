@@ -1,71 +1,82 @@
+function makeId(prefix) {
+  return prefix + "-" + Math.random().toString(36).substring(2, 10).toUpperCase();
+}
+
+async function sendTelegram(env, text) {
+  if (!env.TG_TOKEN || !env.TG_CHAT_ID) return;
+
+  await fetch(`https://api.telegram.org/bot${env.TG_TOKEN}/sendMessage`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      chat_id: env.TG_CHAT_ID,
+      text,
+      parse_mode: "HTML"
+    })
+  });
+}
+
 export async function onRequestPost(context) {
   try {
-    const body = await context.request.json();
-    const { name, email } = body;
+    const store = context.env.STORE || context.env.LOG_STORE;
+    const data = await context.request.json();
 
-    if (!email) {
-      return new Response(JSON.stringify({ error: "Email required" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" }
-      });
-    }
+    const id = makeId("REQ");
+    const clientKey = makeId("CLIENT");
+    const consoleUrl = `https://tvevt.com/console.html?key=${clientKey}`;
 
-    const id = "REQ-" + Math.random().toString(36).substring(2, 10).toUpperCase();
-    const createdAt = new Date().toISOString();
-
-    const record = {
+    const lead = {
       id,
-      name: name || "",
-      email,
+      name: data.name || "",
+      email: data.email || "",
+      message: data.message || "",
       status: "NEW",
-      createdAt
+      clientKey,
+      consoleUrl,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString()
     };
 
-    const origin = new URL(context.request.url).origin;
+    await store.put(id, JSON.stringify(lead));
 
-    if (context.env.TG_TOKEN && context.env.TG_CHAT_ID) {
-      const text =
-`🚀 NEW TVEVT ACCESS REQUEST
+    const approveUrl = `https://tvevt.com/api/lead-action?id=${id}&action=approve`;
+    const rejectUrl = `https://tvevt.com/api/lead-action?id=${id}&action=reject`;
+
+    await sendTelegram(context.env, `
+🚀 NEW TVEVT ACCESS REQUEST
 
 ID: ${id}
-Name: ${name || "—"}
-Email: ${email}
+Name: ${lead.name}
+Email: ${lead.email}
 Status: NEW
-Time: ${createdAt}`;
 
-      const tgRes = await fetch(`https://api.telegram.org/bot${context.env.TG_TOKEN}/sendMessage`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          chat_id: context.env.TG_CHAT_ID,
-          text,
-          reply_markup: {
-            inline_keyboard: [
-              [
-                { text: "✅ Approve", url: `${origin}/lead-action?id=${id}&status=APPROVED` },
-                { text: "❌ Reject", url: `${origin}/lead-action?id=${id}&status=REJECTED` }
-              ]
-            ]
-          }
-        })
-      });
+Generated client key:
+${clientKey}
 
-      const tgData = await tgRes.json();
-      if (tgData.ok && tgData.result && tgData.result.message_id) {
-        record.telegramMessageId = tgData.result.message_id;
-      }
-    }
+Private console:
+${consoleUrl}
 
-    if (context.env.STORE) {
-      await context.env.STORE.put(id, JSON.stringify(record));
-    }
+Approve:
+${approveUrl}
 
-    return new Response(JSON.stringify({ success: true, id }), {
+Reject:
+${rejectUrl}
+`);
+
+    return new Response(JSON.stringify({
+      ok: true,
+      id,
+      clientKey,
+      consoleUrl
+    }), {
       headers: { "Content-Type": "application/json" }
     });
 
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
+    return new Response(JSON.stringify({
+      ok: false,
+      error: err.message
+    }), {
       status: 500,
       headers: { "Content-Type": "application/json" }
     });
