@@ -2,7 +2,7 @@ function makeId(prefix) {
   return prefix + "-" + Math.random().toString(36).substring(2, 10).toUpperCase();
 }
 
-async function sendTelegram(env, text, approveUrl, rejectUrl) {
+async function sendTelegram(env, text) {
   if (!env.TG_TOKEN || !env.TG_CHAT_ID) return;
 
   await fetch(`https://api.telegram.org/bot${env.TG_TOKEN}/sendMessage`, {
@@ -10,13 +10,33 @@ async function sendTelegram(env, text, approveUrl, rejectUrl) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       chat_id: env.TG_CHAT_ID,
-      text,
-      reply_markup: {
-        inline_keyboard: [[
-          { text: "✅ Approve", url: approveUrl },
-          { text: "❌ Reject", url: rejectUrl }
-        ]]
-      }
+      text
+    })
+  });
+}
+
+async function sendEmail(env, lead) {
+  if (!env.RESEND_API_KEY || !lead.email) return;
+
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: "TVEVT <onboarding@resend.dev>",
+      to: [lead.email],
+      bcc: ["max@fincib.com"],
+      subject: "Your TVEVT access request was received",
+      html: `
+        <p>Hi ${lead.name || "there"},</p>
+        <p>Your TVEVT access request has been received.</p>
+        <p>Your private console link:</p>
+        <p><a href="${lead.consoleUrl}">${lead.consoleUrl}</a></p>
+        <p>Please keep this link private.</p>
+        <p>— TVEVT</p>
+      `
     })
   });
 }
@@ -59,9 +79,6 @@ export async function onRequestPost(context) {
 
     await store.put(id, JSON.stringify(lead));
 
-    const approveUrl = `https://tvevt.com/api/lead-action?id=${id}&action=approve`;
-    const rejectUrl = `https://tvevt.com/api/lead-action?id=${id}&action=reject`;
-
     const message =
 `🚀 NEW TVEVT ACCESS REQUEST
 
@@ -76,7 +93,8 @@ ${clientKey}
 Private console:
 ${consoleUrl}`;
 
-    await sendTelegram(context.env, message, approveUrl, rejectUrl);
+    await sendTelegram(context.env, message);
+    await sendEmail(context.env, lead);
 
     return new Response(JSON.stringify({ ok:true, id, clientKey, consoleUrl }), {
       headers: { "Content-Type": "application/json" }
@@ -115,13 +133,15 @@ export async function onRequestGet(context) {
       const lead = JSON.parse(raw);
 
       if (accessToken) {
-        if (lead.accessToken === accessToken && lead.status === "APPROVED") {
+        if (lead.clientKey === accessToken || lead.accessToken === accessToken) {
           return new Response(JSON.stringify({
             valid: true,
             id: lead.id || key.name,
             name: lead.name || "",
             email: lead.email || "",
-            status: lead.status
+            status: lead.status || "NEW",
+            clientKey: lead.clientKey || "",
+            consoleUrl: lead.consoleUrl || ""
           }), {
             headers: { "Content-Type": "application/json" }
           });
