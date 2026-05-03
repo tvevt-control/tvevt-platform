@@ -16,6 +16,32 @@ async function sendTelegram(env, text) {
   });
 }
 
+async function sendEmail(env, lead) {
+  if (!env.RESEND_API_KEY || !lead.email) return;
+
+  await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${env.RESEND_API_KEY}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+      from: "TVEVT <onboarding@resend.dev>",
+      to: [lead.email],
+      bcc: ["max@fincib.com"],
+      subject: "Your TVEVT access request was received",
+      html: `
+        <p>Hi ${lead.name || "there"},</p>
+        <p>Your TVEVT access request has been received.</p>
+        <p>Your private console link:</p>
+        <p><a href="${lead.consoleUrl}">${lead.consoleUrl}</a></p>
+        <p>Please keep this link private.</p>
+        <p>— TVEVT</p>
+      `
+    })
+  });
+}
+
 export async function onRequestPost(context) {
   try {
     const store = context.env.STORE || context.env.LOG_STORE;
@@ -33,17 +59,16 @@ export async function onRequestPost(context) {
       status: "NEW",
       clientKey,
       consoleUrl,
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      createdAt: new Date().toISOString()
     };
 
-    await store.put(id, JSON.stringify(lead));
+    if (store) {
+      await store.put(id, JSON.stringify(lead));
+    }
 
-    const approveUrl = `https://tvevt.com/api/lead-action?id=${id}&action=approve`;
-    const rejectUrl = `https://tvevt.com/api/lead-action?id=${id}&action=reject`;
-
-    await sendTelegram(context.env, `
-🚀 NEW TVEVT ACCESS REQUEST
+    await sendTelegram(
+      context.env,
+`🚀 NEW TVEVT ACCESS REQUEST
 
 ID: ${id}
 Name: ${lead.name}
@@ -54,14 +79,10 @@ Generated client key:
 ${clientKey}
 
 Private console:
-${consoleUrl}
+${consoleUrl}`
+    );
 
-Approve:
-${approveUrl}
-
-Reject:
-${rejectUrl}
-`);
+    await sendEmail(context.env, lead);
 
     return new Response(JSON.stringify({
       ok: true,
@@ -81,4 +102,8 @@ ${rejectUrl}
       headers: { "Content-Type": "application/json" }
     });
   }
+}
+
+export async function onRequestGet() {
+  return Response.redirect("https://tvevt.com/request-access.html", 302);
 }
