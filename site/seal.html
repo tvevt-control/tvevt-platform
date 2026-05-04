@@ -1,91 +1,390 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>TVEVT — Seal Signal</title>
-  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg">
-  <style>
-    :root{--bg:#07090c;--text:#f4f6f8;--muted:rgba(244,246,248,.56);--soft:rgba(244,246,248,.34);--line:rgba(255,255,255,.12);--orange:#ff7a1a;--orange2:#ffb14a;--green:#8ff0b1;--radius:24px}
-    *{box-sizing:border-box} body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 0%,rgba(255,122,26,.13),transparent 32%),linear-gradient(180deg,#10131a,#07090c);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif}
-    .page{min-height:100vh;padding:34px;display:flex;flex-direction:column}
-    header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:28px}.brand{display:flex;align-items:center;gap:14px;color:var(--text);text-decoration:none}.brand img{width:42px}.brand strong{letter-spacing:.16em}.brand span span{display:block;margin-top:4px;color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-    nav{display:flex;gap:10px}nav a{color:var(--text);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:12px 18px;font-size:13px;text-transform:uppercase;letter-spacing:.1em;background:rgba(255,255,255,.03)}
-    main{width:min(1120px,100%);margin:54px auto 0;display:grid;grid-template-columns:1.35fr .65fr;gap:28px}
-    .panel{border:1px solid var(--line);border-radius:var(--radius);background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015)),rgba(10,13,18,.72);padding:30px;box-shadow:0 30px 100px rgba(0,0,0,.32)}
-    .label{display:block;margin-bottom:12px;color:var(--muted);font-size:12px;font-weight:850;letter-spacing:.18em;text-transform:uppercase}
-    textarea{width:100%;min-height:360px;resize:vertical;border:1px solid var(--line);border-radius:18px;background:rgba(0,0,0,.22);color:var(--text);outline:none;padding:24px;font:inherit;font-size:20px;line-height:1.55} textarea:focus{border-color:rgba(255,122,26,.55);box-shadow:0 0 0 4px rgba(255,122,26,.08)}
-    .actions{display:flex;gap:14px;margin-top:24px}button,.button{min-height:60px;border-radius:999px;padding:0 24px;border:1px solid var(--line);font-weight:850;letter-spacing:.14em;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center;justify-content:center;cursor:pointer}
-    .primary{flex:1;background:linear-gradient(135deg,var(--orange2),var(--orange));color:#170900;border-color:rgba(255,122,26,.8)}.secondary,.button{background:rgba(255,255,255,.035);color:var(--text)}
-    .card{border:1px solid var(--line);border-radius:var(--radius);padding:24px;background:rgba(10,13,18,.62);margin-bottom:18px}.card h2{margin:0 0 12px;font-size:24px;letter-spacing:-.04em}.card p{margin:0;color:var(--muted);line-height:1.55}
-    .result{display:none;margin-top:24px;border:1px solid rgba(143,240,177,.3);border-radius:20px;background:rgba(143,240,177,.07);padding:22px}.result.show{display:block}.ok{color:var(--green);font-weight:850;margin-bottom:14px}.field{border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.18);padding:14px;margin-top:10px;overflow-wrap:anywhere}.field small{display:block;color:var(--soft);font-size:11px;letter-spacing:.15em;text-transform:uppercase;margin-bottom:7px}.field b{font-size:14px}.msg{margin-top:14px;color:var(--green);font-size:14px;min-height:20px;font-weight:700}
-    @media(max-width:900px){.page{padding:22px}nav{display:none}main{grid-template-columns:1fr;margin-top:32px}.actions{flex-direction:column}button,.button{width:100%}textarea{min-height:280px;font-size:18px}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Create Signal — TVEVT</title>
+<link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
+
+<style>
+:root{
+  --bg:#09090b;
+  --panel:#141416;
+  --line:rgba(255,255,255,.12);
+  --text:#fff;
+  --muted:#a7a7ad;
+  --orange:#ff9b3d;
+  --green:#2cff9a;
+  --red:#ff5a5f;
+  --yellow:#ffe066;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top left, rgba(255,155,61,.18), transparent 34%),
+    radial-gradient(circle at bottom right, rgba(255,155,61,.08), transparent 30%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial, Helvetica, sans-serif;
+}
+.wrap{max-width:1180px;margin:0 auto;padding:28px 24px 70px}
+.header{
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:14px;border:1px solid var(--line);border-radius:28px;
+  background:rgba(20,20,22,.78);backdrop-filter:blur(14px);margin-bottom:28px
+}
+.brand{display:flex;align-items:center;gap:14px;color:white;text-decoration:none}
+.logoBox{
+  width:54px;height:54px;display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,155,61,.35);border-radius:18px;background:rgba(255,155,61,.08)
+}
+.logoBox img{width:30px;height:30px;display:block}
+.brandText strong{display:block;font-size:23px;letter-spacing:-.03em;line-height:1}
+.brandText span{display:block;margin-top:4px;color:var(--muted);font-size:13px}
+.nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.nav a{
+  color:#fff;text-decoration:none;padding:11px 14px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(255,255,255,.04);
+  font-size:14px;font-weight:800
+}
+.nav a.active{background:rgba(255,155,61,.18);border-color:rgba(255,155,61,.55);color:#ffbf7a}
+.nav a.primary{background:var(--orange);color:#000;border-color:transparent}
+.hero{
+  border:1px solid var(--line);border-radius:28px;padding:30px;
+  background:linear-gradient(135deg, rgba(255,155,61,.16), rgba(255,255,255,.035)),rgba(20,20,22,.88);
+  margin-bottom:22px
+}
+.kicker{
+  display:inline-flex;align-items:center;gap:8px;padding:9px 12px;
+  border:1px solid rgba(255,155,61,.32);border-radius:999px;
+  background:rgba(255,155,61,.08);font-size:13px;font-weight:800;margin-bottom:16px
+}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--orange)}
+h1{margin:0 0 12px;font-size:48px;letter-spacing:-.05em;line-height:1.03}
+p{margin:0;color:#d7d7dc;line-height:1.55}
+.layout{display:grid;grid-template-columns:1.35fr .65fr;gap:18px;align-items:start}
+.panel{border:1px solid var(--line);border-radius:24px;background:rgba(20,20,22,.88);padding:24px}
+label{
+  display:block;margin-bottom:12px;color:var(--muted);font-size:12px;
+  text-transform:uppercase;letter-spacing:.1em;font-weight:900
+}
+textarea{
+  width:100%;min-height:340px;resize:vertical;border:1px solid var(--line);
+  border-radius:18px;background:rgba(255,255,255,.04);color:#fff;
+  padding:22px;font:inherit;font-size:18px;line-height:1.55;outline:none
+}
+textarea:focus{border-color:rgba(255,155,61,.55);box-shadow:0 0 0 4px rgba(255,155,61,.08)}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
+.btn,button{
+  display:inline-flex;align-items:center;justify-content:center;padding:14px 18px;
+  border-radius:14px;background:var(--orange);color:#000;text-decoration:none;
+  font-weight:900;border:none;cursor:pointer;font-size:14px
+}
+.btn.secondary,button.secondary{background:rgba(255,255,255,.04);color:#fff;border:1px solid var(--line)}
+button:disabled{opacity:.55;cursor:not-allowed}
+.msg{margin-top:14px;min-height:22px;color:var(--green);font-weight:800}
+.result{
+  display:none;margin-top:22px;border:1px solid rgba(44,255,154,.32);
+  border-radius:22px;background:rgba(44,255,154,.07);padding:22px
+}
+.result.show{display:block}
+.result h2{margin:0 0 12px;font-size:24px}
+.field{
+  border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.18);
+  padding:13px;margin-top:10px;overflow-wrap:anywhere
+}
+.field small{
+  display:block;color:var(--muted);font-size:11px;text-transform:uppercase;
+  letter-spacing:.12em;font-weight:900;margin-bottom:7px
+}
+.side{display:grid;gap:14px}
+.sideCard{border:1px solid var(--line);border-radius:22px;background:rgba(20,20,22,.88);padding:20px}
+.sideCard h3{margin:0 0 8px;font-size:18px}
+.sideCard p{margin:0;color:var(--muted);line-height:1.5;font-size:14px}
+.denied{max-width:620px;margin:90px auto;text-align:center}
+footer{margin-top:36px;color:var(--muted);font-size:13px}
+@media(max-width:900px){
+  .header{align-items:flex-start;flex-direction:column}
+  .nav{justify-content:flex-start}
+  .layout{grid-template-columns:1fr}
+  h1{font-size:38px}
+}
+</style>
 </head>
+
 <body>
-<div class="page">
-<header>
-  <a class="brand" href="/"><img src="/assets/brand/tvevt-icon.svg" alt="TVEVT"><span><strong>TVEVT</strong><span>Governance Console</span></span></a>
-  <nav><a href="/record.html">Verify</a><a href="/proof.html">Proof</a></nav>
+<div class="wrap">
+
+<header class="header">
+  <a class="brand" id="brandLink" href="/console.html">
+    <div class="logoBox">
+      <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
+    </div>
+    <div class="brandText">
+      <strong>TVEVT</strong>
+      <span>Governance Console / Create Signal</span>
+    </div>
+  </a>
+
+  <nav class="nav">
+    <a id="navConsole" href="/console.html">Console</a>
+    <a id="navSignals" href="/signals.html">Signals</a>
+    <a id="navExecutionLog" href="/execution-log.html">Execution Log</a>
+    <a id="navDoctrineLog" href="/log.html">Doctrine Log</a>
+    <a class="active primary" id="navCreate" href="/seal.html">Create Signal</a>
+  </nav>
 </header>
-<main>
-  <section class="panel">
-    <form id="form">
-      <label class="label" for="text">Strategic Signal Content</label>
-      <textarea id="text" placeholder="Enter the exact statement you want to seal..." required></textarea>
-      <div class="actions">
-        <button class="primary" id="btn" type="submit">Seal Signal</button>
-        <button class="secondary" id="clear" type="button">Clear</button>
-      </div>
-      <div class="msg" id="msg"></div>
-    </form>
-    <div class="result" id="result">
-      <div class="ok">Signal sealed</div>
-      <div class="field"><small>Record ID</small><b id="rid">—</b></div>
-      <div class="field"><small>Timestamp</small><b id="ts">—</b></div>
-      <div class="field"><small>Hash</small><b id="hash">—</b></div>
-      <div class="field"><small>Verification Link</small><b id="link">—</b></div>
-      <div class="actions">
-        <a class="button" id="open" href="#">Open Verification</a>
-        <button class="secondary" id="copy" type="button">Copy Link</button>
+
+<div id="loading" class="hero">
+  <div class="kicker"><span class="dot"></span> Private signal creation</div>
+  <h1>Checking access…</h1>
+  <p>Please wait while TVEVT verifies your private console key.</p>
+</div>
+
+<div id="denied" class="panel denied" style="display:none">
+  <h1>Access required</h1>
+  <p>Your private console key was not found. Request access or open your private email link.</p>
+  <div class="actions" style="justify-content:center">
+    <a class="btn" href="/request-access.html">Request Access</a>
+  </div>
+</div>
+
+<div id="app" style="display:none">
+  <section class="hero">
+    <div class="kicker"><span class="dot"></span> Create → Save → Seal → Log</div>
+    <h1>Create Signal</h1>
+    <p>
+      Prepare a strategic statement and save it into your private TVEVT signal library.
+      This version stores records locally under your client key. The next backend layer will move it to KV.
+    </p>
+  </section>
+
+  <section class="layout">
+    <div class="panel">
+      <form id="form">
+        <label for="signalText">Strategic Signal Content</label>
+        <textarea id="signalText" placeholder="Enter the exact statement you want to seal..." required></textarea>
+
+        <div class="actions">
+          <button id="sealBtn" type="submit">Seal Signal</button>
+          <button id="clearBtn" class="secondary" type="button">Clear</button>
+        </div>
+
+        <div id="msg" class="msg"></div>
+      </form>
+
+      <div id="result" class="result">
+        <h2>Signal sealed</h2>
+        <div class="field"><small>Record ID</small><b id="recordId">—</b></div>
+        <div class="field"><small>Timestamp</small><b id="timestamp">—</b></div>
+        <div class="field"><small>Hash</small><b id="hash">—</b></div>
+        <div class="field"><small>Client Key</small><b id="resultKey">—</b></div>
+
+        <div class="actions">
+          <a id="openSignals" class="btn secondary" href="/signals.html">Open Signals</a>
+          <a id="openExecutionLog" class="btn" href="/execution-log.html">Open Execution Log</a>
+        </div>
       </div>
     </div>
-  </section>
-  <aside>
-    <div class="card"><h2>Seal</h2><p>Create a fixed record from a statement. The system returns a timestamp, hash, and verification link.</p></div>
-    <div class="card"><h2>Share</h2><p>Use the verification link anywhere: email, PDF, message, document, or post.</p></div>
-    <div class="card"><h2>Verify</h2><p>Anyone with the link can inspect the sealed record and its proof fields.</p></div>
-  </aside>
-</main>
-</div>
-<script>
-const form=document.getElementById("form"),text=document.getElementById("text"),btn=document.getElementById("btn"),msg=document.getElementById("msg");
-const result=document.getElementById("result"),rid=document.getElementById("rid"),ts=document.getElementById("ts"),hash=document.getElementById("hash"),link=document.getElementById("link"),openBtn=document.getElementById("open"),copy=document.getElementById("copy");
-let currentLink="";
 
-form.addEventListener("submit",async e=>{
-  e.preventDefault();
-  if(!text.value.trim()){msg.textContent="Enter a signal before sealing.";return}
-  btn.disabled=true;btn.textContent="Sealing...";msg.textContent="Creating verification artifact...";
+    <aside class="side">
+      <div class="sideCard">
+        <h3>Client Key</h3>
+        <p>Signals created here are attached to your current private access key.</p>
+        <div class="field"><b id="keyBox">—</b></div>
+      </div>
+
+      <div class="sideCard">
+        <h3>What happens now</h3>
+        <p>
+          A sealed record is saved to your browser under this client key and added to
+          the private Execution Log.
+        </p>
+      </div>
+
+      <div class="sideCard">
+        <h3>Next backend layer</h3>
+        <p>
+          After this local flow works, we connect storage to Cloudflare KV so records
+          persist across devices.
+        </p>
+      </div>
+    </aside>
+  </section>
+</div>
+
+<footer>
+  TVEVT — Infrastructure for Strategic Signal Control & Distribution
+</footer>
+
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+let key = params.get("key") || localStorage.getItem("tvevt_client_key");
+
+const loading = document.getElementById("loading");
+const denied = document.getElementById("denied");
+const app = document.getElementById("app");
+
+const form = document.getElementById("form");
+const signalText = document.getElementById("signalText");
+const sealBtn = document.getElementById("sealBtn");
+const clearBtn = document.getElementById("clearBtn");
+const msg = document.getElementById("msg");
+const result = document.getElementById("result");
+
+const recordIdEl = document.getElementById("recordId");
+const timestampEl = document.getElementById("timestamp");
+const hashEl = document.getElementById("hash");
+const resultKeyEl = document.getElementById("resultKey");
+const keyBox = document.getElementById("keyBox");
+
+const brandLink = document.getElementById("brandLink");
+const navConsole = document.getElementById("navConsole");
+const navSignals = document.getElementById("navSignals");
+const navExecutionLog = document.getElementById("navExecutionLog");
+const navCreate = document.getElementById("navCreate");
+const openSignals = document.getElementById("openSignals");
+const openExecutionLog = document.getElementById("openExecutionLog");
+
+function withKey(path){
+  if(!key) return path;
+  return path + "?key=" + encodeURIComponent(key);
+}
+
+function makeId(prefix){
+  return prefix + "-" + Math.random().toString(36).substring(2,10).toUpperCase();
+}
+
+async function sha256(text){
+  const encoded = new TextEncoder().encode(text);
+  const buffer = await crypto.subtle.digest("SHA-256", encoded);
+  return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2,"0")).join("");
+}
+
+function getSignals(){
+  return JSON.parse(localStorage.getItem("tvevt_signals_" + key) || "[]");
+}
+
+function saveSignals(signals){
+  localStorage.setItem("tvevt_signals_" + key, JSON.stringify(signals));
+}
+
+function getLogs(){
+  return JSON.parse(localStorage.getItem("tvevt_logs_" + key) || "[]");
+}
+
+function saveLogs(logs){
+  localStorage.setItem("tvevt_logs_" + key, JSON.stringify(logs));
+}
+
+async function init(){
+  if(!key){
+    loading.style.display = "none";
+    denied.style.display = "block";
+    return;
+  }
+
   try{
-    const r=await fetch("/publish",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({text:text.value.trim()})});
-    const d=await r.json(); if(!r.ok) throw new Error(d.error||"Unable to seal signal.");
-    currentLink=d.verification_url||(location.origin+"/record.html?id="+encodeURIComponent(d.id));
-    rid.textContent=d.id;ts.textContent=d.timestamp;hash.textContent=d.hash;link.textContent=currentLink;openBtn.href=currentLink;result.classList.add("show");msg.textContent="Signal sealed successfully.";
-    copy.textContent="Copy Link";
-  }catch(err){msg.textContent=err.message}
-  finally{btn.disabled=false;btn.textContent="Seal Signal"}
+    const res = await fetch("/api/leads?access=" + encodeURIComponent(key));
+    const data = await res.json();
+
+    if(!data || !data.valid){
+      loading.style.display = "none";
+      denied.style.display = "block";
+      return;
+    }
+
+    key = data.clientKey || key;
+    localStorage.setItem("tvevt_client_key", key);
+
+    keyBox.textContent = key;
+
+    brandLink.href = withKey("/console.html");
+    navConsole.href = withKey("/console.html");
+    navSignals.href = withKey("/signals.html");
+    navExecutionLog.href = withKey("/execution-log.html");
+    navCreate.href = withKey("/seal.html");
+    openSignals.href = withKey("/signals.html");
+    openExecutionLog.href = withKey("/execution-log.html");
+
+    loading.style.display = "none";
+    app.style.display = "block";
+  }catch(e){
+    loading.style.display = "none";
+    denied.style.display = "block";
+  }
+}
+
+form.addEventListener("submit", async function(e){
+  e.preventDefault();
+
+  const text = signalText.value.trim();
+  if(!text){
+    msg.textContent = "Enter a signal before sealing.";
+    return;
+  }
+
+  sealBtn.disabled = true;
+  sealBtn.textContent = "Sealing...";
+  msg.textContent = "Creating signal record...";
+
+  try{
+    const timestamp = new Date().toISOString();
+    const id = makeId("SIG");
+    const hash = await sha256(JSON.stringify({ id, key, text, timestamp }));
+
+    const signal = {
+      id,
+      clientKey: key,
+      text,
+      status: "sealed",
+      hash,
+      createdAt: timestamp
+    };
+
+    const signals = getSignals();
+    signals.unshift(signal);
+    saveSignals(signals);
+
+    const logs = getLogs();
+    logs.unshift({
+      id: makeId("LOG"),
+      signalId: id,
+      time: timestamp,
+      channel: "TVEVT",
+      text: "Signal sealed and added to private signal library.",
+      status: "sent",
+      hash
+    });
+    saveLogs(logs);
+
+    recordIdEl.textContent = id;
+    timestampEl.textContent = timestamp;
+    hashEl.textContent = hash;
+    resultKeyEl.textContent = key;
+
+    result.classList.add("show");
+    msg.textContent = "Signal sealed ✓ Saved to Signals and Execution Log.";
+
+  }catch(err){
+    msg.textContent = "Unable to seal signal.";
+  }finally{
+    sealBtn.disabled = false;
+    sealBtn.textContent = "Seal Signal";
+  }
 });
 
-document.getElementById("clear").onclick=()=>{text.value="";msg.textContent="";result.classList.remove("show");copy.textContent="Copy Link"};
-
-copy.onclick=async()=>{
-  if(!currentLink)return;
-  await navigator.clipboard.writeText(currentLink);
-  msg.textContent="Copied ✓ Verification link copied.";
-  const original="Copy Link";
-  copy.textContent="Copied ✓";
-  setTimeout(()=>{copy.textContent=original},1600);
+clearBtn.onclick = function(){
+  signalText.value = "";
+  msg.textContent = "";
+  result.classList.remove("show");
 };
+
+init();
 </script>
 </body>
 </html>
