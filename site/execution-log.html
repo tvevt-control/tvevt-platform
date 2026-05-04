@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TVEVT Execution Log</title>
+<title>Execution Log — TVEVT</title>
 <link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
 
 <style>
@@ -11,18 +11,18 @@
   --bg:#09090b;
   --panel:#141416;
   --line:rgba(255,255,255,.12);
-  --text:#fff;
+  --text:#ffffff;
   --muted:#a7a7ad;
   --orange:#ff9b3d;
   --green:#2cff9a;
-  --red:#ff5a5f;
 }
-
-*{box-sizing:border-box}
 
 body{
   margin:0;
-  background:var(--bg);
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top left, rgba(255,155,61,.16), transparent 32%),
+    var(--bg);
   color:var(--text);
   font-family:Arial, Helvetica, sans-serif;
 }
@@ -30,193 +30,141 @@ body{
 .wrap{
   max-width:1100px;
   margin:0 auto;
-  padding:30px 20px 80px;
-}
-
-.header{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  margin-bottom:30px;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-  text-decoration:none;
-  color:white;
-}
-
-.brand img{
-  height:28px;
-}
-
-.nav a{
-  margin-left:10px;
-  text-decoration:none;
-  color:white;
-  border:1px solid var(--line);
-  padding:10px 14px;
-  border-radius:999px;
-  font-size:13px;
-}
-
-.nav a.primary{
-  background:var(--orange);
-  color:black;
-  border:none;
-}
-
-.card{
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:24px;
-  background:var(--panel);
-  margin-bottom:20px;
+  padding:40px 24px 80px;
 }
 
 h1{
   margin:0 0 10px;
-  font-size:36px;
+  font-size:40px;
 }
 
 p{
-  margin:0;
   color:var(--muted);
+  line-height:1.6;
 }
 
-.log{
+.hero{
   border:1px solid var(--line);
-  border-radius:20px;
-  overflow:hidden;
+  border-radius:24px;
+  background:rgba(20,20,22,.88);
+  padding:24px;
 }
 
-.row{
-  display:grid;
-  grid-template-columns:140px 1fr 120px;
-  padding:14px 16px;
-  border-bottom:1px solid var(--line);
-  font-size:14px;
+.list{
+  margin-top:30px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
+
+.item{
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  background:rgba(20,20,22,.85);
+}
+
+.item small{
+  display:block;
   color:var(--muted);
+  margin-bottom:6px;
 }
 
-.row:last-child{
-  border-bottom:none;
+.item strong{
+  display:block;
+  line-height:1.4;
 }
 
-.row strong{
-  color:white;
+.meta{
+  margin-top:10px;
+  color:var(--muted);
+  font-size:13px;
+  word-break:break-all;
 }
 
-.badge{
-  font-size:12px;
-  padding:6px 10px;
+.status{
+  display:inline-block;
+  margin-top:10px;
+  padding:7px 10px;
   border-radius:999px;
+  color:var(--green);
+  border:1px solid rgba(44,255,154,.32);
+  background:rgba(44,255,154,.08);
+  font-size:12px;
+  font-weight:900;
 }
-
-.sent{background:rgba(44,255,154,.1); color:var(--green)}
-.pending{background:rgba(255,155,61,.1); color:var(--orange)}
-.failed{background:rgba(255,90,95,.1); color:var(--red)}
 
 .empty{
-  text-align:center;
-  padding:40px;
+  margin-top:30px;
+  padding:24px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  background:rgba(20,20,22,.7);
   color:var(--muted);
 }
 </style>
 </head>
 
 <body>
+
+<script src="/assets/private-nav.js?v=2026-05-04"></script>
+
 <div class="wrap">
 
-<div class="header">
-  <a id="brandLink" class="brand" href="/console.html">
-    <img src="/assets/brand/tvevt-icon.svg">
-    <strong>Execution Log</strong>
-  </a>
-
-  <div class="nav">
-    <a id="backConsole" href="/console.html">Console</a>
-    <a id="toSignals" href="/signals.html">Signals</a>
-    <a class="primary" id="toCreate" href="/seal.html">Create</a>
-  </div>
-</div>
-
-<div id="loading" class="card">
-  <h1>Loading log…</h1>
-  <p>Connecting to your execution layer.</p>
-</div>
-
-<div id="denied" class="card" style="display:none">
-  <h1>Access denied</h1>
-  <p>Execution log requires valid private key.</p>
-</div>
-
-<div id="logView" style="display:none">
-
-  <div class="card">
+  <section class="hero">
     <h1>Execution Log</h1>
-    <p>All signal execution records will appear here. Immutable by design.</p>
+    <p>
+      Private execution records connected to your TVEVT access key.
+      Every sealed signal creates an append-style local execution entry.
+    </p>
+  </section>
+
+  <div id="list" class="list"></div>
+
+  <div id="empty" class="empty" style="display:none">
+    No execution records yet.
   </div>
-
-  <div id="log" class="log"></div>
-
-</div>
 
 </div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-let key = params.get("key") || localStorage.getItem("tvevt_client_key");
+const key = localStorage.getItem("tvevt_client_key") || "default";
+const storageKey = "tvevt_logs_" + key;
 
-const loading = document.getElementById("loading");
-const denied = document.getElementById("denied");
-const logView = document.getElementById("logView");
-const logEl = document.getElementById("log");
+const list = document.getElementById("list");
+const empty = document.getElementById("empty");
 
-function withKey(path){
-  return key ? path + "?key=" + key : path;
+function escapeHtml(str){
+  return String(str || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
-function renderLog(){
-  let logs = JSON.parse(localStorage.getItem("tvevt_logs_"+key) || "[]");
+const logs = JSON.parse(localStorage.getItem(storageKey) || "[]");
 
-  if(logs.length === 0){
-    logEl.innerHTML = '<div class="empty">No execution records yet.</div>';
-    return;
-  }
+if (!logs.length) {
+  empty.style.display = "block";
+} else {
+  logs.slice().reverse().forEach(log => {
+    const div = document.createElement("div");
+    div.className = "item";
 
-  logEl.innerHTML = logs.map(l => `
-    <div class="row">
-      <strong>${new Date(l.time).toLocaleString()}</strong>
-      <span>${l.text}</span>
-      <span class="badge ${l.status}">${l.status}</span>
-    </div>
-  `).join('');
+    div.innerHTML = `
+      <small>${log.time ? new Date(log.time).toLocaleString() : "No timestamp"}</small>
+      <strong>${escapeHtml(log.text || "Execution record")}</strong>
+      <div class="meta">Log ID: ${escapeHtml(log.id || "—")}</div>
+      <div class="meta">Signal ID: ${escapeHtml(log.signalId || "—")}</div>
+      <div class="meta">Hash: ${escapeHtml(log.hash || "—")}</div>
+      <span class="status">${escapeHtml(log.status || "recorded")}</span>
+    `;
+
+    list.appendChild(div);
+  });
 }
-
-function init(){
-  if(!key){
-    loading.style.display="none";
-    denied.style.display="block";
-    return;
-  }
-
-  localStorage.setItem("tvevt_client_key", key);
-
-  document.getElementById("brandLink").href = withKey("/console.html");
-  document.getElementById("backConsole").href = withKey("/console.html");
-  document.getElementById("toSignals").href = withKey("/signals.html");
-  document.getElementById("toCreate").href = withKey("/seal.html");
-
-  renderLog();
-
-  loading.style.display="none";
-  logView.style.display="block";
-}
-
-init();
 </script>
+
 </body>
 </html>
