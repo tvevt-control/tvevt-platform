@@ -25,7 +25,7 @@ async function sendEmail(env, lead) {
       "Content-Type": "application/json"
     },
     body: JSON.stringify({
-      from: "onboarding@resend.dev",
+      from: "TVEVT Access <access@mail.tvevt.com>",
       to: [lead.email],
       bcc: ["max@fincib.com"],
       subject: "Your TVEVT access request was received",
