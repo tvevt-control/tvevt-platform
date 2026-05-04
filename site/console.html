@@ -5,223 +5,130 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>TVEVT Console</title>
 <link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
+
 <style>
-:root{--bg:#09090b;--panel:#141416;--line:rgba(255,255,255,.12);--text:#fff;--muted:#a7a7ad;--orange:#ff9b3d;--green:#2cff9a}
-*{box-sizing:border-box}
-body{margin:0;min-height:100vh;background:radial-gradient(circle at top left,rgba(255,155,61,.18),transparent 34%),radial-gradient(circle at bottom right,rgba(255,155,61,.08),transparent 30%),var(--bg);color:var(--text);font-family:Arial,Helvetica,sans-serif}
-.wrap{max-width:1180px;margin:0 auto;padding:28px 24px 70px}
-.header{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px;border:1px solid var(--line);border-radius:28px;background:rgba(20,20,22,.78);backdrop-filter:blur(14px);margin-bottom:28px}
-.brand{display:flex;align-items:center;gap:14px;color:white;text-decoration:none}
-.logoBox{width:54px;height:54px;display:flex;align-items:center;justify-content:center;border:1px solid rgba(255,155,61,.35);border-radius:18px;background:rgba(255,155,61,.08)}
-.logoBox img{width:30px;height:30px;display:block}
-.brandText strong{display:block;font-size:23px;letter-spacing:-.03em;line-height:1}
-.brandText span{display:block;margin-top:4px;color:var(--muted);font-size:13px}
-.nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-.nav a{color:#fff;text-decoration:none;padding:11px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:14px;font-weight:800}
-.nav a.active{background:rgba(255,155,61,.18);border-color:rgba(255,155,61,.55);color:#ffbf7a}
-.nav a.primary{background:var(--orange);color:#000;border-color:transparent}
-.hero{display:grid;grid-template-columns:1.25fr .75fr;gap:22px;margin-bottom:22px}
-.card{border:1px solid var(--line);border-radius:28px;padding:30px;background:rgba(20,20,22,.88)}
-.kicker{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border:1px solid rgba(255,155,61,.32);border-radius:999px;background:rgba(255,155,61,.08);font-size:13px;font-weight:800;margin-bottom:16px}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--orange)}
-h1{margin:0 0 12px;font-size:48px;letter-spacing:-.05em;line-height:1.03}
-p{margin:0;color:#d7d7dc;line-height:1.55}
-.accessBox{display:grid;gap:14px}
-.label{color:var(--muted);font-size:12px;text-transform:uppercase;letter-spacing:.1em;font-weight:900}
-.value{margin-top:7px;font-size:15px;word-break:break-all;color:#fff;padding:13px 14px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.04)}
-.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
-.tile{border:1px solid var(--line);border-radius:24px;background:rgba(20,20,22,.88);padding:24px;min-height:190px}
-.tile h2{margin:0 0 10px;font-size:23px;letter-spacing:-.02em}
-.tile p{color:var(--muted);font-size:15px;margin-bottom:20px}
-.btn{display:inline-flex;align-items:center;justify-content:center;padding:13px 16px;border-radius:14px;background:var(--orange);color:#000;text-decoration:none;font-weight:900;border:none}
-.btn.secondary{background:rgba(255,255,255,.04);color:white;border:1px solid var(--line)}
-.status{margin-top:24px;border:1px solid var(--line);border-radius:24px;background:rgba(20,20,22,.88);overflow:hidden}
-.row{display:grid;grid-template-columns:170px 1fr 150px;gap:14px;padding:16px 20px;border-bottom:1px solid var(--line);color:var(--muted);font-size:14px}
-.row:last-child{border-bottom:none}
-.row strong{color:white}
-.badge{padding:8px 11px;border-radius:999px;font-size:12px;font-weight:900;border:1px solid rgba(44,255,154,.32);color:var(--green);background:rgba(44,255,154,.08)}
-.denied{max-width:620px;margin:90px auto;text-align:center}
-footer{margin-top:36px;color:var(--muted);font-size:13px}
-@media(max-width:900px){.header{align-items:flex-start;flex-direction:column}.nav{justify-content:flex-start}.hero{grid-template-columns:1fr}.grid{grid-template-columns:1fr}h1{font-size:38px}.row{grid-template-columns:1fr}}
+:root{
+  --bg:#09090b;
+  --panel:#141416;
+  --line:rgba(255,255,255,.12);
+  --text:#ffffff;
+  --muted:#a7a7ad;
+  --orange:#ff9b3d;
+}
+
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top left, rgba(255,155,61,.16), transparent 32%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:40px 24px 80px;
+}
+
+.hero{
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:34px;
+  background:rgba(20,20,22,.9);
+}
+
+h1{
+  margin:0 0 12px;
+  font-size:42px;
+}
+
+p{
+  color:var(--muted);
+  line-height:1.6;
+}
+
+.grid{
+  margin-top:24px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+
+.card{
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:20px;
+  background:rgba(20,20,22,.85);
+}
+
+.card h2{
+  margin:0 0 8px;
+  font-size:20px;
+}
+
+.card p{
+  margin:0 0 14px;
+}
+
+.btn{
+  display:inline-block;
+  padding:12px 14px;
+  border-radius:12px;
+  background:var(--orange);
+  color:#000;
+  text-decoration:none;
+  font-weight:900;
+}
+
+.btn.secondary{
+  background:transparent;
+  color:#fff;
+  border:1px solid var(--line);
+}
+
+@media(max-width:900px){
+  .grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 
 <body>
+
+<script src="/assets/private-nav.js?v=2026-05-04"></script>
+
 <div class="wrap">
 
-<header class="header">
-  <a class="brand" id="brandLink" href="/console.html">
-    <div class="logoBox">
-      <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
-    </div>
-    <div class="brandText">
-      <strong>TVEVT</strong>
-      <span>Governance Console</span>
-    </div>
-  </a>
-
-  <nav class="nav">
-    <a class="active" id="navConsole" href="/console.html">Console</a>
-    <a id="navSignals" href="/signals.html">Signals</a>
-    <a id="navExecutionLog" href="/execution-log.html">Execution Log</a>
-    <a class="primary" id="navCreate" href="/seal.html">Create Signal</a>
-  </nav>
-</header>
-
-<div id="loading" class="card">
-  <div class="kicker"><span class="dot"></span> Private console</div>
-  <h1>Checking access…</h1>
-  <p>Please wait while TVEVT verifies your private console key.</p>
-</div>
-
-<div id="denied" class="card denied" style="display:none">
-  <h1>Access key not valid</h1>
-  <p>This console link is missing, expired, or not recognized.</p>
-  <div style="margin-top:22px">
-    <a class="btn" href="/request-access.html">Request Access</a>
+  <div class="hero">
+    <h1>Signal Control</h1>
+    <p>
+      Create verified signals, access your private signal library,
+      and manage execution records from one place.
+    </p>
   </div>
-</div>
 
-<div id="console" style="display:none">
-  <section class="hero">
+  <div class="grid">
     <div class="card">
-      <div class="kicker"><span class="dot"></span> Signal control • Library • Execution records</div>
-      <h1>Welcome to your TVEVT Console</h1>
-      <p>
-        This is your private control layer for strategic signal creation,
-        verification, execution and future immutable records.
-      </p>
-    </div>
-
-    <div class="card accessBox">
-      <div>
-        <div class="label">Client key</div>
-        <div id="clientKey" class="value">—</div>
-      </div>
-      <div>
-        <div class="label">Access holder</div>
-        <div id="holder" class="value">—</div>
-      </div>
-      <div>
-        <div class="label">Email</div>
-        <div id="email" class="value">—</div>
-      </div>
-    </div>
-  </section>
-
-  <section class="grid">
-    <div class="tile">
       <h2>Create Signal</h2>
-      <p>Prepare a new strategic statement or organizational signal for future sealing.</p>
-      <a id="createSignal" class="btn" href="/seal.html">Create Signal</a>
+      <p>Prepare a new strategic statement.</p>
+      <a class="btn" href="/seal.html">Create</a>
     </div>
 
-    <div class="tile">
+    <div class="card">
       <h2>My Signals</h2>
-      <p>View your saved signals, drafts and future verified records.</p>
-      <a id="openSignals" class="btn secondary" href="/signals.html">Open Signals</a>
+      <p>Your private signal library.</p>
+      <a class="btn secondary" href="/signals.html">Open</a>
     </div>
 
-    <div class="tile">
+    <div class="card">
       <h2>Execution Log</h2>
-      <p>Open the private execution record layer connected to this access key.</p>
-      <a id="openExecutionLog" class="btn secondary" href="/execution-log.html">View Execution Log</a>
+      <p>Immutable execution records.</p>
+      <a class="btn secondary" href="/execution-log.html">View</a>
     </div>
-  </section>
-
-  <section class="status">
-    <div class="row">
-      <strong>Status</strong>
-      <span>Private access active</span>
-      <span class="badge">Verified</span>
-    </div>
-    <div class="row">
-      <strong>Console</strong>
-      <span>Client access link recognized</span>
-      <span>Ready</span>
-    </div>
-    <div class="row">
-      <strong>Private Flow</strong>
-      <span>Create Signal → Signal Library → Execution Log.</span>
-      <span>Connected</span>
-    </div>
-  </section>
-</div>
-
-<footer>
-  TVEVT — Infrastructure for Strategic Signal Control & Distribution
-</footer>
+  </div>
 
 </div>
 
-<script>
-const params = new URLSearchParams(window.location.search);
-let key = params.get("key") || localStorage.getItem("tvevt_client_key");
-
-const loading = document.getElementById("loading");
-const denied = document.getElementById("denied");
-const consoleView = document.getElementById("console");
-
-const clientKeyEl = document.getElementById("clientKey");
-const holderEl = document.getElementById("holder");
-const emailEl = document.getElementById("email");
-
-const brandLink = document.getElementById("brandLink");
-const navConsole = document.getElementById("navConsole");
-const navSignals = document.getElementById("navSignals");
-const navExecutionLog = document.getElementById("navExecutionLog");
-const navCreate = document.getElementById("navCreate");
-const createSignal = document.getElementById("createSignal");
-const openSignals = document.getElementById("openSignals");
-const openExecutionLog = document.getElementById("openExecutionLog");
-
-function withKey(path){
-  if(!key) return path;
-  return path + "?key=" + encodeURIComponent(key);
-}
-
-async function initConsole(){
-  if(!key){
-    loading.style.display="none";
-    denied.style.display="block";
-    return;
-  }
-
-  try{
-    const res = await fetch("/api/leads?access=" + encodeURIComponent(key));
-    const data = await res.json();
-
-    if(!data || !data.valid){
-      loading.style.display="none";
-      denied.style.display="block";
-      return;
-    }
-
-    key = data.clientKey || key;
-    localStorage.setItem("tvevt_client_key", key);
-
-    clientKeyEl.textContent = key;
-    holderEl.textContent = data.name || "Private access holder";
-    emailEl.textContent = data.email || "—";
-
-    brandLink.href = withKey("/console.html");
-    navConsole.href = withKey("/console.html");
-    navSignals.href = withKey("/signals.html");
-    navExecutionLog.href = withKey("/execution-log.html");
-    navCreate.href = withKey("/seal.html");
-    createSignal.href = withKey("/seal.html");
-    openSignals.href = withKey("/signals.html");
-    openExecutionLog.href = withKey("/execution-log.html");
-
-    loading.style.display="none";
-    consoleView.style.display="block";
-  }catch(err){
-    loading.style.display="none";
-    denied.style.display="block";
-  }
-}
-
-initConsole();
-</script>
 </body>
 </html>
