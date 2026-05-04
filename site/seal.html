@@ -11,256 +11,145 @@
   --bg:#09090b;
   --panel:#141416;
   --line:rgba(255,255,255,.12);
-  --text:#fff;
+  --text:#ffffff;
   --muted:#a7a7ad;
   --orange:#ff9b3d;
   --green:#2cff9a;
-  --red:#ff5a5f;
-  --yellow:#ffe066;
 }
-*{box-sizing:border-box}
 body{
   margin:0;
   min-height:100vh;
   background:
-    radial-gradient(circle at top left, rgba(255,155,61,.18), transparent 34%),
-    radial-gradient(circle at bottom right, rgba(255,155,61,.08), transparent 30%),
+    radial-gradient(circle at top left, rgba(255,155,61,.16), transparent 32%),
     var(--bg);
   color:var(--text);
   font-family:Arial, Helvetica, sans-serif;
 }
-.wrap{max-width:1180px;margin:0 auto;padding:28px 24px 70px}
-.header{
-  display:flex;align-items:center;justify-content:space-between;gap:18px;
-  padding:14px;border:1px solid var(--line);border-radius:28px;
-  background:rgba(20,20,22,.78);backdrop-filter:blur(14px);margin-bottom:28px
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:40px 24px 80px;
 }
-.brand{display:flex;align-items:center;gap:14px;color:white;text-decoration:none}
-.logoBox{
-  width:54px;height:54px;display:flex;align-items:center;justify-content:center;
-  border:1px solid rgba(255,155,61,.35);border-radius:18px;background:rgba(255,155,61,.08)
+.hero,.panel,.result{
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:rgba(20,20,22,.88);
+  padding:24px;
 }
-.logoBox img{width:30px;height:30px;display:block}
-.brandText strong{display:block;font-size:23px;letter-spacing:-.03em;line-height:1}
-.brandText span{display:block;margin-top:4px;color:var(--muted);font-size:13px}
-.nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
-.nav a{
-  color:#fff;text-decoration:none;padding:11px 14px;border-radius:999px;
-  border:1px solid var(--line);background:rgba(255,255,255,.04);
-  font-size:14px;font-weight:800
-}
-.nav a.active{background:rgba(255,155,61,.18);border-color:rgba(255,155,61,.55);color:#ffbf7a}
-.nav a.primary{background:var(--orange);color:#000;border-color:transparent}
-.hero{
-  border:1px solid var(--line);border-radius:28px;padding:30px;
-  background:linear-gradient(135deg, rgba(255,155,61,.16), rgba(255,255,255,.035)),rgba(20,20,22,.88);
-  margin-bottom:22px
-}
-.kicker{
-  display:inline-flex;align-items:center;gap:8px;padding:9px 12px;
-  border:1px solid rgba(255,155,61,.32);border-radius:999px;
-  background:rgba(255,155,61,.08);font-size:13px;font-weight:800;margin-bottom:16px
-}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--orange)}
-h1{margin:0 0 12px;font-size:48px;letter-spacing:-.05em;line-height:1.03}
-p{margin:0;color:#d7d7dc;line-height:1.55}
-.layout{display:grid;grid-template-columns:1.35fr .65fr;gap:18px;align-items:start}
-.panel{border:1px solid var(--line);border-radius:24px;background:rgba(20,20,22,.88);padding:24px}
-label{
-  display:block;margin-bottom:12px;color:var(--muted);font-size:12px;
-  text-transform:uppercase;letter-spacing:.1em;font-weight:900
-}
+h1{margin:0 0 12px;font-size:40px}
+p{color:var(--muted);line-height:1.6}
 textarea{
-  width:100%;min-height:340px;resize:vertical;border:1px solid var(--line);
-  border-radius:18px;background:rgba(255,255,255,.04);color:#fff;
-  padding:22px;font:inherit;font-size:18px;line-height:1.55;outline:none
+  width:100%;
+  min-height:300px;
+  margin-top:20px;
+  padding:18px;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  font:inherit;
+  font-size:18px;
 }
-textarea:focus{border-color:rgba(255,155,61,.55);box-shadow:0 0 0 4px rgba(255,155,61,.08)}
-.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:18px}
-.btn,button{
-  display:inline-flex;align-items:center;justify-content:center;padding:14px 18px;
-  border-radius:14px;background:var(--orange);color:#000;text-decoration:none;
-  font-weight:900;border:none;cursor:pointer;font-size:14px
+.actions{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+button,.btn{
+  padding:13px 16px;
+  border-radius:14px;
+  border:0;
+  background:var(--orange);
+  color:#000;
+  font-weight:900;
+  cursor:pointer;
+  text-decoration:none;
 }
-.btn.secondary,button.secondary{background:rgba(255,255,255,.04);color:#fff;border:1px solid var(--line)}
-button:disabled{opacity:.55;cursor:not-allowed}
-.msg{margin-top:14px;min-height:22px;color:var(--green);font-weight:800}
+.secondary{
+  background:transparent;
+  color:#fff;
+  border:1px solid var(--line);
+}
 .result{
-  display:none;margin-top:22px;border:1px solid rgba(44,255,154,.32);
-  border-radius:22px;background:rgba(44,255,154,.07);padding:22px
+  display:none;
+  margin-top:20px;
+  border-color:rgba(44,255,154,.35);
 }
 .result.show{display:block}
-.result h2{margin:0 0 12px;font-size:24px}
 .field{
-  border:1px solid var(--line);border-radius:14px;background:rgba(0,0,0,.18);
-  padding:13px;margin-top:10px;overflow-wrap:anywhere
+  margin-top:10px;
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:12px;
+  background:rgba(0,0,0,.18);
+  word-break:break-all;
 }
-.field small{
-  display:block;color:var(--muted);font-size:11px;text-transform:uppercase;
-  letter-spacing:.12em;font-weight:900;margin-bottom:7px
-}
-.side{display:grid;gap:14px}
-.sideCard{border:1px solid var(--line);border-radius:22px;background:rgba(20,20,22,.88);padding:20px}
-.sideCard h3{margin:0 0 8px;font-size:18px}
-.sideCard p{margin:0;color:var(--muted);line-height:1.5;font-size:14px}
-.denied{max-width:620px;margin:90px auto;text-align:center}
-footer{margin-top:36px;color:var(--muted);font-size:13px}
-@media(max-width:900px){
-  .header{align-items:flex-start;flex-direction:column}
-  .nav{justify-content:flex-start}
-  .layout{grid-template-columns:1fr}
-  h1{font-size:38px}
-}
+small{display:block;color:var(--muted);margin-bottom:5px}
+.msg{margin-top:12px;color:var(--green);font-weight:800}
 </style>
 </head>
 
 <body>
+
+<script src="/assets/private-nav.js?v=2026-05-04"></script>
+
 <div class="wrap">
 
-<header class="header">
-  <a class="brand" id="brandLink" href="/console.html">
-    <div class="logoBox">
-      <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
-    </div>
-    <div class="brandText">
-      <strong>TVEVT</strong>
-      <span>Governance Console / Create Signal</span>
-    </div>
-  </a>
-
-  <nav class="nav">
-    <a id="navConsole" href="/console.html">Console</a>
-    <a id="navSignals" href="/signals.html">Signals</a>
-    <a id="navExecutionLog" href="/execution-log.html">Execution Log</a>
-    <a id="navDoctrineLog" href="/log.html">Doctrine Log</a>
-    <a class="active primary" id="navCreate" href="/seal.html">Create Signal</a>
-  </nav>
-</header>
-
-<div id="loading" class="hero">
-  <div class="kicker"><span class="dot"></span> Private signal creation</div>
-  <h1>Checking access…</h1>
-  <p>Please wait while TVEVT verifies your private console key.</p>
-</div>
-
-<div id="denied" class="panel denied" style="display:none">
-  <h1>Access required</h1>
-  <p>Your private console key was not found. Request access or open your private email link.</p>
-  <div class="actions" style="justify-content:center">
-    <a class="btn" href="/request-access.html">Request Access</a>
-  </div>
-</div>
-
-<div id="app" style="display:none">
   <section class="hero">
-    <div class="kicker"><span class="dot"></span> Create → Save → Seal → Log</div>
     <h1>Create Signal</h1>
-    <p>
-      Prepare a strategic statement and save it into your private TVEVT signal library.
-      This version stores records locally under your client key. The next backend layer will move it to KV.
-    </p>
+    <p>Create and seal a private TVEVT signal. It will be saved to your Signals library and Execution Log.</p>
   </section>
 
-  <section class="layout">
-    <div class="panel">
-      <form id="form">
-        <label for="signalText">Strategic Signal Content</label>
-        <textarea id="signalText" placeholder="Enter the exact statement you want to seal..." required></textarea>
+  <section class="panel" style="margin-top:20px">
+    <form id="form">
+      <textarea id="text" placeholder="Enter the exact statement you want to seal..." required></textarea>
 
-        <div class="actions">
-          <button id="sealBtn" type="submit">Seal Signal</button>
-          <button id="clearBtn" class="secondary" type="button">Clear</button>
-        </div>
+      <div class="actions">
+        <button id="sealBtn" type="submit">Seal Signal</button>
+        <button id="clearBtn" class="secondary" type="button">Clear</button>
+      </div>
 
-        <div id="msg" class="msg"></div>
-      </form>
+      <div id="msg" class="msg"></div>
+    </form>
 
-      <div id="result" class="result">
-        <h2>Signal sealed</h2>
-        <div class="field"><small>Record ID</small><b id="recordId">—</b></div>
-        <div class="field"><small>Timestamp</small><b id="timestamp">—</b></div>
-        <div class="field"><small>Hash</small><b id="hash">—</b></div>
-        <div class="field"><small>Client Key</small><b id="resultKey">—</b></div>
+    <div id="result" class="result">
+      <h2>Signal sealed</h2>
+      <div class="field"><small>Record ID</small><b id="recordId">—</b></div>
+      <div class="field"><small>Timestamp</small><b id="timestamp">—</b></div>
+      <div class="field"><small>Hash</small><b id="hash">—</b></div>
 
-        <div class="actions">
-          <a id="openSignals" class="btn secondary" href="/signals.html">Open Signals</a>
-          <a id="openExecutionLog" class="btn" href="/execution-log.html">Open Execution Log</a>
-        </div>
+      <div class="actions">
+        <a id="openSignals" class="btn secondary" href="/signals.html">Open Signals</a>
+        <a id="openLog" class="btn" href="/execution-log.html">Open Execution Log</a>
       </div>
     </div>
-
-    <aside class="side">
-      <div class="sideCard">
-        <h3>Client Key</h3>
-        <p>Signals created here are attached to your current private access key.</p>
-        <div class="field"><b id="keyBox">—</b></div>
-      </div>
-
-      <div class="sideCard">
-        <h3>What happens now</h3>
-        <p>
-          A sealed record is saved to your browser under this client key and added to
-          the private Execution Log.
-        </p>
-      </div>
-
-      <div class="sideCard">
-        <h3>Next backend layer</h3>
-        <p>
-          After this local flow works, we connect storage to Cloudflare KV so records
-          persist across devices.
-        </p>
-      </div>
-    </aside>
   </section>
-</div>
-
-<footer>
-  TVEVT — Infrastructure for Strategic Signal Control & Distribution
-</footer>
 
 </div>
 
 <script>
 const params = new URLSearchParams(window.location.search);
-let key = params.get("key") || localStorage.getItem("tvevt_client_key");
-
-const loading = document.getElementById("loading");
-const denied = document.getElementById("denied");
-const app = document.getElementById("app");
+let key = params.get("key") || localStorage.getItem("tvevt_client_key") || "";
 
 const form = document.getElementById("form");
-const signalText = document.getElementById("signalText");
+const text = document.getElementById("text");
 const sealBtn = document.getElementById("sealBtn");
 const clearBtn = document.getElementById("clearBtn");
 const msg = document.getElementById("msg");
 const result = document.getElementById("result");
 
-const recordIdEl = document.getElementById("recordId");
-const timestampEl = document.getElementById("timestamp");
+const recordId = document.getElementById("recordId");
+const timestamp = document.getElementById("timestamp");
 const hashEl = document.getElementById("hash");
-const resultKeyEl = document.getElementById("resultKey");
-const keyBox = document.getElementById("keyBox");
-
-const brandLink = document.getElementById("brandLink");
-const navConsole = document.getElementById("navConsole");
-const navSignals = document.getElementById("navSignals");
-const navExecutionLog = document.getElementById("navExecutionLog");
-const navCreate = document.getElementById("navCreate");
 const openSignals = document.getElementById("openSignals");
-const openExecutionLog = document.getElementById("openExecutionLog");
+const openLog = document.getElementById("openLog");
 
 function withKey(path){
-  if(!key) return path;
-  return path + "?key=" + encodeURIComponent(key);
+  return key ? path + "?key=" + encodeURIComponent(key) : path;
 }
 
 function makeId(prefix){
   return prefix + "-" + Math.random().toString(36).substring(2,10).toUpperCase();
 }
 
-async function sha256(text){
-  const encoded = new TextEncoder().encode(text);
+async function sha256(value){
+  const encoded = new TextEncoder().encode(value);
   const buffer = await crypto.subtle.digest("SHA-256", encoded);
   return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2,"0")).join("");
 }
@@ -269,61 +158,34 @@ function getSignals(){
   return JSON.parse(localStorage.getItem("tvevt_signals_" + key) || "[]");
 }
 
-function saveSignals(signals){
-  localStorage.setItem("tvevt_signals_" + key, JSON.stringify(signals));
+function saveSignals(items){
+  localStorage.setItem("tvevt_signals_" + key, JSON.stringify(items));
 }
 
 function getLogs(){
   return JSON.parse(localStorage.getItem("tvevt_logs_" + key) || "[]");
 }
 
-function saveLogs(logs){
-  localStorage.setItem("tvevt_logs_" + key, JSON.stringify(logs));
+function saveLogs(items){
+  localStorage.setItem("tvevt_logs_" + key, JSON.stringify(items));
 }
 
-async function init(){
-  if(!key){
-    loading.style.display = "none";
-    denied.style.display = "block";
-    return;
-  }
-
-  try{
-    const res = await fetch("/api/leads?access=" + encodeURIComponent(key));
-    const data = await res.json();
-
-    if(!data || !data.valid){
-      loading.style.display = "none";
-      denied.style.display = "block";
-      return;
-    }
-
-    key = data.clientKey || key;
-    localStorage.setItem("tvevt_client_key", key);
-
-    keyBox.textContent = key;
-
-    brandLink.href = withKey("/console.html");
-    navConsole.href = withKey("/console.html");
-    navSignals.href = withKey("/signals.html");
-    navExecutionLog.href = withKey("/execution-log.html");
-    navCreate.href = withKey("/seal.html");
-    openSignals.href = withKey("/signals.html");
-    openExecutionLog.href = withKey("/execution-log.html");
-
-    loading.style.display = "none";
-    app.style.display = "block";
-  }catch(e){
-    loading.style.display = "none";
-    denied.style.display = "block";
-  }
+if(key){
+  localStorage.setItem("tvevt_client_key", key);
+  openSignals.href = withKey("/signals.html");
+  openLog.href = withKey("/execution-log.html");
 }
 
 form.addEventListener("submit", async function(e){
   e.preventDefault();
 
-  const text = signalText.value.trim();
-  if(!text){
+  if(!key){
+    msg.textContent = "No private access key found. Open Console from your email link.";
+    return;
+  }
+
+  const signalText = text.value.trim();
+  if(!signalText){
     msg.textContent = "Enter a signal before sealing.";
     return;
   }
@@ -333,39 +195,38 @@ form.addEventListener("submit", async function(e){
   msg.textContent = "Creating signal record...";
 
   try{
-    const timestamp = new Date().toISOString();
+    const now = new Date().toISOString();
     const id = makeId("SIG");
-    const hash = await sha256(JSON.stringify({ id, key, text, timestamp }));
+    const hash = await sha256(JSON.stringify({ id, key, text: signalText, time: now }));
 
     const signal = {
       id,
-      clientKey: key,
-      text,
+      text: signalText,
       status: "sealed",
       hash,
-      createdAt: timestamp
+      time: now,
+      createdAt: now,
+      clientKey: key
     };
 
     const signals = getSignals();
-    signals.unshift(signal);
+    signals.push(signal);
     saveSignals(signals);
 
     const logs = getLogs();
-    logs.unshift({
+    logs.push({
       id: makeId("LOG"),
       signalId: id,
-      time: timestamp,
-      channel: "TVEVT",
+      time: now,
       text: "Signal sealed and added to private signal library.",
       status: "sent",
       hash
     });
     saveLogs(logs);
 
-    recordIdEl.textContent = id;
-    timestampEl.textContent = timestamp;
+    recordId.textContent = id;
+    timestamp.textContent = now;
     hashEl.textContent = hash;
-    resultKeyEl.textContent = key;
 
     result.classList.add("show");
     msg.textContent = "Signal sealed ✓ Saved to Signals and Execution Log.";
@@ -379,12 +240,11 @@ form.addEventListener("submit", async function(e){
 });
 
 clearBtn.onclick = function(){
-  signalText.value = "";
+  text.value = "";
   msg.textContent = "";
   result.classList.remove("show");
 };
-
-init();
 </script>
+
 </body>
 </html>
