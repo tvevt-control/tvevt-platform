@@ -1,403 +1,257 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>TVEVT — Say it once. Prove it forever.</title>
-  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TVEVT — Verified Signals</title>
+<link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
 
-  <style>
-    :root{
-      --bg:#07090c;
-      --text:#f4f6f8;
-      --muted:rgba(244,246,248,.58);
-      --soft:rgba(244,246,248,.34);
-      --line:rgba(255,255,255,.12);
-      --orange:#ff7a1a;
-      --orange2:#ffb14a;
-      --green:#8ff0b1;
-    }
-
-    *{box-sizing:border-box}
-
-    body{
-      margin:0;
-      min-height:100vh;
-      background:
-        radial-gradient(circle at 50% 12%,rgba(255,122,26,.16),transparent 34%),
-        radial-gradient(circle at 80% 24%,rgba(143,240,177,.045),transparent 28%),
-        linear-gradient(180deg,#10131a,#07090c);
-      color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif;
-    }
-
-    .page{
-      min-height:100vh;
-      padding:34px;
-      display:flex;
-      flex-direction:column;
-    }
-
-    header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      border-bottom:1px solid var(--line);
-      padding-bottom:28px;
-    }
-
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      color:var(--text);
-      text-decoration:none;
-    }
-
-    .brand img{
-      width:42px;
-      height:42px;
-    }
-
-    .brand strong{
-      display:block;
-      letter-spacing:.16em;
-      font-size:16px;
-    }
-
-    .brand span span{
-      display:block;
-      margin-top:4px;
-      color:var(--muted);
-      font-size:11px;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-    }
-
-    nav{
-      display:flex;
-      gap:10px;
-      align-items:center;
-    }
-
-    nav a{
-      color:var(--text);
-      text-decoration:none;
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:12px 18px;
-      font-size:13px;
-      text-transform:uppercase;
-      letter-spacing:.1em;
-      background:rgba(255,255,255,.03);
-    }
-
-    main{
-      flex:1;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:56px 0;
-    }
-
-    .hero{
-      width:min(940px,100%);
-      margin:0 auto;
-      text-align:center;
-    }
-
-    h1{
-      margin:0;
-      font-size:clamp(50px,8vw,108px);
-      line-height:.92;
-      letter-spacing:-.07em;
-    }
-
-    .lead{
-      max-width:680px;
-      margin:26px auto 0;
-      color:var(--muted);
-      font-size:20px;
-      line-height:1.5;
-    }
-
-    .seal-box{
-      margin:44px auto 0;
-      max-width:720px;
-      border:1px solid var(--line);
-      border-radius:30px;
-      padding:24px;
-      background:
-        linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015)),
-        rgba(10,13,18,.72);
-      box-shadow:0 30px 100px rgba(0,0,0,.26);
-      text-align:left;
-    }
-
-    .seal-label{
-      color:var(--soft);
-      font-size:11px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      font-weight:850;
-      margin-bottom:12px;
-    }
-
-    textarea{
-      width:100%;
-      min-height:150px;
-      resize:vertical;
-      border:1px solid var(--line);
-      border-radius:22px;
-      background:rgba(0,0,0,.24);
-      color:var(--text);
-      outline:none;
-      padding:20px;
-      font:inherit;
-      font-size:18px;
-      line-height:1.55;
-    }
-
-    textarea:focus{
-      border-color:rgba(255,122,26,.55);
-      box-shadow:0 0 0 4px rgba(255,122,26,.08);
-    }
-
-    .actions{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      margin-top:18px;
-      flex-wrap:wrap;
-    }
-
-    button,.button{
-      min-height:56px;
-      border-radius:999px;
-      padding:0 24px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.035);
-      color:var(--text);
-      font-weight:850;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      cursor:pointer;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-size:13px;
-    }
-
-    .primary{
-      flex:1;
-      background:linear-gradient(135deg,var(--orange2),var(--orange));
-      color:#170900;
-      border-color:rgba(255,122,26,.8);
-      box-shadow:0 18px 50px rgba(255,122,26,.20);
-    }
-
-    .msg{
-      margin-top:14px;
-      color:var(--green);
-      min-height:22px;
-      font-size:14px;
-      font-weight:700;
-      text-align:center;
-    }
-
-    .example{
-      margin:34px auto 0;
-      max-width:720px;
-      border:1px solid var(--line);
-      border-radius:26px;
-      padding:22px;
-      background:rgba(255,255,255,.03);
-      text-align:left;
-    }
-
-    .example-label{
-      display:flex;
-      align-items:center;
-      gap:10px;
-      color:var(--green);
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      margin-bottom:12px;
-    }
-
-    .dot{
-      width:10px;
-      height:10px;
-      border-radius:50%;
-      background:var(--green);
-      box-shadow:0 0 22px rgba(143,240,177,.65);
-    }
-
-    .example a{
-      display:block;
-      color:var(--text);
-      text-decoration:none;
-      font-size:21px;
-      font-weight:850;
-      letter-spacing:-.03em;
-    }
-
-    .example p{
-      margin:10px 0 0;
-      color:var(--muted);
-      font-size:15px;
-      line-height:1.5;
-    }
-
-    .quiet{
-      margin-top:20px;
-      color:var(--soft);
-      font-size:13px;
-      letter-spacing:.06em;
-      text-align:center;
-    }
-
-    .secondary{
-      color:var(--muted);
-      text-decoration:none;
-      font-size:13px;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      border-bottom:1px solid rgba(244,246,248,.22);
-      padding-bottom:4px;
-      display:inline-block;
-      margin-top:16px;
-    }
-
-    footer{
-      text-align:center;
-      color:rgba(244,246,248,.32);
-      font-size:11px;
-      letter-spacing:.22em;
-      text-transform:uppercase;
-    }
-
-    @media(max-width:760px){
-      .page{padding:22px}
-      nav{display:none}
-      main{padding:40px 0}
-      h1{font-size:52px}
-      .lead{font-size:18px}
-      .actions{flex-direction:column}
-      button,.button{width:100%}
-    }
-  </style>
+<style>
+:root{
+  --bg:#09090b;
+  --panel:#141416;
+  --line:rgba(255,255,255,.12);
+  --text:#ffffff;
+  --muted:#a7a7ad;
+  --orange:#ff9b3d;
+  --green:#7CFFB2;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top left,rgba(255,155,61,.18),transparent 30%),
+    radial-gradient(circle at bottom right,rgba(124,255,178,.08),transparent 28%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial,Helvetica,sans-serif;
+}
+.wrap{max-width:1120px;margin:0 auto;padding:34px 24px 80px}
+header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding-bottom:28px;
+  border-bottom:1px solid var(--line);
+}
+.brand{display:flex;align-items:center;gap:14px;color:white;text-decoration:none}
+.brand img{width:42px;height:42px}
+.brand strong{display:block;font-size:22px;letter-spacing:.08em}
+.brand span{display:block;color:var(--muted);font-size:12px;letter-spacing:.16em}
+nav{display:flex;gap:10px;flex-wrap:wrap}
+nav a{
+  color:white;
+  text-decoration:none;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:12px 18px;
+  font-weight:800;
+  background:rgba(255,255,255,.04);
+}
+.hero{text-align:center;padding:70px 0 38px}
+h1{
+  margin:0 auto 20px;
+  max-width:850px;
+  font-size:86px;
+  line-height:.96;
+  letter-spacing:-.07em;
+}
+.hero p{
+  margin:0 auto;
+  max-width:680px;
+  color:#d7d7dc;
+  font-size:20px;
+  line-height:1.45;
+}
+.sealBox{
+  max-width:720px;
+  margin:38px auto 0;
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:26px;
+  background:rgba(20,20,22,.86);
+}
+.label{
+  color:var(--muted);
+  text-transform:uppercase;
+  letter-spacing:.22em;
+  font-weight:900;
+  font-size:12px;
+  margin-bottom:14px;
+}
+textarea{
+  width:100%;
+  min-height:160px;
+  resize:vertical;
+  border:1px solid var(--line);
+  border-radius:22px;
+  background:rgba(255,255,255,.04);
+  color:white;
+  padding:22px;
+  font:inherit;
+  font-size:18px;
+  outline:none;
+}
+.actions{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+button,.btn{
+  border:0;
+  border-radius:999px;
+  padding:18px 20px;
+  text-decoration:none;
+  font-weight:900;
+  letter-spacing:.14em;
+  cursor:pointer;
+  text-align:center;
+}
+.primary{background:linear-gradient(135deg,#ffb14a,#ff7a1a);color:#120700}
+.secondary{background:rgba(255,255,255,.04);color:white;border:1px solid var(--line)}
+.request{
+  margin-top:28px;
+  text-align:center;
+  color:var(--muted);
+}
+.request a{color:white;font-weight:900;letter-spacing:.08em;text-transform:uppercase}
+.example{
+  max-width:720px;
+  margin:40px auto 0;
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:24px;
+  background:rgba(20,20,22,.72);
+  color:white;
+  text-decoration:none;
+  display:block;
+}
+.example small{color:var(--green);font-weight:900;letter-spacing:.18em}
+.example h2{margin:12px 0 8px;font-size:26px}
+.example p{margin:0;color:var(--muted);line-height:1.5}
+.msg{text-align:center;margin-top:14px;color:var(--green);font-weight:800;min-height:22px}
+footer{text-align:center;margin-top:58px;color:var(--muted);letter-spacing:.18em;font-size:12px}
+@media(max-width:760px){
+  h1{font-size:58px}
+  header{align-items:flex-start;flex-direction:column}
+  .actions{grid-template-columns:1fr}
+}
+</style>
 </head>
 
 <body>
-  <div class="page">
-    <header>
-      <a class="brand" href="/">
-        <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT" onerror="this.style.display='none'">
-        <span>
-          <strong>TVEVT</strong>
-          <span>Verified Signals</span>
-        </span>
-      </a>
+<div class="wrap">
 
-      <nav>
-        <a href="/proof.html">Proof</a>
-        <a href="/record.html">Verify</a>
-        <a href="/seal.html">Console</a>
-      </nav>
-    </header>
+<header>
+  <a class="brand" href="/">
+    <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
+    <div>
+      <strong>TVEVT</strong>
+      <span>VERIFIED SIGNALS</span>
+    </div>
+  </a>
 
-    <main>
-      <section class="hero">
-        <h1>Say it once.<br>Prove it forever.</h1>
+  <nav>
+    <a href="/proof.html">PROOF</a>
+    <a href="/record.html">VERIFY</a>
+    <a id="consoleLink" href="/request-access.html">CONSOLE</a>
+  </nav>
+</header>
 
-        <p class="lead">
-          Turn any statement into a sealed verification record:
-          timestamped, hashed, stored, and shareable by link.
-        </p>
+<section class="hero">
+  <h1>Say it once.<br>Prove it forever.</h1>
+  <p>
+    Turn any statement into a sealed verification record:
+    timestamped, hashed, stored, and shareable by link.
+  </p>
 
-        <div class="seal-box">
-          <form id="form">
-            <div class="seal-label">Seal a signal instantly</div>
-            <textarea id="text" placeholder="Write a statement you want to verify..." required></textarea>
+  <div class="sealBox">
+    <div class="label">Seal a signal instantly</div>
 
-            <div class="actions">
-              <button class="primary" id="btn" type="submit">Seal Signal</button>
-              <a class="button" href="/seal.html">Open Full Console</a>
-            </div>
+    <form id="sealForm">
+      <textarea id="text" placeholder="Write a statement you want to verify..." required></textarea>
 
-            <div class="msg" id="msg"></div>
-          </form>
-        </div>
+      <div class="actions">
+        <button class="primary" id="sealBtn" type="submit">SEAL SIGNAL</button>
+        <button class="secondary" id="openConsole" type="button">REQUEST FULL CONSOLE ACCESS</button>
+      </div>
 
-        <div class="quiet">Start instantly. No account required.</div>
-        <a class="secondary" href="/request-access.html">Request extended access</a>
-
-        <div class="example">
-          <div class="example-label">
-            <span class="dot"></span>
-            Verified record example
-          </div>
-
-          <a href="/record.html?id=TVE-9Y34FC">
-            View a real immutable record →
-          </a>
-
-          <p>
-            This signal is sealed, timestamped, and cannot be altered without detection.
-          </p>
-        </div>
-      </section>
-    </main>
-
-    <footer>Verified Organizational Signals Protocol</footer>
+      <div id="msg" class="msg"></div>
+    </form>
   </div>
 
-<script>
-const form = document.getElementById("form");
-const text = document.getElementById("text");
-const btn = document.getElementById("btn");
-const msg = document.getElementById("msg");
+  <div class="request">
+    Start instantly. No account required.<br><br>
+    <a href="/request-access.html">Request Extended Access</a>
+  </div>
 
-form.addEventListener("submit", async (e) => {
+  <a class="example" href="/record.html?id=TVE-9Y34FC">
+    <small>● VERIFIED RECORD EXAMPLE</small>
+    <h2>View a real immutable record →</h2>
+    <p>This signal is sealed, timestamped, and cannot be altered without detection.</p>
+  </a>
+</section>
+
+<footer>
+  VERIFIED ORGANIZATIONAL SIGNALS PROTOCOL
+</footer>
+
+</div>
+
+<script>
+const consoleLink = document.getElementById("consoleLink");
+const openConsole = document.getElementById("openConsole");
+const sealForm = document.getElementById("sealForm");
+const text = document.getElementById("text");
+const msg = document.getElementById("msg");
+const sealBtn = document.getElementById("sealBtn");
+
+function getConsoleUrl(){
+  const key = localStorage.getItem("tvevt_client_key");
+  if(key) return "/console.html?key=" + encodeURIComponent(key);
+  return "/request-access.html";
+}
+
+consoleLink.href = getConsoleUrl();
+
+openConsole.onclick = function(){
+  window.location.href = "/request-access.html";
+};
+
+sealForm.addEventListener("submit", async function(e){
   e.preventDefault();
 
-  if (!text.value.trim()) {
-    msg.textContent = "Enter a signal before sealing.";
+  const value = text.value.trim();
+  if(!value){
+    msg.textContent = "Write a signal first.";
     return;
   }
 
-  btn.disabled = true;
-  btn.textContent = "Sealing...";
-  msg.textContent = "Creating verification record...";
+  sealBtn.disabled = true;
+  sealBtn.textContent = "SEALING...";
+  msg.textContent = "Creating public verification record...";
 
-  try {
-    const response = await fetch("/publish", {
-      method: "POST",
-      headers: {"Content-Type":"application/json"},
-      body: JSON.stringify({ text: text.value.trim() })
+  try{
+    const res = await fetch("/publish", {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      body:JSON.stringify({ text:value })
     });
 
-    const data = await response.json();
+    const data = await res.json();
 
-    if (!response.ok) {
+    if(!res.ok){
       throw new Error(data.error || "Unable to seal signal.");
     }
 
-    const recordLink = data.verification_url || (location.origin + "/record.html?id=" + encodeURIComponent(data.id));
+    const url = data.verification_url || ("/record.html?id=" + encodeURIComponent(data.id));
+    window.location.href = url;
 
-    msg.textContent = "Record created. Opening verification...";
-    window.location.href = recordLink;
-
-  } catch (err) {
-    msg.textContent = err.message || "Unable to seal signal.";
-    btn.disabled = false;
-    btn.textContent = "Seal Signal";
+  }catch(err){
+    msg.textContent = "Unable to create record.";
+    sealBtn.disabled = false;
+    sealBtn.textContent = "SEAL SIGNAL";
   }
 });
 </script>
+
 </body>
 </html>
