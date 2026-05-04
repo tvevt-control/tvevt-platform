@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TVEVT Execution Log</title>
+<link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
+
+<style>
+:root{
+  --bg:#09090b;
+  --panel:#141416;
+  --line:rgba(255,255,255,.12);
+  --text:#fff;
+  --muted:#a7a7ad;
+  --orange:#ff9b3d;
+  --green:#2cff9a;
+  --red:#ff5a5f;
+}
+
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:Arial, Helvetica, sans-serif;
+}
+
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:30px 20px 80px;
+}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:30px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  text-decoration:none;
+  color:white;
+}
+
+.brand img{
+  height:28px;
+}
+
+.nav a{
+  margin-left:10px;
+  text-decoration:none;
+  color:white;
+  border:1px solid var(--line);
+  padding:10px 14px;
+  border-radius:999px;
+  font-size:13px;
+}
+
+.nav a.primary{
+  background:var(--orange);
+  color:black;
+  border:none;
+}
+
+.card{
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:24px;
+  background:var(--panel);
+  margin-bottom:20px;
+}
+
+h1{
+  margin:0 0 10px;
+  font-size:36px;
+}
+
+p{
+  margin:0;
+  color:var(--muted);
+}
+
+.log{
+  border:1px solid var(--line);
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.row{
+  display:grid;
+  grid-template-columns:140px 1fr 120px;
+  padding:14px 16px;
+  border-bottom:1px solid var(--line);
+  font-size:14px;
+  color:var(--muted);
+}
+
+.row:last-child{
+  border-bottom:none;
+}
+
+.row strong{
+  color:white;
+}
+
+.badge{
+  font-size:12px;
+  padding:6px 10px;
+  border-radius:999px;
+}
+
+.sent{background:rgba(44,255,154,.1); color:var(--green)}
+.pending{background:rgba(255,155,61,.1); color:var(--orange)}
+.failed{background:rgba(255,90,95,.1); color:var(--red)}
+
+.empty{
+  text-align:center;
+  padding:40px;
+  color:var(--muted);
+}
+</style>
+</head>
+
+<body>
+<div class="wrap">
+
+<div class="header">
+  <a id="brandLink" class="brand" href="/console.html">
+    <img src="/assets/brand/tvevt-icon.svg">
+    <strong>Execution Log</strong>
+  </a>
+
+  <div class="nav">
+    <a id="backConsole" href="/console.html">Console</a>
+    <a id="toSignals" href="/signals.html">Signals</a>
+    <a class="primary" id="toCreate" href="/seal.html">Create</a>
+  </div>
+</div>
+
+<div id="loading" class="card">
+  <h1>Loading log…</h1>
+  <p>Connecting to your execution layer.</p>
+</div>
+
+<div id="denied" class="card" style="display:none">
+  <h1>Access denied</h1>
+  <p>Execution log requires valid private key.</p>
+</div>
+
+<div id="logView" style="display:none">
+
+  <div class="card">
+    <h1>Execution Log</h1>
+    <p>All signal execution records will appear here. Immutable by design.</p>
+  </div>
+
+  <div id="log" class="log"></div>
+
+</div>
+
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+let key = params.get("key") || localStorage.getItem("tvevt_client_key");
+
+const loading = document.getElementById("loading");
+const denied = document.getElementById("denied");
+const logView = document.getElementById("logView");
+const logEl = document.getElementById("log");
+
+function withKey(path){
+  return key ? path + "?key=" + key : path;
+}
+
+function renderLog(){
+  let logs = JSON.parse(localStorage.getItem("tvevt_logs_"+key) || "[]");
+
+  if(logs.length === 0){
+    logEl.innerHTML = '<div class="empty">No execution records yet.</div>';
+    return;
+  }
+
+  logEl.innerHTML = logs.map(l => `
+    <div class="row">
+      <strong>${new Date(l.time).toLocaleString()}</strong>
+      <span>${l.text}</span>
+      <span class="badge ${l.status}">${l.status}</span>
+    </div>
+  `).join('');
+}
+
+function init(){
+  if(!key){
+    loading.style.display="none";
+    denied.style.display="block";
+    return;
+  }
+
+  localStorage.setItem("tvevt_client_key", key);
+
+  document.getElementById("brandLink").href = withKey("/console.html");
+  document.getElementById("backConsole").href = withKey("/console.html");
+  document.getElementById("toSignals").href = withKey("/signals.html");
+  document.getElementById("toCreate").href = withKey("/seal.html");
+
+  renderLog();
+
+  loading.style.display="none";
+  logView.style.display="block";
+}
+
+init();
+</script>
+</body>
+</html>
