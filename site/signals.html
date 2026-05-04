@@ -3,64 +3,243 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TVEVT Signals</title>
+<title>My Signals — TVEVT</title>
+<link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
 
 <style>
-body{margin:0;background:#0b0b0c;color:#fff;font-family:Arial;padding:40px}
-h1{margin-bottom:10px}
-input{width:100%;padding:14px;border-radius:10px;border:1px solid #333;background:#141416;color:#fff;margin-bottom:20px}
-.card{background:#141416;padding:15px;border-radius:10px;margin-bottom:15px}
-small{color:#aaa}
-button{margin-top:10px;margin-right:10px;padding:10px;border:none;border-radius:8px;background:#ff9b3d;color:#000;cursor:pointer}
-.error{color:#ff5a5a}
+:root{
+  --bg:#09090b;
+  --panel:#141416;
+  --line:rgba(255,255,255,.12);
+  --text:#fff;
+  --muted:#a7a7ad;
+  --orange:#ff9b3d;
+  --green:#2cff9a;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at top left, rgba(255,155,61,.14), transparent 32%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial, Helvetica, sans-serif;
+}
+header{
+  padding:24px;
+  border-bottom:1px solid var(--line);
+  background:rgba(9,9,11,.78);
+}
+.top{
+  max-width:1120px;
+  margin:0 auto;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  color:white;
+  text-decoration:none;
+  font-weight:900;
+}
+.brand img{height:34px}
+.badge{
+  border:1px solid rgba(44,255,154,.35);
+  color:var(--green);
+  background:rgba(44,255,154,.08);
+  padding:8px 12px;
+  border-radius:999px;
+  font-size:13px;
+  font-weight:800;
+}
+main{
+  max-width:1120px;
+  margin:0 auto;
+  padding:46px 24px 80px;
+}
+.card{
+  background:rgba(20,20,22,.88);
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:28px;
+}
+h1{
+  margin:0 0 12px;
+  font-size:44px;
+  letter-spacing:-.04em;
+}
+p{
+  color:var(--muted);
+  line-height:1.55;
+}
+.actions{
+  margin-top:22px;
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+}
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding:13px 16px;
+  border-radius:14px;
+  background:var(--orange);
+  color:#000;
+  text-decoration:none;
+  font-weight:900;
+}
+.btn.secondary{
+  background:transparent;
+  color:white;
+  border:1px solid var(--line);
+}
+.grid{
+  margin-top:24px;
+  display:grid;
+  grid-template-columns:1fr;
+  gap:14px;
+}
+.row{
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:18px;
+  background:rgba(255,255,255,.035);
+}
+.row strong{display:block;margin-bottom:6px}
+.empty{
+  margin-top:24px;
+  padding:28px;
+  border:1px dashed rgba(255,255,255,.18);
+  border-radius:22px;
+  color:var(--muted);
+}
+.denied{
+  max-width:560px;
+  margin:90px auto;
+  text-align:center;
+}
+footer{
+  max-width:1120px;
+  margin:0 auto;
+  padding:0 24px 36px;
+  color:var(--muted);
+  font-size:13px;
+}
 </style>
 </head>
 
 <body>
+<header>
+  <div class="top">
+    <a class="brand" href="/console.html">
+      <img src="/assets/brand/tvevt-logo-horizontal.svg" alt="TVEVT">
+      <span>MY SIGNALS</span>
+    </a>
+    <div class="badge">Private access</div>
+  </div>
+</header>
 
-<h1>TVEVT Signals</h1>
-<p>Private signal library.</p>
+<main>
+  <div id="loading" class="card">
+    <h1>Loading signals…</h1>
+    <p>Checking your private access key.</p>
+  </div>
 
-<input id="search" placeholder="Search by ID, text, date..." oninput="load()">
+  <div id="denied" class="card denied" style="display:none">
+    <h1>Access required</h1>
+    <p>Your private console key was not found.</p>
+    <div class="actions" style="justify-content:center">
+      <a class="btn" href="/request-access.html">Request Access</a>
+    </div>
+  </div>
 
-<div id="list"></div>
+  <div id="app" style="display:none">
+    <section class="card">
+      <h1>My Signals</h1>
+      <p>
+        This is your private signal library. Drafts, sealed records and future verified
+        executions will appear here under your access key.
+      </p>
+
+      <div class="actions">
+        <a id="backConsole" class="btn secondary" href="/console.html">Back to Console</a>
+        <a class="btn" href="/seal.html">Create Signal</a>
+      </div>
+    </section>
+
+    <section class="empty">
+      <strong>No signals yet.</strong>
+      <p>
+        Your library is ready. The next layer will connect Create Signal → Save Draft →
+        Seal Record → Execution Log.
+      </p>
+    </section>
+
+    <section class="grid">
+      <div class="row">
+        <strong>Access status</strong>
+        Private signal library active.
+      </div>
+      <div class="row">
+        <strong>Storage layer</strong>
+        Pending connection to KV signal records.
+      </div>
+      <div class="row">
+        <strong>Next build step</strong>
+        Connect Create Signal to this library.
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer>
+  TVEVT — Infrastructure for Strategic Signal Control & Distribution
+</footer>
 
 <script>
-async function load() {
-  const params = new URLSearchParams(location.search);
-  const key = params.get("key") || "";
-  const q = document.getElementById("search").value;
+const params = new URLSearchParams(window.location.search);
+let key = params.get("key") || localStorage.getItem("tvevt_client_key");
 
-  const res = await fetch(`/api/signals?key=${key}&q=${encodeURIComponent(q)}`);
+const loading = document.getElementById("loading");
+const denied = document.getElementById("denied");
+const app = document.getElementById("app");
+const backConsole = document.getElementById("backConsole");
 
-  if (!res.ok) {
-    document.getElementById("list").innerHTML =
-      '<div class="error">Unauthorized or unable to load signals.</div>';
+async function start(){
+  if(!key){
+    loading.style.display="none";
+    denied.style.display="block";
     return;
   }
 
-  const data = await res.json();
+  try{
+    const res = await fetch("/api/leads?access=" + encodeURIComponent(key));
+    const data = await res.json();
 
-  document.getElementById("list").innerHTML = data.map(s => `
-    <div class="card">
-      <small>${s.id} | ${s.timestamp} | ${s.status}</small>
-      <div>${s.text}</div>
-      <button onclick="openLink('${s.link}')">Open</button>
-      <button onclick="copyLink('${s.link}')">Copy</button>
-    </div>
-  `).join("");
+    if(!data || !data.valid){
+      loading.style.display="none";
+      denied.style.display="block";
+      return;
+    }
+
+    localStorage.setItem("tvevt_client_key", key);
+    backConsole.href = "/console.html?key=" + encodeURIComponent(key);
+
+    loading.style.display="none";
+    app.style.display="block";
+  }catch(e){
+    loading.style.display="none";
+    denied.style.display="block";
+  }
 }
 
-function openLink(link) {
-  window.open(link, "_blank");
-}
-
-function copyLink(link) {
-  navigator.clipboard.writeText(location.origin + link);
-}
-
-load();
+start();
 </script>
-
 </body>
 </html>
