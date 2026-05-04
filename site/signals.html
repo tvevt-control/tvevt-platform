@@ -8,349 +8,100 @@
 
 <style>
 :root{
-  --bg:#09090b;
-  --panel:#141416;
-  --panel2:#1b1b1f;
-  --line:rgba(255,255,255,.12);
-  --text:#ffffff;
-  --muted:#a7a7ad;
-  --orange:#ff9b3d;
-  --green:#2cff9a;
-  --red:#ff5a5f;
+  --bg:#09090b;--panel:#141416;--line:rgba(255,255,255,.12);
+  --text:#fff;--muted:#a7a7ad;--orange:#ff9b3d;--green:#2cff9a;
   --yellow:#ffe066;
 }
 *{box-sizing:border-box}
 body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at top left, rgba(255,155,61,.18), transparent 34%),
-    radial-gradient(circle at bottom right, rgba(255,155,61,.08), transparent 30%),
-    var(--bg);
-  color:var(--text);
-  font-family:Arial, Helvetica, sans-serif;
+  margin:0;min-height:100vh;
+  background:radial-gradient(circle at top left,rgba(255,155,61,.18),transparent 34%),
+             radial-gradient(circle at bottom right,rgba(255,155,61,.08),transparent 30%),
+             var(--bg);
+  color:var(--text);font-family:Arial,Helvetica,sans-serif;
 }
-
-.wrap{
-  max-width:1180px;
-  margin:0 auto;
-  padding:28px 24px 70px;
-}
-
+.wrap{max-width:1180px;margin:0 auto;padding:28px 24px 70px}
 .header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:18px;
-  padding:14px;
-  border:1px solid var(--line);
-  border-radius:28px;
-  background:rgba(20,20,22,.78);
-  backdrop-filter:blur(14px);
-  margin-bottom:28px;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;
+  padding:14px;border:1px solid var(--line);border-radius:28px;
+  background:rgba(20,20,22,.78);backdrop-filter:blur(14px);margin-bottom:28px
 }
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  color:white;
-  text-decoration:none;
-}
-
+.brand{display:flex;align-items:center;gap:14px;color:white;text-decoration:none}
 .logoBox{
-  width:54px;
-  height:54px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid rgba(255,155,61,.35);
-  border-radius:18px;
-  background:rgba(255,155,61,.08);
+  width:54px;height:54px;display:flex;align-items:center;justify-content:center;
+  border:1px solid rgba(255,155,61,.35);border-radius:18px;background:rgba(255,155,61,.08)
 }
-
-.logoBox img{
-  width:30px;
-  height:30px;
-  display:block;
-}
-
-.brandText strong{
-  display:block;
-  font-size:23px;
-  letter-spacing:-.03em;
-  line-height:1;
-}
-
-.brandText span{
-  display:block;
-  margin-top:4px;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.nav{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
-}
-
+.logoBox img{width:30px;height:30px}
+.brandText strong{display:block;font-size:23px;letter-spacing:-.03em;line-height:1}
+.brandText span{display:block;margin-top:4px;color:var(--muted);font-size:13px}
+.nav{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:flex-end}
 .nav a{
-  color:#fff;
-  text-decoration:none;
-  padding:11px 14px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  font-size:14px;
-  font-weight:800;
+  color:#fff;text-decoration:none;padding:11px 14px;border-radius:999px;
+  border:1px solid var(--line);background:rgba(255,255,255,.04);
+  font-size:14px;font-weight:800
 }
-
-.nav a.active{
-  background:rgba(255,155,61,.18);
-  border-color:rgba(255,155,61,.55);
-  color:#ffbf7a;
-}
-
-.nav a.primary{
-  background:var(--orange);
-  color:#000;
-  border-color:transparent;
-}
-
+.nav a.active{background:rgba(255,155,61,.18);border-color:rgba(255,155,61,.55);color:#ffbf7a}
+.nav a.primary{background:var(--orange);color:#000;border-color:transparent}
 .hero{
-  border:1px solid var(--line);
-  border-radius:28px;
-  padding:30px;
-  background:
-    linear-gradient(135deg, rgba(255,155,61,.16), rgba(255,255,255,.035)),
-    rgba(20,20,22,.88);
-  margin-bottom:22px;
+  border:1px solid var(--line);border-radius:28px;padding:30px;
+  background:linear-gradient(135deg,rgba(255,155,61,.16),rgba(255,255,255,.035)),rgba(20,20,22,.88);
+  margin-bottom:22px
 }
-
 .kicker{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:9px 12px;
-  border:1px solid rgba(255,155,61,.32);
-  border-radius:999px;
-  background:rgba(255,155,61,.08);
-  color:#fff;
-  font-size:13px;
-  font-weight:800;
-  margin-bottom:16px;
+  display:inline-flex;align-items:center;gap:8px;padding:9px 12px;
+  border:1px solid rgba(255,155,61,.32);border-radius:999px;
+  background:rgba(255,155,61,.08);font-size:13px;font-weight:800;margin-bottom:16px
 }
-
-.dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--orange);
-}
-
-h1{
-  margin:0 0 12px;
-  font-size:48px;
-  letter-spacing:-.05em;
-  line-height:1.03;
-}
-
-.hero p{
-  margin:0;
-  max-width:860px;
-  color:#d7d7dc;
-  line-height:1.55;
-  font-size:16px;
-}
-
-.actions{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:22px;
-}
-
+.dot{width:8px;height:8px;border-radius:50%;background:var(--orange)}
+h1{margin:0 0 12px;font-size:48px;letter-spacing:-.05em;line-height:1.03}
+p{margin:0;color:#d7d7dc;line-height:1.55}
+.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:22px}
 .btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  padding:13px 16px;
-  border-radius:14px;
-  background:var(--orange);
-  color:#000;
-  text-decoration:none;
-  font-weight:900;
-  border:none;
+  display:inline-flex;align-items:center;justify-content:center;padding:13px 16px;
+  border-radius:14px;background:var(--orange);color:#000;text-decoration:none;font-weight:900;border:none
 }
-
-.btn.secondary{
-  background:rgba(255,255,255,.04);
-  color:#fff;
-  border:1px solid var(--line);
-}
-
-.layout{
-  display:grid;
-  grid-template-columns:1.35fr .65fr;
-  gap:18px;
-  align-items:start;
-}
-
-.panel{
-  border:1px solid var(--line);
-  border-radius:24px;
-  background:rgba(20,20,22,.88);
-  overflow:hidden;
-}
-
+.btn.secondary{background:rgba(255,255,255,.04);color:#fff;border:1px solid var(--line)}
+.layout{display:grid;grid-template-columns:1.35fr .65fr;gap:18px;align-items:start}
+.panel{border:1px solid var(--line);border-radius:24px;background:rgba(20,20,22,.88);overflow:hidden}
 .panelHead{
-  padding:18px 20px;
-  border-bottom:1px solid var(--line);
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
+  padding:18px 20px;border-bottom:1px solid var(--line);
+  display:flex;align-items:center;justify-content:space-between;gap:12px
 }
-
-.panelHead h2{
-  margin:0;
-  font-size:22px;
-  letter-spacing:-.02em;
-}
-
+.panelHead h2{margin:0;font-size:22px;letter-spacing:-.02em}
 .badge{
-  padding:8px 11px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:900;
-  border:1px solid rgba(44,255,154,.32);
-  color:var(--green);
-  background:rgba(44,255,154,.08);
-  white-space:nowrap;
+  padding:8px 11px;border-radius:999px;font-size:12px;font-weight:900;
+  border:1px solid rgba(44,255,154,.32);color:var(--green);
+  background:rgba(44,255,154,.08);white-space:nowrap
 }
-
-.empty{
-  padding:26px 20px;
-  border-bottom:1px solid var(--line);
+.empty{padding:26px 20px;border-bottom:1px solid var(--line);color:var(--muted)}
+.signal{
+  padding:18px 20px;border-bottom:1px solid var(--line);
+  display:grid;grid-template-columns:140px 1fr 130px;gap:16px;align-items:start
 }
-
-.empty strong{
-  display:block;
-  font-size:18px;
-  margin-bottom:8px;
-}
-
-.empty p{
-  margin:0;
-  color:var(--muted);
-  line-height:1.55;
-}
-
-.table{
-  width:100%;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:150px 1fr 130px;
-  gap:16px;
-  padding:16px 20px;
-  border-bottom:1px solid var(--line);
-  color:var(--muted);
-  font-size:14px;
-}
-
-.row:last-child{border-bottom:none}
-
-.row strong{
-  color:#fff;
-  font-weight:900;
-}
-
+.signal:last-child{border-bottom:none}
+.signalId{font-weight:900;color:#fff;font-size:14px}
+.signalText{color:#d7d7dc;line-height:1.45;font-size:14px;white-space:pre-wrap}
+.signalMeta{font-size:12px;color:var(--muted);margin-top:8px;word-break:break-all}
 .status{
-  justify-self:start;
-  padding:7px 10px;
-  border-radius:999px;
-  font-size:12px;
-  font-weight:900;
+  justify-self:start;padding:7px 10px;border-radius:999px;font-size:12px;font-weight:900;
+  color:var(--green);background:rgba(44,255,154,.08);border:1px solid rgba(44,255,154,.32)
 }
-
-.status.ready{
-  color:var(--green);
-  background:rgba(44,255,154,.08);
-  border:1px solid rgba(44,255,154,.32);
-}
-
-.status.pending{
-  color:var(--yellow);
-  background:rgba(255,224,102,.08);
-  border:1px solid rgba(255,224,102,.3);
-}
-
-.side{
-  display:grid;
-  gap:14px;
-}
-
-.sideCard{
-  border:1px solid var(--line);
-  border-radius:22px;
-  background:rgba(20,20,22,.88);
-  padding:20px;
-}
-
-.sideCard h3{
-  margin:0 0 8px;
-  font-size:18px;
-}
-
-.sideCard p{
-  margin:0;
-  color:var(--muted);
-  line-height:1.5;
-  font-size:14px;
-}
-
+.side{display:grid;gap:14px}
+.sideCard{border:1px solid var(--line);border-radius:22px;background:rgba(20,20,22,.88);padding:20px}
+.sideCard h3{margin:0 0 8px;font-size:18px}
+.sideCard p{margin:0;color:var(--muted);line-height:1.5;font-size:14px}
 .keyBox{
-  margin-top:12px;
-  padding:12px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:rgba(255,255,255,.04);
-  word-break:break-all;
-  color:#fff;
-  font-size:13px;
+  margin-top:12px;padding:12px;border:1px solid var(--line);border-radius:14px;
+  background:rgba(255,255,255,.04);word-break:break-all;color:#fff;font-size:13px
 }
-
-footer{
-  margin-top:36px;
-  color:var(--muted);
-  font-size:13px;
-}
-
 .denied{
-  max-width:620px;
-  margin:90px auto;
-  text-align:center;
-  border:1px solid var(--line);
-  border-radius:26px;
-  background:rgba(20,20,22,.88);
-  padding:34px;
+  max-width:620px;margin:90px auto;text-align:center;border:1px solid var(--line);
+  border-radius:26px;background:rgba(20,20,22,.88);padding:34px
 }
-
-.denied h1{
-  font-size:36px;
-}
-
+footer{margin-top:36px;color:var(--muted);font-size:13px}
 @media(max-width:900px){
-  .header{align-items:flex-start;flex-direction:column}
-  .nav{justify-content:flex-start}
-  .layout{grid-template-columns:1fr}
-  h1{font-size:38px}
-  .row{grid-template-columns:1fr}
+  .header{align-items:flex-start;flex-direction:column}.nav{justify-content:flex-start}
+  .layout{grid-template-columns:1fr}h1{font-size:38px}.signal{grid-template-columns:1fr}
 }
 </style>
 </head>
@@ -358,117 +109,83 @@ footer{
 <body>
 <div class="wrap">
 
-  <header class="header">
-    <a class="brand" id="brandLink" href="/console.html">
-      <div class="logoBox">
-        <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
-      </div>
-      <div class="brandText">
-        <strong>TVEVT</strong>
-        <span>Governance Console / My Signals</span>
-      </div>
-    </a>
-
-    <nav class="nav">
-      <a id="navConsole" href="/console.html">Console</a>
-      <a class="active" id="navSignals" href="/signals.html">Signals</a>
-      <a id="navLog" href="/log.html">Log</a>
-      <a class="primary" id="navCreate" href="/seal.html">Create Signal</a>
-    </nav>
-  </header>
-
-  <div id="loading" class="hero">
-    <div class="kicker"><span class="dot"></span> Private signal library</div>
-    <h1>Loading Signals</h1>
-    <p>Checking your private access key and preparing your signal workspace.</p>
-  </div>
-
-  <div id="denied" class="denied" style="display:none">
-    <h1>Access required</h1>
-    <p>Your private console key was not found. Request access or open the private link from your email.</p>
-    <div class="actions" style="justify-content:center">
-      <a class="btn" href="/request-access.html">Request Access</a>
+<header class="header">
+  <a class="brand" id="brandLink" href="/console.html">
+    <div class="logoBox"><img src="/assets/brand/tvevt-icon.svg" alt="TVEVT"></div>
+    <div class="brandText">
+      <strong>TVEVT</strong>
+      <span>Governance Console / My Signals</span>
     </div>
+  </a>
+
+  <nav class="nav">
+    <a id="navConsole" href="/console.html">Console</a>
+    <a class="active" id="navSignals" href="/signals.html">Signals</a>
+    <a id="navExecutionLog" href="/execution-log.html">Execution Log</a>
+    <a class="primary" id="navCreate" href="/seal.html">Create Signal</a>
+  </nav>
+</header>
+
+<div id="loading" class="hero">
+  <div class="kicker"><span class="dot"></span> Private signal library</div>
+  <h1>Loading Signals</h1>
+  <p>Checking your private access key and preparing your signal workspace.</p>
+</div>
+
+<div id="denied" class="denied" style="display:none">
+  <h1>Access required</h1>
+  <p>Your private console key was not found. Open your private email link again.</p>
+  <div class="actions" style="justify-content:center">
+    <a class="btn" href="/request-access.html">Request Access</a>
   </div>
+</div>
 
-  <div id="app" style="display:none">
-    <section class="hero">
-      <div class="kicker"><span class="dot"></span> Signal library • Drafts • Records • Governance</div>
-      <h1>My Signals</h1>
-      <p>
-        This is your private signal library. Drafts, sealed statements, distribution records
-        and future verified executions will appear here under your TVEVT access key.
-      </p>
+<div id="app" style="display:none">
+  <section class="hero">
+    <div class="kicker"><span class="dot"></span> Signal library • Drafts • Records • Governance</div>
+    <h1>My Signals</h1>
+    <p>
+      This is your private signal library. Sealed statements and future verified executions
+      appear here under your TVEVT access key.
+    </p>
 
-      <div class="actions">
-        <a id="backConsole" class="btn secondary" href="/console.html">Back to Console</a>
-        <a id="createSignal" class="btn" href="/seal.html">Create Signal</a>
-      </div>
-    </section>
+    <div class="actions">
+      <a id="backConsole" class="btn secondary" href="/console.html">Back to Console</a>
+      <a id="createSignal" class="btn" href="/seal.html">Create Signal</a>
+    </div>
+  </section>
 
-    <section class="layout">
-      <div class="panel">
-        <div class="panelHead">
-          <h2>Signal Library</h2>
-          <span class="badge">Private access active</span>
-        </div>
-
-        <div class="empty">
-          <strong>No signals yet.</strong>
-          <p>
-            Your library is ready. The next layer will connect:
-            Create Signal → Save Draft → Seal Record → Execution Log.
-          </p>
-        </div>
-
-        <div class="table">
-          <div class="row">
-            <strong>Access status</strong>
-            <span>Private signal library recognized.</span>
-            <span class="status ready">Ready</span>
-          </div>
-          <div class="row">
-            <strong>Storage layer</strong>
-            <span>Signal records will be connected to KV storage.</span>
-            <span class="status pending">Pending</span>
-          </div>
-          <div class="row">
-            <strong>Execution layer</strong>
-            <span>Sealed signals will later write to the execution log.</span>
-            <span class="status pending">Pending</span>
-          </div>
-        </div>
+  <section class="layout">
+    <div class="panel">
+      <div class="panelHead">
+        <h2>Signal Library</h2>
+        <span class="badge">Private access active</span>
       </div>
 
-      <aside class="side">
-        <div class="sideCard">
-          <h3>Client Key</h3>
-          <p>Your current private access key.</p>
-          <div id="keyBox" class="keyBox">—</div>
-        </div>
+      <div id="signalsList"></div>
+    </div>
 
-        <div class="sideCard">
-          <h3>Signal Channels</h3>
-          <p>
-            Future execution records may include Telegram, Email, LinkedIn,
-            X, Facebook, Instagram and other external distribution channels.
-          </p>
-        </div>
+    <aside class="side">
+      <div class="sideCard">
+        <h3>Client Key</h3>
+        <p>Your current private access key.</p>
+        <div id="keyBox" class="keyBox">—</div>
+      </div>
 
-        <div class="sideCard">
-          <h3>Governance Logic</h3>
-          <p>
-            Signals should not just be created. They should be controlled,
-            attributed, distributed and recorded.
-          </p>
-        </div>
-      </aside>
-    </section>
-  </div>
+      <div class="sideCard">
+        <h3>Signal Channels</h3>
+        <p>Future execution records may include Telegram, Email, LinkedIn, X, Facebook, Instagram and other external distribution channels.</p>
+      </div>
 
-  <footer>
-    TVEVT — Infrastructure for Strategic Signal Control & Distribution
-  </footer>
+      <div class="sideCard">
+        <h3>Storage Layer</h3>
+        <p>Current MVP stores signals locally in this browser. Next step: Cloudflare KV storage.</p>
+      </div>
+    </aside>
+  </section>
+</div>
+
+<footer>TVEVT — Infrastructure for Strategic Signal Control & Distribution</footer>
 
 </div>
 
@@ -480,10 +197,11 @@ const loading = document.getElementById("loading");
 const denied = document.getElementById("denied");
 const app = document.getElementById("app");
 const keyBox = document.getElementById("keyBox");
+const signalsList = document.getElementById("signalsList");
 
 const navConsole = document.getElementById("navConsole");
 const navSignals = document.getElementById("navSignals");
-const navLog = document.getElementById("navLog");
+const navExecutionLog = document.getElementById("navExecutionLog");
 const navCreate = document.getElementById("navCreate");
 const backConsole = document.getElementById("backConsole");
 const createSignal = document.getElementById("createSignal");
@@ -492,6 +210,47 @@ const brandLink = document.getElementById("brandLink");
 function withKey(path){
   if(!key) return path;
   return path + "?key=" + encodeURIComponent(key);
+}
+
+function escapeHtml(str){
+  return String(str || "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+function getSignals(){
+  return JSON.parse(localStorage.getItem("tvevt_signals_" + key) || "[]");
+}
+
+function renderSignals(){
+  const signals = getSignals();
+
+  if(!signals.length){
+    signalsList.innerHTML = `
+      <div class="empty">
+        <strong>No signals yet.</strong>
+        <p>Your library is ready. Create Signal → Seal Signal → it will appear here.</p>
+      </div>
+    `;
+    return;
+  }
+
+  signalsList.innerHTML = signals.map(s => `
+    <div class="signal">
+      <div>
+        <div class="signalId">${escapeHtml(s.id)}</div>
+        <div class="signalMeta">${new Date(s.createdAt).toLocaleString()}</div>
+      </div>
+      <div>
+        <div class="signalText">${escapeHtml(s.text)}</div>
+        <div class="signalMeta">Hash: ${escapeHtml(s.hash)}</div>
+      </div>
+      <div class="status">${escapeHtml(s.status || "sealed")}</div>
+    </div>
+  `).join("");
 }
 
 async function start(){
@@ -518,11 +277,13 @@ async function start(){
 
     navConsole.href = withKey("/console.html");
     navSignals.href = withKey("/signals.html");
-    navLog.href = withKey("/log.html");
+    navExecutionLog.href = withKey("/execution-log.html");
     navCreate.href = withKey("/seal.html");
     backConsole.href = withKey("/console.html");
     createSignal.href = withKey("/seal.html");
     brandLink.href = withKey("/console.html");
+
+    renderSignals();
 
     loading.style.display="none";
     app.style.display="block";
