@@ -2,80 +2,403 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Request Access — TVEVT</title>
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1"
+>
+
+<title>
+  Request Access — TVEVT
+</title>
+
 <style>
-body{margin:0;background:#0b0b0c;color:#fff;font-family:Arial,sans-serif;display:flex;justify-content:center;align-items:center;min-height:100vh;padding:24px}
-.box{width:100%;max-width:460px;padding:34px;background:#141416;border:1px solid rgba(255,255,255,.12);border-radius:24px}
-h1{margin:0 0 12px;font-size:42px}
-p{color:#aaa}
-input{width:100%;box-sizing:border-box;padding:15px;margin-top:12px;border-radius:12px;border:1px solid #333;background:#0b0b0c;color:#fff;font-size:16px}
-button{width:100%;margin-top:18px;padding:16px;border:none;border-radius:14px;background:#ff9b3d;color:#000;font-weight:800;cursor:pointer}
-button:disabled{opacity:.6;cursor:not-allowed}
-.status{margin-top:14px;color:#00ff99}
-.links a{display:block;margin-top:10px;color:#ff9b3d;text-decoration:none}
+*{
+  box-sizing:border-box;
+}
+
+body{
+  margin:0;
+  background:#0b0b0c;
+  color:#ffffff;
+  font-family:Arial,sans-serif;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  min-height:100vh;
+  padding:24px;
+}
+
+.box{
+  width:100%;
+  max-width:460px;
+  padding:34px;
+  background:#141416;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:24px;
+  box-shadow:0 10px 40px rgba(0,0,0,.35);
+}
+
+.badge{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:8px 12px;
+  border-radius:999px;
+  background:rgba(255,155,61,.12);
+  border:1px solid rgba(255,155,61,.28);
+  color:#ffb36a;
+  font-size:12px;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  margin-bottom:18px;
+}
+
+h1{
+  margin:0 0 12px;
+  font-size:42px;
+  line-height:1;
+}
+
+.description{
+  color:#a8a8ad;
+  line-height:1.6;
+  margin-bottom:28px;
+}
+
+form{
+  margin:0;
+}
+
+input{
+  width:100%;
+  padding:15px;
+  margin-top:12px;
+  border-radius:14px;
+  border:1px solid #2a2a2e;
+  background:#0b0b0c;
+  color:#ffffff;
+  font-size:16px;
+  outline:none;
+  transition:border-color .2s ease;
+}
+
+input:focus{
+  border-color:#ff9b3d;
+}
+
+button{
+  width:100%;
+  margin-top:20px;
+  padding:16px;
+  border:none;
+  border-radius:14px;
+  background:#ff9b3d;
+  color:#000000;
+  font-weight:800;
+  font-size:15px;
+  cursor:pointer;
+  transition:all .2s ease;
+}
+
+button:hover{
+  transform:translateY(-1px);
+}
+
+button:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+  transform:none;
+}
+
+.status{
+  margin-top:18px;
+  padding:14px;
+  border-radius:14px;
+  display:none;
+  line-height:1.5;
+  font-size:14px;
+}
+
+.status.show{
+  display:block;
+}
+
+.status.success{
+  background:rgba(0,255,153,.08);
+  border:1px solid rgba(0,255,153,.2);
+  color:#7fffc1;
+}
+
+.status.error{
+  background:rgba(255,70,70,.08);
+  border:1px solid rgba(255,70,70,.18);
+  color:#ff8d8d;
+}
+
+.status.info{
+  background:rgba(255,155,61,.08);
+  border:1px solid rgba(255,155,61,.18);
+  color:#ffca8f;
+}
+
+.links{
+  margin-top:20px;
+}
+
+.links a{
+  display:block;
+  margin-top:12px;
+  color:#ff9b3d;
+  text-decoration:none;
+  font-size:14px;
+}
+
+.links a:hover{
+  opacity:.85;
+}
+
+.footer{
+  margin-top:28px;
+  color:#666;
+  font-size:12px;
+  line-height:1.6;
+}
 </style>
 </head>
+
 <body>
 
 <div class="box">
-  <h1>Request Access</h1>
-  <p>Private console access requires approval.</p>
 
-  <input id="name" placeholder="Your name">
-  <input id="email" placeholder="Email">
+  <div class="badge">
+    TVEVT PRIVATE ACCESS
+  </div>
 
-  <button id="btn" onclick="send()">Request Access</button>
+  <h1>
+    Request Access
+  </h1>
 
-  <div id="status" class="status"></div>
-  <div id="links" class="links"></div>
+  <div class="description">
+    TVEVT private console access is managed through controlled identity approval.
+    Your access link will be delivered to your email.
+  </div>
+
+  <form
+    id="accessForm"
+    onsubmit="event.preventDefault(); send();"
+  >
+
+    <input
+      id="name"
+      type="text"
+      placeholder="Your name"
+      autocomplete="name"
+      required
+    >
+
+    <input
+      id="email"
+      type="email"
+      placeholder="Email"
+      autocomplete="email"
+      inputmode="email"
+      required
+    >
+
+    <button
+      id="btn"
+      type="submit"
+    >
+      Request Access
+    </button>
+
+  </form>
+
+  <div
+    id="status"
+    class="status"
+  ></div>
+
+  <div
+    id="links"
+    class="links"
+  ></div>
+
+  <div class="footer">
+    TVEVT is infrastructure for verified organizational signals.
+  </div>
+
 </div>
 
 <script>
-async function send(){
-  const btn=document.getElementById("btn");
-  const status=document.getElementById("status");
-  const links=document.getElementById("links");
+function showStatus(type, message) {
 
-  const name=document.getElementById("name").value.trim();
-  const email=document.getElementById("email").value.trim();
+  const status =
+    document.getElementById(
+      "status"
+    );
 
-  if(!name || !email){
-    status.innerText="Fill all fields";
+  status.className =
+    `status show ${type}`;
+
+  /*
+    SAFE:
+    Messages are hardcoded internally.
+  */
+
+  status.innerHTML =
+    message;
+}
+
+async function send() {
+
+  const btn =
+    document.getElementById(
+      "btn"
+    );
+
+  const links =
+    document.getElementById(
+      "links"
+    );
+
+  const name =
+    document.getElementById(
+      "name"
+    )
+      .value
+      .trim();
+
+  const email =
+    document.getElementById(
+      "email"
+    )
+      .value
+      .trim();
+
+  if (!name || !email) {
+
+    showStatus(
+      "error",
+      "Please fill in all required fields."
+    );
+
     return;
   }
 
-  btn.disabled=true;
-  btn.innerText="Sending...";
-  status.innerText="";
-  links.innerHTML="";
+  /*
+    LOCK UI
+  */
 
-  try{
-    const res=await fetch("/api/leads",{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({name,email})
-    });
+  btn.disabled = true;
 
-    if(res.ok){
-      btn.innerText="Request sent ✓";
-      status.innerText="We received your request.";
+  btn.innerText =
+    "Sending Request...";
 
-      links.innerHTML=`
-        <a href="/">Go to Home</a>
-        <a href="mailto:${email}">Check Email</a>
-      `;
-      return;
+  links.innerHTML = "";
+
+  showStatus(
+    "info",
+    "Submitting your access request..."
+  );
+
+  try {
+
+    const res =
+      await fetch(
+        "/api/leads",
+        {
+          method:"POST",
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+          body:JSON.stringify({
+            name,
+            email
+          })
+        }
+      );
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+      throw new Error(
+        data.error ||
+        "Request failed"
+      );
     }
 
-    btn.disabled=false;
-    btn.innerText="Try again";
-    status.innerText="Error sending request";
+    /*
+      EXISTING ACCESS
+    */
 
-  }catch(e){
-    btn.disabled=false;
-    btn.innerText="Try again";
-    status.innerText="Network error";
+    if (data.resent) {
+
+      btn.innerText =
+        "Access Link Resent";
+
+      showStatus(
+        "success",
+        `
+        Your TVEVT access is already active.<br><br>
+        We resent your private console link to your email.
+        `
+      );
+    }
+
+    /*
+      NEW ACCESS
+    */
+
+    else {
+
+      btn.innerText =
+        "Request Received";
+
+      showStatus(
+        "success",
+        `
+        Your access request has been received.<br><br>
+        Your private console link was sent to your email.
+        `
+      );
+    }
+
+    /*
+      NEXT ACTIONS
+    */
+
+    links.innerHTML = `
+      <a href="/">
+        Return to Home
+      </a>
+
+      <a href="mailto:${email}">
+        Open Email Application
+      </a>
+    `;
+
+  }
+
+  catch(err){
+
+    console.error(err);
+
+    btn.disabled = false;
+
+    btn.innerText =
+      "Try Again";
+
+    showStatus(
+      "error",
+      `
+      Unable to complete your request.<br><br>
+      Please try again in a moment.
+      `
+    );
   }
 }
 </script>
