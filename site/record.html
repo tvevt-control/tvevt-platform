@@ -45,6 +45,7 @@ header{
   align-items:center;
   border-bottom:1px solid var(--line);
   padding-bottom:28px;
+  gap:18px;
 }
 
 .brand{
@@ -75,9 +76,11 @@ header{
 nav{
   display:flex;
   gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
 }
 
-nav a{
+nav a, nav button{
   color:var(--text);
   text-decoration:none;
   border:1px solid var(--line);
@@ -87,6 +90,15 @@ nav a{
   text-transform:uppercase;
   letter-spacing:.1em;
   background:rgba(255,255,255,.03);
+  cursor:pointer;
+  font:inherit;
+  font-weight:800;
+}
+
+nav a.primary{
+  background:linear-gradient(135deg,var(--orange2),var(--orange));
+  color:#170900;
+  border-color:rgba(255,122,26,.8);
 }
 
 main{
@@ -341,13 +353,15 @@ footer{
 
 @media(max-width:760px){
   .page{padding:22px}
-  nav{display:none}
+  header{align-items:flex-start;flex-direction:column}
   main{margin-top:34px}
   .card{padding:28px}
   .lookup,.meta{grid-template-columns:1fr}
   button,.button{width:100%}
   .actions{flex-direction:column}
   .sealed-text{font-size:18px}
+  nav{width:100%;justify-content:flex-start}
+  nav a,nav button{width:100%;text-align:center;justify-content:center}
 }
 </style>
 </head>
@@ -360,13 +374,17 @@ footer{
     <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT" onerror="this.style.display='none'">
     <span>
       <strong>TVEVT</strong>
-      <span>Governance Console</span>
+      <span id="brandSub">Governance Console</span>
     </span>
   </a>
 
-  <nav>
+  <nav id="topNav">
     <a href="/proof.html">Proof</a>
-    <a href="/seal.html">New Signal</a>
+    <a href="/record.html">Verify</a>
+    <a class="primary" id="newSignalLink" href="/seal.html">New Signal</a>
+    <a id="consoleLink" href="/request-access.html">Console</a>
+    <a id="signalsLink" href="/request-access.html">Signals</a>
+    <a id="logLink" href="/request-access.html">Execution Log</a>
   </nav>
 </header>
 
@@ -442,7 +460,8 @@ footer{
       <button id="copyLink">Copy Link</button>
       <button id="shareProof">Share Proof</button>
       <button id="toggleTechnical">Show Hash</button>
-      <a class="button orange" href="/seal.html">Seal New</a>
+      <a class="button orange" id="sealNewLink" href="/seal.html">Seal New</a>
+      <a class="button" id="goConsoleLink" href="/request-access.html">Console</a>
     </div>
 
     <div class="growth" id="growth">
@@ -470,8 +489,38 @@ const $ = id => document.getElementById(id);
 let currentRecord = null;
 let currentVerification = null;
 
+const params = new URLSearchParams(location.search);
+let key = params.get("key") || localStorage.getItem("tvevt_client_key") || "";
+
+if(key){
+  localStorage.setItem("tvevt_client_key", key);
+}
+
+function withKey(path){
+  return key ? path + "?key=" + encodeURIComponent(key) : path;
+}
+
+function applyNavigation(){
+  $("newSignalLink").href = withKey("/seal.html");
+  $("sealNewLink").href = withKey("/seal.html");
+
+  if(key){
+    $("brandSub").textContent = "Private Console Active";
+    $("consoleLink").href = withKey("/console.html");
+    $("signalsLink").href = withKey("/signals.html");
+    $("logLink").href = withKey("/execution-log.html");
+    $("goConsoleLink").href = withKey("/console.html");
+  }else{
+    $("brandSub").textContent = "Governance Console";
+    $("consoleLink").href = "/request-access.html";
+    $("signalsLink").href = "/request-access.html";
+    $("logLink").href = "/request-access.html";
+    $("goConsoleLink").href = "/request-access.html";
+  }
+}
+
 function idFromUrl(){
-  return new URLSearchParams(location.search).get("id") || "";
+  return params.get("id") || "";
 }
 
 function reset(){
@@ -504,11 +553,14 @@ function render(data){
   currentRecord = record;
   currentVerification = verification;
 
-  const verified = verification.verified === true;
+  const verified = verification.verified === true || data.verified === true;
 
   $("badge").style.display = "flex";
   $("record").style.display = "block";
-  $("growth").classList.add("show");
+
+  if(!key){
+    $("growth").classList.add("show");
+  }
 
   $("sealIcon").textContent = verified ? "✓" : "!";
   $("statusLabel").textContent = verified ? "Verified Record" : "Verification Failed";
@@ -628,6 +680,8 @@ $("toggleTechnical").onclick = () => {
   $("technical").classList.toggle("show");
   $("toggleTechnical").textContent = $("technical").classList.contains("show") ? "Hide Hash" : "Show Hash";
 };
+
+applyNavigation();
 
 const initialId = idFromUrl();
 
