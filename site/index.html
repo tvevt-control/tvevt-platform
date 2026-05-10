@@ -271,36 +271,79 @@ footer{
 
 <section class="hero">
   <h1>Say it once.<br>Prove it forever.</h1>
+
   <p>
     Turn any statement into a sealed verification record:
     timestamped, hashed, stored, and shareable by link.
   </p>
 
   <div class="sealBox">
-    <div class="label">Seal a signal instantly</div>
+
+    <div class="label">
+      Seal a signal instantly
+    </div>
 
     <form id="sealForm">
-      <textarea id="text" placeholder="Write a statement you want to verify..." required></textarea>
+
+      <textarea
+        id="text"
+        placeholder="Write a statement you want to verify..."
+        required
+      ></textarea>
 
       <div class="actions">
-        <button class="primary" id="sealBtn" type="submit">Seal Signal</button>
-        <button class="secondary" id="openConsole" type="button">Request Full Console Access</button>
+
+        <button
+          class="primary"
+          id="sealBtn"
+          type="submit"
+        >
+          Seal Signal
+        </button>
+
+        <button
+          class="secondary"
+          id="openConsole"
+          type="button"
+        >
+          Request Full Console Access
+        </button>
+
       </div>
 
       <div id="msg" class="msg"></div>
+
     </form>
+
   </div>
 
   <div class="request">
-    Start instantly. No account required.<br><br>
-    <a href="/request-access.html">Request Extended Access</a>
+    Start instantly. No account required.
+    <br><br>
+
+    <a href="/request-access.html">
+      Request Extended Access
+    </a>
   </div>
 
-  <a class="example" href="/record.html?id=TVE-9Y34FC">
-    <small>● VERIFIED RECORD EXAMPLE</small>
-    <h2>View a real immutable record →</h2>
-    <p>This signal is sealed, timestamped, and cannot be altered without detection.</p>
+  <a
+    class="example"
+    href="/record.html?id=TVE-VUOI83"
+  >
+    <small>
+      ● VERIFIED RECORD EXAMPLE
+    </small>
+
+    <h2>
+      View a real immutable record →
+    </h2>
+
+    <p>
+      This signal is sealed, timestamped,
+      and cannot be altered without detection.
+    </p>
   </a>
+
 </section>
 
 <footer>
@@ -310,63 +353,161 @@ footer{
 </div>
 
 <script>
-const consoleLink = document.getElementById("consoleLink");
-const openConsole = document.getElementById("openConsole");
-const sealForm = document.getElementById("sealForm");
-const text = document.getElementById("text");
-const msg = document.getElementById("msg");
-const sealBtn = document.getElementById("sealBtn");
+
+const consoleLink =
+  document.getElementById(
+    "consoleLink"
+  );
+
+const openConsole =
+  document.getElementById(
+    "openConsole"
+  );
+
+const sealForm =
+  document.getElementById(
+    "sealForm"
+  );
+
+const text =
+  document.getElementById(
+    "text"
+  );
+
+const msg =
+  document.getElementById(
+    "msg"
+  );
+
+const sealBtn =
+  document.getElementById(
+    "sealBtn"
+  );
 
 function getConsoleUrl(){
-  const key = localStorage.getItem("tvevt_client_key");
-  if(key) return "/console.html?key=" + encodeURIComponent(key);
+
+  const key =
+    localStorage.getItem(
+      "tvevt_client_key"
+    );
+
+  if(key){
+
+    return "/console.html?key=" +
+      encodeURIComponent(key);
+  }
+
   return "/request-access.html";
 }
 
-consoleLink.href = getConsoleUrl();
+consoleLink.href =
+  getConsoleUrl();
 
-openConsole.onclick = function(){
-  openConsole.textContent = "Opening...";
-  openConsole.disabled = true;
-  window.location.href = "/request-access.html";
-};
+openConsole.onclick =
+  function(){
 
-sealForm.addEventListener("submit", async function(e){
-  e.preventDefault();
+    openConsole.textContent =
+      "Opening...";
 
-  const value = text.value.trim();
-  if(!value){
-    msg.textContent = "Write a signal first.";
-    return;
-  }
+    openConsole.disabled =
+      true;
 
-  sealBtn.disabled = true;
-  sealBtn.textContent = "Sealing...";
-  msg.textContent = "Creating public verification record...";
+    window.location.href =
+      "/request-access.html";
+  };
 
-  try{
-    const res = await fetch("/publish", {
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      body:JSON.stringify({ text:value })
-    });
+sealForm.addEventListener(
+  "submit",
+  async function(e){
 
-    const data = await res.json();
+    e.preventDefault();
 
-    if(!res.ok){
-      throw new Error(data.error || "Unable to seal signal.");
+    const value =
+      text.value.trim();
+
+    if(!value){
+
+      msg.textContent =
+        "Write a signal first.";
+
+      return;
     }
 
-    const url = data.verification_url || ("/record.html?id=" + encodeURIComponent(data.id));
-    msg.textContent = "Record created. Opening...";
-    window.location.href = url;
+    sealBtn.disabled = true;
 
-  }catch(err){
-    msg.textContent = "Unable to create record.";
-    sealBtn.disabled = false;
-    sealBtn.textContent = "Seal Signal";
+    sealBtn.textContent =
+      "Sealing...";
+
+    msg.textContent =
+      "Creating public verification record...";
+
+    try{
+
+      const res =
+        await fetch(
+          "/api/publish",
+          {
+            method:"POST",
+
+            headers:{
+              "Content-Type":
+                "application/json"
+            },
+
+            body:JSON.stringify({
+              text:value
+            })
+          }
+        );
+
+      const data =
+        await res.json();
+
+      if(
+        !res.ok ||
+        !data.ok
+      ){
+        throw new Error(
+          data.error ||
+          "Unable to seal signal."
+        );
+      }
+
+      const url =
+        data.verification_url ||
+        data.recordUrl ||
+        (
+          "/record.html?id=" +
+          encodeURIComponent(
+            data.id
+          )
+        );
+
+      msg.textContent =
+        "Record created. Opening...";
+
+      window.location.href =
+        url;
+
+    }
+
+    catch(err){
+
+      console.error(err);
+
+      msg.textContent =
+        err.message ||
+        "Unable to create record.";
+
+      sealBtn.disabled =
+        false;
+
+      sealBtn.textContent =
+        "Seal Signal";
+    }
   }
-});
+);
+
 </script>
 
 </body>
