@@ -1,8 +1,12 @@
 (function () {
   const params = new URLSearchParams(window.location.search);
+
   const urlKey = params.get("key");
-  const savedKey = localStorage.getItem("tvevt_client_key");
-  const key = urlKey || savedKey || "";
+
+  let key =
+    urlKey ||
+    localStorage.getItem("tvevt_client_key") ||
+    "";
 
   if (key) {
     localStorage.setItem("tvevt_client_key", key);
@@ -10,6 +14,7 @@
 
   function withKey(path) {
     if (!key) return path;
+
     return path + "?key=" + encodeURIComponent(key);
   }
 
@@ -18,7 +23,20 @@
     return current.endsWith(page) ? "active" : "";
   }
 
+  function forgetAccess() {
+    const confirmed = window.confirm(
+      "Forget TVEVT private access on this device?"
+    );
+
+    if (!confirmed) return;
+
+    localStorage.removeItem("tvevt_client_key");
+
+    window.location.href = "/request-access.html";
+  }
+
   const nav = document.createElement("header");
+
   nav.className = "tvevt-private-nav";
 
   nav.innerHTML = `
@@ -26,21 +44,56 @@
       <div class="tvevt-private-logo">
         <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
       </div>
+
       <div class="tvevt-private-brand-text">
         <strong>TVEVT</strong>
-        <span>Governance Console</span>
+        <span>${key ? "Private Console Active" : "Governance Console"}</span>
       </div>
     </a>
 
     <nav class="tvevt-private-links">
-      <a class="${activeClass("console.html")}" href="${withKey("/console.html")}">Console</a>
-      <a class="${activeClass("signals.html")}" href="${withKey("/signals.html")}">Signals</a>
-      <a class="${activeClass("execution-log.html")}" href="${withKey("/execution-log.html")}">Execution Log</a>
-      <a class="primary ${activeClass("seal.html")}" href="${withKey("/seal.html")}">Create Signal</a>
+      <a class="${activeClass("console.html")}" href="${withKey("/console.html")}">
+        Console
+      </a>
+
+      <a class="${activeClass("signals.html")}" href="${withKey("/signals.html")}">
+        Signals
+      </a>
+
+      <a class="${activeClass("execution-log.html")}" href="${withKey("/execution-log.html")}">
+        Execution Log
+      </a>
+
+      <a class="primary ${activeClass("seal.html")}" href="${withKey("/seal.html")}">
+        Create Signal
+      </a>
+
+      <a href="/">
+        Public Site
+      </a>
+
+      ${
+        key
+          ? `
+            <button
+              class="tvevt-private-forget"
+              type="button"
+              id="tvevtForgetAccess"
+            >
+              Forget Access
+            </button>
+          `
+          : `
+            <a href="/request-access.html">
+              Request Access
+            </a>
+          `
+      }
     </nav>
   `;
 
   const style = document.createElement("style");
+
   style.textContent = `
     .tvevt-private-nav{
       display:flex;
@@ -54,6 +107,7 @@
       backdrop-filter:blur(14px);
       margin:28px auto;
       max-width:1180px;
+      font-family:Arial, Helvetica, sans-serif;
     }
 
     .tvevt-private-brand{
@@ -62,6 +116,7 @@
       gap:14px;
       color:white;
       text-decoration:none;
+      min-width:0;
     }
 
     .tvevt-private-logo{
@@ -73,6 +128,7 @@
       border:1px solid rgba(255,155,61,.35);
       border-radius:18px;
       background:rgba(255,155,61,.08);
+      flex:0 0 auto;
     }
 
     .tvevt-private-logo img{
@@ -104,7 +160,8 @@
       justify-content:flex-end;
     }
 
-    .tvevt-private-links a{
+    .tvevt-private-links a,
+    .tvevt-private-forget{
       color:#fff;
       text-decoration:none;
       padding:11px 14px;
@@ -114,6 +171,18 @@
       font-size:14px;
       font-weight:800;
       font-family:Arial, Helvetica, sans-serif;
+      cursor:pointer;
+      transition:
+        background .18s ease,
+        border-color .18s ease,
+        color .18s ease,
+        transform .18s ease;
+    }
+
+    .tvevt-private-links a:hover,
+    .tvevt-private-forget:hover{
+      transform:translateY(-1px);
+      border-color:rgba(255,255,255,.24);
     }
 
     .tvevt-private-links a.active{
@@ -126,11 +195,22 @@
       background:#ff9b3d;
       color:#000;
       border-color:transparent;
+      box-shadow:0 12px 30px rgba(255,155,61,.18);
     }
 
     .tvevt-private-links a.primary.active{
       background:#ff9b3d;
       color:#000;
+    }
+
+    .tvevt-private-forget{
+      color:#ff9b3d;
+      border-color:rgba(255,155,61,.35);
+      background:rgba(255,155,61,.06);
+    }
+
+    .tvevt-private-forget:hover{
+      background:rgba(255,155,61,.12);
     }
 
     @media(max-width:900px){
@@ -144,8 +224,28 @@
         justify-content:flex-start;
       }
     }
+
+    @media(max-width:640px){
+      .tvevt-private-links{
+        width:100%;
+      }
+
+      .tvevt-private-links a,
+      .tvevt-private-forget{
+        width:100%;
+        justify-content:center;
+        text-align:center;
+      }
+    }
   `;
 
   document.head.appendChild(style);
+
   document.body.insertBefore(nav, document.body.firstChild);
+
+  const forgetBtn = document.getElementById("tvevtForgetAccess");
+
+  if (forgetBtn) {
+    forgetBtn.addEventListener("click", forgetAccess);
+  }
 })();
