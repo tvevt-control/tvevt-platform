@@ -1,345 +1,853 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>TVEVT — Leads</title>
-  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg">
+<meta charset="utf-8">
 
-  <style>
-    :root{
-      --bg:#07090c;
-      --panel:#10141c;
-      --card:#141922;
-      --text:#f4f6f8;
-      --muted:rgba(244,246,248,.58);
-      --line:rgba(255,255,255,.12);
-      --orange:#ff7a1a;
-      --orange2:#ffb14a;
-      --green:#7ff0a5;
-      --red:#ff6a5f;
-    }
+<meta
+  name="viewport"
+  content="width=device-width,initial-scale=1"
+>
 
-    *{box-sizing:border-box}
+<title>
+  TVEVT — Leads Control
+</title>
 
-    body{
-      margin:0;
-      min-height:100vh;
-      background:
-        radial-gradient(circle at 18% 0%,rgba(255,122,26,.12),transparent 32%),
-        linear-gradient(180deg,#10131a,var(--bg));
-      color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif;
-      padding:34px;
-    }
+<link
+  rel="icon"
+  type="image/svg+xml"
+  href="/tvevt-favicon.svg"
+>
 
-    header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      border-bottom:1px solid var(--line);
-      padding-bottom:26px;
-      margin-bottom:42px;
-    }
+<style>
+:root{
+  --bg:#07090c;
+  --panel:#10141c;
+  --card:#141922;
+  --text:#f4f6f8;
+  --muted:rgba(244,246,248,.58);
+  --line:rgba(255,255,255,.12);
+  --orange:#ff7a1a;
+  --orange2:#ffb14a;
+  --green:#7ff0a5;
+  --red:#ff6a5f;
+}
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      color:var(--text);
-      text-decoration:none;
-    }
+*{
+  box-sizing:border-box;
+}
 
-    .brand img{width:42px;height:42px}
+body{
+  margin:0;
+  min-height:100vh;
 
-    .brand strong{
-      display:block;
-      letter-spacing:.16em;
-      font-size:16px;
-    }
+  background:
+    radial-gradient(
+      circle at 18% 0%,
+      rgba(255,122,26,.12),
+      transparent 32%
+    ),
+    linear-gradient(
+      180deg,
+      #10131a,
+      var(--bg)
+    );
 
-    .brand span span{
-      display:block;
-      margin-top:4px;
-      color:var(--muted);
-      font-size:11px;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-    }
+  color:var(--text);
 
-    .nav{
-      display:flex;
-      gap:10px;
-    }
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "Inter",
+    "SF Pro Display",
+    "Segoe UI",
+    Arial,
+    sans-serif;
 
-    .nav a{
-      color:var(--text);
-      text-decoration:none;
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:12px 18px;
-      font-size:13px;
-      font-weight:700;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-    }
+  padding:34px;
+}
 
-    main{
-      max-width:980px;
-      margin:0 auto;
-    }
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--line);
+  padding-bottom:26px;
+  margin-bottom:42px;
+}
 
-    h1{
-      margin:0;
-      font-size:56px;
-      letter-spacing:-.06em;
-      line-height:.95;
-    }
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  color:var(--text);
+  text-decoration:none;
+}
 
-    .lead-text{
-      margin:14px 0 32px;
-      color:var(--muted);
-      font-size:18px;
-      line-height:1.5;
-    }
+.brand img{
+  width:42px;
+  height:42px;
+}
 
-    .toolbar{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      margin-bottom:24px;
-    }
+.brand strong{
+  display:block;
+  letter-spacing:.16em;
+  font-size:16px;
+}
 
-    .filter{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      color:var(--text);
-      border-radius:999px;
-      padding:11px 16px;
-      cursor:pointer;
-      font-weight:700;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      font-size:12px;
-    }
+.brand span span{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
 
-    .filter.active{
-      background:linear-gradient(135deg,var(--orange2),var(--orange));
-      color:#170900;
-      border-color:transparent;
-    }
+.nav{
+  display:flex;
+  gap:10px;
+}
 
-    .list{
-      display:flex;
-      flex-direction:column;
-      gap:14px;
-    }
+.nav a{
+  color:var(--text);
+  text-decoration:none;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:12px 18px;
+  font-size:13px;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
 
-    .lead{
-      border:1px solid var(--line);
-      border-radius:24px;
-      padding:22px;
-      background:rgba(255,255,255,.045);
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:18px;
-      align-items:center;
-    }
+main{
+  max-width:1180px;
+  margin:0 auto;
+}
 
-    .id{
-      color:var(--orange2);
-      font-size:12px;
-      letter-spacing:.14em;
-      font-weight:800;
-      text-transform:uppercase;
-      margin-bottom:8px;
-    }
+h1{
+  margin:0;
+  font-size:56px;
+  letter-spacing:-.06em;
+  line-height:.95;
+}
 
-    .name{
-      font-size:22px;
-      font-weight:800;
-      margin-bottom:6px;
-    }
+.lead-text{
+  margin:14px 0 32px;
+  color:var(--muted);
+  font-size:18px;
+  line-height:1.5;
+}
 
-    .email,.time{
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.5;
-    }
+.toolbar{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+  margin-bottom:24px;
+}
 
-    .status{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:120px;
-      border-radius:999px;
-      padding:11px 14px;
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.1em;
-      text-transform:uppercase;
-      border:1px solid var(--line);
-    }
+.filter{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:var(--text);
+  border-radius:999px;
+  padding:11px 16px;
+  cursor:pointer;
+  font-weight:700;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-size:12px;
+}
 
-    .status.NEW{color:var(--orange2)}
-    .status.APPROVED{color:var(--green)}
-    .status.REJECTED{color:var(--red)}
+.filter.active{
+  background:
+    linear-gradient(
+      135deg,
+      var(--orange2),
+      var(--orange)
+    );
 
-    .actions{
-      display:flex;
-      gap:10px;
-      margin-top:16px;
-    }
+  color:#170900;
+  border-color:transparent;
+}
 
-    button{
-      border:0;
-      border-radius:999px;
-      padding:10px 15px;
-      cursor:pointer;
-      font-weight:800;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      font-size:12px;
-    }
+.list{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+}
 
-    .approve{background:#1f8f4d;color:white}
-    .reject{background:#b8342b;color:white}
+.lead{
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:22px;
+  background:rgba(255,255,255,.045);
 
-    .empty{
-      border:1px solid var(--line);
-      border-radius:24px;
-      padding:30px;
-      color:var(--muted);
-      background:rgba(255,255,255,.04);
-    }
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:18px;
+  align-items:center;
+}
 
-    footer{
-      margin-top:40px;
-      text-align:center;
-      color:rgba(244,246,248,.32);
-      font-size:11px;
-      letter-spacing:.2em;
-      text-transform:uppercase;
-    }
+.id{
+  color:var(--orange2);
+  font-size:12px;
+  letter-spacing:.14em;
+  font-weight:800;
+  text-transform:uppercase;
+  margin-bottom:8px;
+}
 
-    @media(max-width:700px){
-      body{padding:22px}
-      header{align-items:flex-start;gap:18px;flex-direction:column}
-      h1{font-size:42px}
-      .lead{grid-template-columns:1fr}
-      .status{width:max-content}
-    }
-  </style>
+.name{
+  font-size:22px;
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.email,
+.time,
+.meta{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.5;
+}
+
+.meta{
+  margin-top:8px;
+}
+
+.status{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  min-width:120px;
+  border-radius:999px;
+  padding:11px 14px;
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  border:1px solid var(--line);
+}
+
+.status.NEW{
+  color:var(--orange2);
+}
+
+.status.REVIEWED{
+  color:#8ed1ff;
+}
+
+.status.APPROVED{
+  color:var(--green);
+}
+
+.status.RESENT{
+  color:#ffe38a;
+}
+
+.status.BLOCKED{
+  color:var(--red);
+}
+
+.status.HIDDEN{
+  color:#999;
+}
+
+.actions{
+  display:flex;
+  flex-wrap:wrap;
+  gap:10px;
+  margin-top:18px;
+}
+
+button{
+  border:0;
+  border-radius:999px;
+  padding:10px 15px;
+  cursor:pointer;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-size:11px;
+}
+
+.review{
+  background:#2d6cdf;
+  color:white;
+}
+
+.approve{
+  background:#1f8f4d;
+  color:white;
+}
+
+.resend{
+  background:#d69528;
+  color:white;
+}
+
+.block{
+  background:#b8342b;
+  color:white;
+}
+
+.hide{
+  background:#444;
+  color:white;
+}
+
+.delete{
+  background:#000;
+  color:#ff6a5f;
+  border:1px solid #ff6a5f;
+}
+
+.copy{
+  background:#1d1d1d;
+  color:#fff;
+  border:1px solid var(--line);
+}
+
+.refresh{
+  background:#111;
+  color:#fff;
+  border:1px solid var(--line);
+}
+
+.empty{
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:30px;
+  color:var(--muted);
+  background:rgba(255,255,255,.04);
+}
+
+.loading{
+  color:var(--muted);
+}
+
+footer{
+  margin-top:40px;
+  text-align:center;
+  color:rgba(244,246,248,.32);
+  font-size:11px;
+  letter-spacing:.2em;
+  text-transform:uppercase;
+}
+
+@media(max-width:700px){
+
+  body{
+    padding:22px;
+  }
+
+  header{
+    align-items:flex-start;
+    gap:18px;
+    flex-direction:column;
+  }
+
+  h1{
+    font-size:42px;
+  }
+
+  .lead{
+    grid-template-columns:1fr;
+  }
+
+  .status{
+    width:max-content;
+  }
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <a class="brand" href="/">
-    <img src="/assets/brand/tvevt-icon.svg" alt="">
+
+  <a
+    class="brand"
+    href="/"
+  >
+    <img
+      src="/assets/brand/tvevt-icon.svg"
+      alt=""
+    >
+
     <span>
-      <strong>TVEVT</strong>
-      <span>Governance Console</span>
+      <strong>
+        TVEVT
+      </strong>
+
+      <span>
+        Governance Console
+      </span>
     </span>
   </a>
 
   <nav class="nav">
-    <a href="/request-access.html">Access</a>
-    <a href="/seal.html">Console</a>
+
+    <a href="/">
+      Home
+    </a>
+
+    <a href="/request-access.html">
+      Access
+    </a>
+
   </nav>
+
 </header>
 
 <main>
-  <h1>Leads control.</h1>
+
+  <h1>
+    Leads control.
+  </h1>
+
   <p class="lead-text">
-    Access requests captured through TVEVT. Review, approve, or reject incoming signals.
+    Operational identity management for TVEVT private access infrastructure.
   </p>
 
   <div class="toolbar">
-    <button class="filter active" data-filter="ALL">All</button>
-    <button class="filter" data-filter="NEW">New</button>
-    <button class="filter" data-filter="APPROVED">Approved</button>
-    <button class="filter" data-filter="REJECTED">Rejected</button>
+
+    <button
+      class="filter active"
+      data-filter="ALL"
+    >
+      All
+    </button>
+
+    <button
+      class="filter"
+      data-filter="NEW"
+    >
+      New
+    </button>
+
+    <button
+      class="filter"
+      data-filter="REVIEWED"
+    >
+      Reviewed
+    </button>
+
+    <button
+      class="filter"
+      data-filter="APPROVED"
+    >
+      Approved
+    </button>
+
+    <button
+      class="filter"
+      data-filter="BLOCKED"
+    >
+      Blocked
+    </button>
+
+    <button
+      class="refresh"
+      onclick="loadLeads()"
+    >
+      Refresh
+    </button>
+
   </div>
 
-  <div id="leads" class="list"></div>
+  <div
+    id="leads"
+    class="list"
+  >
+    <div class="loading">
+      Loading leads...
+    </div>
+  </div>
+
 </main>
 
-<footer>Say it once. Prove it forever.</footer>
+<footer>
+  Say it once. Prove it forever.
+</footer>
 
 <script>
+let ADMIN_TOKEN =
+  localStorage.getItem(
+    "TVEVT_ADMIN_TOKEN"
+  ) || "";
+
 let allLeads = [];
 let currentFilter = "ALL";
 
+function escapeHtml(value){
+
+  return String(value || "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;");
+}
+
+function ensureAdminToken(){
+
+  if (!ADMIN_TOKEN) {
+
+    ADMIN_TOKEN =
+      window.prompt(
+        "Enter TVEVT Admin Token"
+      ) || "";
+
+    if (ADMIN_TOKEN) {
+
+      localStorage.setItem(
+        "TVEVT_ADMIN_TOKEN",
+        ADMIN_TOKEN
+      );
+    }
+  }
+}
+
 function formatDate(value){
-  if (!value) return "—";
+
+  if (!value) {
+    return "—";
+  }
+
   try {
-    return new Date(value).toLocaleString();
+
+    return new Date(value)
+      .toLocaleString();
+
   } catch {
+
     return value;
   }
 }
 
 async function loadLeads(){
-  const res = await fetch("/api/leads");
-  allLeads = await res.json();
-  renderLeads();
+
+  ensureAdminToken();
+
+  const container =
+    document.getElementById(
+      "leads"
+    );
+
+  try {
+
+    const res =
+      await fetch(
+        `/api/leads?admin_token=${encodeURIComponent(ADMIN_TOKEN)}`
+      );
+
+    if (res.status === 401) {
+
+      localStorage.removeItem(
+        "TVEVT_ADMIN_TOKEN"
+      );
+
+      ADMIN_TOKEN = "";
+
+      alert(
+        "Admin session expired."
+      );
+
+      ensureAdminToken();
+
+      return loadLeads();
+    }
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+
+      throw new Error(
+        data.error ||
+        "Unable to load leads"
+      );
+    }
+
+    allLeads =
+      (data.leads || [])
+        .filter(
+          lead => !lead.hidden
+        );
+
+    renderLeads();
+
+  }
+
+  catch(err){
+
+    console.error(err);
+
+    container.innerHTML = `
+      <div class="empty">
+        Unable to load leads.
+      </div>
+    `;
+  }
 }
 
 function renderLeads(){
-  const container = document.getElementById("leads");
+
+  const container =
+    document.getElementById(
+      "leads"
+    );
+
   container.innerHTML = "";
 
-  const visible = currentFilter === "ALL"
-    ? allLeads
-    : allLeads.filter(item => item.status === currentFilter);
+  const visible =
+    currentFilter === "ALL"
+      ? allLeads
+      : allLeads.filter(
+          item =>
+            item.status === currentFilter
+        );
 
   if (!visible.length) {
-    container.innerHTML = `<div class="empty">No leads in this view.</div>`;
+
+    container.innerHTML = `
+      <div class="empty">
+        No leads in this view.
+      </div>
+    `;
+
     return;
   }
 
   visible.forEach(lead => {
-    const card = document.createElement("div");
-    card.className = "lead";
 
-    const showActions = lead.status === "NEW";
+    const card =
+      document.createElement("div");
+
+    card.className =
+      "lead";
 
     card.innerHTML = `
       <div>
-        <div class="id">${lead.id}</div>
-        <div class="name">${lead.name || "—"}</div>
-        <div class="email">${lead.email || "—"}</div>
-        <div class="time">Created: ${formatDate(lead.createdAt)}</div>
-        ${lead.updatedAt ? `<div class="time">Updated: ${formatDate(lead.updatedAt)}</div>` : ""}
-        ${showActions ? `
-          <div class="actions">
-            <button class="approve" onclick="updateLead('${lead.id}','APPROVED')">Approve</button>
-            <button class="reject" onclick="updateLead('${lead.id}','REJECTED')">Reject</button>
+
+        <div class="id">
+          ${escapeHtml(lead.id)}
+        </div>
+
+        <div class="name">
+          ${escapeHtml(lead.name || "—")}
+        </div>
+
+        <div class="email">
+          ${escapeHtml(lead.email || "—")}
+        </div>
+
+        <div class="meta">
+          Requests:
+          ${escapeHtml(lead.requestCount || 1)}
+        </div>
+
+        <div class="time">
+          Created:
+          ${escapeHtml(formatDate(lead.createdAt))}
+        </div>
+
+        <div class="time">
+          Updated:
+          ${escapeHtml(formatDate(lead.updatedAt))}
+        </div>
+
+        <div class="time">
+          Last Request:
+          ${escapeHtml(formatDate(lead.lastRequestAt))}
+        </div>
+
+        ${
+          lead.clientKey
+          ? `
+          <div class="meta">
+            Key:
+            ${escapeHtml(lead.clientKey)}
           </div>
-        ` : ""}
+          `
+          : ""
+        }
+
+        <div class="actions">
+
+          <button
+            class="review"
+            onclick="runAction('${escapeHtml(lead.id)}','review')"
+          >
+            Review
+          </button>
+
+          <button
+            class="approve"
+            onclick="runAction('${escapeHtml(lead.id)}','approve')"
+          >
+            Approve
+          </button>
+
+          <button
+            class="resend"
+            onclick="runAction('${escapeHtml(lead.id)}','resend')"
+          >
+            Resend
+          </button>
+
+          <button
+            class="block"
+            onclick="runAction('${escapeHtml(lead.id)}','block')"
+          >
+            Block
+          </button>
+
+          <button
+            class="hide"
+            onclick="runAction('${escapeHtml(lead.id)}','hide')"
+          >
+            Hide
+          </button>
+
+          <button
+            class="delete"
+            onclick="runAction('${escapeHtml(lead.id)}','delete')"
+          >
+            Delete
+          </button>
+
+          ${
+            lead.consoleUrl
+            ? `
+            <button
+              class="copy"
+              onclick="copyConsole('${escapeHtml(lead.consoleUrl)}')"
+            >
+              Copy Console
+            </button>
+            `
+            : ""
+          }
+
+        </div>
+
       </div>
 
-      <div class="status ${lead.status}">${lead.status}</div>
+      <div class="status ${escapeHtml(lead.status)}">
+        ${escapeHtml(lead.status)}
+      </div>
     `;
 
     container.appendChild(card);
   });
 }
 
-async function updateLead(id, status){
-  await fetch(`/lead-action?id=${id}&status=${status}`);
-  await loadLeads();
+async function runAction(
+  id,
+  action
+){
+
+  try {
+
+    const res =
+      await fetch(
+        `/api/lead-action?admin_token=${encodeURIComponent(ADMIN_TOKEN)}`,
+        {
+          method:"POST",
+
+          headers:{
+            "Content-Type":
+              "application/json"
+          },
+
+          body:JSON.stringify({
+            id,
+            action
+          })
+        }
+      );
+
+    const data =
+      await res.json();
+
+    if (!res.ok) {
+
+      throw new Error(
+        data.error ||
+        "Action failed"
+      );
+    }
+
+    await loadLeads();
+
+  }
+
+  catch(err){
+
+    console.error(err);
+
+    alert(
+      err.message ||
+      "Action failed"
+    );
+  }
 }
 
-document.querySelectorAll(".filter").forEach(button => {
-  button.addEventListener("click", () => {
-    document.querySelectorAll(".filter").forEach(b => b.classList.remove("active"));
-    button.classList.add("active");
-    currentFilter = button.dataset.filter;
-    renderLeads();
+async function copyConsole(
+  url
+){
+
+  try {
+
+    await navigator
+      .clipboard
+      .writeText(url);
+
+    alert(
+      "Console link copied."
+    );
+
+  }
+
+  catch(err){
+
+    console.error(err);
+
+    alert(
+      "Unable to copy."
+    );
+  }
+}
+
+document
+  .querySelectorAll(".filter")
+  .forEach(button => {
+
+    button.addEventListener(
+      "click",
+      () => {
+
+        document
+          .querySelectorAll(".filter")
+          .forEach(
+            b =>
+              b.classList.remove(
+                "active"
+              )
+          );
+
+        button.classList.add(
+          "active"
+        );
+
+        currentFilter =
+          button.dataset.filter;
+
+        renderLeads();
+      }
+    );
   });
-});
 
 loadLeads();
 </script>
