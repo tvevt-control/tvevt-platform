@@ -11,13 +11,33 @@ async function sha256(text) {
     .join("");
 }
 
+function jsonResponse(payload, status = 200) {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store"
+    }
+  });
+}
+
+function getText(record) {
+  return (
+    record.text ||
+    record.content?.text ||
+    record.statement ||
+    record.payload?.text ||
+    ""
+  );
+}
+
 function buildCanonicalPayload(record) {
   if (record.canonicalPayload) {
     return record.canonicalPayload;
   }
 
   const normalized = {
-    text: record.text || record.content?.text || "",
+    text: getText(record),
     visibility: record.visibility || "public",
     createdAt: record.createdAt || record.timestamp || null
   };
@@ -30,7 +50,7 @@ function buildCanonicalPayload(record) {
 }
 
 function buildVerificationCandidates(record) {
-  const text = record.text || record.content?.text || "";
+  const text = getText(record);
 
   const candidates = [];
 
@@ -51,24 +71,86 @@ function buildVerificationCandidates(record) {
     payload: text
   });
 
-  if (record.content?.text && record.content.text !== text) {
-    candidates.push({
-      mode: "legacy_content_text_only",
-      payload: record.content.text
-    });
-  }
+  candidates.push({
+    mode: "legacy_content_text_only",
+    payload: record.content?.text || ""
+  });
 
-  return candidates;
+  candidates.push({
+    mode: "legacy_record_json",
+    payload: JSON.stringify(record)
+  });
+
+  candidates.push({
+    mode: "legacy_content_json",
+    payload: JSON.stringify(record.content || {})
+  });
+
+  candidates.push({
+    mode: "legacy_text_timestamp",
+    payload: JSON.stringify({
+      text,
+      timestamp: record.timestamp || record.createdAt || ""
+    })
+  });
+
+  candidates.push({
+    mode: "legacy_text_createdAt",
+    payload: JSON.stringify({
+      text,
+      createdAt: record.createdAt || record.timestamp || ""
+    })
+  });
+
+  candidates.push({
+    mode: "legacy_id_key_text_time",
+    payload: JSON.stringify({
+      id: record.id || "",
+      key: record.clientKey || record.key || "",
+      text,
+      time: record.time || record.timestamp || record.createdAt || ""
+    })
+  });
+
+  return candidates.filter(
+    (candidate) =>
+      typeof candidate.payload === "string" &&
+      candidate.payload.length > 0
+  );
 }
 
-function jsonResponse(payload, status = 200) {
-  return new Response(JSON.stringify(payload), {
-    status,
-    headers: {
-      "Content-Type": "application/json",
-      "Cache-Control": "no-store"
+async function verifyHash(record) {
+  const storedHash = record.hash || "";
+
+  const candidates = buildVerificationCandidates(record);
+
+  let firstHash = "";
+
+  for (const candidate of candidates) {
+    const hash = await sha256(candidate.payload);
+
+    if (!firstHash) {
+      firstHash = hash;
     }
-  });
+
+    if (hash === storedHash) {
+      return {
+        verified: true,
+        mode: candidate.mode,
+        recalculatedHash: hash,
+        storedHash,
+        canonicalPayload: candidate.payload
+      };
+    }
+  }
+
+  return {
+    verified: false,
+    mode: "no_hash_match",
+    recalculatedHash: firstHash,
+    storedHash,
+    canonicalPayload: buildCanonicalPayload(record)
+  };
 }
 
 export async function onRequestGet(context) {
@@ -113,35 +195,9 @@ export async function onRequestGet(context) {
 
     const record = JSON.parse(raw);
 
-    const storedHash = record.hash || "";
+    const verification = await verifyHash(record);
 
-    const candidates = buildVerificationCandidates(record);
-
-    let verified = false;
-    let matchedMode = "";
-    let matchedPayload = "";
-    let recalculatedHash = "";
-
-    for (const candidate of candidates) {
-      const candidateHash = await sha256(candidate.payload);
-
-      if (candidateHash === storedHash) {
-        verified = true;
-        matchedMode = candidate.mode;
-        matchedPayload = candidate.payload;
-        recalculatedHash = candidateHash;
-        break;
-      }
-
-      if (!recalculatedHash) {
-        recalculatedHash = candidateHash;
-      }
-    }
-
-    const text =
-      record.text ||
-      record.content?.text ||
-      "";
+    const text = getText(record);
 
     const recordUrl =
       record.recordUrl ||
@@ -151,15 +207,9 @@ export async function onRequestGet(context) {
     return jsonResponse({
       ok: true,
 
-      verified,
+      verified: verification.verified,
 
-      verification: {
-        verified,
-        mode: matchedMode || "no_hash_match",
-        recalculatedHash,
-        storedHash,
-        canonicalPayload: matchedPayload || buildCanonicalPayload(record)
-      },
+      verification,
 
       record: {
         id: record.id || id,
@@ -181,16 +231,18 @@ export async function onRequestGet(context) {
           text
         },
 
-        hash: storedHash,
+        hash: record.hash || "",
 
         createdAt:
           record.createdAt ||
           record.timestamp ||
+          record.time ||
           "",
 
         timestamp:
           record.timestamp ||
           record.createdAt ||
+          record.time ||
           "",
 
         verification_url: recordUrl,
