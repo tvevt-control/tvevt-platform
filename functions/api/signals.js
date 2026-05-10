@@ -1,53 +1,125 @@
+function isAdminRequest(request, env, url) {
+  const tokenFromQuery = url.searchParams.get("admin_token");
+  const tokenFromHeader = request.headers.get("x-admin-token");
+  const authHeader = request.headers.get("authorization") || "";
+
+  const tokenFromBearer = authHeader.startsWith("Bearer ")
+    ? authHeader.replace("Bearer ", "").trim()
+    : "";
+
+  const adminToken = env.ADMIN_TOKEN;
+
+  if (!adminToken) return false;
+
+  return (
+    tokenFromQuery === adminToken ||
+    tokenFromHeader === adminToken ||
+    tokenFromBearer === adminToken
+  );
+}
+
+function jsonResponse(payload, status = 200) {
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: {
+      "Content-Type": "application/json"
+    }
+  });
+}
+
+function normalizeRecord(record, fallbackId) {
+  const id = record.id || fallbackId;
+
+  return {
+    id,
+    type: record.type || "Verified Signal",
+    visibility: record.visibility || "public",
+    timestamp: record.timestamp || record.createdAt || "",
+    createdAt: record.createdAt || record.timestamp || "",
+    hash: record.hash || "",
+    status: record.anchor_status || record.status || "sealed",
+    anchor_status: record.anchor_status || record.status || "sealed",
+    text: record.content?.text || record.text || "",
+    recordUrl:
+      record.recordUrl ||
+      record.verification_url ||
+      `/record.html?id=${encodeURIComponent(id)}`,
+    verification_url:
+      record.verification_url ||
+      record.recordUrl ||
+      `/record.html?id=${encodeURIComponent(id)}`
+  };
+}
+
 export async function onRequestGet(context) {
   try {
     const store = context.env.STORE || context.env.LOG_STORE;
 
-    const url = new URL(context.request.url);
-    const key = url.searchParams.get("key") || "";
-    const query = (url.searchParams.get("q") || "").toLowerCase().trim();
-
-    if (!key) {
-      return new Response(JSON.stringify({ error: "Missing key" }), {
-        status: 403,
-        headers: { "Content-Type": "application/json" }
-      });
+    if (!store) {
+      return jsonResponse(
+        {
+          ok: false,
+          error: "Storage not configured"
+        },
+        500
+      );
     }
 
-    const list = await store.list();
+    const url = new URL(context.request.url);
+
+    const key = String(url.searchParams.get("key") || "").trim();
+
+    const query = String(url.searchParams.get("q") || "")
+      .toLowerCase()
+      .trim();
+
+    const admin = isAdminRequest(context.request, context.env, url);
+
+    if (!key && !admin) {
+      return jsonResponse(
+        {
+          ok: false,
+          error: "Missing private access key"
+        },
+        403
+      );
+    }
+
+    const list = await store.list({
+      prefix: "TVE-"
+    });
+
+    const entries = await Promise.all(
+      list.keys.map(async (item) => {
+        const raw = await store.get(item.name);
+
+        if (!raw) return null;
+
+        try {
+          return {
+            key: item.name,
+            record: JSON.parse(raw)
+          };
+        } catch {
+          return null;
+        }
+      })
+    );
+
     const signals = [];
 
-    for (const item of list.keys) {
-      if (!item.name.startsWith("TVE-")) continue;
+    for (const entry of entries.filter(Boolean)) {
+      const record = entry.record;
 
-      const raw = await store.get(item.name);
-      if (!raw) continue;
+      if (!admin) {
+        const recordClientKey = record.clientKey || record.key || "";
 
-      let record;
-      try {
-        record = JSON.parse(raw);
-      } catch {
-        continue;
+        if (recordClientKey !== key) {
+          continue;
+        }
       }
 
-      /*
-        ADMIN KEY:
-        TVEVT-MAX-2026 sees all existing signals.
-        Future client keys will see only records with matching key.
-      */
-      if (key !== "TVEVT-MAX-2026") {
-        if (record.key !== key) continue;
-      }
-
-      const text = record.content?.text || record.text || "";
-
-      const signal = {
-        id: record.id || item.name,
-        timestamp: record.timestamp || record.createdAt || "",
-        hash: record.hash || "",
-        status: record.anchor_status || record.status || "sealed",
-        text,
-        link: `/record.html?id=${record.id || item.name}`
-      };
+      const signal = normalizeRecord(record, entry.key);
 
       if (query) {
         const haystack = [
@@ -55,25 +127,41 @@ export async function onRequestGet(context) {
           signal.timestamp,
           signal.status,
           signal.hash,
-          signal.text
-        ].join(" ").toLowerCase();
+          signal.text,
+          signal.visibility
+        ]
+          .join(" ")
+          .toLowerCase();
 
-        if (!haystack.includes(query)) continue;
+        if (!haystack.includes(query)) {
+          continue;
+        }
       }
 
       signals.push(signal);
     }
 
-    signals.sort((a, b) => new Date(b.timestamp || 0) - new Date(a.timestamp || 0));
+    signals.sort(
+      (a, b) =>
+        new Date(b.timestamp || 0) -
+        new Date(a.timestamp || 0)
+    );
 
-    return new Response(JSON.stringify(signals), {
-      headers: { "Content-Type": "application/json" }
+    return jsonResponse({
+      ok: true,
+      signals,
+      records: signals
     });
 
   } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    });
+    console.error("Signals GET error:", err);
+
+    return jsonResponse(
+      {
+        ok: false,
+        error: err.message
+      },
+      500
+    );
   }
 }
