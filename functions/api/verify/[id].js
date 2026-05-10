@@ -11,24 +11,11 @@ async function sha256(text) {
     .join("");
 }
 
-function canonicalPayload(record) {
-  /*
-    IMPORTANT:
-    New records created by publish.js already store
-    the exact canonicalPayload used for hashing.
-
-    Verification must use that stored payload first.
-    This prevents schema drift between publish.js
-    and verify/[id].js.
-  */
+function buildCanonicalPayload(record) {
   if (record.canonicalPayload) {
     return record.canonicalPayload;
   }
 
-  /*
-    Fallback for older records created before
-    canonicalPayload was stored.
-  */
   const normalized = {
     text: record.text || record.content?.text || "",
     visibility: record.visibility || "public",
@@ -40,6 +27,38 @@ function canonicalPayload(record) {
   }
 
   return JSON.stringify(normalized);
+}
+
+function buildVerificationCandidates(record) {
+  const text = record.text || record.content?.text || "";
+
+  const candidates = [];
+
+  if (record.canonicalPayload) {
+    candidates.push({
+      mode: "stored_canonical_payload",
+      payload: record.canonicalPayload
+    });
+  }
+
+  candidates.push({
+    mode: "current_canonical_payload",
+    payload: buildCanonicalPayload(record)
+  });
+
+  candidates.push({
+    mode: "legacy_text_only",
+    payload: text
+  });
+
+  if (record.content?.text && record.content.text !== text) {
+    candidates.push({
+      mode: "legacy_content_text_only",
+      payload: record.content.text
+    });
+  }
+
+  return candidates;
 }
 
 function jsonResponse(payload, status = 200) {
@@ -94,29 +113,53 @@ export async function onRequestGet(context) {
 
     const record = JSON.parse(raw);
 
-    const payload = canonicalPayload(record);
-
-    const recalculatedHash = await sha256(payload);
-
     const storedHash = record.hash || "";
 
-    const verified =
-      Boolean(storedHash) &&
-      recalculatedHash === storedHash;
+    const candidates = buildVerificationCandidates(record);
 
-    const verification = {
-      verified,
-      recalculatedHash,
-      storedHash,
-      canonicalPayload: payload
-    };
+    let verified = false;
+    let matchedMode = "";
+    let matchedPayload = "";
+    let recalculatedHash = "";
+
+    for (const candidate of candidates) {
+      const candidateHash = await sha256(candidate.payload);
+
+      if (candidateHash === storedHash) {
+        verified = true;
+        matchedMode = candidate.mode;
+        matchedPayload = candidate.payload;
+        recalculatedHash = candidateHash;
+        break;
+      }
+
+      if (!recalculatedHash) {
+        recalculatedHash = candidateHash;
+      }
+    }
+
+    const text =
+      record.text ||
+      record.content?.text ||
+      "";
+
+    const recordUrl =
+      record.recordUrl ||
+      record.verification_url ||
+      `https://tvevt.com/record.html?id=${encodeURIComponent(record.id || id)}`;
 
     return jsonResponse({
       ok: true,
 
       verified,
 
-      verification,
+      verification: {
+        verified,
+        mode: matchedMode || "no_hash_match",
+        recalculatedHash,
+        storedHash,
+        canonicalPayload: matchedPayload || buildCanonicalPayload(record)
+      },
 
       record: {
         id: record.id || id,
@@ -132,16 +175,10 @@ export async function onRequestGet(context) {
           record.status ||
           "sealed",
 
-        text:
-          record.text ||
-          record.content?.text ||
-          "",
+        text,
 
         content: {
-          text:
-            record.text ||
-            record.content?.text ||
-            ""
+          text
         },
 
         hash: storedHash,
@@ -156,15 +193,9 @@ export async function onRequestGet(context) {
           record.createdAt ||
           "",
 
-        verification_url:
-          record.verification_url ||
-          record.recordUrl ||
-          `https://tvevt.com/record.html?id=${encodeURIComponent(record.id || id)}`,
+        verification_url: recordUrl,
 
-        recordUrl:
-          record.recordUrl ||
-          record.verification_url ||
-          `https://tvevt.com/record.html?id=${encodeURIComponent(record.id || id)}`,
+        recordUrl,
 
         owner:
           record.visibility === "private"
@@ -181,10 +212,7 @@ export async function onRequestGet(context) {
     });
 
   } catch (err) {
-    console.error(
-      "Verify record error:",
-      err
-    );
+    console.error("Verify record error:", err);
 
     return jsonResponse(
       {
