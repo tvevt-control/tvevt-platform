@@ -12,31 +12,134 @@
   Request Access — TVEVT
 </title>
 
+<link
+  rel="icon"
+  href="/assets/brand/tvevt-favicon.svg"
+  type="image/svg+xml"
+>
+
 <style>
+:root{
+  --bg:#09090b;
+  --panel:#141416;
+  --line:rgba(255,255,255,.12);
+  --text:#ffffff;
+  --muted:#a7a7ad;
+  --orange:#ff9b3d;
+  --green:#2cff9a;
+  --red:#ff6a5f;
+}
+
 *{
   box-sizing:border-box;
 }
 
 body{
   margin:0;
-  background:#0b0b0c;
-  color:#ffffff;
-  font-family:Arial,sans-serif;
-  display:flex;
-  justify-content:center;
-  align-items:center;
   min-height:100vh;
-  padding:24px;
+  background:
+    radial-gradient(circle at top left, rgba(255,155,61,.16), transparent 32%),
+    var(--bg);
+  color:var(--text);
+  font-family:Arial, Helvetica, sans-serif;
 }
 
-.box{
-  width:100%;
-  max-width:460px;
-  padding:34px;
-  background:#141416;
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:24px;
-  box-shadow:0 10px 40px rgba(0,0,0,.35);
+.page{
+  max-width:1180px;
+  margin:0 auto;
+  padding:28px 24px 80px;
+}
+
+.header{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:18px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:28px;
+  background:rgba(20,20,22,.78);
+  backdrop-filter:blur(14px);
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  color:#fff;
+  text-decoration:none;
+  min-width:0;
+}
+
+.logo{
+  width:54px;
+  height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,155,61,.35);
+  border-radius:18px;
+  background:rgba(255,155,61,.08);
+  flex:0 0 auto;
+}
+
+.logo img{
+  width:30px;
+  height:30px;
+  display:block;
+}
+
+.brandText strong{
+  display:block;
+  font-size:23px;
+  letter-spacing:-.03em;
+  line-height:1;
+  color:#fff;
+}
+
+.brandText span{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.nav{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.nav a{
+  color:#fff;
+  text-decoration:none;
+  padding:11px 14px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  font-size:14px;
+  font-weight:800;
+}
+
+.nav a.primary{
+  background:var(--orange);
+  color:#000;
+  border-color:transparent;
+}
+
+.layout{
+  min-height:calc(100vh - 150px);
+  display:grid;
+  grid-template-columns:1fr 460px;
+  gap:42px;
+  align-items:center;
+  padding:54px 0 0;
+}
+
+.copy{
+  max-width:590px;
 }
 
 .badge{
@@ -52,18 +155,51 @@ body{
   letter-spacing:.08em;
   text-transform:uppercase;
   margin-bottom:18px;
+  font-weight:900;
 }
 
 h1{
-  margin:0 0 12px;
-  font-size:42px;
-  line-height:1;
+  margin:0;
+  font-size:clamp(48px,7vw,84px);
+  line-height:.92;
+  letter-spacing:-.07em;
 }
 
 .description{
-  color:#a8a8ad;
-  line-height:1.6;
-  margin-bottom:28px;
+  color:var(--muted);
+  line-height:1.65;
+  margin-top:22px;
+  font-size:19px;
+}
+
+.points{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+  margin-top:28px;
+}
+
+.point{
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(255,255,255,.035);
+  padding:16px;
+  color:var(--muted);
+  line-height:1.55;
+  font-size:14px;
+}
+
+.point strong{
+  color:#fff;
+}
+
+.box{
+  width:100%;
+  padding:34px;
+  background:rgba(20,20,22,.9);
+  border:1px solid var(--line);
+  border-radius:28px;
+  box-shadow:0 10px 40px rgba(0,0,0,.35);
 }
 
 form{
@@ -84,7 +220,7 @@ input{
 }
 
 input:focus{
-  border-color:#ff9b3d;
+  border-color:var(--orange);
 }
 
 button{
@@ -93,9 +229,9 @@ button{
   padding:16px;
   border:none;
   border-radius:14px;
-  background:#ff9b3d;
+  background:var(--orange);
   color:#000000;
-  font-weight:800;
+  font-weight:900;
   font-size:15px;
   cursor:pointer;
   transition:all .2s ease;
@@ -149,9 +285,10 @@ button:disabled{
 .links a{
   display:block;
   margin-top:12px;
-  color:#ff9b3d;
+  color:var(--orange);
   text-decoration:none;
   font-size:14px;
+  font-weight:800;
 }
 
 .links a:hover{
@@ -160,125 +297,220 @@ button:disabled{
 
 .footer{
   margin-top:28px;
-  color:#666;
+  color:#777;
   font-size:12px;
   line-height:1.6;
+}
+
+.siteFooter{
+  margin-top:38px;
+  text-align:center;
+  color:rgba(255,255,255,.24);
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+
+@media(max-width:920px){
+  .layout{
+    grid-template-columns:1fr;
+    padding-top:34px;
+  }
+
+  .copy{
+    max-width:none;
+  }
+
+  .header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+
+  .nav{
+    justify-content:flex-start;
+  }
+}
+
+@media(max-width:640px){
+  .page{
+    padding:22px 18px 60px;
+  }
+
+  .nav{
+    width:100%;
+  }
+
+  .nav a{
+    width:100%;
+    text-align:center;
+  }
+
+  .box{
+    padding:26px;
+  }
+
+  h1{
+    font-size:44px;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="box">
+<div class="page">
 
-  <div class="badge">
-    TVEVT PRIVATE ACCESS
-  </div>
+  <header class="header">
 
-  <h1>
-    Request Access
-  </h1>
+    <a class="brand" href="/">
+      <div class="logo">
+        <img
+          src="/assets/brand/tvevt-icon.svg"
+          alt="TVEVT"
+        >
+      </div>
 
-  <div class="description">
-    TVEVT private console access is managed through controlled identity approval.
-    Your access link will be delivered to your email.
-  </div>
+      <div class="brandText">
+        <strong>TVEVT</strong>
+        <span>Governance Console</span>
+      </div>
+    </a>
 
-  <form
-    id="accessForm"
-    onsubmit="event.preventDefault(); send();"
-  >
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/record.html">Verify Record</a>
+      <a href="/seal.html">Public Seal</a>
+      <a class="primary" href="/request-access.html">Request Access</a>
+    </nav>
 
-    <input
-      id="name"
-      type="text"
-      placeholder="Your name"
-      autocomplete="name"
-      required
-    >
+  </header>
 
-    <input
-      id="email"
-      type="email"
-      placeholder="Email"
-      autocomplete="email"
-      inputmode="email"
-      required
-    >
+  <main class="layout">
 
-    <button
-      id="btn"
-      type="submit"
-    >
-      Request Access
-    </button>
+    <section class="copy">
 
-  </form>
+      <div class="badge">
+        TVEVT Private Access
+      </div>
 
-  <div
-    id="status"
-    class="status"
-  ></div>
+      <h1>
+        Request Access
+      </h1>
 
-  <div
-    id="links"
-    class="links"
-  ></div>
+      <div class="description">
+        TVEVT private console access is managed through controlled
+        identity approval. This is not a social login. It is access
+        to verified signal infrastructure.
+      </div>
 
-  <div class="footer">
-    TVEVT is infrastructure for verified organizational signals.
-  </div>
+      <div class="points">
+
+        <div class="point">
+          <strong>Controlled identity.</strong>
+          Access is linked to an approved private console identity.
+        </div>
+
+        <div class="point">
+          <strong>Recoverable access.</strong>
+          If your email already exists, TVEVT can resend your existing private console link.
+        </div>
+
+        <div class="point">
+          <strong>Verified signal layer.</strong>
+          Private access enables signal creation, records, and execution logs.
+        </div>
+
+      </div>
+
+    </section>
+
+    <section class="box">
+
+      <form
+        id="accessForm"
+        onsubmit="event.preventDefault(); send();"
+      >
+
+        <input
+          id="name"
+          type="text"
+          placeholder="Your name"
+          autocomplete="name"
+          required
+        >
+
+        <input
+          id="email"
+          type="email"
+          placeholder="Email"
+          autocomplete="email"
+          inputmode="email"
+          required
+        >
+
+        <button
+          id="btn"
+          type="submit"
+        >
+          Request Access
+        </button>
+
+      </form>
+
+      <div
+        id="status"
+        class="status"
+      ></div>
+
+      <div
+        id="links"
+        class="links"
+      ></div>
+
+      <div class="footer">
+        TVEVT is infrastructure for verified organizational signals.
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer class="siteFooter">
+    Say it once. Prove it forever.
+  </footer>
 
 </div>
 
 <script>
 function showStatus(type, message) {
-
   const status =
-    document.getElementById(
-      "status"
-    );
+    document.getElementById("status");
 
   status.className =
     `status show ${type}`;
-
-  /*
-    SAFE:
-    Messages are hardcoded internally.
-  */
 
   status.innerHTML =
     message;
 }
 
 async function send() {
-
   const btn =
-    document.getElementById(
-      "btn"
-    );
+    document.getElementById("btn");
 
   const links =
-    document.getElementById(
-      "links"
-    );
+    document.getElementById("links");
 
   const name =
-    document.getElementById(
-      "name"
-    )
+    document.getElementById("name")
       .value
       .trim();
 
   const email =
-    document.getElementById(
-      "email"
-    )
+    document.getElementById("email")
       .value
       .trim();
 
   if (!name || !email) {
-
     showStatus(
       "error",
       "Please fill in all required fields."
@@ -287,12 +519,7 @@ async function send() {
     return;
   }
 
-  /*
-    LOCK UI
-  */
-
   btn.disabled = true;
-
   btn.innerText =
     "Sending Request...";
 
@@ -304,7 +531,6 @@ async function send() {
   );
 
   try {
-
     const res =
       await fetch(
         "/api/leads",
@@ -331,12 +557,7 @@ async function send() {
       );
     }
 
-    /*
-      EXISTING ACCESS
-    */
-
     if (data.resent) {
-
       btn.innerText =
         "Access Link Resent";
 
@@ -347,14 +568,7 @@ async function send() {
         We resent your private console link to your email.
         `
       );
-    }
-
-    /*
-      NEW ACCESS
-    */
-
-    else {
-
+    } else {
       btn.innerText =
         "Request Received";
 
@@ -367,10 +581,6 @@ async function send() {
       );
     }
 
-    /*
-      NEXT ACTIONS
-    */
-
     links.innerHTML = `
       <a href="/">
         Return to Home
@@ -381,10 +591,7 @@ async function send() {
       </a>
     `;
 
-  }
-
-  catch(err){
-
+  } catch(err) {
     console.error(err);
 
     btn.disabled = false;
