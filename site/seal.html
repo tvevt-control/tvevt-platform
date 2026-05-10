@@ -15,7 +15,11 @@
   --muted:#a7a7ad;
   --orange:#ff9b3d;
   --green:#2cff9a;
+  --red:#ff6a5f;
 }
+
+*{box-sizing:border-box}
+
 body{
   margin:0;
   min-height:100vh;
@@ -25,19 +29,87 @@ body{
   color:var(--text);
   font-family:Arial, Helvetica, sans-serif;
 }
+
 .wrap{
   max-width:1100px;
   margin:0 auto;
-  padding:40px 24px 80px;
+  padding:34px 24px 80px;
 }
+
+.modeBar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  margin-bottom:22px;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:16px 18px;
+  background:rgba(255,255,255,.04);
+}
+
+.modeBar.private{
+  border-color:rgba(44,255,154,.22);
+  background:rgba(44,255,154,.06);
+}
+
+.modeBar strong{
+  display:block;
+  font-size:13px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--orange);
+}
+
+.modeBar.private strong{
+  color:var(--green);
+}
+
+.modeBar span{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.modeActions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.topBtn{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  border-radius:999px;
+  padding:10px 14px;
+  cursor:pointer;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
 .hero,.panel,.result{
   border:1px solid var(--line);
   border-radius:24px;
   background:rgba(20,20,22,.88);
   padding:24px;
 }
-h1{margin:0 0 12px;font-size:40px}
-p{color:var(--muted);line-height:1.6}
+
+h1{
+  margin:0 0 12px;
+  font-size:40px;
+  letter-spacing:-.04em;
+}
+
+p{
+  color:var(--muted);
+  line-height:1.6;
+}
+
 textarea{
   width:100%;
   min-height:300px;
@@ -49,8 +121,20 @@ textarea{
   color:#fff;
   font:inherit;
   font-size:18px;
+  outline:none;
 }
-.actions{display:flex;gap:12px;margin-top:18px;flex-wrap:wrap}
+
+textarea:focus{
+  border-color:var(--orange);
+}
+
+.actions{
+  display:flex;
+  gap:12px;
+  margin-top:18px;
+  flex-wrap:wrap;
+}
+
 button,.btn{
   padding:13px 16px;
   border-radius:14px;
@@ -61,17 +145,28 @@ button,.btn{
   cursor:pointer;
   text-decoration:none;
 }
+
+button:disabled{
+  opacity:.65;
+  cursor:not-allowed;
+}
+
 .secondary{
   background:transparent;
   color:#fff;
   border:1px solid var(--line);
 }
+
 .result{
   display:none;
   margin-top:20px;
   border-color:rgba(44,255,154,.35);
 }
-.result.show{display:block}
+
+.result.show{
+  display:block;
+}
+
 .field{
   margin-top:10px;
   padding:12px;
@@ -80,20 +175,79 @@ button,.btn{
   background:rgba(0,0,0,.18);
   word-break:break-all;
 }
-small{display:block;color:var(--muted);margin-bottom:5px}
-.msg{margin-top:12px;color:var(--green);font-weight:800}
+
+small{
+  display:block;
+  color:var(--muted);
+  margin-bottom:5px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-weight:900;
+  font-size:11px;
+}
+
+.msg{
+  margin-top:12px;
+  color:var(--green);
+  font-weight:800;
+  min-height:22px;
+}
+
+.msg.error{
+  color:var(--red);
+}
+
+footer{
+  margin-top:40px;
+  text-align:center;
+  color:rgba(255,255,255,.24);
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+
+@media(max-width:800px){
+  .modeBar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  h1{
+    font-size:34px;
+  }
+
+  button,.btn{
+    width:100%;
+    text-align:center;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<script src="/assets/private-nav.js?v=2026-05-04"></script>
+<script src="/assets/private-nav.js?v=2026-05-10"></script>
 
 <div class="wrap">
 
+  <div id="modeBar" class="modeBar">
+    <div>
+      <strong id="modeTitle">Public Seal Mode</strong>
+      <span id="modeText">This signal will be sealed as a public verified record.</span>
+    </div>
+
+    <div class="modeActions">
+      <a class="topBtn" href="/">Public Site</a>
+      <a class="topBtn" id="consoleLink" href="/console.html">Console</a>
+    </div>
+  </div>
+
   <section class="hero">
     <h1>Create Signal</h1>
-    <p>Create and seal a private TVEVT signal. It will be saved to your Signals library and Execution Log.</p>
+    <p>
+      Write the exact statement you want to seal. TVEVT will create a verified record,
+      generate a cryptographic hash, and open the permanent verification page.
+    </p>
   </section>
 
   <section class="panel" style="margin-top:20px">
@@ -110,22 +264,42 @@ small{display:block;color:var(--muted);margin-bottom:5px}
 
     <div id="result" class="result">
       <h2>Signal sealed</h2>
-      <div class="field"><small>Record ID</small><b id="recordId">—</b></div>
-      <div class="field"><small>Timestamp</small><b id="timestamp">—</b></div>
-      <div class="field"><small>Hash</small><b id="hash">—</b></div>
+
+      <div class="field">
+        <small>Record ID</small>
+        <b id="recordId">—</b>
+      </div>
+
+      <div class="field">
+        <small>Hash</small>
+        <b id="hash">—</b>
+      </div>
+
+      <div class="field">
+        <small>Verification Link</small>
+        <b id="recordUrl">—</b>
+      </div>
 
       <div class="actions">
-        <a id="openSignals" class="btn secondary" href="/signals.html">Open Signals</a>
-        <a id="openLog" class="btn" href="/execution-log.html">Open Execution Log</a>
+        <a id="openRecord" class="btn" href="#">Open Verified Record</a>
+        <button id="copyRecord" class="secondary" type="button">Copy Link</button>
       </div>
     </div>
   </section>
+
+  <footer>
+    Say it once. Prove it forever.
+  </footer>
 
 </div>
 
 <script>
 const params = new URLSearchParams(window.location.search);
-let key = params.get("key") || localStorage.getItem("tvevt_client_key") || "";
+
+let key =
+  params.get("key") ||
+  localStorage.getItem("tvevt_client_key") ||
+  "";
 
 const form = document.getElementById("form");
 const text = document.getElementById("text");
@@ -135,115 +309,147 @@ const msg = document.getElementById("msg");
 const result = document.getElementById("result");
 
 const recordId = document.getElementById("recordId");
-const timestamp = document.getElementById("timestamp");
 const hashEl = document.getElementById("hash");
-const openSignals = document.getElementById("openSignals");
-const openLog = document.getElementById("openLog");
+const recordUrl = document.getElementById("recordUrl");
+const openRecord = document.getElementById("openRecord");
+const copyRecord = document.getElementById("copyRecord");
+
+const modeBar = document.getElementById("modeBar");
+const modeTitle = document.getElementById("modeTitle");
+const modeText = document.getElementById("modeText");
+const consoleLink = document.getElementById("consoleLink");
+
+let currentRecordUrl = "";
+
+function setMessage(message, isError = false){
+  msg.textContent = message;
+  msg.classList.toggle("error", isError);
+}
 
 function withKey(path){
-  return key ? path + "?key=" + encodeURIComponent(key) : path;
+  return key
+    ? path + "?key=" + encodeURIComponent(key)
+    : path;
 }
 
-function makeId(prefix){
-  return prefix + "-" + Math.random().toString(36).substring(2,10).toUpperCase();
+function applyMode(){
+  if(key){
+    localStorage.setItem("tvevt_client_key", key);
+
+    modeBar.classList.add("private");
+    modeTitle.textContent = "Private Console Active";
+    modeText.textContent = "This signal will be sealed under your private TVEVT identity.";
+    consoleLink.href = withKey("/console.html");
+    consoleLink.textContent = "Console";
+  }else{
+    modeBar.classList.remove("private");
+    modeTitle.textContent = "Public Seal Mode";
+    modeText.textContent = "This signal will be sealed as a public verified record.";
+    consoleLink.href = "/request-access.html";
+    consoleLink.textContent = "Request Access";
+  }
 }
 
-async function sha256(value){
-  const encoded = new TextEncoder().encode(value);
-  const buffer = await crypto.subtle.digest("SHA-256", encoded);
-  return Array.from(new Uint8Array(buffer)).map(b => b.toString(16).padStart(2,"0")).join("");
-}
+async function sealSignal(signalText){
+  const payload = {
+    text: signalText
+  };
 
-function getSignals(){
-  return JSON.parse(localStorage.getItem("tvevt_signals_" + key) || "[]");
-}
+  if(key){
+    payload.key = key;
+  }
 
-function saveSignals(items){
-  localStorage.setItem("tvevt_signals_" + key, JSON.stringify(items));
-}
+  const res = await fetch("/api/publish", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(payload)
+  });
 
-function getLogs(){
-  return JSON.parse(localStorage.getItem("tvevt_logs_" + key) || "[]");
-}
+  const data = await res.json();
 
-function saveLogs(items){
-  localStorage.setItem("tvevt_logs_" + key, JSON.stringify(items));
-}
+  if(!res.ok || !data.ok){
+    throw new Error(data.error || "Unable to seal signal.");
+  }
 
-if(key){
-  localStorage.setItem("tvevt_client_key", key);
-  openSignals.href = withKey("/signals.html");
-  openLog.href = withKey("/execution-log.html");
+  return data;
 }
 
 form.addEventListener("submit", async function(e){
   e.preventDefault();
 
-  if(!key){
-    msg.textContent = "No private access key found. Open Console from your email link.";
-    return;
-  }
-
   const signalText = text.value.trim();
+
   if(!signalText){
-    msg.textContent = "Enter a signal before sealing.";
+    setMessage("Enter a signal before sealing.", true);
     return;
   }
 
   sealBtn.disabled = true;
   sealBtn.textContent = "Sealing...";
-  msg.textContent = "Creating signal record...";
+
+  result.classList.remove("show");
+  setMessage("Sealing signal and creating verified record...");
 
   try{
-    const now = new Date().toISOString();
-    const id = makeId("SIG");
-    const hash = await sha256(JSON.stringify({ id, key, text: signalText, time: now }));
+    const data = await sealSignal(signalText);
 
-    const signal = {
-      id,
-      text: signalText,
-      status: "sealed",
-      hash,
-      time: now,
-      createdAt: now,
-      clientKey: key
-    };
+    const record = data.record || {};
+    const url = data.recordUrl || data.verification_url || record.recordUrl || record.verification_url;
 
-    const signals = getSignals();
-    signals.push(signal);
-    saveSignals(signals);
+    currentRecordUrl =
+      url ||
+      (window.location.origin + "/record.html?id=" + encodeURIComponent(data.id));
 
-    const logs = getLogs();
-    logs.push({
-      id: makeId("LOG"),
-      signalId: id,
-      time: now,
-      text: "Signal sealed and added to private signal library.",
-      status: "sent",
-      hash
-    });
-    saveLogs(logs);
+    recordId.textContent = data.id || record.id || "—";
+    hashEl.textContent = data.hash || record.hash || "—";
+    recordUrl.textContent = currentRecordUrl;
 
-    recordId.textContent = id;
-    timestamp.textContent = now;
-    hashEl.textContent = hash;
+    openRecord.href = currentRecordUrl;
 
     result.classList.add("show");
-    msg.textContent = "Signal sealed ✓ Saved to Signals and Execution Log.";
+
+    setMessage("Signal sealed ✓ Redirecting to verified record...");
+
+    setTimeout(() => {
+      window.location.href = currentRecordUrl;
+    }, 900);
 
   }catch(err){
-    msg.textContent = "Unable to seal signal.";
-  }finally{
+    console.error(err);
+
     sealBtn.disabled = false;
     sealBtn.textContent = "Seal Signal";
+
+    setMessage(
+      err.message || "Signal could not be sealed. Please try again.",
+      true
+    );
   }
 });
 
 clearBtn.onclick = function(){
   text.value = "";
-  msg.textContent = "";
+  setMessage("");
   result.classList.remove("show");
 };
+
+copyRecord.onclick = async function(){
+  if(!currentRecordUrl){
+    setMessage("No verification link available yet.", true);
+    return;
+  }
+
+  try{
+    await navigator.clipboard.writeText(currentRecordUrl);
+    setMessage("Verification link copied.");
+  }catch(err){
+    setMessage("Unable to copy verification link.", true);
+  }
+};
+
+applyMode();
 </script>
 
 </body>
