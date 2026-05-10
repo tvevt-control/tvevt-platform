@@ -263,7 +263,7 @@ footer{
     </form>
 
     <div id="result" class="result">
-      <h2>Signal sealed</h2>
+      <h2>Verified record created</h2>
 
       <div class="field">
         <small>Record ID</small>
@@ -273,6 +273,11 @@ footer{
       <div class="field">
         <small>Hash</small>
         <b id="hash">—</b>
+      </div>
+
+      <div class="field">
+        <small>Execution Event</small>
+        <b id="logId">—</b>
       </div>
 
       <div class="field">
@@ -310,6 +315,7 @@ const result = document.getElementById("result");
 
 const recordId = document.getElementById("recordId");
 const hashEl = document.getElementById("hash");
+const logIdEl = document.getElementById("logId");
 const recordUrl = document.getElementById("recordUrl");
 const openRecord = document.getElementById("openRecord");
 const copyRecord = document.getElementById("copyRecord");
@@ -350,6 +356,24 @@ function applyMode(){
   }
 }
 
+async function safeJson(response){
+  const raw = await response.text();
+
+  if(!raw){
+    throw new Error(
+      "Empty response from /api/publish. Check Cloudflare function deployment."
+    );
+  }
+
+  try{
+    return JSON.parse(raw);
+  }catch(err){
+    throw new Error(
+      "Invalid JSON response from /api/publish: " + raw.slice(0, 180)
+    );
+  }
+}
+
 async function sealSignal(signalText){
   const payload = {
     text: signalText
@@ -359,7 +383,7 @@ async function sealSignal(signalText){
     payload.key = key;
   }
 
-  const res = await fetch("/api/publish", {
+  const response = await fetch("/api/publish", {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
@@ -367,9 +391,9 @@ async function sealSignal(signalText){
     body: JSON.stringify(payload)
   });
 
-  const data = await res.json();
+  const data = await safeJson(response);
 
-  if(!res.ok || !data.ok){
+  if(!response.ok || !data.ok){
     throw new Error(data.error || "Unable to seal signal.");
   }
 
@@ -396,7 +420,12 @@ form.addEventListener("submit", async function(e){
     const data = await sealSignal(signalText);
 
     const record = data.record || {};
-    const url = data.recordUrl || data.verification_url || record.recordUrl || record.verification_url;
+
+    const url =
+      data.recordUrl ||
+      data.verification_url ||
+      record.recordUrl ||
+      record.verification_url;
 
     currentRecordUrl =
       url ||
@@ -404,13 +433,14 @@ form.addEventListener("submit", async function(e){
 
     recordId.textContent = data.id || record.id || "—";
     hashEl.textContent = data.hash || record.hash || "—";
+    logIdEl.textContent = data.logId || data.executionEvent?.id || "—";
     recordUrl.textContent = currentRecordUrl;
 
     openRecord.href = currentRecordUrl;
 
     result.classList.add("show");
 
-    setMessage("Signal sealed ✓ Redirecting to verified record...");
+    setMessage("Verified record created ✓ Opening verification page...");
 
     setTimeout(() => {
       window.location.href = currentRecordUrl;
