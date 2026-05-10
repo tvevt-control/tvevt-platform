@@ -29,6 +29,7 @@ async function getLeadByClientKey(store, clientKey) {
   const entries = await Promise.all(
     list.keys.map(async (item) => {
       const raw = await store.get(item.name);
+
       if (!raw) return null;
 
       try {
@@ -57,33 +58,59 @@ export async function onRequestGet(context) {
     const store = context.env.STORE || context.env.LOG_STORE;
 
     if (!store) {
-      return json({ error: "Storage not configured" }, 500);
+      return json(
+        { error: "Storage not configured" },
+        500
+      );
     }
 
     const url = new URL(context.request.url);
 
     const key = (url.searchParams.get("key") || "").trim();
-    const query = (url.searchParams.get("q") || "").trim().toLowerCase();
+
+    const query = (
+      url.searchParams.get("q") || ""
+    )
+      .trim()
+      .toLowerCase();
 
     if (!key) {
-      return json({ error: "Missing key" }, 403);
+      return json(
+        { error: "Missing key" },
+        403
+      );
     }
 
     /*
-      ADMIN ACCESS:
-      TVEVT-MAX-2026 sees all execution events.
+      ADMIN ACCESS
+      Use environment variable in production:
+      context.env.ADMIN_KEY
     */
-    const isAdmin = key === "TVEVT-MAX-2026";
+    const adminKey =
+      context.env.ADMIN_KEY || "TVEVT-MAX-2026";
+
+    const isAdmin = key === adminKey;
 
     if (!isAdmin) {
-      const lead = await getLeadByClientKey(store, key);
+      const lead = await getLeadByClientKey(
+        store,
+        key
+      );
 
       if (!lead) {
-        return json({ error: "Invalid or blocked key" }, 403);
+        return json(
+          {
+            error:
+              "Invalid, blocked, or inactive key"
+          },
+          403
+        );
       }
     }
 
-    const list = await store.list({ prefix: "LOG-" });
+    const list = await store.list({
+      prefix: "LOG-"
+    });
 
     const entries = await Promise.all(
       list.keys.map(async (item) => {
@@ -94,11 +121,20 @@ export async function onRequestGet(context) {
         try {
           const parsed = JSON.parse(raw);
 
-          if (!isAdmin && parsed.clientKey !== key) {
-            return null;
+          /*
+            Non-admin users only see
+            their own execution events
+          */
+          if (!isAdmin) {
+            if (parsed.clientKey !== key) {
+              return null;
+            }
           }
 
-          const normalized = normalizeLog(parsed, item.name);
+          const normalized = normalizeLog(
+            parsed,
+            item.name
+          );
 
           if (query) {
             const haystack = [
@@ -108,7 +144,8 @@ export async function onRequestGet(context) {
               normalized.timestamp,
               normalized.hash,
               normalized.status,
-              normalized.text
+              normalized.text,
+              normalized.visibility
             ]
               .join(" ")
               .toLowerCase();
@@ -119,6 +156,7 @@ export async function onRequestGet(context) {
           }
 
           return normalized;
+
         } catch {
           return null;
         }
@@ -129,7 +167,8 @@ export async function onRequestGet(context) {
       .filter(Boolean)
       .sort(
         (a, b) =>
-          new Date(b.timestamp || 0) - new Date(a.timestamp || 0)
+          new Date(b.timestamp || 0) -
+          new Date(a.timestamp || 0)
       );
 
     return json({
@@ -139,11 +178,16 @@ export async function onRequestGet(context) {
     });
 
   } catch (err) {
-    console.error("Execution Log API Error:", err);
+    console.error(
+      "Execution Log API Error:",
+      err
+    );
 
     return json(
       {
-        error: err.message || "Internal server error"
+        error:
+          err.message ||
+          "Internal server error"
       },
       500
     );
