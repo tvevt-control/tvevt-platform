@@ -20,12 +20,34 @@ function escapeHtml(value) {
     .replace(/>/g, "&gt;");
 }
 
+function json(payload, status = 200) {
+  return new Response(
+    JSON.stringify(payload),
+    {
+      status,
+      headers: {
+        "Content-Type": "application/json",
+        "Cache-Control": "no-store"
+      }
+    }
+  );
+}
+
+function getAdminToken(env) {
+  return (
+    env.ADMIN_TOKEN ||
+    env.SIGNALS_ADMIN_KEY ||
+    env.TVEVT_ADMIN_TOKEN ||
+    ""
+  );
+}
+
 function isAdminRequest(request, env, url) {
   const tokenFromQuery =
-    url.searchParams.get("admin_token");
+    url.searchParams.get("admin_token") || "";
 
   const tokenFromHeader =
-    request.headers.get("x-admin-token");
+    request.headers.get("x-admin-token") || "";
 
   const authHeader =
     request.headers.get("authorization") || "";
@@ -35,7 +57,8 @@ function isAdminRequest(request, env, url) {
       ? authHeader.replace("Bearer ", "").trim()
       : "";
 
-  const adminToken = env.ADMIN_TOKEN;
+  const adminToken =
+    getAdminToken(env);
 
   if (!adminToken) {
     return false;
@@ -76,11 +99,7 @@ async function sendTelegram(env, text) {
   }
 }
 
-async function sendEmail(
-  env,
-  lead,
-  isResend = false
-) {
+async function sendEmail(env, lead, isResend = false) {
   if (!env.RESEND_API_KEY || !lead.email) {
     return;
   }
@@ -108,19 +127,11 @@ async function sendEmail(
         subject,
         html: `
           <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111111;">
-            <p>
-              Hi ${escapeHtml(lead.name || "there")},
-            </p>
+            <p>Hi ${escapeHtml(lead.name || "there")},</p>
 
-            <p>
-              ${escapeHtml(intro)}
-            </p>
+            <p>${escapeHtml(intro)}</p>
 
-            <p>
-              <strong>
-                Your private console:
-              </strong>
-            </p>
+            <p><strong>Your private console:</strong></p>
 
             <p>
               <a href="${lead.consoleUrl}">
@@ -128,13 +139,9 @@ async function sendEmail(
               </a>
             </p>
 
-            <p>
-              Please keep this link private.
-            </p>
+            <p>Please keep this link private.</p>
 
-            <p>
-              — TVEVT
-            </p>
+            <p>— TVEVT</p>
           </div>
         `
       })
@@ -156,45 +163,31 @@ export async function onRequestPost(context) {
       context.env.LOG_STORE;
 
     if (!store) {
-      return new Response(
-        JSON.stringify({
+      return json(
+        {
           ok: false,
           error: "Storage not configured"
-        }),
-        {
-          status: 500,
-          headers: {
-            "Content-Type":
-              "application/json"
-          }
-        }
+        },
+        500
       );
     }
 
     const data =
       await context.request.json();
 
-    const name = String(data.name || "")
-      .trim();
+    const name =
+      String(data.name || "").trim();
 
-    const email = String(data.email || "")
-      .trim()
-      .toLowerCase();
+    const email =
+      String(data.email || "").trim().toLowerCase();
 
     if (!name || !email) {
-      return new Response(
-        JSON.stringify({
-          ok: false,
-          error:
-            "Missing name or email"
-        }),
+      return json(
         {
-          status: 400,
-          headers: {
-            "Content-Type":
-              "application/json"
-          }
-        }
+          ok: false,
+          error: "Missing name or email"
+        },
+        400
       );
     }
 
@@ -203,11 +196,6 @@ export async function onRequestPost(context) {
 
     const existingLeadId =
       await store.get(emailLookupKey);
-
-    /*
-      EXISTING USER
-      RESEND EXISTING ACCESS
-    */
 
     if (existingLeadId) {
       const existingRaw =
@@ -258,30 +246,15 @@ Private Console:
 ${escapeHtml(existingLead.consoleUrl)}`
         );
 
-        return new Response(
-          JSON.stringify({
-            ok: true,
-            resent: true,
-            id: existingLead.id,
-            clientKey:
-              existingLead.clientKey,
-            consoleUrl:
-              existingLead.consoleUrl
-          }),
-          {
-            headers: {
-              "Content-Type":
-                "application/json"
-            }
-          }
-        );
+        return json({
+          ok: true,
+          resent: true,
+          id: existingLead.id,
+          clientKey: existingLead.clientKey,
+          consoleUrl: existingLead.consoleUrl
+        });
       }
     }
-
-    /*
-      NEW USER
-      CREATE IDENTITY
-    */
 
     const id =
       generateId("REQ");
@@ -307,12 +280,6 @@ ${escapeHtml(existingLead.consoleUrl)}`
       updatedAt: now,
       lastRequestAt: now
     };
-
-    /*
-      KV is eventually consistent.
-      Full transactional protection
-      will later migrate to D1.
-    */
 
     await store.put(
       id,
@@ -346,21 +313,13 @@ Private Console:
 ${escapeHtml(consoleUrl)}`
     );
 
-    return new Response(
-      JSON.stringify({
-        ok: true,
-        resent: false,
-        id,
-        clientKey,
-        consoleUrl
-      }),
-      {
-        headers: {
-          "Content-Type":
-            "application/json"
-        }
-      }
-    );
+    return json({
+      ok: true,
+      resent: false,
+      id,
+      clientKey,
+      consoleUrl
+    });
 
   } catch (err) {
     console.error(
@@ -368,18 +327,12 @@ ${escapeHtml(consoleUrl)}`
       err
     );
 
-    return new Response(
-      JSON.stringify({
+    return json(
+      {
         ok: false,
         error: err.message
-      }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type":
-            "application/json"
-        }
-      }
+      },
+      500
     );
   }
 }
@@ -397,32 +350,16 @@ export async function onRequestGet(context) {
       context.env.LOG_STORE;
 
     if (!store) {
-      return new Response(
-        JSON.stringify(
-          accessToken
-            ? { valid: false }
-            : {
-                ok: false,
-                error:
-                  "Storage not configured"
-              }
-        ),
-        {
-          status:
-            accessToken ? 200 : 500,
-          headers: {
-            "Content-Type":
-              "application/json"
-          }
-        }
+      return json(
+        accessToken
+          ? { valid: false }
+          : {
+              ok: false,
+              error: "Storage not configured"
+            },
+        accessToken ? 200 : 500
       );
     }
-
-    /*
-      SECURITY:
-      REQUIRE ADMIN AUTHORIZATION
-      BEFORE LOADING KV
-    */
 
     if (
       !accessToken &&
@@ -432,51 +369,39 @@ export async function onRequestGet(context) {
         url
       )
     ) {
-      return new Response(
-        JSON.stringify({
+      return json(
+        {
           ok: false,
           error: "Unauthorized"
-        }),
-        {
-          status: 401,
-          headers: {
-            "Content-Type":
-              "application/json"
-          }
-        }
+        },
+        401
       );
     }
-
-    /*
-      ONLY LOAD REQ- KEYS
-    */
 
     const list =
       await store.list({
         prefix: "REQ-"
       });
 
-    /*
-      PARALLEL KV READS
-    */
-
     const leadEntries =
       await Promise.all(
         list.keys.map(
           async (key) => {
             const raw =
-              await store.get(
-                key.name
-              );
+              await store.get(key.name);
 
             if (!raw) {
               return null;
             }
 
-            return {
-              key: key.name,
-              lead: JSON.parse(raw)
-            };
+            try {
+              return {
+                key: key.name,
+                lead: JSON.parse(raw)
+              };
+            } catch {
+              return null;
+            }
           }
         )
       );
@@ -484,62 +409,27 @@ export async function onRequestGet(context) {
     const validEntries =
       leadEntries.filter(Boolean);
 
-    /*
-      ACCESS VALIDATION
-    */
-
     if (accessToken) {
       for (const entry of validEntries) {
         const lead =
           entry.lead;
 
-        if (
-          lead.clientKey ===
-          accessToken
-        ) {
-          return new Response(
-            JSON.stringify({
-              valid: true,
-              id:
-                lead.id ||
-                entry.key,
-              name:
-                lead.name || "",
-              email:
-                lead.email || "",
-              status:
-                lead.status ||
-                "NEW",
-              consoleUrl:
-                lead.consoleUrl ||
-                ""
-            }),
-            {
-              headers: {
-                "Content-Type":
-                  "application/json"
-              }
-            }
-          );
+        if (lead.clientKey === accessToken) {
+          return json({
+            valid: true,
+            id: lead.id || entry.key,
+            name: lead.name || "",
+            email: lead.email || "",
+            status: lead.status || "NEW",
+            consoleUrl: lead.consoleUrl || ""
+          });
         }
       }
 
-      return new Response(
-        JSON.stringify({
-          valid: false
-        }),
-        {
-          headers: {
-            "Content-Type":
-              "application/json"
-          }
-        }
-      );
+      return json({
+        valid: false
+      });
     }
-
-    /*
-      ADMIN LEAD LIST
-    */
 
     const leads =
       validEntries.map(
@@ -548,60 +438,31 @@ export async function onRequestGet(context) {
             entry.lead;
 
           return {
-            id:
-              lead.id ||
-              entry.key,
-            name:
-              lead.name || "—",
-            email:
-              lead.email || "—",
-            status:
-              lead.status ||
-              "NEW",
-            clientKey:
-              lead.clientKey ||
-              "",
-            consoleUrl:
-              lead.consoleUrl ||
-              "",
-            requestCount:
-              lead.requestCount ||
-              1,
-            createdAt:
-              lead.createdAt ||
-              "",
-            updatedAt:
-              lead.updatedAt ||
-              "",
-            lastRequestAt:
-              lead.lastRequestAt ||
-              ""
+            id: lead.id || entry.key,
+            name: lead.name || "—",
+            email: lead.email || "—",
+            status: lead.status || "NEW",
+            clientKey: lead.clientKey || "",
+            consoleUrl: lead.consoleUrl || "",
+            requestCount: lead.requestCount || 1,
+            createdAt: lead.createdAt || "",
+            updatedAt: lead.updatedAt || "",
+            lastRequestAt: lead.lastRequestAt || "",
+            hidden: lead.hidden || false
           };
         }
       );
 
     leads.sort(
       (a, b) =>
-        new Date(
-          b.createdAt || 0
-        ) -
-        new Date(
-          a.createdAt || 0
-        )
+        new Date(b.createdAt || 0) -
+        new Date(a.createdAt || 0)
     );
 
-    return new Response(
-      JSON.stringify({
-        ok: true,
-        leads
-      }),
-      {
-        headers: {
-          "Content-Type":
-            "application/json"
-        }
-      }
-    );
+    return json({
+      ok: true,
+      leads
+    });
 
   } catch (err) {
     console.error(
@@ -609,18 +470,12 @@ export async function onRequestGet(context) {
       err
     );
 
-    return new Response(
-      JSON.stringify({
+    return json(
+      {
         ok: false,
         error: err.message
-      }),
-      {
-        status: 500,
-        headers: {
-          "Content-Type":
-            "application/json"
-        }
-      }
+      },
+      500
     );
   }
 }
