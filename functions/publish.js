@@ -1,65 +1,379 @@
-function randomId() {
-  return "TVE-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+function generateRecordId() {
+  const bytes =
+    crypto.getRandomValues(
+      new Uint8Array(6)
+    );
+
+  const randomPart =
+    Array.from(bytes)
+      .map((b) =>
+        b
+          .toString(16)
+          .padStart(2, "0")
+      )
+      .join("")
+      .toUpperCase();
+
+  return `TVE-${randomPart}`;
 }
 
 async function sha256(text) {
-  const data = new TextEncoder().encode(text);
-  const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-  return [...new Uint8Array(hashBuffer)]
-    .map(b => b.toString(16).padStart(2, "0"))
+  const data =
+    new TextEncoder()
+      .encode(text);
+
+  const hashBuffer =
+    await crypto.subtle.digest(
+      "SHA-256",
+      data
+    );
+
+  return Array.from(
+    new Uint8Array(hashBuffer)
+  )
+    .map((b) =>
+      b
+        .toString(16)
+        .padStart(2, "0")
+    )
     .join("");
 }
 
-export async function onRequestPost(context) {
+function canonicalPayload({
+  text,
+  clientKey,
+  visibility,
+  createdAt
+}) {
+
+  const normalized = {
+    text,
+    visibility,
+    createdAt
+  };
+
+  if (clientKey) {
+    normalized.clientKey =
+      clientKey;
+  }
+
+  return JSON.stringify(normalized);
+}
+
+async function getLeadByClientKey(
+  store,
+  clientKey
+) {
+
+  if (!clientKey) {
+    return null;
+  }
+
+  const keyIndex =
+    `key:${clientKey}`;
+
+  const indexedLeadId =
+    await store.get(keyIndex);
+
+  if (indexedLeadId) {
+
+    const raw =
+      await store.get(
+        indexedLeadId
+      );
+
+    if (!raw) {
+      return null;
+    }
+
+    return JSON.parse(raw);
+  }
+
+  const list =
+    await store.list({
+      prefix: "REQ-"
+    });
+
+  const entries =
+    await Promise.all(
+      list.keys.map(
+        async (key) => {
+
+          const raw =
+            await store.get(
+              key.name
+            );
+
+          if (!raw) {
+            return null;
+          }
+
+          const lead =
+            JSON.parse(raw);
+
+          if (
+            lead.clientKey ===
+            clientKey
+          ) {
+
+            await store.put(
+              keyIndex,
+              lead.id
+            );
+
+            return lead;
+          }
+
+          return null;
+        }
+      )
+    );
+
+  return (
+    entries.find(Boolean) ||
+    null
+  );
+}
+
+function jsonResponse(
+  payload,
+  status = 200
+) {
+
+  return new Response(
+    JSON.stringify(payload),
+    {
+      status,
+      headers: {
+        "Content-Type":
+          "application/json"
+      }
+    }
+  );
+}
+
+export async function onRequestPost(
+  context
+) {
+
   try {
-    const store = context.env.STORE || context.env.LOG_STORE;
+
+    const store =
+      context.env.STORE ||
+      context.env.LOG_STORE;
 
     if (!store) {
-      return new Response(JSON.stringify({ error: "Storage not configured" }), {
-        status: 500,
-        headers: { "Content-Type": "application/json" }
-      });
+
+      return jsonResponse(
+        {
+          ok: false,
+          error:
+            "Storage not configured"
+        },
+        500
+      );
     }
 
-    const body = await context.request.json();
+    const body =
+      await context.request.json();
 
-    const text = (body.text || "").trim();
-    const key = (body.key || "").trim();
+    const text =
+      String(
+        body.text || ""
+      ).trim();
+
+    const clientKey =
+      String(
+        body.key ||
+        body.clientKey ||
+        ""
+      ).trim();
+
+    const visibility =
+      clientKey
+        ? "private"
+        : "public";
 
     if (!text) {
-      return new Response(JSON.stringify({ error: "Missing text" }), {
-        status: 400,
-        headers: { "Content-Type": "application/json" }
-      });
+
+      return jsonResponse(
+        {
+          ok: false,
+          error:
+            "Missing text"
+        },
+        400
+      );
     }
 
-    const id = randomId();
-    const timestamp = new Date().toISOString();
-    const hash = await sha256(text);
+    let lead = null;
+
+    if (clientKey) {
+
+      lead =
+        await getLeadByClientKey(
+          store,
+          clientKey
+        );
+
+      if (!lead) {
+
+        return jsonResponse(
+          {
+            ok: false,
+            error:
+              "Invalid private access key"
+          },
+          401
+        );
+      }
+
+      if (
+        lead.status ===
+        "BLOCKED"
+      ) {
+
+        return jsonResponse(
+          {
+            ok: false,
+            error:
+              "Private access is blocked"
+          },
+          403
+        );
+      }
+    }
+
+    const id =
+      generateRecordId();
+
+    const createdAt =
+      new Date().toISOString();
+
+    const payload =
+      canonicalPayload({
+        text,
+        clientKey:
+          clientKey || null,
+        visibility,
+        createdAt
+      });
+
+    const hash =
+      await sha256(payload);
+
+    const verificationUrl =
+      `https://tvevt.com/record.html?id=${id}`;
 
     const record = {
+
       id,
+
+      type:
+        "Verified Signal",
+
+      visibility,
+
+      status:
+        "sealed",
+
+      anchor_status:
+        "sealed",
+
+      clientKey:
+        clientKey || null,
+
+      leadId:
+        lead?.id || null,
+
+      owner:
+        lead
+          ? {
+              name:
+                lead.name || "",
+              email:
+                lead.email || ""
+            }
+          : null,
+
       text,
-      content: { text },
-      key,
-      timestamp,
+
+      content: {
+        text
+      },
+
+      canonicalPayload:
+        payload,
+
       hash,
-      status: "sealed",
-      anchor_status: "sealed",
-      type: "Verified Signal",
-      verification_url: `https://tvevt.com/record.html?id=${id}`
+
+      createdAt,
+
+      timestamp:
+        createdAt,
+
+      verification_url:
+        verificationUrl,
+
+      recordUrl:
+        verificationUrl,
+
+      lifecycle: [
+        {
+          status:
+            "created",
+
+          at:
+            createdAt
+        },
+        {
+          status:
+            "sealed",
+
+          at:
+            createdAt
+        }
+      ]
     };
 
-    await store.put(id, JSON.stringify(record));
+    await store.put(
+      id,
+      JSON.stringify(record)
+    );
 
-    return new Response(JSON.stringify(record), {
-      headers: { "Content-Type": "application/json" }
+    return jsonResponse({
+
+      ok: true,
+
+      id,
+
+      hash,
+
+      verification_url:
+        verificationUrl,
+
+      recordUrl:
+        verificationUrl,
+
+      record
     });
 
-  } catch (err) {
-    return new Response(JSON.stringify({ error: err.message }), {
-      status: 500,
-      headers: { "Content-Type": "application/json" }
-    });
+  }
+
+  catch(err){
+
+    console.error(
+      "Publish error:",
+      err
+    );
+
+    return jsonResponse(
+      {
+        ok: false,
+        error:
+          err.message
+      },
+      500
+    );
   }
 }
