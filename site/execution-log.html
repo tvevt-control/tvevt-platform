@@ -234,10 +234,12 @@ footer{
 
   <section class="hero">
     <h1>Execution Log</h1>
+
     <p>
       Private execution records connected to your TVEVT access key.
-      Each sealed signal appears as a verified record event.
+      Each sealed signal appears as a verified execution event.
     </p>
+
     <div id="msg" class="msg"></div>
   </section>
 
@@ -264,10 +266,18 @@ let key =
 const list = document.getElementById("list");
 const empty = document.getElementById("empty");
 const msg = document.getElementById("msg");
-const modeText = document.getElementById("modeText");
-const consoleLink = document.getElementById("consoleLink");
-const signalsLink = document.getElementById("signalsLink");
-const createLink = document.getElementById("createLink");
+
+const modeText =
+  document.getElementById("modeText");
+
+const consoleLink =
+  document.getElementById("consoleLink");
+
+const signalsLink =
+  document.getElementById("signalsLink");
+
+const createLink =
+  document.getElementById("createLink");
 
 function withKey(path){
   return key
@@ -276,158 +286,318 @@ function withKey(path){
 }
 
 function formatDate(value){
+
   if(!value) return "—";
 
   try{
-    return new Date(value).toLocaleString();
+    return new Date(value)
+      .toLocaleString();
   }catch{
     return value;
   }
 }
 
-function setMessage(text, error = false){
+function setMessage(
+  text,
+  error = false
+){
   msg.textContent = text || "";
-  msg.classList.toggle("error", error);
+  msg.classList.toggle(
+    "error",
+    error
+  );
 }
 
 function applyMode(){
+
   if(key){
-    localStorage.setItem("tvevt_client_key", key);
-    modeText.textContent = "Private identity active on this device.";
-    consoleLink.href = withKey("/console.html");
-    signalsLink.href = withKey("/signals.html");
-    createLink.href = withKey("/seal.html");
+
+    localStorage.setItem(
+      "tvevt_client_key",
+      key
+    );
+
+    modeText.textContent =
+      "Private identity active on this device.";
+
+    consoleLink.href =
+      withKey("/console.html");
+
+    signalsLink.href =
+      withKey("/signals.html");
+
+    createLink.href =
+      withKey("/seal.html");
+
   }else{
-    modeText.textContent = "No private identity found.";
-    consoleLink.href = "/request-access.html";
-    consoleLink.textContent = "Request Access";
-    signalsLink.href = "/request-access.html";
-    createLink.href = "/seal.html";
+
+    modeText.textContent =
+      "No private identity found.";
+
+    consoleLink.href =
+      "/request-access.html";
+
+    consoleLink.textContent =
+      "Request Access";
+
+    signalsLink.href =
+      "/request-access.html";
+
+    createLink.href =
+      "/seal.html";
   }
 }
 
-function normalizeRecords(data){
-  if(Array.isArray(data)) return data;
-  if(Array.isArray(data.records)) return data.records;
-  if(Array.isArray(data.signals)) return data.signals;
+function normalizeLogs(data){
+
+  if(Array.isArray(data))
+    return data;
+
+  if(Array.isArray(data.logs))
+    return data.logs;
+
+  if(Array.isArray(data.events))
+    return data.events;
+
   return [];
 }
 
 async function loadFromApi(){
-  const res = await fetch(
-    "/api/signals?key=" + encodeURIComponent(key)
-  );
 
-  const data = await res.json();
+  const response =
+    await fetch(
+      "/api/execution-log?key=" +
+      encodeURIComponent(key)
+    );
 
-  if(!res.ok || data.ok === false){
-    throw new Error(data.error || "Unable to load execution log.");
+  const data =
+    await response.json();
+
+  if(
+    !response.ok ||
+    data.ok === false
+  ){
+    throw new Error(
+      data.error ||
+      "Unable to load execution log."
+    );
   }
 
-  return normalizeRecords(data);
+  return normalizeLogs(data);
 }
 
 function loadLocalFallback(){
-  const storageKey = "tvevt_logs_" + (key || "default");
-  return JSON.parse(localStorage.getItem(storageKey) || "[]");
+
+  const storageKey =
+    "tvevt_logs_" +
+    (key || "default");
+
+  return JSON.parse(
+    localStorage.getItem(storageKey)
+    || "[]"
+  );
 }
 
-function buildLogsFromRecords(records){
-  return records.map(record => ({
-    id: "LOG-" + (record.id || ""),
-    signalId: record.id || "",
-    time: record.createdAt || record.timestamp || "",
-    text: "Signal sealed and verified record created.",
-    status: record.anchor_status || record.status || "sealed",
-    hash: record.hash || "",
-    recordUrl: record.recordUrl || record.verification_url || ""
-  }));
-}
+function saveLocalFallback(logs){
 
-function saveLocalFallback(records){
-  if(!key || !Array.isArray(records)) return;
+  if(
+    !key ||
+    !Array.isArray(logs)
+  ){
+    return;
+  }
+
+  const limited =
+    logs.slice(0, 50);
 
   localStorage.setItem(
     "tvevt_logs_" + key,
-    JSON.stringify(buildLogsFromRecords(records))
+    JSON.stringify(limited)
   );
 }
 
 function render(logs){
+
   list.innerHTML = "";
 
   if(!logs.length){
-    empty.style.display = "block";
+
+    empty.style.display =
+      "block";
+
     return;
   }
 
-  empty.style.display = "none";
+  empty.style.display =
+    "none";
 
   logs
     .slice()
     .reverse()
     .forEach(log => {
-      const id = log.id || "—";
-      const signalId = log.signalId || log.id || "—";
-      const time = log.time || log.createdAt || log.timestamp || "";
-      const text = log.text || log.content?.text || "Signal sealed and verified record created.";
-      const status = log.status || log.anchor_status || "sealed";
-      const hash = log.hash || "—";
+
+      const id =
+        log.id || "—";
+
+      const signalId =
+        log.signalId || "—";
+
+      const event =
+        log.event ||
+        "SIGNAL_EVENT";
+
+      const time =
+        log.time ||
+        log.createdAt ||
+        log.timestamp ||
+        "";
+
+      const text =
+        log.text ||
+        "Signal sealed and verified record created.";
+
+      const status =
+        log.status ||
+        "recorded";
+
+      const hash =
+        log.hash || "—";
+
+      const visibility =
+        log.visibility ||
+        "private";
+
       const recordUrl =
         log.recordUrl ||
         log.verification_url ||
-        (signalId !== "—" ? "/record.html?id=" + encodeURIComponent(signalId) : "#");
+        (
+          signalId !== "—"
+            ? "/record.html?id=" +
+              encodeURIComponent(signalId)
+            : "#"
+        );
 
-      const div = document.createElement("div");
-      div.className = "item";
+      const div =
+        document.createElement("div");
 
-      const label = document.createElement("small");
-      label.textContent = `${id} · ${formatDate(time)}`;
+      div.className =
+        "item";
 
-      const title = document.createElement("strong");
-      title.textContent = text;
+      const label =
+        document.createElement("small");
 
-      const meta1 = document.createElement("div");
-      meta1.className = "meta";
-      meta1.textContent = `Signal ID: ${signalId}`;
+      label.textContent =
+        `${id} · ${formatDate(time)}`;
 
-      const meta2 = document.createElement("div");
-      meta2.className = "meta";
-      meta2.textContent = `Hash: ${hash}`;
+      const title =
+        document.createElement("strong");
 
-      const badge = document.createElement("span");
-      badge.className = "status";
-      badge.textContent = status;
+      title.textContent =
+        text;
 
-      const actions = document.createElement("div");
-      actions.className = "actions";
+      const metaEvent =
+        document.createElement("div");
 
-      const open = document.createElement("a");
-      open.className = "btn";
-      open.href = recordUrl;
-      open.textContent = "Open Record";
+      metaEvent.className =
+        "meta";
 
-      const copy = document.createElement("button");
-      copy.className = "btn secondary";
-      copy.type = "button";
-      copy.textContent = "Copy Link";
+      metaEvent.textContent =
+        `Event: ${event}`;
 
-      copy.onclick = async () => {
-        const full = recordUrl.startsWith("http")
-          ? recordUrl
-          : window.location.origin + recordUrl;
+      const meta1 =
+        document.createElement("div");
 
-        await navigator.clipboard.writeText(full);
-        setMessage("Verification link copied.");
-      };
+      meta1.className =
+        "meta";
+
+      meta1.textContent =
+        `Signal ID: ${signalId}`;
+
+      const meta2 =
+        document.createElement("div");
+
+      meta2.className =
+        "meta";
+
+      meta2.textContent =
+        `Hash: ${hash}`;
+
+      const meta3 =
+        document.createElement("div");
+
+      meta3.className =
+        "meta";
+
+      meta3.textContent =
+        `Visibility: ${visibility}`;
+
+      const badge =
+        document.createElement("span");
+
+      badge.className =
+        "status";
+
+      badge.textContent =
+        status;
+
+      const actions =
+        document.createElement("div");
+
+      actions.className =
+        "actions";
+
+      const open =
+        document.createElement("a");
+
+      open.className =
+        "btn";
+
+      open.href =
+        recordUrl;
+
+      open.textContent =
+        "Open Record";
+
+      const copy =
+        document.createElement("button");
+
+      copy.className =
+        "btn secondary";
+
+      copy.type =
+        "button";
+
+      copy.textContent =
+        "Copy Link";
+
+      copy.onclick =
+        async () => {
+
+          const full =
+            recordUrl.startsWith("http")
+              ? recordUrl
+              : (
+                  window.location.origin +
+                  recordUrl
+                );
+
+          await navigator.clipboard
+            .writeText(full);
+
+          setMessage(
+            "Verification link copied."
+          );
+        };
 
       actions.appendChild(open);
       actions.appendChild(copy);
 
       div.appendChild(label);
       div.appendChild(title);
+      div.appendChild(metaEvent);
       div.appendChild(meta1);
       div.appendChild(meta2);
+      div.appendChild(meta3);
       div.appendChild(badge);
       div.appendChild(actions);
 
@@ -436,35 +606,61 @@ function render(logs){
 }
 
 async function init(){
+
   applyMode();
 
   if(!key){
-    empty.style.display = "block";
-    setMessage("Private access is required to load your execution log.", true);
+
+    empty.style.display =
+      "block";
+
+    setMessage(
+      "Private access is required to load your execution log.",
+      true
+    );
+
     return;
   }
 
-  setMessage("Loading private execution log…");
+  setMessage(
+    "Loading private execution log…"
+  );
 
   try{
-    const records = await loadFromApi();
-    const logs = buildLogsFromRecords(records);
 
-    saveLocalFallback(records);
+    const logs =
+      await loadFromApi();
+
+    saveLocalFallback(logs);
+
     render(logs);
 
-    setMessage("Execution log loaded.");
+    setMessage(
+      "Execution log loaded."
+    );
+
   }catch(err){
+
     console.error(err);
 
-    const fallback = loadLocalFallback();
+    const fallback =
+      loadLocalFallback();
 
     if(fallback.length){
+
       render(fallback);
-      setMessage("Loaded local fallback execution log.");
+
+      setMessage(
+        "Loaded local fallback execution log."
+      );
+
     }else{
+
       render([]);
-      setMessage("No private execution records found yet.");
+
+      setMessage(
+        "No private execution records found yet."
+      );
     }
   }
 }
