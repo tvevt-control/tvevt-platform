@@ -8,15 +8,16 @@
 
 <style>
 :root{
-  --text:#f4f6f8;
-  --muted:rgba(244,246,248,.62);
-  --soft:rgba(244,246,248,.36);
+  --bg:#09090b;
+  --panel:#141416;
   --line:rgba(255,255,255,.12);
-  --orange:#ff7a1a;
-  --orange2:#ffb14a;
-  --green:#8ff0b1;
+  --text:#ffffff;
+  --muted:#a7a7ad;
+  --soft:rgba(255,255,255,.42);
+  --orange:#ff9b3d;
+  --orange2:#ff7a1a;
+  --green:#2cff9a;
   --red:#ff6a5f;
-  --bg:#07090c;
 }
 
 *{box-sizing:border-box}
@@ -25,114 +26,118 @@ body{
   margin:0;
   min-height:100vh;
   background:
-    radial-gradient(circle at 50% 0%,rgba(255,122,26,.16),transparent 34%),
-    radial-gradient(circle at 80% 22%,rgba(143,240,177,.06),transparent 28%),
-    linear-gradient(180deg,#10131a,#07090c);
+    radial-gradient(circle at top left, rgba(255,155,61,.16), transparent 32%),
+    var(--bg);
   color:var(--text);
-  font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif;
+  font-family:Arial, Helvetica, sans-serif;
 }
 
-.page{
-  min-height:100vh;
-  padding:34px;
-  display:flex;
-  flex-direction:column;
+.wrap{
+  max-width:1100px;
+  margin:0 auto;
+  padding:34px 24px 80px;
 }
 
 header{
   display:flex;
-  justify-content:space-between;
   align-items:center;
-  border-bottom:1px solid var(--line);
-  padding-bottom:28px;
+  justify-content:space-between;
   gap:18px;
+  padding:14px;
+  border:1px solid var(--line);
+  border-radius:28px;
+  background:rgba(20,20,22,.78);
+  backdrop-filter:blur(14px);
+  margin-bottom:34px;
 }
 
 .brand{
   display:flex;
   align-items:center;
   gap:14px;
-  color:var(--text);
+  color:white;
   text-decoration:none;
 }
 
-.brand img{width:42px;height:42px}
-
-.brand strong{
-  display:block;
-  letter-spacing:.16em;
-  font-size:16px;
+.logoBox{
+  width:54px;
+  height:54px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border:1px solid rgba(255,155,61,.35);
+  border-radius:18px;
+  background:rgba(255,155,61,.08);
 }
 
-.brand span span{
+.logoBox img{
+  width:30px;
+  height:30px;
+  display:block;
+}
+
+.brandText strong{
+  display:block;
+  font-size:23px;
+  letter-spacing:-.03em;
+  line-height:1;
+}
+
+.brandText span{
   display:block;
   margin-top:4px;
   color:var(--muted);
-  font-size:11px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
+  font-size:13px;
 }
 
 nav{
   display:flex;
+  align-items:center;
   gap:10px;
   flex-wrap:wrap;
   justify-content:flex-end;
 }
 
-nav a, nav button{
-  color:var(--text);
+nav a{
+  color:#fff;
   text-decoration:none;
-  border:1px solid var(--line);
+  padding:11px 14px;
   border-radius:999px;
-  padding:12px 18px;
-  font-size:13px;
-  text-transform:uppercase;
-  letter-spacing:.1em;
-  background:rgba(255,255,255,.03);
-  cursor:pointer;
-  font:inherit;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  font-size:14px;
   font-weight:800;
 }
 
 nav a.primary{
-  background:linear-gradient(135deg,var(--orange2),var(--orange));
-  color:#170900;
-  border-color:rgba(255,122,26,.8);
-}
-
-main{
-  flex:1;
-  width:min(940px,100%);
-  margin:56px auto 0;
+  background:var(--orange);
+  color:#000;
+  border-color:transparent;
 }
 
 .card{
   border:1px solid var(--line);
-  border-radius:36px;
-  background:
-    linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015)),
-    rgba(10,13,18,.78);
-  padding:44px;
-  box-shadow:0 30px 100px rgba(0,0,0,.32);
+  border-radius:28px;
+  background:rgba(20,20,22,.88);
+  padding:28px;
 }
 
 .statusBadge{
   display:none;
   align-items:center;
   gap:14px;
-  margin-bottom:28px;
+  margin-bottom:22px;
 }
 
 .seal{
-  width:52px;
-  height:52px;
+  width:50px;
+  height:50px;
   border-radius:50%;
   display:flex;
   align-items:center;
   justify-content:center;
-  background:rgba(143,240,177,.12);
-  border:1px solid rgba(143,240,177,.34);
+  background:rgba(44,255,154,.1);
+  border:1px solid rgba(44,255,154,.32);
   color:var(--green);
   font-size:28px;
   flex:0 0 auto;
@@ -146,63 +151,63 @@ main{
 
 .status-label{
   color:var(--green);
-  font-size:13px;
+  font-size:12px;
   font-weight:900;
   letter-spacing:.14em;
   text-transform:uppercase;
 }
 
-.status-label.failed{color:var(--red)}
+.status-label.failed{
+  color:var(--red);
+}
 
 .status-sub{
   color:var(--muted);
-  margin-top:4px;
+  margin-top:5px;
   font-size:14px;
 }
 
 h1{
-  margin:0;
-  font-size:clamp(48px,7vw,88px);
-  line-height:.94;
-  letter-spacing:-.065em;
+  margin:0 0 10px;
+  font-size:44px;
+  letter-spacing:-.05em;
+  line-height:1.02;
 }
 
 .lead{
-  margin:18px 0 30px;
-  max-width:720px;
+  margin:0 0 20px;
   color:var(--muted);
-  font-size:20px;
-  line-height:1.48;
+  font-size:16px;
+  line-height:1.6;
+  max-width:760px;
 }
 
 .lookup{
   display:grid;
   grid-template-columns:1fr auto;
   gap:12px;
-  margin:28px 0 10px;
+  margin-top:22px;
 }
 
 input{
-  height:58px;
+  min-height:54px;
   border:1px solid var(--line);
-  border-radius:999px;
-  background:rgba(0,0,0,.22);
+  border-radius:14px;
+  background:rgba(255,255,255,.04);
   color:var(--text);
-  padding:0 20px;
+  padding:0 16px;
   font:inherit;
   outline:none;
 }
 
 button,.button{
-  min-height:58px;
-  border-radius:999px;
-  padding:0 22px;
   border:1px solid var(--line);
-  background:rgba(255,255,255,.035);
-  color:var(--text);
-  font-weight:850;
-  letter-spacing:.12em;
-  text-transform:uppercase;
+  border-radius:14px;
+  padding:13px 16px;
+  min-height:48px;
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  font-weight:900;
   cursor:pointer;
   text-decoration:none;
   display:inline-flex;
@@ -212,37 +217,37 @@ button,.button{
 }
 
 .orange{
-  background:linear-gradient(135deg,var(--orange2),var(--orange));
-  color:#170900;
-  border-color:rgba(255,122,26,.8);
-  box-shadow:0 18px 50px rgba(255,122,26,.20);
+  background:var(--orange);
+  color:#000;
+  border-color:transparent;
 }
 
 .msg{
+  margin-top:14px;
   color:var(--green);
+  font-weight:800;
   font-size:14px;
-  min-height:22px;
-  margin:12px 0 0;
-  font-weight:700;
 }
 
-.msg.error{color:var(--red)}
+.msg.error{
+  color:var(--red);
+}
 
 .record{
   display:none;
-  margin-top:34px;
-  padding-top:30px;
+  margin-top:26px;
+  padding-top:24px;
   border-top:1px solid var(--line);
 }
 
 .notice{
-  border:1px solid rgba(143,240,177,.22);
-  background:rgba(143,240,177,.06);
-  border-radius:22px;
+  border:1px solid rgba(44,255,154,.24);
+  background:rgba(44,255,154,.06);
+  border-radius:20px;
   padding:18px;
   color:var(--muted);
   line-height:1.5;
-  margin-bottom:24px;
+  margin-bottom:22px;
 }
 
 .notice.failed{
@@ -250,33 +255,34 @@ button,.button{
   background:rgba(255,106,95,.06);
 }
 
-.notice strong{color:var(--text)}
+.notice strong{
+  color:#fff;
+}
 
 .content-label{
   color:var(--soft);
   font-size:11px;
   letter-spacing:.16em;
   text-transform:uppercase;
-  font-weight:850;
-  margin-bottom:12px;
+  font-weight:900;
+  margin-bottom:10px;
 }
 
 .sealed-text{
   border:1px solid var(--line);
-  border-radius:26px;
-  background:rgba(0,0,0,.24);
-  padding:28px;
+  border-radius:20px;
+  background:rgba(0,0,0,.18);
+  padding:22px;
   white-space:pre-wrap;
   line-height:1.6;
   overflow-wrap:anywhere;
-  font-size:20px;
-  color:var(--text);
-  margin-bottom:18px;
+  font-size:17px;
+  color:#fff;
 }
 
 .meta{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(2,1fr);
   gap:14px;
   margin-top:18px;
 }
@@ -296,7 +302,7 @@ button,.button{
   letter-spacing:.15em;
   text-transform:uppercase;
   margin-bottom:7px;
-  font-weight:850;
+  font-weight:900;
 }
 
 .field b{
@@ -309,30 +315,33 @@ button,.button{
   margin-top:14px;
 }
 
-.technical.show{display:block}
+.technical.show{
+  display:block;
+}
 
 .actions{
   display:flex;
   gap:12px;
   flex-wrap:wrap;
-  margin-top:24px;
+  margin-top:22px;
 }
 
 .growth{
-  margin-top:28px;
-  padding:24px;
-  border:1px solid rgba(255,122,26,.22);
-  border-radius:26px;
-  background:rgba(255,122,26,.055);
+  margin-top:24px;
+  padding:22px;
+  border:1px solid rgba(255,155,61,.22);
+  border-radius:22px;
+  background:rgba(255,155,61,.055);
   display:none;
 }
 
-.growth.show{display:block}
+.growth.show{
+  display:block;
+}
 
 .growth h2{
   margin:0 0 8px;
-  font-size:26px;
-  letter-spacing:-.045em;
+  font-size:22px;
 }
 
 .growth p{
@@ -343,42 +352,67 @@ button,.button{
 }
 
 footer{
+  margin-top:40px;
   text-align:center;
-  color:rgba(244,246,248,.32);
+  color:rgba(255,255,255,.24);
   font-size:11px;
-  letter-spacing:.22em;
+  letter-spacing:.18em;
   text-transform:uppercase;
-  margin-top:30px;
 }
 
-@media(max-width:760px){
-  .page{padding:22px}
-  header{align-items:flex-start;flex-direction:column}
-  main{margin-top:34px}
-  .card{padding:28px}
-  .lookup,.meta{grid-template-columns:1fr}
-  button,.button{width:100%}
-  .actions{flex-direction:column}
-  .sealed-text{font-size:18px}
-  nav{width:100%;justify-content:flex-start}
-  nav a,nav button{width:100%;text-align:center;justify-content:center}
+@media(max-width:800px){
+  .wrap{padding:22px 18px 60px}
+
+  header{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  nav{
+    justify-content:flex-start;
+    width:100%;
+  }
+
+  nav a{
+    width:100%;
+    text-align:center;
+  }
+
+  h1{
+    font-size:34px;
+  }
+
+  .lookup,.meta{
+    grid-template-columns:1fr;
+  }
+
+  button,.button{
+    width:100%;
+  }
+
+  .actions{
+    flex-direction:column;
+  }
 }
 </style>
 </head>
 
 <body>
-<div class="page">
+
+<div class="wrap">
 
 <header>
   <a class="brand" href="/">
-    <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT" onerror="this.style.display='none'">
-    <span>
+    <div class="logoBox">
+      <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
+    </div>
+    <div class="brandText">
       <strong>TVEVT</strong>
       <span id="brandSub">Governance Console</span>
-    </span>
+    </div>
   </a>
 
-  <nav id="topNav">
+  <nav>
     <a href="/proof.html">Proof</a>
     <a href="/record.html">Verify</a>
     <a class="primary" id="newSignalLink" href="/seal.html">New Signal</a>
@@ -388,7 +422,6 @@ footer{
   </nav>
 </header>
 
-<main>
 <section class="card">
 
   <div class="statusBadge" id="badge">
@@ -399,7 +432,7 @@ footer{
     </div>
   </div>
 
-  <h1 id="title">Verified record.</h1>
+  <h1 id="title">Verified record</h1>
 
   <p class="lead" id="lead">
     A sealed signal with a timestamp, hash, and fixed verification link.
@@ -477,7 +510,6 @@ footer{
   </div>
 
 </section>
-</main>
 
 <footer>Say it once. Prove it forever.</footer>
 
@@ -582,7 +614,7 @@ function render(data){
   $("visibility").textContent = record.visibility || "public";
   $("content").textContent = record.text || record.content?.text || "No sealed text available.";
 
-  $("title").textContent = verified ? "Record verified." : "Record integrity warning.";
+  $("title").textContent = verified ? "Record verified" : "Record integrity warning";
   $("lead").textContent = verified
     ? "This sealed signal matches its stored verification record."
     : "This record was found, but its cryptographic integrity check did not pass.";
@@ -690,5 +722,6 @@ if(initialId){
   loadRecord(initialId);
 }
 </script>
+
 </body>
 </html>
