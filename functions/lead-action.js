@@ -1,60 +1,345 @@
-export async function onRequestGet(context) {
-  try {
-    const url = new URL(context.request.url);
+function generateId(prefix) {
+  const bytes = crypto.getRandomValues(new Uint8Array(8));
 
-    const id = url.searchParams.get("id");
-    const action = url.searchParams.get("action");
+  const randomPart = Array.from(bytes)
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("")
+    .toUpperCase();
+
+  return `${prefix}-${randomPart}`;
+}
+
+function makeEmailLookupKey(email) {
+  return `email:${String(email || "").trim().toLowerCase()}`;
+}
+
+function isAdminRequest(request, env, url) {
+  const tokenFromQuery =
+    url.searchParams.get("admin_token");
+
+  const tokenFromHeader =
+    request.headers.get("x-admin-token");
+
+  const authHeader =
+    request.headers.get("authorization") || "";
+
+  const tokenFromBearer =
+    authHeader.startsWith("Bearer ")
+      ? authHeader.replace("Bearer ", "").trim()
+      : "";
+
+  const adminToken = env.ADMIN_TOKEN;
+
+  if (!adminToken) {
+    return false;
+  }
+
+  return (
+    tokenFromQuery === adminToken ||
+    tokenFromHeader === adminToken ||
+    tokenFromBearer === adminToken
+  );
+}
+
+function jsonResponse(payload, status = 200) {
+  return new Response(
+    JSON.stringify(payload),
+    {
+      status,
+      headers: {
+        "Content-Type":
+          "application/json"
+      }
+    }
+  );
+}
+
+export async function onRequestPost(context) {
+  try {
+    const url =
+      new URL(context.request.url);
+
+    /*
+      REQUIRE ADMIN AUTHORIZATION
+    */
+
+    if (
+      !isAdminRequest(
+        context.request,
+        context.env,
+        url
+      )
+    ) {
+      return jsonResponse(
+        {
+          ok: false,
+          error: "Unauthorized"
+        },
+        401
+      );
+    }
+
+    const store =
+      context.env.STORE ||
+      context.env.LOG_STORE;
+
+    if (!store) {
+      return jsonResponse(
+        {
+          ok: false,
+          error:
+            "Storage not configured"
+        },
+        500
+      );
+    }
+
+    const data =
+      await context.request.json();
+
+    const id = String(data.id || "")
+      .trim();
+
+    const action = String(
+      data.action || ""
+    )
+      .trim()
+      .toLowerCase();
+
+    /*
+      VALIDATE INPUT
+    */
 
     if (!id || !action) {
-      return new Response("Missing parameters", { status: 400 });
+      return jsonResponse(
+        {
+          ok: false,
+          error:
+            "Missing id or action"
+        },
+        400
+      );
     }
 
-    const store = context.env.LOG_STORE;
+    /*
+      SECURITY:
+      ONLY REQ-* OBJECTS
+    */
 
-    const raw = await store.get(id);
+    if (!id.startsWith("REQ-")) {
+      return jsonResponse(
+        {
+          ok: false,
+          error:
+            "Invalid lead id"
+        },
+        400
+      );
+    }
+
+    const raw =
+      await store.get(id);
+
     if (!raw) {
-      return new Response("Request not found", { status: 404 });
+      return jsonResponse(
+        {
+          ok: false,
+          error: "Lead not found"
+        },
+        404
+      );
     }
 
-    const lead = JSON.parse(raw);
+    const lead =
+      JSON.parse(raw);
 
-    // 🔥 если approve → создаём ключ
-    if (action === "approve") {
-      const clientKey = "TVEVT-" + Math.random().toString(36).substring(2, 8).toUpperCase();
+    const now =
+      new Date().toISOString();
 
-      lead.status = "APPROVED";
-      lead.clientKey = clientKey;
-      lead.consoleUrl = `/console.html?key=${clientKey}`;
+    /*
+      REVIEW
+    */
+
+    if (action === "review") {
+      lead.status =
+        "REVIEWED";
+
+      lead.reviewedAt =
+        now;
     }
 
-    if (action === "reject") {
-      lead.status = "REJECTED";
+    /*
+      APPROVE
+    */
+
+    else if (
+      action === "approve"
+    ) {
+      lead.status =
+        "APPROVED";
+
+      if (!lead.clientKey) {
+        lead.clientKey =
+          generateId(
+            "CLIENT"
+          );
+      }
+
+      lead.consoleUrl =
+        `https://tvevt.com/console.html?key=${lead.clientKey}`;
+
+      lead.approvedAt =
+        now;
     }
 
-    await store.put(id, JSON.stringify(lead));
+    /*
+      RESEND
+    */
 
-    return new Response(`
-      <html>
-        <body style="font-family:Arial;padding:40px;background:#0b0b0c;color:white">
-          <h2>TVEVT Access ${lead.status}</h2>
+    else if (
+      action === "resend"
+    ) {
+      lead.status =
+        "RESENT";
 
-          ${lead.clientKey ? `
-            <p>Client Key:</p>
-            <code>${lead.clientKey}</code>
+      lead.lastRequestAt =
+        now;
 
-            <p>Console:</p>
-            <a href="${lead.consoleUrl}" style="color:#ff9b3d">
-              ${lead.consoleUrl}
-            </a>
-          ` : ""}
+      lead.requestCount =
+        (lead.requestCount || 1) + 1;
+    }
 
-        </body>
-      </html>
-    `, {
-      headers: { "Content-Type": "text/html" }
+    /*
+      BLOCK
+    */
+
+    else if (
+      action === "block"
+    ) {
+      lead.status =
+        "BLOCKED";
+
+      lead.blockedAt =
+        now;
+    }
+
+    /*
+      HIDE
+    */
+
+    else if (
+      action === "hide"
+    ) {
+      lead.hidden = true;
+
+      lead.hiddenAt =
+        now;
+
+      if (
+        lead.status !==
+        "BLOCKED"
+      ) {
+        lead.status =
+          "HIDDEN";
+      }
+    }
+
+    /*
+      DELETE
+    */
+
+    else if (
+      action === "delete"
+    ) {
+      /*
+        DELETE EMAIL INDEX
+      */
+
+      if (lead.email) {
+        const emailLookupKey =
+          makeEmailLookupKey(
+            lead.email
+          );
+
+        await store.delete(
+          emailLookupKey
+        );
+      }
+
+      /*
+        DELETE LEAD
+      */
+
+      await store.delete(id);
+
+      return jsonResponse({
+        ok: true,
+        deleted: true,
+        id
+      });
+    }
+
+    /*
+      UNKNOWN ACTION
+    */
+
+    else {
+      return jsonResponse(
+        {
+          ok: false,
+          error:
+            "Unsupported action"
+        },
+        400
+      );
+    }
+
+    /*
+      UPDATE TIMESTAMP
+    */
+
+    lead.updatedAt =
+      now;
+
+    /*
+      SAVE
+    */
+
+    await store.put(
+      id,
+      JSON.stringify(lead)
+    );
+
+    return jsonResponse({
+      ok: true,
+      id,
+      action,
+      lead
     });
 
   } catch (err) {
-    return new Response(err.message, { status: 500 });
+    console.error(
+      "Lead action error:",
+      err
+    );
+
+    return jsonResponse(
+      {
+        ok: false,
+        error: err.message
+      },
+      500
+    );
   }
+}
+
+export async function onRequestGet() {
+  return jsonResponse(
+    {
+      ok: false,
+      error:
+        "Use POST for lead actions"
+    },
+    405
+  );
 }
