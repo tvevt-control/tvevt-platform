@@ -2,9 +2,21 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TVEVT Console</title>
-<link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
+
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1"
+>
+
+<title>
+  TVEVT Console
+</title>
+
+<link
+  rel="icon"
+  href="/assets/brand/tvevt-favicon.svg"
+  type="image/svg+xml"
+>
 
 <style>
 :root{
@@ -16,54 +28,135 @@
   --orange:#ff9b3d;
   --green:#2cff9a;
 }
-*{box-sizing:border-box}
+
+*{
+  box-sizing:border-box;
+}
+
 body{
   margin:0;
   min-height:100vh;
+
   background:
-    radial-gradient(circle at top left, rgba(255,155,61,.16), transparent 32%),
+    radial-gradient(
+      circle at top left,
+      rgba(255,155,61,.16),
+      transparent 32%
+    ),
     var(--bg);
+
   color:var(--text);
-  font-family:Arial, Helvetica, sans-serif;
+
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
 }
+
 .wrap{
   max-width:1100px;
   margin:0 auto;
-  padding:40px 24px 80px;
+  padding:34px 24px 80px;
 }
-.hero,.card,.access{
+
+.systemBar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+
+  margin-bottom:24px;
+
+  border:1px solid rgba(44,255,154,.18);
+
+  background:
+    rgba(44,255,154,.06);
+
+  border-radius:20px;
+
+  padding:18px 20px;
+}
+
+.systemBar strong{
+  display:block;
+  font-size:13px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--green);
+}
+
+.systemBar span{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.systemActions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.topBtn{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  border-radius:999px;
+  padding:11px 15px;
+  cursor:pointer;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.hero,
+.card,
+.access{
   border:1px solid var(--line);
   border-radius:28px;
   background:rgba(20,20,22,.9);
 }
+
 .hero{
   padding:34px;
 }
+
 h1{
   margin:0 0 12px;
   font-size:42px;
   letter-spacing:-.04em;
 }
+
 p{
   color:var(--muted);
   line-height:1.6;
 }
+
 .grid{
   margin-top:24px;
+
   display:grid;
   grid-template-columns:repeat(3,1fr);
+
   gap:16px;
 }
+
 .card{
   padding:20px;
 }
+
 .card h2{
   margin:0 0 8px;
   font-size:20px;
 }
+
 .card p{
   margin:0 0 14px;
 }
+
 .btn{
   display:inline-block;
   padding:12px 14px;
@@ -74,34 +167,47 @@ p{
   font-weight:900;
   cursor:pointer;
 }
+
 .btn.secondary{
   background:transparent;
   color:#fff;
   border:1px solid var(--line);
 }
+
 .btn.loading{
   opacity:.65;
   pointer-events:none;
 }
+
 .access{
   margin-top:24px;
   padding:22px;
 }
+
 .access h2{
-  margin:0 0 16px;
+  margin:0 0 10px;
   font-size:22px;
 }
+
+.accessSub{
+  margin:0 0 18px;
+  color:var(--muted);
+  font-size:14px;
+}
+
 .accessGrid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
   gap:12px;
 }
+
 .field{
   border:1px solid var(--line);
   border-radius:16px;
   padding:14px;
   background:rgba(255,255,255,.04);
 }
+
 .field small{
   display:block;
   color:var(--muted);
@@ -111,164 +217,594 @@ p{
   margin-bottom:7px;
   font-weight:900;
 }
+
 .field b{
   display:block;
   word-break:break-all;
   font-size:14px;
 }
+
 .status{
   color:var(--green);
 }
-.loadingBox,.denied{
+
+.loadingBox,
+.denied{
   border:1px solid var(--line);
   border-radius:24px;
   background:rgba(20,20,22,.9);
   padding:30px;
 }
+
+.deniedActions{
+  margin-top:20px;
+}
+
+.notice{
+  margin-top:16px;
+  color:var(--muted);
+  font-size:13px;
+}
+
+footer{
+  margin-top:40px;
+  text-align:center;
+  color:rgba(255,255,255,.24);
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+
 @media(max-width:900px){
-  .grid,.accessGrid{grid-template-columns:1fr}
+
+  .grid,
+  .accessGrid{
+    grid-template-columns:1fr;
+  }
+
+  .systemBar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<script src="/assets/private-nav.js?v=2026-05-04"></script>
+<script src="/assets/private-nav.js?v=2026-05-10"></script>
 
 <div class="wrap">
 
-  <div id="loading" class="loadingBox">
-    <h1>Checking access…</h1>
-    <p>Please wait while TVEVT verifies your private console key.</p>
-  </div>
+  <div
+    id="systemBar"
+    class="systemBar"
+    style="display:none"
+  >
 
-  <div id="denied" class="denied" style="display:none">
-    <h1>Access required</h1>
-    <p>This console link is missing, expired, or not recognized.</p>
-    <a class="btn" href="/request-access.html">Request Access</a>
-  </div>
+    <div>
 
-  <div id="app" style="display:none">
+      <strong>
+        Private Console Active
+      </strong>
 
-    <section class="hero">
-      <h1>Signal Control</h1>
-      <p>
-        Create verified signals, access your private signal library,
-        and manage execution records from one place.
-      </p>
-    </section>
+      <span id="sessionText">
+        Identity secured on this device.
+      </span>
 
-    <section class="access">
-      <h2>Access Holder</h2>
-      <div class="accessGrid">
-        <div class="field">
-          <small>Name</small>
-          <b id="holderName">—</b>
-        </div>
-        <div class="field">
-          <small>Email</small>
-          <b id="holderEmail">—</b>
-        </div>
-        <div class="field">
-          <small>Client Key</small>
-          <b id="clientKey">—</b>
-        </div>
-        <div class="field">
-          <small>Status</small>
-          <b class="status">Active</b>
-        </div>
-      </div>
-    </section>
+    </div>
 
-    <div class="grid">
-      <div class="card">
-        <h2>Create Signal</h2>
-        <p>Prepare a new strategic statement.</p>
-        <a id="createBtn" class="btn" href="/seal.html">Create</a>
-      </div>
+    <div class="systemActions">
 
-      <div class="card">
-        <h2>My Signals</h2>
-        <p>Your private signal library.</p>
-        <a id="signalsBtn" class="btn secondary" href="/signals.html">Open</a>
-      </div>
+      <a
+        class="topBtn"
+        href="/"
+      >
+        Public Site
+      </a>
 
-      <div class="card">
-        <h2>Execution Log</h2>
-        <p>Private execution records.</p>
-        <a id="logBtn" class="btn secondary" href="/execution-log.html">View</a>
-      </div>
+      <button
+        class="topBtn"
+        onclick="copyPrivateLink()"
+      >
+        Copy Private Link
+      </button>
+
+      <button
+        class="topBtn"
+        onclick="forgetAccess()"
+      >
+        Forget Access
+      </button>
+
     </div>
 
   </div>
 
+  <div
+    id="loading"
+    class="loadingBox"
+  >
+
+    <h1>
+      Checking access…
+    </h1>
+
+    <p>
+      Please wait while TVEVT verifies your private console key.
+    </p>
+
+  </div>
+
+  <div
+    id="denied"
+    class="denied"
+    style="display:none"
+  >
+
+    <h1>
+      Access required
+    </h1>
+
+    <p>
+      This console link is missing, expired, or not recognized.
+    </p>
+
+    <div class="deniedActions">
+
+      <a
+        class="btn"
+        href="/request-access.html"
+      >
+        Request Access
+      </a>
+
+    </div>
+
+  </div>
+
+  <div
+    id="app"
+    style="display:none"
+  >
+
+    <section class="hero">
+
+      <h1>
+        Signal Control
+      </h1>
+
+      <p>
+        Create verified signals, access your private signal library,
+        and manage execution records from one place.
+      </p>
+
+    </section>
+
+    <section class="access">
+
+      <h2>
+        Active Identity
+      </h2>
+
+      <p class="accessSub">
+        This device currently holds active TVEVT private access.
+      </p>
+
+      <div class="accessGrid">
+
+        <div class="field">
+
+          <small>
+            Name
+          </small>
+
+          <b id="holderName">
+            —
+          </b>
+
+        </div>
+
+        <div class="field">
+
+          <small>
+            Email
+          </small>
+
+          <b id="holderEmail">
+            —
+          </b>
+
+        </div>
+
+        <div class="field">
+
+          <small>
+            Client Key
+          </small>
+
+          <b id="clientKey">
+            —
+          </b>
+
+        </div>
+
+        <div class="field">
+
+          <small>
+            Status
+          </small>
+
+          <b class="status">
+            Active
+          </b>
+
+        </div>
+
+      </div>
+
+      <div
+        id="restoreNotice"
+        class="notice"
+      ></div>
+
+    </section>
+
+    <div class="grid">
+
+      <div class="card">
+
+        <h2>
+          Create Signal
+        </h2>
+
+        <p>
+          Prepare a new strategic statement.
+        </p>
+
+        <a
+          id="createBtn"
+          class="btn"
+          href="/seal.html"
+        >
+          Create
+        </a>
+
+      </div>
+
+      <div class="card">
+
+        <h2>
+          My Signals
+        </h2>
+
+        <p>
+          Your private signal library.
+        </p>
+
+        <a
+          id="signalsBtn"
+          class="btn secondary"
+          href="/signals.html"
+        >
+          Open
+        </a>
+
+      </div>
+
+      <div class="card">
+
+        <h2>
+          Execution Log
+        </h2>
+
+        <p>
+          Private execution records.
+        </p>
+
+        <a
+          id="logBtn"
+          class="btn secondary"
+          href="/execution-log.html"
+        >
+          View
+        </a>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <footer>
+    Say it once. Prove it forever.
+  </footer>
+
 </div>
 
 <script>
-const params = new URLSearchParams(window.location.search);
-let key = params.get("key") || localStorage.getItem("tvevt_client_key") || "";
+const params =
+  new URLSearchParams(
+    window.location.search
+  );
 
-const loading = document.getElementById("loading");
-const denied = document.getElementById("denied");
-const app = document.getElementById("app");
+const urlKey =
+  params.get("key");
 
-const holderName = document.getElementById("holderName");
-const holderEmail = document.getElementById("holderEmail");
-const clientKey = document.getElementById("clientKey");
+let key =
+  urlKey ||
+  localStorage.getItem(
+    "tvevt_client_key"
+  ) ||
+  "";
 
-const createBtn = document.getElementById("createBtn");
-const signalsBtn = document.getElementById("signalsBtn");
-const logBtn = document.getElementById("logBtn");
+const loading =
+  document.getElementById(
+    "loading"
+  );
+
+const denied =
+  document.getElementById(
+    "denied"
+  );
+
+const app =
+  document.getElementById(
+    "app"
+  );
+
+const systemBar =
+  document.getElementById(
+    "systemBar"
+  );
+
+const restoreNotice =
+  document.getElementById(
+    "restoreNotice"
+  );
+
+const sessionText =
+  document.getElementById(
+    "sessionText"
+  );
+
+const holderName =
+  document.getElementById(
+    "holderName"
+  );
+
+const holderEmail =
+  document.getElementById(
+    "holderEmail"
+  );
+
+const clientKey =
+  document.getElementById(
+    "clientKey"
+  );
+
+const createBtn =
+  document.getElementById(
+    "createBtn"
+  );
+
+const signalsBtn =
+  document.getElementById(
+    "signalsBtn"
+  );
+
+const logBtn =
+  document.getElementById(
+    "logBtn"
+  );
 
 function withKey(path){
-  return key ? path + "?key=" + encodeURIComponent(key) : path;
+
+  return key
+    ? path +
+      "?key=" +
+      encodeURIComponent(key)
+    : path;
 }
 
-function addButtonFeedback(el, text){
-  el.addEventListener("click", function(){
-    el.classList.add("loading");
-    el.textContent = text;
-  });
+function addButtonFeedback(
+  el,
+  text
+){
+
+  el.addEventListener(
+    "click",
+    function(){
+
+      el.classList.add(
+        "loading"
+      );
+
+      el.textContent =
+        text;
+    }
+  );
 }
 
-async function init(){
-  if(!key){
-    loading.style.display = "none";
-    denied.style.display = "block";
+function copyPrivateLink(){
+
+  if (!key) {
+
+    alert(
+      "No private access key found."
+    );
+
     return;
   }
 
-  try{
-    const res = await fetch("/api/leads?access=" + encodeURIComponent(key));
-    const data = await res.json();
+  const full =
+    window.location.origin +
+    "/console.html?key=" +
+    encodeURIComponent(key);
 
-    if(!data || !data.valid){
-      loading.style.display = "none";
-      denied.style.display = "block";
+  navigator.clipboard
+    .writeText(full)
+
+    .then(() => {
+
+      alert(
+        "Private console link copied."
+      );
+    })
+
+    .catch(() => {
+
+      alert(
+        "Unable to copy link."
+      );
+    });
+}
+
+function forgetAccess(){
+
+  const confirmed =
+    confirm(
+      "Forget TVEVT private access on this device?"
+    );
+
+  if (!confirmed) {
+    return;
+  }
+
+  localStorage.removeItem(
+    "tvevt_client_key"
+  );
+
+  window.location.href =
+    "/request-access.html";
+}
+
+async function init(){
+
+  if (!key) {
+
+    loading.style.display =
+      "none";
+
+    denied.style.display =
+      "block";
+
+    return;
+  }
+
+  try {
+
+    const res =
+      await fetch(
+        "/api/leads?access=" +
+        encodeURIComponent(key)
+      );
+
+    const data =
+      await res.json();
+
+    if (
+      !data ||
+      !data.valid
+    ) {
+
+      localStorage.removeItem(
+        "tvevt_client_key"
+      );
+
+      loading.style.display =
+        "none";
+
+      denied.style.display =
+        "block";
+
       return;
     }
 
-    key = data.clientKey || key;
-    localStorage.setItem("tvevt_client_key", key);
+    key =
+      data.clientKey || key;
 
-    holderName.textContent = data.name || "Private access holder";
-    holderEmail.textContent = data.email || "—";
-    clientKey.textContent = key;
+    localStorage.setItem(
+      "tvevt_client_key",
+      key
+    );
 
-    createBtn.href = withKey("/seal.html");
-    signalsBtn.href = withKey("/signals.html");
-    logBtn.href = withKey("/execution-log.html");
+    holderName.textContent =
+      data.name ||
+      "Private access holder";
 
-    addButtonFeedback(createBtn, "Opening...");
-    addButtonFeedback(signalsBtn, "Opening...");
-    addButtonFeedback(logBtn, "Opening...");
+    holderEmail.textContent =
+      data.email || "—";
 
-    loading.style.display = "none";
-    app.style.display = "block";
+    clientKey.textContent =
+      key;
 
-  }catch(err){
-    loading.style.display = "none";
-    denied.style.display = "block";
+    createBtn.href =
+      withKey("/seal.html");
+
+    signalsBtn.href =
+      withKey("/signals.html");
+
+    logBtn.href =
+      withKey("/execution-log.html");
+
+    addButtonFeedback(
+      createBtn,
+      "Opening..."
+    );
+
+    addButtonFeedback(
+      signalsBtn,
+      "Opening..."
+    );
+
+    addButtonFeedback(
+      logBtn,
+      "Opening..."
+    );
+
+    if (urlKey) {
+
+      restoreNotice.textContent =
+        "Private access restored from secure link.";
+
+      sessionText.textContent =
+        "Secure identity restored from private access link.";
+    }
+
+    else {
+
+      restoreNotice.textContent =
+        "Session restored from this device.";
+
+      sessionText.textContent =
+        "Identity secured on this device.";
+    }
+
+    loading.style.display =
+      "none";
+
+    systemBar.style.display =
+      "flex";
+
+    app.style.display =
+      "block";
+
+  }
+
+  catch(err){
+
+    console.error(err);
+
+    localStorage.removeItem(
+      "tvevt_client_key"
+    );
+
+    loading.style.display =
+      "none";
+
+    denied.style.display =
+      "block";
   }
 }
 
