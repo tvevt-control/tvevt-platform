@@ -14,7 +14,11 @@
   --text:#ffffff;
   --muted:#a7a7ad;
   --orange:#ff9b3d;
+  --green:#2cff9a;
+  --red:#ff6a5f;
 }
+
+*{box-sizing:border-box}
 
 body{
   margin:0;
@@ -29,95 +33,405 @@ body{
 .wrap{
   max-width:1100px;
   margin:0 auto;
-  padding:40px 24px 80px;
+  padding:34px 24px 80px;
+}
+
+.modeBar{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:16px;
+  margin-bottom:22px;
+  border:1px solid rgba(44,255,154,.22);
+  border-radius:20px;
+  padding:16px 18px;
+  background:rgba(44,255,154,.06);
+}
+
+.modeBar strong{
+  display:block;
+  font-size:13px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--green);
+}
+
+.modeBar span{
+  display:block;
+  margin-top:5px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.modeActions{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+
+.topBtn{
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:#fff;
+  border-radius:999px;
+  padding:10px 14px;
+  cursor:pointer;
+  text-decoration:none;
+  font-size:12px;
+  font-weight:800;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+
+.hero,.item,.empty{
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:rgba(20,20,22,.88);
+  padding:24px;
 }
 
 h1{
   margin:0 0 10px;
   font-size:40px;
+  letter-spacing:-.04em;
 }
 
 p{
   color:var(--muted);
+  line-height:1.6;
 }
 
 .list{
-  margin-top:30px;
+  margin-top:24px;
   display:flex;
   flex-direction:column;
   gap:14px;
 }
 
-.item{
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:18px;
-  background:rgba(20,20,22,.85);
-}
-
 .item small{
   display:block;
   color:var(--muted);
-  margin-bottom:6px;
+  margin-bottom:8px;
+  text-transform:uppercase;
+  letter-spacing:.12em;
+  font-weight:900;
+  font-size:11px;
 }
 
 .item strong{
   display:block;
-  line-height:1.4;
+  line-height:1.5;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  margin-bottom:14px;
+}
+
+.meta{
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.5;
+  word-break:break-all;
+}
+
+.actions{
+  display:flex;
+  gap:10px;
+  margin-top:16px;
+  flex-wrap:wrap;
+}
+
+.btn{
+  padding:11px 14px;
+  border-radius:12px;
+  background:var(--orange);
+  color:#000;
+  font-weight:900;
+  text-decoration:none;
+  border:0;
+  cursor:pointer;
+  font-size:13px;
+}
+
+.btn.secondary{
+  background:transparent;
+  color:#fff;
+  border:1px solid var(--line);
 }
 
 .empty{
-  margin-top:40px;
-  padding:24px;
-  border:1px solid var(--line);
-  border-radius:20px;
-  background:rgba(20,20,22,.7);
+  margin-top:24px;
+  color:var(--muted);
 }
 
+.msg{
+  margin-top:16px;
+  color:var(--green);
+  font-weight:800;
+}
+
+.msg.error{
+  color:var(--red);
+}
+
+footer{
+  margin-top:40px;
+  text-align:center;
+  color:rgba(255,255,255,.24);
+  font-size:11px;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+}
+
+@media(max-width:800px){
+  .modeBar{
+    flex-direction:column;
+    align-items:flex-start;
+  }
+
+  h1{
+    font-size:34px;
+  }
+
+  .btn{
+    width:100%;
+    text-align:center;
+  }
+}
 </style>
 </head>
 
 <body>
 
-<script src="/assets/private-nav.js?v=2026-05-04"></script>
+<script src="/assets/private-nav.js?v=2026-05-10"></script>
 
 <div class="wrap">
 
-  <h1>My Signals</h1>
-  <p>Your private signal library.</p>
+  <div id="modeBar" class="modeBar">
+    <div>
+      <strong>Private Signal Library</strong>
+      <span id="modeText">Loading private identity…</span>
+    </div>
+
+    <div class="modeActions">
+      <a class="topBtn" id="consoleLink" href="/console.html">Console</a>
+      <a class="topBtn" id="createLink" href="/seal.html">Create Signal</a>
+      <a class="topBtn" href="/">Public Site</a>
+    </div>
+  </div>
+
+  <section class="hero">
+    <h1>My Signals</h1>
+    <p>
+      Your private verified signal library. Every signal opens as a TVEVT verification record.
+    </p>
+    <div id="msg" class="msg"></div>
+  </section>
 
   <div id="list" class="list"></div>
 
   <div id="empty" class="empty" style="display:none">
-    No signals yet.
+    No private signals found yet.
   </div>
+
+  <footer>
+    Say it once. Prove it forever.
+  </footer>
 
 </div>
 
 <script>
-const key = localStorage.getItem("tvevt_client_key") || "default";
-const storageKey = "tvevt_signals_" + key;
+const params = new URLSearchParams(window.location.search);
+
+let key =
+  params.get("key") ||
+  localStorage.getItem("tvevt_client_key") ||
+  "";
 
 const list = document.getElementById("list");
 const empty = document.getElementById("empty");
+const msg = document.getElementById("msg");
+const modeText = document.getElementById("modeText");
+const consoleLink = document.getElementById("consoleLink");
+const createLink = document.getElementById("createLink");
 
-const signals = JSON.parse(localStorage.getItem(storageKey) || "[]");
-
-if (!signals.length) {
-  empty.style.display = "block";
-} else {
-  signals.reverse().forEach(s => {
-    const div = document.createElement("div");
-    div.className = "item";
-
-    div.innerHTML = `
-      <small>${new Date(s.time).toLocaleString()}</small>
-      <strong>${s.text}</strong>
-    `;
-
-    list.appendChild(div);
-  });
+function withKey(path){
+  return key
+    ? path + "?key=" + encodeURIComponent(key)
+    : path;
 }
+
+function formatDate(value){
+  if(!value) return "—";
+
+  try{
+    return new Date(value).toLocaleString();
+  }catch{
+    return value;
+  }
+}
+
+function setMessage(text, error = false){
+  msg.textContent = text || "";
+  msg.classList.toggle("error", error);
+}
+
+function applyMode(){
+  if(key){
+    localStorage.setItem("tvevt_client_key", key);
+    modeText.textContent = "Private identity active on this device.";
+    consoleLink.href = withKey("/console.html");
+    createLink.href = withKey("/seal.html");
+  }else{
+    modeText.textContent = "No private identity found.";
+    consoleLink.href = "/request-access.html";
+    consoleLink.textContent = "Request Access";
+    createLink.href = "/seal.html";
+  }
+}
+
+function normalizeRecords(data){
+  if(Array.isArray(data)) return data;
+  if(Array.isArray(data.records)) return data.records;
+  if(Array.isArray(data.signals)) return data.signals;
+  return [];
+}
+
+async function loadFromApi(){
+  const res = await fetch(
+    "/api/signals?key=" + encodeURIComponent(key)
+  );
+
+  const data = await res.json();
+
+  if(!res.ok || data.ok === false){
+    throw new Error(data.error || "Unable to load signals.");
+  }
+
+  return normalizeRecords(data);
+}
+
+function loadLocalFallback(){
+  const storageKey = "tvevt_signals_" + (key || "default");
+  return JSON.parse(localStorage.getItem(storageKey) || "[]");
+}
+
+function saveLocalFallback(records){
+  if(!key || !Array.isArray(records)) return;
+
+  const storageKey = "tvevt_signals_" + key;
+
+  localStorage.setItem(
+    storageKey,
+    JSON.stringify(records)
+  );
+}
+
+function render(records){
+  list.innerHTML = "";
+
+  if(!records.length){
+    empty.style.display = "block";
+    return;
+  }
+
+  empty.style.display = "none";
+
+  records
+    .slice()
+    .reverse()
+    .forEach(record => {
+      const id = record.id || record.signalId || "—";
+      const text = record.text || record.content?.text || "No sealed text available.";
+      const time = record.createdAt || record.timestamp || record.time || "";
+      const hash = record.hash || "—";
+      const status = record.anchor_status || record.status || "sealed";
+      const visibility = record.visibility || "private";
+      const url =
+        record.recordUrl ||
+        record.verification_url ||
+        (id !== "—" ? "/record.html?id=" + encodeURIComponent(id) : "#");
+
+      const div = document.createElement("div");
+      div.className = "item";
+
+      const label = document.createElement("small");
+      label.textContent = `${id} · ${formatDate(time)}`;
+
+      const body = document.createElement("strong");
+      body.textContent = text;
+
+      const meta = document.createElement("div");
+      meta.className = "meta";
+      meta.textContent = `Status: ${status} · Visibility: ${visibility} · Hash: ${hash}`;
+
+      const actions = document.createElement("div");
+      actions.className = "actions";
+
+      const open = document.createElement("a");
+      open.className = "btn";
+      open.href = url;
+      open.textContent = "Open Record";
+
+      const copy = document.createElement("button");
+      copy.className = "btn secondary";
+      copy.type = "button";
+      copy.textContent = "Copy Link";
+
+      copy.onclick = async () => {
+        const full = url.startsWith("http")
+          ? url
+          : window.location.origin + url;
+
+        await navigator.clipboard.writeText(full);
+        setMessage("Verification link copied.");
+      };
+
+      actions.appendChild(open);
+      actions.appendChild(copy);
+
+      div.appendChild(label);
+      div.appendChild(body);
+      div.appendChild(meta);
+      div.appendChild(actions);
+
+      list.appendChild(div);
+    });
+}
+
+async function init(){
+  applyMode();
+
+  if(!key){
+    empty.style.display = "block";
+    setMessage("Private access is required to load your signal library.", true);
+    return;
+  }
+
+  setMessage("Loading private signal library…");
+
+  try{
+    const records = await loadFromApi();
+
+    saveLocalFallback(records);
+    render(records);
+
+    setMessage("Signal library loaded.");
+  }catch(err){
+    console.error(err);
+
+    const fallback = loadLocalFallback();
+
+    if(fallback.length){
+      render(fallback);
+      setMessage("Loaded local fallback library.");
+    }else{
+      render([]);
+      setMessage("No private records found yet.");
+    }
+  }
+}
+
+init();
 </script>
 
 </body>
