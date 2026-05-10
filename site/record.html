@@ -1,444 +1,474 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>TVEVT — Verified Record</title>
-  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TVEVT — Verified Record</title>
+<link rel="icon" type="image/svg+xml" href="/assets/brand/tvevt-favicon.svg">
 
-  <style>
-    :root{
-      --text:#f4f6f8;
-      --muted:rgba(244,246,248,.62);
-      --soft:rgba(244,246,248,.36);
-      --line:rgba(255,255,255,.12);
-      --orange:#ff7a1a;
-      --orange2:#ffb14a;
-      --green:#8ff0b1;
-      --bg:#07090c;
-    }
+<style>
+:root{
+  --text:#f4f6f8;
+  --muted:rgba(244,246,248,.62);
+  --soft:rgba(244,246,248,.36);
+  --line:rgba(255,255,255,.12);
+  --orange:#ff7a1a;
+  --orange2:#ffb14a;
+  --green:#8ff0b1;
+  --red:#ff6a5f;
+  --bg:#07090c;
+}
 
-    *{box-sizing:border-box}
+*{box-sizing:border-box}
 
-    body{
-      margin:0;
-      min-height:100vh;
-      background:
-        radial-gradient(circle at 50% 0%,rgba(255,122,26,.16),transparent 34%),
-        radial-gradient(circle at 80% 22%,rgba(143,240,177,.06),transparent 28%),
-        linear-gradient(180deg,#10131a,#07090c);
-      color:var(--text);
-      font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif;
-    }
+body{
+  margin:0;
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 50% 0%,rgba(255,122,26,.16),transparent 34%),
+    radial-gradient(circle at 80% 22%,rgba(143,240,177,.06),transparent 28%),
+    linear-gradient(180deg,#10131a,#07090c);
+  color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif;
+}
 
-    .page{
-      min-height:100vh;
-      padding:34px;
-      display:flex;
-      flex-direction:column;
-    }
+.page{
+  min-height:100vh;
+  padding:34px;
+  display:flex;
+  flex-direction:column;
+}
 
-    header{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      border-bottom:1px solid var(--line);
-      padding-bottom:28px;
-    }
+header{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid var(--line);
+  padding-bottom:28px;
+}
 
-    .brand{
-      display:flex;
-      align-items:center;
-      gap:14px;
-      color:var(--text);
-      text-decoration:none;
-    }
+.brand{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  color:var(--text);
+  text-decoration:none;
+}
 
-    .brand img{width:42px;height:42px}
+.brand img{width:42px;height:42px}
 
-    .brand strong{
-      display:block;
-      letter-spacing:.16em;
-      font-size:16px;
-    }
+.brand strong{
+  display:block;
+  letter-spacing:.16em;
+  font-size:16px;
+}
 
-    .brand span span{
-      display:block;
-      margin-top:4px;
-      color:var(--muted);
-      font-size:11px;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-    }
+.brand span span{
+  display:block;
+  margin-top:4px;
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
 
-    nav{
-      display:flex;
-      gap:10px;
-    }
+nav{
+  display:flex;
+  gap:10px;
+}
 
-    nav a{
-      color:var(--text);
-      text-decoration:none;
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:12px 18px;
-      font-size:13px;
-      text-transform:uppercase;
-      letter-spacing:.1em;
-      background:rgba(255,255,255,.03);
-    }
+nav a{
+  color:var(--text);
+  text-decoration:none;
+  border:1px solid var(--line);
+  border-radius:999px;
+  padding:12px 18px;
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+  background:rgba(255,255,255,.03);
+}
 
-    main{
-      flex:1;
-      width:min(940px,100%);
-      margin:56px auto 0;
-    }
+main{
+  flex:1;
+  width:min(940px,100%);
+  margin:56px auto 0;
+}
 
-    .card{
-      border:1px solid var(--line);
-      border-radius:36px;
-      background:
-        linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015)),
-        rgba(10,13,18,.78);
-      padding:44px;
-      box-shadow:0 30px 100px rgba(0,0,0,.32);
-    }
+.card{
+  border:1px solid var(--line);
+  border-radius:36px;
+  background:
+    linear-gradient(180deg,rgba(255,255,255,.05),rgba(255,255,255,.015)),
+    rgba(10,13,18,.78);
+  padding:44px;
+  box-shadow:0 30px 100px rgba(0,0,0,.32);
+}
 
-    .status{
-      display:none;
-      align-items:center;
-      gap:14px;
-      margin-bottom:28px;
-    }
+.statusBadge{
+  display:none;
+  align-items:center;
+  gap:14px;
+  margin-bottom:28px;
+}
 
-    .seal{
-      width:52px;
-      height:52px;
-      border-radius:50%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:rgba(143,240,177,.12);
-      border:1px solid rgba(143,240,177,.34);
-      color:var(--green);
-      font-size:28px;
-      flex:0 0 auto;
-    }
+.seal{
+  width:52px;
+  height:52px;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(143,240,177,.12);
+  border:1px solid rgba(143,240,177,.34);
+  color:var(--green);
+  font-size:28px;
+  flex:0 0 auto;
+}
 
-    .status-label{
-      color:var(--green);
-      font-size:13px;
-      font-weight:900;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-    }
+.seal.failed{
+  background:rgba(255,106,95,.12);
+  border-color:rgba(255,106,95,.34);
+  color:var(--red);
+}
 
-    .status-sub{
-      color:var(--muted);
-      margin-top:4px;
-      font-size:14px;
-    }
+.status-label{
+  color:var(--green);
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+}
 
-    h1{
-      margin:0;
-      font-size:clamp(48px,7vw,88px);
-      line-height:.94;
-      letter-spacing:-.065em;
-    }
+.status-label.failed{color:var(--red)}
 
-    .lead{
-      margin:18px 0 30px;
-      max-width:720px;
-      color:var(--muted);
-      font-size:20px;
-      line-height:1.48;
-    }
+.status-sub{
+  color:var(--muted);
+  margin-top:4px;
+  font-size:14px;
+}
 
-    .lookup{
-      display:grid;
-      grid-template-columns:1fr auto;
-      gap:12px;
-      margin:28px 0 10px;
-    }
+h1{
+  margin:0;
+  font-size:clamp(48px,7vw,88px);
+  line-height:.94;
+  letter-spacing:-.065em;
+}
 
-    input{
-      height:58px;
-      border:1px solid var(--line);
-      border-radius:999px;
-      background:rgba(0,0,0,.22);
-      color:var(--text);
-      padding:0 20px;
-      font:inherit;
-      outline:none;
-    }
+.lead{
+  margin:18px 0 30px;
+  max-width:720px;
+  color:var(--muted);
+  font-size:20px;
+  line-height:1.48;
+}
 
-    button,.button{
-      min-height:58px;
-      border-radius:999px;
-      padding:0 22px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.035);
-      color:var(--text);
-      font-weight:850;
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      cursor:pointer;
-      text-decoration:none;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      font-size:13px;
-    }
+.lookup{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:12px;
+  margin:28px 0 10px;
+}
 
-    .orange{
-      background:linear-gradient(135deg,var(--orange2),var(--orange));
-      color:#170900;
-      border-color:rgba(255,122,26,.8);
-      box-shadow:0 18px 50px rgba(255,122,26,.20);
-    }
+input{
+  height:58px;
+  border:1px solid var(--line);
+  border-radius:999px;
+  background:rgba(0,0,0,.22);
+  color:var(--text);
+  padding:0 20px;
+  font:inherit;
+  outline:none;
+}
 
-    .msg{
-      color:var(--green);
-      font-size:14px;
-      min-height:22px;
-      margin:12px 0 0;
-      font-weight:700;
-    }
+button,.button{
+  min-height:58px;
+  border-radius:999px;
+  padding:0 22px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.035);
+  color:var(--text);
+  font-weight:850;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  cursor:pointer;
+  text-decoration:none;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  font-size:13px;
+}
 
-    .record{
-      display:none;
-      margin-top:34px;
-      padding-top:30px;
-      border-top:1px solid var(--line);
-    }
+.orange{
+  background:linear-gradient(135deg,var(--orange2),var(--orange));
+  color:#170900;
+  border-color:rgba(255,122,26,.8);
+  box-shadow:0 18px 50px rgba(255,122,26,.20);
+}
 
-    .notice{
-      border:1px solid rgba(143,240,177,.22);
-      background:rgba(143,240,177,.06);
-      border-radius:22px;
-      padding:18px;
-      color:var(--muted);
-      line-height:1.5;
-      margin-bottom:24px;
-    }
+.msg{
+  color:var(--green);
+  font-size:14px;
+  min-height:22px;
+  margin:12px 0 0;
+  font-weight:700;
+}
 
-    .notice strong{color:var(--text)}
+.msg.error{color:var(--red)}
 
-    .content-label{
-      color:var(--soft);
-      font-size:11px;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      font-weight:850;
-      margin-bottom:12px;
-    }
+.record{
+  display:none;
+  margin-top:34px;
+  padding-top:30px;
+  border-top:1px solid var(--line);
+}
 
-    .sealed-text{
-      border:1px solid var(--line);
-      border-radius:26px;
-      background:rgba(0,0,0,.24);
-      padding:28px;
-      white-space:pre-wrap;
-      line-height:1.6;
-      overflow-wrap:anywhere;
-      font-size:20px;
-      color:var(--text);
-      margin-bottom:18px;
-    }
+.notice{
+  border:1px solid rgba(143,240,177,.22);
+  background:rgba(143,240,177,.06);
+  border-radius:22px;
+  padding:18px;
+  color:var(--muted);
+  line-height:1.5;
+  margin-bottom:24px;
+}
 
-    .meta{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:14px;
-      margin-top:18px;
-    }
+.notice.failed{
+  border-color:rgba(255,106,95,.24);
+  background:rgba(255,106,95,.06);
+}
 
-    .field{
-      border:1px solid var(--line);
-      border-radius:18px;
-      background:rgba(0,0,0,.16);
-      padding:16px;
-      overflow-wrap:anywhere;
-    }
+.notice strong{color:var(--text)}
 
-    .field small{
-      display:block;
-      color:var(--soft);
-      font-size:11px;
-      letter-spacing:.15em;
-      text-transform:uppercase;
-      margin-bottom:7px;
-      font-weight:850;
-    }
+.content-label{
+  color:var(--soft);
+  font-size:11px;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  font-weight:850;
+  margin-bottom:12px;
+}
 
-    .field b{
-      font-size:14px;
-      line-height:1.45;
-    }
+.sealed-text{
+  border:1px solid var(--line);
+  border-radius:26px;
+  background:rgba(0,0,0,.24);
+  padding:28px;
+  white-space:pre-wrap;
+  line-height:1.6;
+  overflow-wrap:anywhere;
+  font-size:20px;
+  color:var(--text);
+  margin-bottom:18px;
+}
 
-    .technical{
-      display:none;
-      margin-top:14px;
-    }
+.meta{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:14px;
+  margin-top:18px;
+}
 
-    .technical.show{display:block}
+.field{
+  border:1px solid var(--line);
+  border-radius:18px;
+  background:rgba(0,0,0,.16);
+  padding:16px;
+  overflow-wrap:anywhere;
+}
 
-    .actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:24px;
-    }
+.field small{
+  display:block;
+  color:var(--soft);
+  font-size:11px;
+  letter-spacing:.15em;
+  text-transform:uppercase;
+  margin-bottom:7px;
+  font-weight:850;
+}
 
-    .growth{
-      margin-top:28px;
-      padding:24px;
-      border:1px solid rgba(255,122,26,.22);
-      border-radius:26px;
-      background:rgba(255,122,26,.055);
-      display:none;
-    }
+.field b{
+  font-size:14px;
+  line-height:1.45;
+}
 
-    .growth.show{display:block}
+.technical{
+  display:none;
+  margin-top:14px;
+}
 
-    .growth h2{
-      margin:0 0 8px;
-      font-size:26px;
-      letter-spacing:-.045em;
-    }
+.technical.show{display:block}
 
-    .growth p{
-      margin:0;
-      color:var(--muted);
-      line-height:1.5;
-      font-size:15px;
-    }
+.actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:24px;
+}
 
-    footer{
-      text-align:center;
-      color:rgba(244,246,248,.32);
-      font-size:11px;
-      letter-spacing:.22em;
-      text-transform:uppercase;
-      margin-top:30px;
-    }
+.growth{
+  margin-top:28px;
+  padding:24px;
+  border:1px solid rgba(255,122,26,.22);
+  border-radius:26px;
+  background:rgba(255,122,26,.055);
+  display:none;
+}
 
-    @media(max-width:760px){
-      .page{padding:22px}
-      nav{display:none}
-      main{margin-top:34px}
-      .card{padding:28px}
-      .lookup,.meta{grid-template-columns:1fr}
-      button,.button{width:100%}
-      .actions{flex-direction:column}
-      .sealed-text{font-size:18px}
-    }
-  </style>
+.growth.show{display:block}
+
+.growth h2{
+  margin:0 0 8px;
+  font-size:26px;
+  letter-spacing:-.045em;
+}
+
+.growth p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.5;
+  font-size:15px;
+}
+
+footer{
+  text-align:center;
+  color:rgba(244,246,248,.32);
+  font-size:11px;
+  letter-spacing:.22em;
+  text-transform:uppercase;
+  margin-top:30px;
+}
+
+@media(max-width:760px){
+  .page{padding:22px}
+  nav{display:none}
+  main{margin-top:34px}
+  .card{padding:28px}
+  .lookup,.meta{grid-template-columns:1fr}
+  button,.button{width:100%}
+  .actions{flex-direction:column}
+  .sealed-text{font-size:18px}
+}
+</style>
 </head>
 
 <body>
 <div class="page">
-  <header>
-    <a class="brand" href="/">
-      <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT" onerror="this.style.display='none'">
-      <span>
-        <strong>TVEVT</strong>
-        <span>Governance Console</span>
-      </span>
-    </a>
 
-    <nav>
-      <a href="/proof.html">Proof</a>
-      <a href="/seal.html">New Signal</a>
-    </nav>
-  </header>
+<header>
+  <a class="brand" href="/">
+    <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT" onerror="this.style.display='none'">
+    <span>
+      <strong>TVEVT</strong>
+      <span>Governance Console</span>
+    </span>
+  </a>
 
-  <main>
-    <section class="card">
-      <div class="status" id="badge">
-        <div class="seal">✓</div>
-        <div>
-          <div class="status-label">Verified Record</div>
-          <div class="status-sub">Immutable. Timestamped. Traceable.</div>
-        </div>
+  <nav>
+    <a href="/proof.html">Proof</a>
+    <a href="/seal.html">New Signal</a>
+  </nav>
+</header>
+
+<main>
+<section class="card">
+
+  <div class="statusBadge" id="badge">
+    <div class="seal" id="sealIcon">✓</div>
+    <div>
+      <div class="status-label" id="statusLabel">Verified Record</div>
+      <div class="status-sub" id="statusSub">Immutable. Timestamped. Traceable.</div>
+    </div>
+  </div>
+
+  <h1 id="title">Verified record.</h1>
+
+  <p class="lead" id="lead">
+    A sealed signal with a timestamp, hash, and fixed verification link.
+  </p>
+
+  <div class="lookup" id="lookup">
+    <input id="recordInput" placeholder="Enter record ID, e.g. TVE-XXXXXX">
+    <button class="orange" id="load">Load</button>
+  </div>
+
+  <div class="msg" id="msg">Open a verification link or enter a record ID.</div>
+
+  <div class="record" id="record">
+
+    <div class="notice" id="notice">
+      <strong>This record cannot be altered without detection.</strong><br>
+      The content below is the sealed statement associated with this verification record.
+    </div>
+
+    <div class="content-label">Sealed content</div>
+    <div class="sealed-text" id="content">No record loaded.</div>
+
+    <div class="meta">
+      <div class="field">
+        <small>Record ID</small>
+        <b id="rid">—</b>
       </div>
 
-      <h1 id="title">Verified record.</h1>
-      <p class="lead" id="lead">
-        A sealed signal with a timestamp, hash, and fixed verification link.
+      <div class="field">
+        <small>Timestamp</small>
+        <b id="ts">—</b>
+      </div>
+
+      <div class="field">
+        <small>Status</small>
+        <b id="recordStatus">sealed</b>
+      </div>
+
+      <div class="field">
+        <small>Visibility</small>
+        <b id="visibility">—</b>
+      </div>
+    </div>
+
+    <div class="technical" id="technical">
+      <div class="field" style="margin-top:14px;">
+        <small>Stored Hash</small>
+        <b id="hash">—</b>
+      </div>
+
+      <div class="field" style="margin-top:14px;">
+        <small>Recalculated Hash</small>
+        <b id="recalculatedHash">—</b>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button id="copyLink">Copy Link</button>
+      <button id="shareProof">Share Proof</button>
+      <button id="toggleTechnical">Show Hash</button>
+      <a class="button orange" href="/seal.html">Seal New</a>
+    </div>
+
+    <div class="growth" id="growth">
+      <h2>Protect your statements.</h2>
+      <p>
+        Identity, account history, delivery, and team governance are the next control layer.
       </p>
-
-      <div class="lookup" id="lookup">
-        <input id="recordInput" placeholder="Enter record ID, e.g. TVE-XXXXXX">
-        <button class="orange" id="load">Load</button>
+      <div class="actions">
+        <a class="button orange" href="/request-access.html">Request Access</a>
       </div>
+    </div>
 
-      <div class="msg" id="msg">Open a verification link or enter a record ID.</div>
+  </div>
 
-      <div class="record" id="record">
-        <div class="notice">
-          <strong>This record cannot be altered without detection.</strong><br>
-          The content below is the sealed statement associated with this verification record.
-        </div>
+</section>
+</main>
 
-        <div class="content-label">Sealed content</div>
-        <div class="sealed-text" id="content">No record loaded.</div>
+<footer>Say it once. Prove it forever.</footer>
 
-        <div class="meta">
-          <div class="field">
-            <small>Record ID</small>
-            <b id="rid">—</b>
-          </div>
-
-          <div class="field">
-            <small>Timestamp</small>
-            <b id="ts">—</b>
-          </div>
-
-          <div class="field">
-            <small>Status</small>
-            <b id="status">sealed</b>
-          </div>
-
-          <div class="field">
-            <small>Type</small>
-            <b>Verified Signal</b>
-          </div>
-        </div>
-
-        <div class="technical" id="technical">
-          <div class="field" style="margin-top:14px;">
-            <small>Hash</small>
-            <b id="hash">—</b>
-          </div>
-        </div>
-
-        <div class="actions">
-          <button id="copyLink">Copy Link</button>
-          <button id="shareProof">Share Proof</button>
-          <button id="toggleTechnical">Show Hash</button>
-          <a class="button orange" href="/seal.html">Seal New</a>
-        </div>
-
-        <div class="growth" id="growth">
-          <h2>Protect your statements.</h2>
-          <p>
-            Identity, account history, delivery, and team governance are the next control layer.
-          </p>
-          <div class="actions">
-            <a class="button orange" href="/request-access.html">Request Access</a>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-
-  <footer>Say it once. Prove it forever.</footer>
 </div>
 
 <script>
 const $ = id => document.getElementById(id);
-let current = null;
+
+let currentRecord = null;
+let currentVerification = null;
 
 function idFromUrl(){
   return new URLSearchParams(location.search).get("id") || "";
@@ -449,33 +479,67 @@ function reset(){
   $("record").style.display = "none";
   $("growth").classList.remove("show");
   $("technical").classList.remove("show");
+  $("notice").classList.remove("failed");
+  $("sealIcon").classList.remove("failed");
+  $("statusLabel").classList.remove("failed");
   $("toggleTechnical").textContent = "Show Hash";
   $("copyLink").textContent = "Copy Link";
   $("shareProof").textContent = "Share Proof";
   $("rid").textContent = "—";
   $("ts").textContent = "—";
   $("hash").textContent = "—";
-  $("status").textContent = "sealed";
+  $("recalculatedHash").textContent = "—";
+  $("recordStatus").textContent = "sealed";
+  $("visibility").textContent = "—";
   $("content").textContent = "No record loaded.";
-  current = null;
+  $("msg").classList.remove("error");
+  currentRecord = null;
+  currentVerification = null;
 }
 
-function render(record){
-  current = record;
+function render(data){
+  const record = data.record;
+  const verification = data.verification || {};
+
+  currentRecord = record;
+  currentVerification = verification;
+
+  const verified = verification.verified === true;
 
   $("badge").style.display = "flex";
   $("record").style.display = "block";
   $("growth").classList.add("show");
 
-  $("rid").textContent = record.id || "—";
-  $("ts").textContent = record.timestamp || "—";
-  $("hash").textContent = record.hash || "—";
-  $("status").textContent = record.anchor_status || "sealed";
-  $("content").textContent = record.content?.text || "No sealed text available.";
+  $("sealIcon").textContent = verified ? "✓" : "!";
+  $("statusLabel").textContent = verified ? "Verified Record" : "Verification Failed";
+  $("statusSub").textContent = verified
+    ? "Immutable. Timestamped. Traceable."
+    : "The stored hash does not match the recalculated payload.";
 
-  $("title").textContent = "Record verified.";
-  $("lead").textContent = "This sealed signal matches its stored verification record.";
-  $("msg").textContent = "Record loaded successfully.";
+  if (!verified) {
+    $("notice").classList.add("failed");
+    $("sealIcon").classList.add("failed");
+    $("statusLabel").classList.add("failed");
+  }
+
+  $("rid").textContent = record.id || "—";
+  $("ts").textContent = record.createdAt || record.timestamp || "—";
+  $("hash").textContent = verification.storedHash || record.hash || "—";
+  $("recalculatedHash").textContent = verification.recalculatedHash || "—";
+  $("recordStatus").textContent = record.anchor_status || record.status || "sealed";
+  $("visibility").textContent = record.visibility || "public";
+  $("content").textContent = record.text || record.content?.text || "No sealed text available.";
+
+  $("title").textContent = verified ? "Record verified." : "Record integrity warning.";
+  $("lead").textContent = verified
+    ? "This sealed signal matches its stored verification record."
+    : "This record was found, but its cryptographic integrity check did not pass.";
+
+  $("msg").textContent = verified
+    ? "Record loaded and verified successfully."
+    : "Record loaded, but verification failed.";
+
+  if (!verified) $("msg").classList.add("error");
 }
 
 async function loadRecord(id){
@@ -499,7 +563,9 @@ async function loadRecord(id){
     }
 
     render(data);
+
   }catch(error){
+    $("msg").classList.add("error");
     $("msg").textContent = error.message;
   }
 }
@@ -507,6 +573,7 @@ async function loadRecord(id){
 async function copyText(text, successMessage, button){
   await navigator.clipboard.writeText(text);
   $("msg").textContent = successMessage;
+  $("msg").classList.remove("error");
 
   if(button){
     const original = button.textContent;
@@ -524,22 +591,23 @@ $("recordInput").onkeydown = event => {
 };
 
 $("copyLink").onclick = async () => {
-  if(!current) return;
+  if(!currentRecord) return;
 
-  const link = location.origin + "/record.html?id=" + encodeURIComponent(current.id);
+  const link = location.origin + "/record.html?id=" + encodeURIComponent(currentRecord.id);
   await copyText(link, "Copied ✓ Verification link copied.", $("copyLink"));
 };
 
 $("shareProof").onclick = async () => {
-  if(!current) return;
+  if(!currentRecord) return;
 
-  const link = location.origin + "/record.html?id=" + encodeURIComponent(current.id);
+  const link = location.origin + "/record.html?id=" + encodeURIComponent(currentRecord.id);
+  const verified = currentVerification?.verified === true;
 
   const text =
 `This signal has been verified in TVEVT.
 
-Record ID: ${current.id}
-Status: VERIFIED
+Record ID: ${currentRecord.id}
+Status: ${verified ? "VERIFIED" : "INTEGRITY WARNING"}
 
 ${link}
 
