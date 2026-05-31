@@ -3,20 +3,11 @@
 <head>
 <meta charset="utf-8">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1"
->
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>
-  TVEVT Console
-</title>
+<title>TVEVT Console</title>
 
-<link
-  rel="icon"
-  href="/assets/brand/tvevt-favicon.svg"
-  type="image/svg+xml"
->
+<link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
 
 <style>
 :root{
@@ -29,28 +20,16 @@
   --green:#2cff9a;
 }
 
-*{
-  box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
   margin:0;
   min-height:100vh;
-
   background:
-    radial-gradient(
-      circle at top left,
-      rgba(255,155,61,.16),
-      transparent 32%
-    ),
+    radial-gradient(circle at top left, rgba(255,155,61,.16), transparent 32%),
     var(--bg);
-
   color:var(--text);
-
-  font-family:
-    Arial,
-    Helvetica,
-    sans-serif;
+  font-family:Arial, Helvetica, sans-serif;
 }
 
 .wrap{
@@ -64,16 +43,10 @@ body{
   justify-content:space-between;
   align-items:center;
   gap:16px;
-
   margin-bottom:24px;
-
   border:1px solid rgba(44,255,154,.18);
-
-  background:
-    rgba(44,255,154,.06);
-
+  background:rgba(44,255,154,.06);
   border-radius:20px;
-
   padding:18px 20px;
 }
 
@@ -114,15 +87,14 @@ body{
 
 .hero,
 .card,
-.access{
+.access,
+.guidance{
   border:1px solid var(--line);
   border-radius:28px;
   background:rgba(20,20,22,.9);
 }
 
-.hero{
-  padding:34px;
-}
+.hero{padding:34px}
 
 h1{
   margin:0 0 12px;
@@ -137,16 +109,12 @@ p{
 
 .grid{
   margin-top:24px;
-
   display:grid;
   grid-template-columns:repeat(3,1fr);
-
   gap:16px;
 }
 
-.card{
-  padding:20px;
-}
+.card{padding:20px}
 
 .card h2{
   margin:0 0 8px;
@@ -161,11 +129,13 @@ p{
   display:inline-block;
   padding:12px 14px;
   border-radius:12px;
+  border:0;
   background:var(--orange);
   color:#000;
   text-decoration:none;
   font-weight:900;
   cursor:pointer;
+  font:inherit;
 }
 
 .btn.secondary{
@@ -224,8 +194,92 @@ p{
   font-size:14px;
 }
 
-.status{
-  color:var(--green);
+.status{color:var(--green)}
+
+.guidance{
+  display:none;
+  margin-top:24px;
+  padding:28px;
+  border-color:rgba(255,155,61,.28);
+  background:
+    radial-gradient(circle at top left, rgba(255,155,61,.12), transparent 36%),
+    rgba(20,20,22,.92);
+}
+
+.guidance.show{display:block}
+
+.guidanceBadge{
+  display:inline-flex;
+  margin-bottom:18px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(255,155,61,.28);
+  background:rgba(255,155,61,.1);
+  color:#ffb36a;
+  font-size:12px;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  font-weight:900;
+}
+
+.guidance h2{
+  margin:0 0 12px;
+  font-size:32px;
+  letter-spacing:-.045em;
+  line-height:1.08;
+}
+
+.guidanceText{
+  max-width:720px;
+  margin:0;
+  color:var(--muted);
+  font-size:16px;
+  line-height:1.65;
+}
+
+.flow{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+  margin-top:24px;
+}
+
+.flowStep{
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  background:rgba(255,255,255,.035);
+}
+
+.flowStep small{
+  display:block;
+  color:var(--orange);
+  font-size:11px;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  font-weight:900;
+  margin-bottom:8px;
+}
+
+.flowStep strong{
+  display:block;
+  color:#fff;
+  font-size:17px;
+  margin-bottom:6px;
+}
+
+.flowStep span{
+  display:block;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+}
+
+.guidanceActions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:24px;
 }
 
 .loadingBox,
@@ -236,9 +290,7 @@ p{
   padding:30px;
 }
 
-.deniedActions{
-  margin-top:20px;
-}
+.deniedActions{margin-top:20px}
 
 .notice{
   margin-top:16px;
@@ -256,15 +308,20 @@ footer{
 }
 
 @media(max-width:900px){
-
   .grid,
-  .accessGrid{
+  .accessGrid,
+  .flow{
     grid-template-columns:1fr;
   }
 
   .systemBar{
     flex-direction:column;
     align-items:flex-start;
+  }
+
+  .guidanceActions .btn{
+    width:100%;
+    text-align:center;
   }
 }
 </style>
@@ -276,242 +333,138 @@ footer{
 
 <div class="wrap">
 
-  <div
-    id="systemBar"
-    class="systemBar"
-    style="display:none"
-  >
-
+  <div id="systemBar" class="systemBar" style="display:none">
     <div>
-
-      <strong>
-        Private Console Active
-      </strong>
-
-      <span id="sessionText">
-        Identity secured on this device.
-      </span>
-
+      <strong>Private Console Active</strong>
+      <span id="sessionText">Identity secured on this device.</span>
     </div>
 
     <div class="systemActions">
-
-      <a
-        class="topBtn"
-        href="/"
-      >
-        Public Site
-      </a>
-
-      <button
-        class="topBtn"
-        onclick="copyPrivateLink()"
-      >
-        Copy Private Link
-      </button>
-
-      <button
-        class="topBtn"
-        onclick="forgetAccess()"
-      >
-        Forget Access
-      </button>
-
+      <a class="topBtn" href="/">Public Site</a>
+      <button class="topBtn" onclick="copyPrivateLink()">Copy Private Link</button>
+      <button class="topBtn" onclick="forgetAccess()">Forget Access</button>
     </div>
-
   </div>
 
-  <div
-    id="loading"
-    class="loadingBox"
-  >
-
-    <h1>
-      Checking access…
-    </h1>
-
-    <p>
-      Please wait while TVEVT verifies your private console key.
-    </p>
-
+  <div id="loading" class="loadingBox">
+    <h1>Checking access…</h1>
+    <p>Please wait while TVEVT verifies your private console key.</p>
   </div>
 
-  <div
-    id="denied"
-    class="denied"
-    style="display:none"
-  >
-
-    <h1>
-      Access required
-    </h1>
-
-    <p>
-      This console link is missing, expired, or not recognized.
-    </p>
+  <div id="denied" class="denied" style="display:none">
+    <h1>Access required</h1>
+    <p>This console link is missing, expired, or not recognized.</p>
 
     <div class="deniedActions">
-
-      <a
-        class="btn"
-        href="/request-access.html"
-      >
-        Request Access
-      </a>
-
+      <a class="btn" href="/request-access.html">Request Access</a>
     </div>
-
   </div>
 
-  <div
-    id="app"
-    style="display:none"
-  >
+  <div id="app" style="display:none">
 
     <section class="hero">
-
-      <h1>
-        Signal Control
-      </h1>
-
+      <h1>Signal Control</h1>
       <p>
         Create verified signals, access your private signal library,
         and manage execution records from one place.
       </p>
-
     </section>
 
     <section class="access">
-
-      <h2>
-        Active Identity
-      </h2>
-
-      <p class="accessSub">
-        This device currently holds active TVEVT private access.
-      </p>
+      <h2>Active Identity</h2>
+      <p class="accessSub">This device currently holds active TVEVT private access.</p>
 
       <div class="accessGrid">
-
         <div class="field">
-
-          <small>
-            Name
-          </small>
-
-          <b id="holderName">
-            —
-          </b>
-
+          <small>Name</small>
+          <b id="holderName">—</b>
         </div>
 
         <div class="field">
-
-          <small>
-            Email
-          </small>
-
-          <b id="holderEmail">
-            —
-          </b>
-
+          <small>Email</small>
+          <b id="holderEmail">—</b>
         </div>
 
         <div class="field">
-
-          <small>
-            Client Key
-          </small>
-
-          <b id="clientKey">
-            —
-          </b>
-
+          <small>Client Key</small>
+          <b id="clientKey">—</b>
         </div>
 
         <div class="field">
-
-          <small>
-            Status
-          </small>
-
-          <b class="status">
-            Active
-          </b>
-
+          <small>Status</small>
+          <b class="status">Active</b>
         </div>
-
       </div>
 
-      <div
-        id="restoreNotice"
-        class="notice"
-      ></div>
+      <div id="restoreNotice" class="notice"></div>
+    </section>
 
+    <section id="firstGuidance" class="guidance">
+      <div class="guidanceBadge">First Console Guidance</div>
+
+      <h2>Welcome to your private TVEVT workspace.</h2>
+
+      <p class="guidanceText">
+        This console is your private access point for creating verified communication records.
+        Start by sealing one exact statement. TVEVT will generate a verification record,
+        preserve the hash, and make the signal independently verifiable.
+      </p>
+
+      <div class="flow">
+        <div class="flowStep">
+          <small>01</small>
+          <strong>Write</strong>
+          <span>Create the exact statement you want to preserve.</span>
+        </div>
+
+        <div class="flowStep">
+          <small>02</small>
+          <strong>Seal</strong>
+          <span>Generate a verified record and cryptographic hash.</span>
+        </div>
+
+        <div class="flowStep">
+          <small>03</small>
+          <strong>Verify</strong>
+          <span>Open the permanent verification page for the record.</span>
+        </div>
+
+        <div class="flowStep">
+          <small>04</small>
+          <strong>Archive</strong>
+          <span>Keep the signal inside your private verified archive.</span>
+        </div>
+      </div>
+
+      <div class="guidanceActions">
+        <button id="firstSignalBtn" class="btn" type="button">
+          Create Your First Verified Signal
+        </button>
+
+        <button id="firstArchiveBtn" class="btn secondary" type="button">
+          Open Verified Archive
+        </button>
+      </div>
     </section>
 
     <div class="grid">
-
       <div class="card">
-
-        <h2>
-          Create Signal
-        </h2>
-
-        <p>
-          Prepare a new strategic statement.
-        </p>
-
-        <a
-          id="createBtn"
-          class="btn"
-          href="/seal.html"
-        >
-          Create
-        </a>
-
+        <h2>Create Signal</h2>
+        <p>Prepare a new strategic statement.</p>
+        <button id="createBtn" class="btn" type="button">Create</button>
       </div>
 
       <div class="card">
-
-        <h2>
-          My Signals
-        </h2>
-
-        <p>
-          Your private signal library.
-        </p>
-
-        <a
-          id="signalsBtn"
-          class="btn secondary"
-          href="/signals.html"
-        >
-          Open
-        </a>
-
+        <h2>Verified Archive</h2>
+        <p>Your private verified signal library.</p>
+        <button id="signalsBtn" class="btn secondary" type="button">Open</button>
       </div>
 
       <div class="card">
-
-        <h2>
-          Execution Log
-        </h2>
-
-        <p>
-          Private execution records.
-        </p>
-
-        <a
-          id="logBtn"
-          class="btn secondary"
-          href="/execution-log.html"
-        >
-          View
-        </a>
-
+        <h2>Execution Log</h2>
+        <p>Private execution records.</p>
+        <button id="logBtn" class="btn secondary" type="button">View</button>
       </div>
-
     </div>
 
   </div>
@@ -523,117 +476,62 @@ footer{
 </div>
 
 <script>
-const params =
-  new URLSearchParams(
-    window.location.search
-  );
-
-const urlKey =
-  params.get("key");
+const params = new URLSearchParams(window.location.search);
+const urlKey = params.get("key");
 
 let key =
   urlKey ||
-  localStorage.getItem(
-    "tvevt_client_key"
-  ) ||
+  localStorage.getItem("tvevt_client_key") ||
   "";
 
-const loading =
-  document.getElementById(
-    "loading"
-  );
+let navigating = false;
 
-const denied =
-  document.getElementById(
-    "denied"
-  );
+const loading = document.getElementById("loading");
+const denied = document.getElementById("denied");
+const app = document.getElementById("app");
+const systemBar = document.getElementById("systemBar");
+const restoreNotice = document.getElementById("restoreNotice");
+const sessionText = document.getElementById("sessionText");
+const holderName = document.getElementById("holderName");
+const holderEmail = document.getElementById("holderEmail");
+const clientKey = document.getElementById("clientKey");
 
-const app =
-  document.getElementById(
-    "app"
-  );
+const createBtn = document.getElementById("createBtn");
+const signalsBtn = document.getElementById("signalsBtn");
+const logBtn = document.getElementById("logBtn");
 
-const systemBar =
-  document.getElementById(
-    "systemBar"
-  );
-
-const restoreNotice =
-  document.getElementById(
-    "restoreNotice"
-  );
-
-const sessionText =
-  document.getElementById(
-    "sessionText"
-  );
-
-const holderName =
-  document.getElementById(
-    "holderName"
-  );
-
-const holderEmail =
-  document.getElementById(
-    "holderEmail"
-  );
-
-const clientKey =
-  document.getElementById(
-    "clientKey"
-  );
-
-const createBtn =
-  document.getElementById(
-    "createBtn"
-  );
-
-const signalsBtn =
-  document.getElementById(
-    "signalsBtn"
-  );
-
-const logBtn =
-  document.getElementById(
-    "logBtn"
-  );
+const firstGuidance = document.getElementById("firstGuidance");
+const firstSignalBtn = document.getElementById("firstSignalBtn");
+const firstArchiveBtn = document.getElementById("firstArchiveBtn");
 
 function withKey(path){
-
   return key
-    ? path +
-      "?key=" +
-      encodeURIComponent(key)
+    ? path + "?key=" + encodeURIComponent(key)
     : path;
 }
 
-function addButtonFeedback(
-  el,
-  text
-){
+function navigateWithFeedback(el, path, text){
+  if (navigating) {
+    return;
+  }
 
-  el.addEventListener(
-    "click",
-    function(){
+  navigating = true;
 
-      el.classList.add(
-        "loading"
-      );
+  el.classList.add("loading");
+  el.textContent = text;
 
-      el.textContent =
-        text;
-    }
-  );
+  window.location.href = withKey(path);
+}
+
+function bindNavigation(el, path, text){
+  el.addEventListener("click", function(){
+    navigateWithFeedback(el, path, text);
+  });
 }
 
 function copyPrivateLink(){
-
   if (!key) {
-
-    alert(
-      "No private access key found."
-    );
-
+    alert("No private access key found.");
     return;
   }
 
@@ -644,136 +542,138 @@ function copyPrivateLink(){
 
   navigator.clipboard
     .writeText(full)
-
     .then(() => {
-
-      alert(
-        "Private console link copied."
-      );
+      alert("Private console link copied.");
     })
-
     .catch(() => {
-
-      alert(
-        "Unable to copy link."
-      );
+      alert("Unable to copy link.");
     });
 }
 
 function forgetAccess(){
-
   const confirmed =
-    confirm(
-      "Forget TVEVT private access on this device?"
-    );
+    confirm("Forget TVEVT private access on this device?");
 
   if (!confirmed) {
     return;
   }
 
-  localStorage.removeItem(
-    "tvevt_client_key"
-  );
+  localStorage.removeItem("tvevt_client_key");
+  window.location.href = "/request-access.html";
+}
 
-  window.location.href =
-    "/request-access.html";
+function getArrayFromSignalsPayload(data){
+  if (!data || typeof data !== "object") {
+    return null;
+  }
+
+  if (Array.isArray(data.signals)) {
+    return data.signals;
+  }
+
+  if (Array.isArray(data.records)) {
+    return data.records;
+  }
+
+  if (Array.isArray(data.items)) {
+    return data.items;
+  }
+
+  if (Array.isArray(data.entries)) {
+    return data.entries;
+  }
+
+  return null;
+}
+
+async function evaluateFirstGuidance(){
+  if (!key) {
+    return;
+  }
+
+  /*
+    Future D1 optimization:
+    /api/leads?access=... can later return hasRecords:true/false
+    to avoid this second request.
+  */
+
+  try {
+    const res =
+      await fetch(
+        "/api/signals?key=" +
+        encodeURIComponent(key)
+      );
+
+    if (!res.ok) {
+      firstGuidance.classList.add("show");
+      return;
+    }
+
+    const data = await res.json();
+    const items = getArrayFromSignalsPayload(data);
+
+    if (items === null) {
+      firstGuidance.classList.add("show");
+      return;
+    }
+
+    if (Array.isArray(items) && items.length === 0) {
+      firstGuidance.classList.add("show");
+    }
+  } catch(err) {
+    console.warn("First guidance check fallback:", err);
+    firstGuidance.classList.add("show");
+  }
 }
 
 async function init(){
-
   if (!key) {
-
-    loading.style.display =
-      "none";
-
-    denied.style.display =
-      "block";
-
+    loading.style.display = "none";
+    denied.style.display = "block";
     return;
   }
 
   try {
-
     const res =
       await fetch(
         "/api/leads?access=" +
         encodeURIComponent(key)
       );
 
-    const data =
-      await res.json();
+    const data = await res.json();
 
-    if (
-      !data ||
-      !data.valid
-    ) {
-
-      localStorage.removeItem(
-        "tvevt_client_key"
-      );
-
-      loading.style.display =
-        "none";
-
-      denied.style.display =
-        "block";
-
+    if (!data || !data.valid) {
+      localStorage.removeItem("tvevt_client_key");
+      loading.style.display = "none";
+      denied.style.display = "block";
       return;
     }
 
-    key =
-      data.clientKey || key;
+    key = data.clientKey || key;
 
-    localStorage.setItem(
-      "tvevt_client_key",
-      key
-    );
+    localStorage.setItem("tvevt_client_key", key);
 
     holderName.textContent =
-      data.name ||
-      "Private access holder";
+      data.name || "Private access holder";
 
     holderEmail.textContent =
       data.email || "—";
 
-    clientKey.textContent =
-      key;
+    clientKey.textContent = key;
 
-    createBtn.href =
-      withKey("/seal.html");
-
-    signalsBtn.href =
-      withKey("/signals.html");
-
-    logBtn.href =
-      withKey("/execution-log.html");
-
-    addButtonFeedback(
-      createBtn,
-      "Opening..."
-    );
-
-    addButtonFeedback(
-      signalsBtn,
-      "Opening..."
-    );
-
-    addButtonFeedback(
-      logBtn,
-      "Opening..."
-    );
+    bindNavigation(createBtn, "/seal.html", "Opening...");
+    bindNavigation(signalsBtn, "/signals.html", "Opening...");
+    bindNavigation(logBtn, "/execution-log.html", "Opening...");
+    bindNavigation(firstSignalBtn, "/seal.html", "Opening...");
+    bindNavigation(firstArchiveBtn, "/signals.html", "Opening...");
 
     if (urlKey) {
-
       restoreNotice.textContent =
         "Private access restored from secure link.";
 
       sessionText.textContent =
         "Secure identity restored from private access link.";
-    }
-
-    else {
-
+    } else {
       restoreNotice.textContent =
         "Session restored from this device.";
 
@@ -781,30 +681,19 @@ async function init(){
         "Identity secured on this device.";
     }
 
-    loading.style.display =
-      "none";
+    loading.style.display = "none";
+    systemBar.style.display = "flex";
+    app.style.display = "block";
 
-    systemBar.style.display =
-      "flex";
+    evaluateFirstGuidance();
 
-    app.style.display =
-      "block";
-
-  }
-
-  catch(err){
-
+  } catch(err) {
     console.error(err);
 
-    localStorage.removeItem(
-      "tvevt_client_key"
-    );
+    localStorage.removeItem("tvevt_client_key");
 
-    loading.style.display =
-      "none";
-
-    denied.style.display =
-      "block";
+    loading.style.display = "none";
+    denied.style.display = "block";
   }
 }
 
