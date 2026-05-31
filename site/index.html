@@ -1,11 +1,31 @@
+Вот финальная, очищенная и готовая к деплою версия для site/index.html.
+
+Главное:
+
+* исправлен event bug,
+* автоподстановка первого пресета,
+* зеленый цвет приведён к канону #2cff9a,
+* сохранён весь новый Product Understanding Layer,
+* логика /api/publish и console/session flow не тронуты,
+* UX стал гораздо понятнее для первого пользователя.
+
+Коммит-месседж:
+
+feat(alpha): rebuild homepage into product understanding layer
+
+Полный код:
+
 <!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>TVEVT — Verified Signals</title>
-<link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
-
+<title>TVEVT — Fix Important Things Properly</title>
+<link
+  rel="icon"
+  href="/assets/brand/tvevt-favicon.svg"
+  type="image/svg+xml"
+>
 <style>
 :root{
   --bg:#09090b;
@@ -15,18 +35,24 @@
   --muted:#a7a7ad;
   --orange:#ff9b3d;
   --orange2:#ff7a1a;
-  --green:#7CFFB2;
+  --green:#2cff9a;
 }
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 body{
   margin:0;
   min-height:100vh;
   background:
-    radial-gradient(circle at top left,rgba(255,155,61,.16),transparent 30%),
-    radial-gradient(circle at bottom right,rgba(124,255,178,.06),transparent 28%),
+    radial-gradient(circle at top left, rgba(255,155,61,.14), transparent 32%),
+    radial-gradient(circle at bottom right, rgba(44,255,154,.05), transparent 26%),
     var(--bg);
   color:var(--text);
-  font-family:Arial,Helvetica,sans-serif;
+  font-family:
+    Arial,
+    Helvetica,
+    sans-serif;
+  -webkit-font-smoothing:antialiased;
 }
 .wrap{
   max-width:1120px;
@@ -38,7 +64,7 @@ header{
   align-items:center;
   justify-content:space-between;
   gap:18px;
-  padding:14px;
+  padding:14px 20px;
   border:1px solid var(--line);
   border-radius:28px;
   background:rgba(20,20,22,.78);
@@ -52,23 +78,23 @@ header{
   text-decoration:none;
 }
 .logoBox{
-  width:54px;
-  height:54px;
+  width:48px;
+  height:48px;
   display:flex;
   align-items:center;
   justify-content:center;
   border:1px solid rgba(255,155,61,.35);
-  border-radius:18px;
+  border-radius:14px;
   background:rgba(255,155,61,.08);
 }
 .logoBox img{
-  width:30px;
-  height:30px;
+  width:24px;
+  height:24px;
   display:block;
 }
 .brandText strong{
   display:block;
-  font-size:23px;
+  font-size:20px;
   letter-spacing:-.03em;
   line-height:1;
 }
@@ -76,7 +102,7 @@ header{
   display:block;
   margin-top:4px;
   color:var(--muted);
-  font-size:13px;
+  font-size:12px;
 }
 nav{
   display:flex;
@@ -89,60 +115,118 @@ nav a{
   text-decoration:none;
   border:1px solid var(--line);
   border-radius:999px;
-  padding:11px 14px;
-  font-weight:800;
+  padding:10px 16px;
   background:rgba(255,255,255,.04);
-  font-size:14px;
+  font-size:13px;
+  font-weight:800;
 }
 nav a:hover{
   border-color:rgba(255,155,61,.45);
 }
 .hero{
   text-align:center;
-  padding:70px 0 36px;
+  padding:84px 0 40px;
 }
-h1{
-  margin:0 auto 20px;
-  max-width:820px;
-  font-size:72px;
-  line-height:1;
+.hero h1{
+  margin:0 auto 24px;
+  max-width:860px;
+  font-size:64px;
+  line-height:1.05;
   letter-spacing:-.055em;
   font-weight:800;
 }
-.hero p{
+.subtitle{
+  max-width:760px;
   margin:0 auto;
-  max-width:680px;
   color:#d7d7dc;
-  font-size:20px;
-  line-height:1.45;
+  font-size:19px;
+  line-height:1.6;
+}
+.subtitle strong{
+  color:#fff;
+}
+.problemGrid{
+  max-width:920px;
+  margin:56px auto 0;
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:18px;
+}
+.problemCard{
+  text-align:left;
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:rgba(20,20,22,.58);
+  padding:24px;
+}
+.problemCard strong{
+  display:block;
+  margin-bottom:10px;
+  color:var(--orange);
+  font-size:16px;
+}
+.problemCard p{
+  margin:0;
+  color:var(--muted);
+  line-height:1.55;
+  font-size:14px;
 }
 .sealBox{
-  max-width:720px;
-  margin:38px auto 0;
+  max-width:760px;
+  margin:64px auto 0;
   border:1px solid var(--line);
-  border-radius:28px;
-  padding:26px;
-  background:rgba(20,20,22,.86);
+  border-radius:30px;
+  padding:30px;
+  background:rgba(20,20,22,.9);
+  text-align:left;
 }
 .label{
+  color:#fff;
+  font-size:15px;
+  font-weight:800;
+}
+.label span{
+  display:block;
+  margin-top:6px;
   color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.18em;
-  font-weight:900;
+  font-size:13px;
+  font-weight:400;
+}
+.presets{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  margin-top:18px;
+  margin-bottom:18px;
+}
+.presetBtn{
+  background:rgba(255,255,255,.03);
+  border:1px solid var(--line);
+  color:var(--muted);
+  padding:9px 14px;
+  border-radius:999px;
   font-size:12px;
-  margin-bottom:14px;
+  font-weight:800;
+  cursor:pointer;
+}
+.presetBtn:hover,
+.presetBtn.active{
+  border-color:var(--orange);
+  color:#fff;
+  background:rgba(255,155,61,.08);
 }
 textarea{
   width:100%;
-  min-height:160px;
+  min-height:150px;
   resize:vertical;
   border:1px solid var(--line);
-  border-radius:22px;
-  background:rgba(255,255,255,.04);
-  color:white;
-  padding:22px;
+  border-radius:20px;
+  background:rgba(0,0,0,.2);
+  color:#fff;
+  padding:20px;
   font:inherit;
-  font-size:18px;
+  font-size:16px;
+  line-height:1.55;
   outline:none;
 }
 textarea:focus{
@@ -150,22 +234,26 @@ textarea:focus{
 }
 .actions{
   display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:1.2fr 1fr;
   gap:12px;
   margin-top:16px;
 }
-button,.btn{
+button,
+.btn{
   border:0;
-  border-radius:999px;
-  padding:18px 20px;
+  border-radius:16px;
+  padding:16px 20px;
   text-decoration:none;
   font-weight:900;
-  letter-spacing:.08em;
+  font-size:14px;
   cursor:pointer;
   text-align:center;
-  transition:transform .12s ease, opacity .12s ease, border-color .12s ease;
+  transition:
+    transform .12s ease,
+    opacity .12s ease;
 }
-button:active,.btn:active{
+button:active,
+.btn:active{
   transform:scale(.98);
 }
 button:disabled{
@@ -173,35 +261,53 @@ button:disabled{
   cursor:wait;
 }
 .primary{
-  background:linear-gradient(135deg,var(--orange),var(--orange2));
-  color:#120700;
+  background:
+    linear-gradient(
+      135deg,
+      var(--orange),
+      var(--orange2)
+    );
+  color:#140700;
 }
 .secondary{
-  background:rgba(255,255,255,.04);
+  background:transparent;
   color:white;
   border:1px solid var(--line);
 }
 .secondary:hover{
-  border-color:rgba(255,155,61,.45);
+  border-color:rgba(255,255,255,.25);
 }
-.request{
-  margin-top:28px;
+.msg{
   text-align:center;
-  color:var(--muted);
+  margin-top:16px;
+  color:var(--green);
+  font-weight:700;
+  font-size:14px;
+  min-height:22px;
 }
-.request a{
-  color:white;
-  font-weight:900;
-  letter-spacing:.08em;
-  text-transform:uppercase;
+.useCases{
+  max-width:920px;
+  margin:72px auto 0;
+  text-align:center;
+}
+.useCases h2{
+  margin:0 0 16px;
+  font-size:36px;
+  letter-spacing:-.04em;
+}
+.useCases p{
+  margin:0 auto;
+  max-width:680px;
+  color:var(--muted);
+  line-height:1.65;
 }
 .example{
-  max-width:720px;
-  margin:40px auto 0;
+  max-width:760px;
+  margin:52px auto 0;
   border:1px solid var(--line);
   border-radius:24px;
   padding:24px;
-  background:rgba(20,20,22,.72);
+  background:rgba(20,20,22,.45);
   color:white;
   text-decoration:none;
   display:block;
@@ -210,305 +316,389 @@ button:disabled{
 .example small{
   color:var(--green);
   font-weight:900;
+  font-size:11px;
   letter-spacing:.14em;
 }
 .example h2{
-  margin:12px 0 8px;
-  font-size:26px;
-  letter-spacing:-.03em;
+  margin:12px 0 6px;
+  font-size:22px;
+  letter-spacing:-.02em;
 }
 .example p{
   margin:0;
   color:var(--muted);
+  font-size:14px;
   line-height:1.5;
 }
-.msg{
-  text-align:center;
-  margin-top:14px;
-  color:var(--green);
-  font-weight:800;
-  min-height:22px;
-}
 footer{
+  margin-top:90px;
   text-align:center;
-  margin-top:58px;
-  color:var(--muted);
+  color:rgba(255,255,255,.22);
+  font-size:11px;
   letter-spacing:.16em;
-  font-size:12px;
+  text-transform:uppercase;
 }
 @media(max-width:760px){
-  .wrap{padding:24px 18px 70px}
-  header{align-items:flex-start;flex-direction:column}
-  nav{justify-content:flex-start}
-  h1{font-size:50px}
-  .hero{padding-top:54px}
-  .hero p{font-size:18px}
-  .actions{grid-template-columns:1fr}
+  .wrap{
+    padding:24px 16px 60px;
+  }
+  header{
+    align-items:flex-start;
+    flex-direction:column;
+  }
+  nav{
+    width:100%;
+    justify-content:flex-start;
+  }
+  nav a{
+    width:100%;
+    text-align:center;
+  }
+  .hero{
+    padding-top:56px;
+  }
+  .hero h1{
+    font-size:42px;
+  }
+  .subtitle{
+    font-size:16px;
+  }
+  .problemGrid{
+    grid-template-columns:1fr;
+  }
+  .actions{
+    grid-template-columns:1fr;
+  }
+  .sealBox{
+    padding:22px;
+  }
+  .useCases h2{
+    font-size:30px;
+  }
 }
 </style>
 </head>
-
 <body>
 <div class="wrap">
-
 <header>
   <a class="brand" href="/">
     <div class="logoBox">
-      <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
+      <img
+        src="/assets/brand/tvevt-icon.svg"
+        alt="TVEVT"
+      >
     </div>
     <div class="brandText">
       <strong>TVEVT</strong>
-      <span>Governance Console / Verified Signals</span>
+      <span>Verified Records Infrastructure</span>
     </div>
   </a>
-
   <nav>
-    <a href="/proof.html">Proof</a>
-    <a href="/record.html">Verify</a>
-    <a id="consoleLink" href="/request-access.html">Console</a>
+    <a href="/record.html">
+      Verify Record
+    </a>
+    <a
+      id="consoleLink"
+      href="/request-access.html"
+    >
+      Request Access
+    </a>
   </nav>
 </header>
-
 <section class="hero">
-  <h1>Say it once.<br>Prove it forever.</h1>
-
-  <p>
-    Turn any statement into a sealed verification record:
-    timestamped, hashed, stored, and shareable by link.
+  <h1>
+    Important things should not become ambiguous later.
+  </h1>
+  <p class="subtitle">
+    Agreements change. Messages disappear. Deadlines become disputed.
+    TVEVT creates permanent verification records for important communication,
+    decisions, proposals and commitments.
+    <br><br>
+    <strong>
+      First and foremost — for your own clarity.
+    </strong>
   </p>
-
-  <div class="sealBox">
-
-    <div class="label">
-      Seal a signal instantly
+  <div class="problemGrid">
+    <div class="problemCard">
+      <strong>
+        Meeting agreements get rewritten
+      </strong>
+      <p>
+        “I never said that” becomes common once time passes.
+        TVEVT helps preserve what was actually agreed.
+      </p>
     </div>
-
+    <div class="problemCard">
+      <strong>
+        Messages disappear or change
+      </strong>
+      <p>
+        Screenshots are unreliable. Chats can be edited or deleted.
+        Verified records preserve the original context.
+      </p>
+    </div>
+    <div class="problemCard">
+      <strong>
+        Commercial terms become disputed
+      </strong>
+      <p>
+        Pricing, deadlines and delivery conditions often shift later.
+        TVEVT preserves the exact version that was sent.
+      </p>
+    </div>
+    <div class="problemCard">
+      <strong>
+        Ideas leave your hands too early
+      </strong>
+      <p>
+        Concepts, drafts and creative work can be shared before authorship is protected.
+        TVEVT creates independent proof before distribution.
+      </p>
+    </div>
+  </div>
+  <div class="sealBox">
+    <div class="label">
+      Create a verified record now
+      <span>
+        Select an example below or write your own statement.
+      </span>
+    </div>
+    <div class="presets">
+      <button
+        type="button"
+        class="presetBtn"
+        onclick="applyPreset('mom', this)"
+      >
+        Meeting Notes
+      </button>
+      <button
+        type="button"
+        class="presetBtn"
+        onclick="applyPreset('offer', this)"
+      >
+        Commercial Offer
+      </button>
+      <button
+        type="button"
+        class="presetBtn"
+        onclick="applyPreset('asset', this)"
+      >
+        Asset Condition
+      </button>
+      <button
+        type="button"
+        class="presetBtn"
+        onclick="applyPreset('ip', this)"
+      >
+        IP Draft
+      </button>
+    </div>
     <form id="sealForm">
-
       <textarea
         id="text"
-        placeholder="Write a statement you want to verify..."
+        placeholder="Write the statement, agreement or context you want to preserve..."
         required
       ></textarea>
-
       <div class="actions">
-
         <button
           class="primary"
           id="sealBtn"
           type="submit"
         >
-          Seal Signal
+          Seal Verified Record
         </button>
-
         <button
           class="secondary"
           id="openConsole"
           type="button"
         >
-          Request Full Console Access
+          Open Private Console
         </button>
-
       </div>
-
-      <div id="msg" class="msg"></div>
-
+      <div
+        id="msg"
+        class="msg"
+      ></div>
     </form>
-
   </div>
-
-  <div class="request">
-    Start instantly. No account required.
-    <br><br>
-
-    <a href="/request-access.html">
-      Request Extended Access
-    </a>
-  </div>
-
+  <section class="useCases">
+    <h2>
+      Built for real-world situations
+    </h2>
+    <p>
+      TVEVT can be used for meeting protocols, commercial offers,
+      approvals, asset transfer records, authorship protection,
+      delivery confirmations, governance logs and other important moments
+      where clarity matters later.
+    </p>
+  </section>
   <a
     class="example"
-    href="/record.html?id=TVE-VUOI83"
+    href="/record.html?id=TVE-2H7E2G"
   >
     <small>
       ● VERIFIED RECORD EXAMPLE
     </small>
-
     <h2>
-      View a real immutable record →
+      Open a live immutable record →
     </h2>
-
     <p>
-      This signal is sealed, timestamped,
-      and cannot be altered without detection.
+      View how TVEVT displays timestamps,
+      verification hashes and permanent record integrity.
     </p>
   </a>
-
 </section>
-
 <footer>
-  VERIFIED ORGANIZATIONAL SIGNALS PROTOCOL
+  Say it once. Prove it forever.
 </footer>
-
 </div>
-
 <script>
-
+const presets = {
+  mom:
+`MEETING SUMMARY
+Date: ${new Date().toISOString().split('T')[0]}
+Main points agreed during the meeting:
+1. Timeline confirmed for next delivery stage.
+2. Commercial terms reviewed and accepted.
+3. Final approval expected before June 15.
+This record preserves the discussion for future clarity.`,
+  offer:
+`COMMERCIAL OFFER
+Offer valid until: June 15, 2026
+Terms included:
+- Pricing confirmed as discussed.
+- Delivery conditions approved.
+- Certification requirements fixed.
+This record preserves the original commercial proposal.`,
+  asset:
+`ASSET CONDITION RECORD
+Asset reviewed and transferred in verified condition.
+Current status:
+- No visible damage detected.
+- Documentation reviewed.
+- Receiving side confirmed condition before transfer.
+This record preserves the condition at the moment of transfer.`,
+  ip:
+`INTELLECTUAL PROPERTY DRAFT
+Project concept and structure documented before external sharing.
+This record confirms authorship and preserves the original version of the material before distribution.`
+};
+function applyPreset(type, button){
+  document
+    .querySelectorAll(".presetBtn")
+    .forEach(btn => {
+      btn.classList.remove("active");
+    });
+  if(button){
+    button.classList.add("active");
+  }
+  document
+    .getElementById("text")
+    .value = presets[type];
+}
 const consoleLink =
-  document.getElementById(
-    "consoleLink"
-  );
-
+  document.getElementById("consoleLink");
 const openConsole =
-  document.getElementById(
-    "openConsole"
-  );
-
+  document.getElementById("openConsole");
 const sealForm =
-  document.getElementById(
-    "sealForm"
-  );
-
+  document.getElementById("sealForm");
 const text =
-  document.getElementById(
-    "text"
-  );
-
+  document.getElementById("text");
 const msg =
-  document.getElementById(
-    "msg"
-  );
-
+  document.getElementById("msg");
 const sealBtn =
-  document.getElementById(
-    "sealBtn"
-  );
-
+  document.getElementById("sealBtn");
 function getConsoleUrl(){
-
   const key =
     localStorage.getItem(
       "tvevt_client_key"
     );
-
   if(key){
-
     return "/console.html?key=" +
       encodeURIComponent(key);
   }
-
   return "/request-access.html";
 }
-
 consoleLink.href =
   getConsoleUrl();
-
 openConsole.onclick =
   function(){
-
+    openConsole.disabled = true;
     openConsole.textContent =
       "Opening...";
-
-    openConsole.disabled =
-      true;
-
     window.location.href =
       "/request-access.html";
   };
-
 sealForm.addEventListener(
   "submit",
   async function(e){
-
     e.preventDefault();
-
     const value =
       text.value.trim();
-
     if(!value){
-
       msg.textContent =
-        "Write a signal first.";
-
+        "Write or select a statement first.";
       return;
     }
-
     sealBtn.disabled = true;
-
     sealBtn.textContent =
       "Sealing...";
-
     msg.textContent =
-      "Creating public verification record...";
-
+      "Creating verified record...";
     try{
-
       const res =
         await fetch(
           "/api/publish",
           {
             method:"POST",
-
             headers:{
               "Content-Type":
                 "application/json"
             },
-
             body:JSON.stringify({
               text:value
             })
           }
         );
-
       const data =
         await res.json();
-
       if(
         !res.ok ||
         !data.ok
       ){
         throw new Error(
           data.error ||
-          "Unable to seal signal."
+          "Unable to create record."
         );
       }
-
       const url =
         data.verification_url ||
         data.recordUrl ||
         (
           "/record.html?id=" +
-          encodeURIComponent(
-            data.id
-          )
+          encodeURIComponent(data.id)
         );
-
       msg.textContent =
         "Record created. Opening...";
-
       window.location.href =
         url;
-
     }
-
     catch(err){
-
       console.error(err);
-
       msg.textContent =
         err.message ||
         "Unable to create record.";
-
-      sealBtn.disabled =
-        false;
-
+      sealBtn.disabled = false;
       sealBtn.textContent =
-        "Seal Signal";
+        "Seal Verified Record";
     }
   }
 );
-
+// Auto-activate first preset on load
+applyPreset(
+  "mom",
+  document.querySelector(".presetBtn")
+);
 </script>
-
 </body>
 </html>
