@@ -105,12 +105,16 @@ async function sendEmail(env, lead, isResend = false) {
   }
 
   const subject = isResend
-    ? "Your TVEVT private access link"
-    : "Your TVEVT access request was received";
+    ? "Your TVEVT private console link"
+    : "Your TVEVT private console access";
+
+  const headline = isResend
+    ? "Your private console link has been resent."
+    : "Your private console access is ready.";
 
   const intro = isResend
-    ? "Your TVEVT access is already active. We resent your private console link below."
-    : "Your TVEVT access request has been received.";
+    ? "Your TVEVT access is already active. We have resent your existing private console link below."
+    : "TVEVT has created your private console access link.";
 
   const response = await fetch(
     "https://api.resend.com/emails",
@@ -126,22 +130,74 @@ async function sendEmail(env, lead, isResend = false) {
         bcc: ["max@fincib.com"],
         subject,
         html: `
-          <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #111111;">
-            <p>Hi ${escapeHtml(lead.name || "there")},</p>
+          <div style="margin:0;padding:0;background:#09090b;color:#ffffff;font-family:Arial,Helvetica,sans-serif;">
+            <div style="max-width:640px;margin:0 auto;padding:34px 22px;">
+              
+              <div style="border:1px solid rgba(255,255,255,0.12);border-radius:24px;background:#141416;padding:30px;">
+                
+                <div style="font-size:12px;letter-spacing:0.14em;text-transform:uppercase;color:#ff9b3d;font-weight:900;margin-bottom:18px;">
+                  TVEVT Private Access
+                </div>
 
-            <p>${escapeHtml(intro)}</p>
+                <h1 style="margin:0 0 14px;font-size:28px;line-height:1.15;letter-spacing:-0.04em;color:#ffffff;">
+                  ${escapeHtml(headline)}
+                </h1>
 
-            <p><strong>Your private console:</strong></p>
+                <p style="margin:0 0 22px;color:#a7a7ad;font-size:15px;line-height:1.65;">
+                  Hi ${escapeHtml(lead.name || "there")},<br>
+                  ${escapeHtml(intro)}
+                </p>
 
-            <p>
-              <a href="${lead.consoleUrl}">
-                ${lead.consoleUrl}
-              </a>
-            </p>
+                <div style="border:1px solid rgba(255,155,61,0.24);background:rgba(255,155,61,0.08);border-radius:18px;padding:18px;margin:24px 0;">
+                  <p style="margin:0;color:#ffffff;font-size:15px;line-height:1.6;">
+                    <strong>Your private console link is your access identity.</strong><br>
+                    No passwords. No usernames. Keep this link private.
+                  </p>
+                </div>
 
-            <p>Please keep this link private.</p>
+                <p style="margin:0 0 18px;color:#a7a7ad;font-size:15px;line-height:1.65;">
+                  TVEVT allows you to create permanent verification records for digital communication.
+                  Your console stores your verified archive and lets you seal statements, announcements,
+                  decisions, and digital signals.
+                </p>
 
-            <p>— TVEVT</p>
+                <a href="${lead.consoleUrl}" style="display:block;text-align:center;background:#ff9b3d;color:#000000;text-decoration:none;font-weight:900;border-radius:14px;padding:16px 18px;margin:26px 0 24px;">
+                  Enter Private Console
+                </a>
+
+                <div style="border-top:1px solid rgba(255,255,255,0.12);padding-top:22px;margin-top:22px;">
+                  <p style="margin:0 0 10px;color:#ffffff;font-weight:900;font-size:14px;">
+                    What to do next:
+                  </p>
+
+                  <ol style="margin:0;padding-left:20px;color:#a7a7ad;font-size:14px;line-height:1.7;">
+                    <li>Open your private console.</li>
+                    <li>Create your first verified signal.</li>
+                    <li>Open the verification record.</li>
+                    <li>Share the verification link when needed.</li>
+                  </ol>
+                </div>
+
+                <div style="margin-top:24px;padding:14px;border-radius:14px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);">
+                  <p style="margin:0;color:#a7a7ad;font-size:12px;line-height:1.6;word-break:break-all;">
+                    Console link:<br>
+                    <a href="${lead.consoleUrl}" style="color:#ff9b3d;text-decoration:none;">
+                      ${lead.consoleUrl}
+                    </a>
+                  </p>
+                </div>
+
+                <p style="margin:28px 0 0;color:#777777;font-size:12px;line-height:1.6;">
+                  If you requested access again using the same email, TVEVT will resend this same private console link rather than creating a duplicate identity.
+                </p>
+
+              </div>
+
+              <div style="text-align:center;margin-top:22px;color:rgba(255,255,255,0.32);font-size:11px;letter-spacing:0.16em;text-transform:uppercase;">
+                Say it once. Prove it forever.
+              </div>
+
+            </div>
           </div>
         `
       })
