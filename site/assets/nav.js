@@ -1,300 +1,448 @@
 /* TVEVT shared navigation injector
-   Canon v2026-03-01
-   - Single nav injected from /assets/nav.js
-   - Canonical Request Access: https://leads.tvevt.com/?intent=access
-   - Brand assets from /assets/brand/
-   - Safety: rewrites ANY legacy /request-access links + forces same-tab behavior
+   Canon v2026-05-31
+   - Unified Alpha header
+   - Current working routes only
+   - No legacy leads.tvevt.com rewrite
+   - No /app.html or /log.html legacy paths
 */
 
 (() => {
-  const CANON = {
-    requestAccess: "https://leads.tvevt.com/?intent=access",
-    links: [
-      { label: "Packages", href: "/index.html#pricing" },
-      { label: "Architecture", href: "/architecture.html" },
-      { label: "About", href: "/about.html" },
-      { label: "Book a Call", href: "/call.html" },
-      { label: "Console", href: "/app.html?x=1" },
-      { label: "Log", href: "/log.html?x=1" },
-    ],
+  const ROUTES = {
+    home: "/",
+    verify: "/record.html",
+    seal: "/seal.html",
+    console: "/console.html",
+    signals: "/signals.html",
+    executionLog: "/execution-log.html",
+    requestAccess: "/request-access.html"
   };
 
-  // Helper: build canonical access URL and optionally preserve ?plan=...
-  function buildAccessUrlFromOldHref(oldHref) {
-    try {
-      const u = new URL(oldHref, window.location.origin);
-      const plan = u.searchParams.get("plan");
+  const clientKey =
+    localStorage.getItem("tvevt_client_key") || "";
 
-      const canon = new URL(CANON.requestAccess);
-      if (plan) canon.searchParams.set("plan", plan);
-
-      return canon.toString();
-    } catch (e) {
-      return CANON.requestAccess;
-    }
+  function withKey(path) {
+    return clientKey
+      ? path + "?key=" + encodeURIComponent(clientKey)
+      : path;
   }
 
-  // Rewrite ALL request-access links on the page to canonical
-  // + force same-tab behavior (remove target/_blank, rel, onclick)
-  function canonicalizeAccessLinks(root = document) {
+  function getConsoleHref() {
+    return clientKey
+      ? withKey(ROUTES.console)
+      : ROUTES.requestAccess;
+  }
+
+  function getSealHref() {
+    return clientKey
+      ? withKey(ROUTES.seal)
+      : ROUTES.seal;
+  }
+
+  function getSignalsHref() {
+    return clientKey
+      ? withKey(ROUTES.signals)
+      : ROUTES.requestAccess;
+  }
+
+  function getExecutionLogHref() {
+    return clientKey
+      ? withKey(ROUTES.executionLog)
+      : ROUTES.requestAccess;
+  }
+
+  function normalizeLegacyLinks(root = document) {
     const anchors = root.querySelectorAll("a[href]");
+
     anchors.forEach((a) => {
-      const href = (a.getAttribute("href") || "").trim();
+      const href =
+        (a.getAttribute("href") || "").trim();
+
       if (!href) return;
 
-      const normalized = href.toLowerCase();
+      const lower =
+        href.toLowerCase();
 
-      const isLegacy =
-        normalized.includes("/request-access") ||
-        normalized.includes("request-access.html") ||
-        normalized === "request-access" ||
-        normalized === "request-access.html";
-
-      const isCanon =
-        normalized.startsWith(CANON.requestAccess.toLowerCase());
-
-      // If it’s the canonical URL OR legacy path -> enforce canonical + same-tab
-      if (isCanon || isLegacy) {
-        // Set canonical URL (preserve ?plan= if legacy had it)
-        a.setAttribute("href", isCanon ? CANON.requestAccess : buildAccessUrlFromOldHref(href));
-
-        // FORCE same-tab behavior (this is what fixes About opening a new tab)
+      if (
+        lower.includes("leads.tvevt.com") ||
+        lower.includes("/request-access") ||
+        lower.includes("request-access.html")
+      ) {
+        a.setAttribute("href", ROUTES.requestAccess);
         a.removeAttribute("target");
         a.removeAttribute("rel");
         a.removeAttribute("onclick");
-        try { a.onclick = null; } catch (_) {}
-
-        return;
       }
 
-      // Also catch any absolute URL variants of /request-access on tvevt.com
-      // (rare but happens)
-      if (normalized.includes("tvevt.com/request-access")) {
-        a.setAttribute("href", buildAccessUrlFromOldHref(href));
-        a.removeAttribute("target");
-        a.removeAttribute("rel");
-        a.removeAttribute("onclick");
-        try { a.onclick = null; } catch (_) {}
+      if (
+        lower.includes("/app.html") ||
+        lower.includes("app.html?x=1")
+      ) {
+        a.setAttribute("href", getConsoleHref());
+      }
+
+      if (
+        lower.includes("/log.html") ||
+        lower.includes("log.html?x=1")
+      ) {
+        a.setAttribute("href", getExecutionLogHref());
       }
     });
   }
 
-  // Guard: do not inject twice
   if (document.querySelector("[data-tvevt-nav='1']")) {
-    canonicalizeAccessLinks();
-    document.addEventListener("DOMContentLoaded", () => canonicalizeAccessLinks());
+    normalizeLegacyLinks();
+    document.addEventListener(
+      "DOMContentLoaded",
+      () => normalizeLegacyLinks()
+    );
     return;
   }
 
-  // Hide legacy headers/nav to prevent duplicates (conservative)
-  function hideLegacyNavIfPresent() {
-    const header = document.querySelector("header");
-    if (!header) return;
+  function hideLegacyHeaderIfPresent() {
+    const headers =
+      document.querySelectorAll("header");
 
-    const txt = (header.innerText || "").toLowerCase();
-    const looksLikeTvevt =
-      txt.includes("tvevt") &&
-      (txt.includes("packages") || txt.includes("architecture") || txt.includes("request"));
+    headers.forEach((header) => {
+      if (header.closest("[data-tvevt-nav='1']")) {
+        return;
+      }
 
-    if (looksLikeTvevt) {
-      header.style.display = "none";
-      return;
-    }
+      const text =
+        (header.innerText || "").toLowerCase();
 
-    const topbar = document.querySelector(".topbar");
-    if (topbar && (topbar.innerText || "").toLowerCase().includes("request")) {
-      topbar.style.display = "none";
-    }
+      const looksLikeTvevt =
+        text.includes("tvevt") ||
+        text.includes("request access") ||
+        text.includes("verify record") ||
+        text.includes("console");
+
+      if (looksLikeTvevt) {
+        header.style.display = "none";
+      }
+    });
   }
 
-  hideLegacyNavIfPresent();
+  hideLegacyHeaderIfPresent();
 
-  // Minimal styles (only for injected nav)
   const css = `
     :root{
-      --tvevt-stroke: rgba(255,255,255,.12);
-      --tvevt-text:#eef2f6;
-      --tvevt-muted2: rgba(238,242,246,.56);
+      --tvevt-nav-bg: rgba(18,18,20,.82);
+      --tvevt-nav-panel: rgba(255,255,255,.035);
+      --tvevt-nav-line: rgba(255,255,255,.10);
+      --tvevt-nav-text: rgba(255,255,255,.92);
+      --tvevt-nav-muted: rgba(255,255,255,.52);
+      --tvevt-nav-orange: #ff9b3d;
+      --tvevt-nav-orange2: #ff7b1c;
     }
 
-    .tvevt-nav-wrap{
-      max-width:1120px;
-      margin:0 auto;
-      padding:16px 18px 0;
-    }
-
-    .tvevt-header{
+    .tvevt-nav-shell{
+      width:100%;
       position:sticky;
       top:0;
       z-index:999;
-      padding:12px 0;
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
+      padding:18px 18px 0;
+      pointer-events:none;
     }
 
-    .tvevt-topbar{
+    .tvevt-nav-inner{
+      max-width:1180px;
+      margin:0 auto;
+      pointer-events:auto;
+    }
+
+    .tvevt-nav-bar{
       display:flex;
       align-items:center;
       justify-content:space-between;
-      gap:14px;
-      width:100%;
-      padding:14px 14px;
-      border:1px solid var(--tvevt-stroke);
-      background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-      border-radius: 22px;
-      box-shadow: 0 10px 40px rgba(0,0,0,.35);
+      gap:18px;
+      padding:14px 18px;
+      border:1px solid var(--tvevt-nav-line);
+      border-radius:24px;
+      background:var(--tvevt-nav-bg);
+      backdrop-filter:blur(16px);
+      -webkit-backdrop-filter:blur(16px);
+      box-shadow:0 12px 36px rgba(0,0,0,.26);
     }
 
-    .tvevt-brand{
+    .tvevt-nav-brand{
       display:flex;
       align-items:center;
-      gap:12px;
-      min-width:260px;
+      gap:14px;
+      min-width:210px;
+      color:var(--tvevt-nav-text);
       text-decoration:none;
-      color: var(--tvevt-text);
     }
 
-    .tvevt-mark{
-      width:34px;
-      height:34px;
-      display:grid;
-      place-items:center;
-      border-radius: 12px;
-      background: rgba(255,255,255,.04);
-      border:1px solid rgba(255,255,255,.10);
-      overflow:hidden;
+    .tvevt-nav-mark{
+      width:46px;
+      height:46px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border-radius:14px;
+      border:1px solid rgba(255,155,61,.28);
+      background:linear-gradient(
+        180deg,
+        rgba(255,155,61,.10),
+        rgba(255,155,61,.04)
+      );
+      flex:0 0 auto;
     }
 
-    .tvevt-word{
+    .tvevt-nav-mark img{
+      width:23px;
+      height:23px;
+      display:block;
+    }
+
+    .tvevt-nav-word{
       display:flex;
       flex-direction:column;
       line-height:1.05;
     }
-    .tvevt-word b{
-      font-size:16px;
-      letter-spacing:.7px;
-    }
-    .tvevt-word span{
-      font-size:12px;
-      color: var(--tvevt-muted2);
+
+    .tvevt-nav-word strong{
+      display:block;
+      font-size:20px;
+      font-weight:700;
+      letter-spacing:-.035em;
+      color:var(--tvevt-nav-text);
     }
 
-    .tvevt-nav{
+    .tvevt-nav-word span{
+      display:block;
+      margin-top:4px;
+      font-size:12px;
+      font-weight:400;
+      color:var(--tvevt-nav-muted);
+    }
+
+    .tvevt-nav-links{
       display:flex;
       align-items:center;
-      gap:10px;
-      flex-wrap:wrap;
       justify-content:flex-end;
+      gap:9px;
+      flex-wrap:wrap;
     }
 
-    .tvevt-btn{
-      appearance:none;
-      border:1px solid rgba(255,255,255,.14);
-      background: rgba(255,255,255,.05);
-      color: var(--tvevt-text);
-      padding:10px 14px;
-      border-radius: 999px;
-      font-size:13px;
-      letter-spacing:.2px;
-      cursor:pointer;
+    .tvevt-nav-link{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap:8px;
-      user-select:none;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease, box-shadow .12s ease;
-      white-space:nowrap;
+      min-height:40px;
+      padding:10px 14px;
+      border:1px solid var(--tvevt-nav-line);
+      border-radius:999px;
+      background:var(--tvevt-nav-panel);
+      color:var(--tvevt-nav-text);
       text-decoration:none;
-    }
-    .tvevt-btn:hover{
-      transform: translateY(-1px);
-      border-color: rgba(255,255,255,.22);
-      background: rgba(255,255,255,.07);
-    }
-    .tvevt-btn:active{ transform: translateY(0px); }
-
-    .tvevt-btn-primary{
-      border:1px solid rgba(255,138,0,.35);
-      background: linear-gradient(135deg, rgba(255,138,0,.95), rgba(255,77,0,.92));
-      color:#1a120a;
-      font-weight:900;
-      box-shadow: 0 14px 40px rgba(255,138,0,.14);
-    }
-    .tvevt-btn-primary:hover{
-      box-shadow: 0 18px 60px rgba(255,138,0,.18);
+      font-size:13px;
+      font-weight:500;
+      letter-spacing:-.01em;
+      white-space:nowrap;
+      transition:
+        border-color .15s ease,
+        background .15s ease,
+        transform .12s ease,
+        color .15s ease;
     }
 
-    @media (max-width: 980px){
-      .tvevt-brand{ min-width: 0; }
-      .tvevt-nav{ justify-content:flex-start; }
-      .tvevt-nav-wrap{ padding:12px 12px 0; }
+    .tvevt-nav-link:hover{
+      transform:translateY(-1px);
+      border-color:rgba(255,155,61,.34);
+      background:rgba(255,255,255,.055);
+      color:#fff;
+    }
+
+    .tvevt-nav-primary{
+      border-color:rgba(255,155,61,.38);
+      background:linear-gradient(
+        135deg,
+        var(--tvevt-nav-orange),
+        var(--tvevt-nav-orange2)
+      );
+      color:#140800;
+      font-weight:650;
+    }
+
+    .tvevt-nav-primary:hover{
+      border-color:rgba(255,155,61,.55);
+      background:linear-gradient(
+        135deg,
+        var(--tvevt-nav-orange),
+        var(--tvevt-nav-orange2)
+      );
+      color:#140800;
+    }
+
+    @media(max-width:980px){
+      .tvevt-nav-shell{
+        padding:14px 12px 0;
+      }
+
+      .tvevt-nav-bar{
+        flex-direction:column;
+        align-items:flex-start;
+      }
+
+      .tvevt-nav-brand{
+        min-width:0;
+      }
+
+      .tvevt-nav-links{
+        width:100%;
+        justify-content:flex-start;
+      }
+
+      .tvevt-nav-link{
+        flex:1 1 auto;
+      }
+    }
+
+    @media(max-width:640px){
+      .tvevt-nav-links{
+        display:grid;
+        grid-template-columns:1fr 1fr;
+      }
+
+      .tvevt-nav-link{
+        width:100%;
+      }
+
+      .tvevt-nav-primary{
+        grid-column:1 / -1;
+      }
     }
   `;
 
-  const style = document.createElement("style");
-  style.setAttribute("data-tvevt-nav-style", "1");
+  const style =
+    document.createElement("style");
+
+  style.setAttribute(
+    "data-tvevt-nav-style",
+    "1"
+  );
+
   style.textContent = css;
+
   document.head.appendChild(style);
 
-  // Build injected nav DOM
-  const wrap = document.createElement("div");
-  wrap.className = "tvevt-nav-wrap";
-  wrap.setAttribute("data-tvevt-nav", "1");
+  const shell =
+    document.createElement("div");
 
-  const header = document.createElement("div");
-  header.className = "tvevt-header";
+  shell.className = "tvevt-nav-shell";
+  shell.setAttribute("data-tvevt-nav", "1");
 
-  const topbar = document.createElement("div");
-  topbar.className = "tvevt-topbar";
+  const inner =
+    document.createElement("div");
 
-  const brand = document.createElement("a");
-  brand.className = "tvevt-brand";
-  brand.href = "/index.html";
+  inner.className = "tvevt-nav-inner";
+
+  const bar =
+    document.createElement("div");
+
+  bar.className = "tvevt-nav-bar";
+
+  const brand =
+    document.createElement("a");
+
+  brand.className = "tvevt-nav-brand";
+  brand.href = ROUTES.home;
   brand.setAttribute("aria-label", "TVEVT Home");
 
-  const mark = document.createElement("div");
-  mark.className = "tvevt-mark";
-  mark.setAttribute("aria-hidden", "true");
-  mark.innerHTML = `<img src="/assets/brand/tvevt-icon.svg?v=2026-03-01" alt="" width="22" height="22" style="display:block;opacity:.95">`;
+  const mark =
+    document.createElement("div");
 
-  const word = document.createElement("div");
-  word.className = "tvevt-word";
-  word.innerHTML = `<b>TVEVT</b><span>Governance Console</span>`;
+  mark.className = "tvevt-nav-mark";
+
+  mark.innerHTML =
+    `<img src="/assets/brand/tvevt-icon.svg?v=2026-05-31" alt="">`;
+
+  const word =
+    document.createElement("div");
+
+  word.className = "tvevt-nav-word";
+
+  word.innerHTML =
+    `<strong>TVEVT</strong><span>Verified Records Infrastructure</span>`;
 
   brand.appendChild(mark);
   brand.appendChild(word);
 
-  const nav = document.createElement("nav");
-  nav.className = "tvevt-nav";
-  nav.setAttribute("aria-label", "Top navigation");
+  const links =
+    document.createElement("nav");
 
-  for (const l of CANON.links) {
-    const a = document.createElement("a");
-    a.className = "tvevt-btn";
-    a.href = l.href;
-    a.textContent = l.label;
-    nav.appendChild(a);
-  }
+  links.className = "tvevt-nav-links";
+  links.setAttribute("aria-label", "TVEVT navigation");
 
-  const access = document.createElement("a");
-  access.className = "tvevt-btn tvevt-btn-primary";
-  access.href = CANON.requestAccess;
-  access.textContent = "Request Access";
-  nav.appendChild(access);
+  const navItems = [
+    {
+      label: "Home",
+      href: ROUTES.home
+    },
+    {
+      label: "Verify",
+      href: ROUTES.verify
+    },
+    {
+      label: "New Signal",
+      href: getSealHref()
+    },
+    {
+      label: "Console",
+      href: getConsoleHref()
+    },
+    {
+      label: "Archive",
+      href: getSignalsHref()
+    },
+    {
+      label: "Execution Log",
+      href: getExecutionLogHref()
+    }
+  ];
 
-  topbar.appendChild(brand);
-  topbar.appendChild(nav);
-  header.appendChild(topbar);
-  wrap.appendChild(header);
+  navItems.forEach((item) => {
+    const a =
+      document.createElement("a");
 
-  // Insert at top of body
-  if (document.body.firstChild) {
-    document.body.insertBefore(wrap, document.body.firstChild);
-  } else {
-    document.body.appendChild(wrap);
-  }
+    a.className = "tvevt-nav-link";
+    a.href = item.href;
+    a.textContent = item.label;
 
-  // Canonicalize links now + after DOM ready
-  canonicalizeAccessLinks();
-  document.addEventListener("DOMContentLoaded", () => canonicalizeAccessLinks());
+    links.appendChild(a);
+  });
+
+  const access =
+    document.createElement("a");
+
+  access.className =
+    "tvevt-nav-link tvevt-nav-primary";
+
+  access.href =
+    ROUTES.requestAccess;
+
+  access.textContent =
+    "Request Access";
+
+  links.appendChild(access);
+
+  bar.appendChild(brand);
+  bar.appendChild(links);
+  inner.appendChild(bar);
+  shell.appendChild(inner);
+
+  document.body.insertBefore(
+    shell,
+    document.body.firstChild
+  );
+
+  normalizeLegacyLinks();
+
+  document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+      normalizeLegacyLinks();
+    }
+  );
 })();
