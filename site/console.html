@@ -2,326 +2,332 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
 <title>TVEVT Console</title>
-
 <link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
-:root{
-  --bg:#09090b;
-  --panel:#141416;
-  --line:rgba(255,255,255,.12);
-  --text:#ffffff;
-  --muted:#a7a7ad;
-  --orange:#ff9b3d;
-  --green:#2cff9a;
+:root {
+  --bg: #101419;
+  --panel: #161B22;
+  --panel2: #21262D;
+  --line: #30363D;
+  --text: #F0F6FC;
+  --muted: #8B949E;
+  
+  /* ТОТАЛЬНЫЙ ФИКС: Переход на нейтральную платину */
+  --accent: #F0F6FC;
+  --accent-muted: rgba(240, 246, 252, 0.1);
+  
+  --green: #00E699;
+  --red: #FF4D4D;
 }
 
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at top left, rgba(255,155,61,.16), transparent 32%),
-    var(--bg);
-  color:var(--text);
-  font-family:Arial, Helvetica, sans-serif;
+* {
+  box-sizing: border-box;
 }
 
-.wrap{
-  max-width:1100px;
-  margin:0 auto;
-  padding:34px 24px 80px;
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-.systemBar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  margin-bottom:24px;
-  border:1px solid rgba(44,255,154,.18);
-  background:rgba(44,255,154,.06);
-  border-radius:20px;
-  padding:18px 20px;
-}
-
-.systemBar strong{
-  display:block;
-  font-size:13px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:var(--green);
-}
-
-.systemBar span{
-  display:block;
-  margin-top:5px;
-  color:var(--muted);
-  font-size:14px;
-}
-
-.systemActions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.topBtn{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  color:#fff;
-  border-radius:999px;
-  padding:11px 15px;
-  cursor:pointer;
-  text-decoration:none;
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.08em;
-  text-transform:uppercase;
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 80px 24px 80px;
 }
 
 .hero,
 .card,
 .access,
-.guidance{
-  border:1px solid var(--line);
-  border-radius:28px;
-  background:rgba(20,20,22,.9);
+.guidance {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
 }
 
-.hero{padding:34px}
-
-h1{
-  margin:0 0 12px;
-  font-size:42px;
-  letter-spacing:-.04em;
+.hero {
+  padding: 32px;
 }
 
-p{
-  color:var(--muted);
-  line-height:1.6;
+h1 {
+  margin: 0 0 12px;
+  font-size: 36px;
+  letter-spacing: -.02em;
+  font-weight: 400;
 }
 
-.grid{
-  margin-top:24px;
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
+p {
+  color: var(--muted);
+  line-height: 1.65;
+  font-size: 15px;
 }
 
-.card{padding:20px}
-
-.card h2{
-  margin:0 0 8px;
-  font-size:20px;
+.grid {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
 }
 
-.card p{
-  margin:0 0 14px;
+.card {
+  padding: 24px;
+  background: var(--panel);
 }
 
-.btn{
-  display:inline-block;
-  padding:12px 14px;
-  border-radius:12px;
-  border:0;
-  background:var(--orange);
-  color:#000;
-  text-decoration:none;
-  font-weight:900;
-  cursor:pointer;
-  font:inherit;
+.card h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 400;
 }
 
-.btn.secondary{
-  background:transparent;
-  color:#fff;
-  border:1px solid var(--line);
+.card p {
+  margin: 0 0 20px;
 }
 
-.btn.loading{
-  opacity:.65;
-  pointer-events:none;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--panel2);
+  color: var(--text);
+  text-decoration: none;
+  font-weight: 500;
+  font-size: 14px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
 }
 
-.access{
-  margin-top:24px;
-  padding:22px;
+.btn:hover {
+  border-color: var(--text);
+  background: var(--line);
 }
 
-.access h2{
-  margin:0 0 10px;
-  font-size:22px;
+/* ФИКС: Перевод primary кнопок в строгий контурный/платиновый стиль */
+.btn.primary {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--line);
 }
 
-.accessSub{
-  margin:0 0 18px;
-  color:var(--muted);
-  font-size:14px;
+.btn.primary:hover {
+  background: var(--panel2);
+  color: var(--text);
+  border-color: var(--text);
 }
 
-.accessGrid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
+.btn.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
 }
 
-.field{
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:14px;
-  background:rgba(255,255,255,.04);
+.btn.secondary:hover {
+  background: var(--panel2);
+  border-color: var(--text);
 }
 
-.field small{
-  display:block;
-  color:var(--muted);
-  font-size:11px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  margin-bottom:7px;
-  font-weight:900;
+.btn.loading {
+  opacity: .5;
+  pointer-events: none;
+  cursor: wait;
 }
 
-.field b{
-  display:block;
-  word-break:break-all;
-  font-size:14px;
+.access {
+  margin-top: 24px;
+  padding: 24px;
 }
 
-.status{color:var(--green)}
-
-.guidance{
-  display:none;
-  margin-top:24px;
-  padding:28px;
-  border-color:rgba(255,155,61,.28);
-  background:
-    radial-gradient(circle at top left, rgba(255,155,61,.12), transparent 36%),
-    rgba(20,20,22,.92);
+.access h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 400;
 }
 
-.guidance.show{display:block}
-
-.guidanceBadge{
-  display:inline-flex;
-  margin-bottom:18px;
-  padding:8px 12px;
-  border-radius:999px;
-  border:1px solid rgba(255,155,61,.28);
-  background:rgba(255,155,61,.1);
-  color:#ffb36a;
-  font-size:12px;
-  letter-spacing:.1em;
-  text-transform:uppercase;
-  font-weight:900;
+.accessSub {
+  margin: 0 0 20px;
+  color: var(--muted);
+  font-size: 14px;
 }
 
-.guidance h2{
-  margin:0 0 12px;
-  font-size:32px;
-  letter-spacing:-.045em;
-  line-height:1.08;
+.accessGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
 }
 
-.guidanceText{
-  max-width:720px;
-  margin:0;
-  color:var(--muted);
-  font-size:16px;
-  line-height:1.65;
+.field {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 14px;
+  background: var(--panel2);
 }
 
-.flow{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-top:24px;
+.field small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.flowStep{
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:16px;
-  background:rgba(255,255,255,.035);
+.field b {
+  display: block;
+  word-break: break-all;
+  font-size: 13px;
+  font-weight: 400;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.flowStep small{
-  display:block;
-  color:var(--orange);
-  font-size:11px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  font-weight:900;
-  margin-bottom:8px;
+.status {
+  color: var(--green);
 }
 
-.flowStep strong{
-  display:block;
-  color:#fff;
-  font-size:17px;
-  margin-bottom:6px;
+.guidance {
+  display: none;
+  margin-top: 24px;
+  padding: 32px;
+  border-color: var(--line);
+  background: var(--panel);
 }
 
-.flowStep span{
-  display:block;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.45;
+.guidance.show {
+  display: block;
 }
 
-.guidanceActions{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:24px;
+.guidanceBadge {
+  display: inline-flex;
+  margin-bottom: 18px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  border: 1px solid var(--line);
+  background: var(--panel2);
+  color: var(--text);
+  font-size: 11px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  font-weight: 500;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.guidance h2 {
+  margin: 0 0 12px;
+  font-size: 28px;
+  letter-spacing: -.02em;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.guidanceText {
+  max-width: 720px;
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+}
+
+.flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.flowStep {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 16px;
+  background: var(--panel2);
+}
+
+.flowStep small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 8px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.flowStep strong {
+  display: block;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.flowStep span {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.guidanceActions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
 }
 
 .loadingBox,
-.denied{
-  border:1px solid var(--line);
-  border-radius:24px;
-  background:rgba(20,20,22,.9);
-  padding:30px;
+.denied {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 32px;
+  margin-top: 40px;
 }
 
-.deniedActions{margin-top:20px}
-
-.notice{
-  margin-top:16px;
-  color:var(--muted);
-  font-size:13px;
+.deniedActions {
+  margin-top: 20px;
 }
 
-footer{
-  margin-top:40px;
-  text-align:center;
-  color:rgba(255,255,255,.24);
-  font-size:11px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
+.notice {
+  margin-top: 16px;
+  color: var(--green);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+}
+
+footer {
+  margin-top: 64px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  font-family: "JetBrains Mono", monospace;
 }
 
 @media(max-width:900px){
   .grid,
   .accessGrid,
-  .flow{
-    grid-template-columns:1fr;
+  .flow {
+    grid-template-columns: 1fr;
   }
-
-  .systemBar{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  .guidanceActions .btn{
-    width:100%;
-    text-align:center;
+  .guidanceActions .btn {
+    width: 100%;
   }
 }
 </style>
@@ -329,22 +335,9 @@ footer{
 
 <body>
 
-<script src="/assets/private-nav.js?v=2026-05-10"></script>
+<script src="/assets/private-nav.js?v=2026-06-07-v4"></script>
 
 <div class="wrap">
-
-  <div id="systemBar" class="systemBar" style="display:none">
-    <div>
-      <strong>Private Console Active</strong>
-      <span id="sessionText">Identity secured on this device.</span>
-    </div>
-
-    <div class="systemActions">
-      <a class="topBtn" href="/">Public Site</a>
-      <button class="topBtn" onclick="copyPrivateLink()">Copy Private Link</button>
-      <button class="topBtn" onclick="forgetAccess()">Forget Access</button>
-    </div>
-  </div>
 
   <div id="loading" class="loadingBox">
     <h1>Checking access…</h1>
@@ -352,21 +345,20 @@ footer{
   </div>
 
   <div id="denied" class="denied" style="display:none">
-    <h1>Access required</h1>
+    <h1>Access Required</h1>
     <p>This console link is missing, expired, or not recognized.</p>
-
     <div class="deniedActions">
-      <a class="btn" href="/request-access.html">Request Access</a>
+      <a class="btn primary" href="/request-access.html">Request Access</a>
     </div>
   </div>
 
   <div id="app" style="display:none">
 
     <section class="hero">
-      <h1>Signal Control</h1>
+      <h1>Record Control</h1>
       <p>
-        Create verified signals, access your private signal library,
-        and manage execution records from one place.
+        Create verified records, access your private record library,
+        and manage execution records from one workspace.
       </p>
     </section>
 
@@ -379,17 +371,14 @@ footer{
           <small>Name</small>
           <b id="holderName">—</b>
         </div>
-
         <div class="field">
           <small>Email</small>
           <b id="holderEmail">—</b>
         </div>
-
         <div class="field">
           <small>Client Key</small>
           <b id="clientKey">—</b>
         </div>
-
         <div class="field">
           <small>Status</small>
           <b class="status">Active</b>
@@ -400,14 +389,12 @@ footer{
     </section>
 
     <section id="firstGuidance" class="guidance">
-      <div class="guidanceBadge">First Console Guidance</div>
-
+      <div class="guidanceBadge">First Workspace Guidance</div>
       <h2>Welcome to your private TVEVT workspace.</h2>
-
       <p class="guidanceText">
         This console is your private access point for creating verified communication records.
         Start by sealing one exact statement. TVEVT will generate a verification record,
-        preserve the hash, and make the signal independently verifiable.
+        preserve the hash, and make the record independently verifiable.
       </p>
 
       <div class="flow">
@@ -416,31 +403,27 @@ footer{
           <strong>Write</strong>
           <span>Create the exact statement you want to preserve.</span>
         </div>
-
         <div class="flowStep">
           <small>02</small>
           <strong>Seal</strong>
           <span>Generate a verified record and cryptographic hash.</span>
         </div>
-
         <div class="flowStep">
           <small>03</small>
           <strong>Verify</strong>
           <span>Open the permanent verification page for the record.</span>
         </div>
-
         <div class="flowStep">
           <small>04</small>
           <strong>Archive</strong>
-          <span>Keep the signal inside your private verified archive.</span>
+          <span>Keep the record inside your private verified archive.</span>
         </div>
       </div>
 
       <div class="guidanceActions">
-        <button id="firstSignalBtn" class="btn" type="button">
-          Create Your First Verified Signal
+        <button id="firstSignalBtn" class="btn primary" type="button">
+          Create Your First Verified Record
         </button>
-
         <button id="firstArchiveBtn" class="btn secondary" type="button">
           Open Verified Archive
         </button>
@@ -449,17 +432,15 @@ footer{
 
     <div class="grid">
       <div class="card">
-        <h2>Create Signal</h2>
+        <h2>Create Record</h2>
         <p>Prepare a new strategic statement.</p>
-        <button id="createBtn" class="btn" type="button">Create</button>
+        <button id="createBtn" class="btn primary" type="button">Create</button>
       </div>
-
       <div class="card">
         <h2>Verified Archive</h2>
-        <p>Your private verified signal library.</p>
+        <p>Your private verified record library.</p>
         <button id="signalsBtn" class="btn secondary" type="button">Open</button>
       </div>
-
       <div class="card">
         <h2>Execution Log</h2>
         <p>Private execution records.</p>
@@ -489,9 +470,7 @@ let navigating = false;
 const loading = document.getElementById("loading");
 const denied = document.getElementById("denied");
 const app = document.getElementById("app");
-const systemBar = document.getElementById("systemBar");
 const restoreNotice = document.getElementById("restoreNotice");
-const sessionText = document.getElementById("sessionText");
 const holderName = document.getElementById("holderName");
 const holderEmail = document.getElementById("holderEmail");
 const clientKey = document.getElementById("clientKey");
@@ -505,21 +484,15 @@ const firstSignalBtn = document.getElementById("firstSignalBtn");
 const firstArchiveBtn = document.getElementById("firstArchiveBtn");
 
 function withKey(path){
-  return key
-    ? path + "?key=" + encodeURIComponent(key)
-    : path;
+  return key ? path + "?key=" + encodeURIComponent(key) : path;
 }
 
 function navigateWithFeedback(el, path, text){
-  if (navigating) {
-    return;
-  }
-
+  if (navigating) return;
   navigating = true;
 
   el.classList.add("loading");
   el.textContent = text;
-
   window.location.href = withKey(path);
 }
 
@@ -529,86 +502,23 @@ function bindNavigation(el, path, text){
   });
 }
 
-function copyPrivateLink(){
-  if (!key) {
-    alert("No private access key found.");
-    return;
-  }
-
-  const full =
-    window.location.origin +
-    "/console.html?key=" +
-    encodeURIComponent(key);
-
-  navigator.clipboard
-    .writeText(full)
-    .then(() => {
-      alert("Private console link copied.");
-    })
-    .catch(() => {
-      alert("Unable to copy link.");
-    });
-}
-
-function forgetAccess(){
-  const confirmed =
-    confirm("Forget TVEVT private access on this device?");
-
-  if (!confirmed) {
-    return;
-  }
-
-  localStorage.removeItem("tvevt_client_key");
-  window.location.href = "/request-access.html";
-}
-
 function getArrayFromSignalsPayload(data){
-  if (!data || typeof data !== "object") {
-    return null;
-  }
-
-  if (Array.isArray(data.signals)) {
-    return data.signals;
-  }
-
-  if (Array.isArray(data.records)) {
-    return data.records;
-  }
-
-  if (Array.isArray(data.items)) {
-    return data.items;
-  }
-
-  if (Array.isArray(data.entries)) {
-    return data.entries;
-  }
-
+  if (!data || typeof data !== "object") return null;
+  if (Array.isArray(data.signals)) return data.signals;
+  if (Array.isArray(data.records)) return data.records;
+  if (Array.isArray(data.items)) return data.items;
+  if (Array.isArray(data.entries)) return data.entries;
   return null;
 }
 
 async function evaluateFirstGuidance(){
-  if (!key) {
-    return;
-  }
-
-  /*
-    Future D1 optimization:
-    /api/leads?access=... can later return hasRecords:true/false
-    to avoid this second request.
-  */
-
+  if (!key) return;
   try {
-    const res =
-      await fetch(
-        "/api/signals?key=" +
-        encodeURIComponent(key)
-      );
-
+    const res = await fetch("/api/signals?key=" + encodeURIComponent(key));
     if (!res.ok) {
       firstGuidance.classList.add("show");
       return;
     }
-
     const data = await res.json();
     const items = getArrayFromSignalsPayload(data);
 
@@ -616,7 +526,6 @@ async function evaluateFirstGuidance(){
       firstGuidance.classList.add("show");
       return;
     }
-
     if (Array.isArray(items) && items.length === 0) {
       firstGuidance.classList.add("show");
     }
@@ -634,12 +543,7 @@ async function init(){
   }
 
   try {
-    const res =
-      await fetch(
-        "/api/leads?access=" +
-        encodeURIComponent(key)
-      );
-
+    const res = await fetch("/api/leads?access=" + encodeURIComponent(key));
     const data = await res.json();
 
     if (!data || !data.valid) {
@@ -650,15 +554,10 @@ async function init(){
     }
 
     key = data.clientKey || key;
-
     localStorage.setItem("tvevt_client_key", key);
 
-    holderName.textContent =
-      data.name || "Private access holder";
-
-    holderEmail.textContent =
-      data.email || "—";
-
+    holderName.textContent = data.name || "Private access holder";
+    holderEmail.textContent = data.email || "—";
     clientKey.textContent = key;
 
     bindNavigation(createBtn, "/seal.html", "Opening...");
@@ -668,30 +567,18 @@ async function init(){
     bindNavigation(firstArchiveBtn, "/signals.html", "Opening...");
 
     if (urlKey) {
-      restoreNotice.textContent =
-        "Private access restored from secure link.";
-
-      sessionText.textContent =
-        "Secure identity restored from private access link.";
+      restoreNotice.textContent = "Private access restored from secure link.";
     } else {
-      restoreNotice.textContent =
-        "Session restored from this device.";
-
-      sessionText.textContent =
-        "Identity secured on this device.";
+      restoreNotice.textContent = "Session restored from this device.";
     }
 
     loading.style.display = "none";
-    systemBar.style.display = "flex";
     app.style.display = "block";
-
     evaluateFirstGuidance();
 
   } catch(err) {
     console.error(err);
-
     localStorage.removeItem("tvevt_client_key");
-
     loading.style.display = "none";
     denied.style.display = "block";
   }
