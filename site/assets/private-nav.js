@@ -34,7 +34,6 @@
   const nav = document.createElement("header");
   nav.className = "tvevt-private-nav";
 
-  // СВЯЗКА ИНТЕРФЕЙСА: В меню теперь Archive, но ведет строго на физический /signals.html
   nav.innerHTML = `
     <a class="tvevt-private-brand" href="/">
       <div class="tvevt-private-logo">
@@ -172,13 +171,13 @@
       background: #30363D;
     }
 
+    /* ФИКС СТИЛЕЙ: Универсальная подсветка активной вкладки */
     .tvevt-private-links a.active {
-      background: rgba(240, 246, 252, 0.1);
-      border-color: #F0F6FC;
-      color: #F0F6FC;
+      background: rgba(240, 246, 252, 0.1) !important;
+      border-color: #F0F6FC !important;
+      color: #F0F6FC !important;
     }
 
-    /* ФИКС: Полная автономность от внешних CSS-переменных страницы */
     .tvevt-private-links a.primary {
       background: transparent;
       color: #F0F6FC;
@@ -187,11 +186,6 @@
 
     .tvevt-private-links a.primary:hover {
       background: #21262D;
-      border-color: #F0F6FC;
-    }
-
-    .tvevt-private-links a.primary.active {
-      background: rgba(240, 246, 252, 0.1);
       border-color: #F0F6FC;
     }
 
