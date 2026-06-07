@@ -376,7 +376,7 @@ button:disabled {
     <nav class="nav">
       <a href="/">Home</a>
       <a href="/record.html">Verify Record</a>
-      <a href="/seal.html">Public Seal</a>
+      <a href="/proof.html">Public Proof</a>
       <a class="primary" href="/request-access.html">Request Access</a>
     </nav>
   </header>
@@ -471,7 +471,6 @@ async function send() {
       showStatus("success", `Your access request has been received.<br><br>Your private console link was sent to your email.`);
     }
 
-    // ИСПРАВЛЕННЫЙ UX: Убрана дефектная mailto ссылка
     links.innerHTML = `
       <a href="/">Return to Home</a>
     `;
