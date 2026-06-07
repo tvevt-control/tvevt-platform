@@ -113,9 +113,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(212, 175, 55, 0.3);
+      border: 1px solid rgba(255, 123, 28, 0.3);
       border-radius: 6px;
-      background: rgba(212, 175, 55, 0.04);
+      background: rgba(255, 123, 28, 0.04);
       flex: 0 0 auto;
     }
 
@@ -172,15 +172,16 @@
     }
 
     .tvevt-private-links a.active {
-      background: rgba(212, 175, 55, 0.1);
-      border-color: #D4AF37;
-      color: #D4AF37;
+      background: rgba(255, 123, 28, 0.1);
+      border-color: #FF7B1C;
+      color: #FF7B1C;
     }
 
+    /* ФИКС: Жестко вшиваем фирменный рыжий оранжевый цвет иконки */
     .tvevt-private-links a.primary {
-      background: #D4AF37;
+      background: #FF7B1C;
       color: #101419;
-      border-color: #D4AF37;
+      border-color: #FF7B1C;
     }
 
     .tvevt-private-links a.primary:hover {
@@ -190,20 +191,20 @@
     }
 
     .tvevt-private-links a.primary.active {
-      background: #D4AF37;
+      background: #FF7B1C;
       color: #101419;
-      border-color: #D4AF37;
+      border-color: #FF7B1C;
     }
 
     .tvevt-private-forget {
-      color: #D4AF37;
-      border-color: rgba(212, 175, 55, 0.3);
-      background: rgba(212, 175, 55, 0.04);
+      color: #FF7B1C;
+      border-color: rgba(255, 123, 28, 0.3);
+      background: rgba(255, 123, 28, 0.04);
     }
 
     .tvevt-private-forget:hover {
-      background: rgba(212, 175, 55, 0.12);
-      border-color: #D4AF37;
+      background: rgba(255, 123, 28, 0.12);
+      border-color: #FF7B1C;
     }
 
     @media(max-width:900px){
