@@ -114,9 +114,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(255, 123, 28, 0.25);
+      border: 1px solid rgba(240, 246, 252, 0.15);
       border-radius: 6px;
-      background: rgba(255, 123, 28, 0.03);
+      background: rgba(240, 246, 252, 0.02);
       flex: 0 0 auto;
     }
 
@@ -178,23 +178,20 @@
       color: #F0F6FC !important;
     }
 
-    /* ВОЗВРАЩАЕМ КАНOН: Кнопка главного действия в нашем фирменном оранжевом цвете */
     .tvevt-private-links a.primary {
-      background: rgba(255, 123, 28, 0.08);
-      color: #FF7B1C;
-      border-color: #FF7B1C;
+      background: transparent;
+      color: #F0F6FC;
+      border-color: #30363D;
     }
 
     .tvevt-private-links a.primary:hover {
-      background: #FF7B1C;
-      color: #101419;
-      border-color: #FF7B1C;
+      background: #21262D;
+      border-color: #F0F6FC;
     }
 
     .tvevt-private-links a.primary.active {
-      background: #FF7B1C !important;
-      color: #101419 !important;
-      border-color: #FF7B1C !important;
+      background: rgba(240, 246, 252, 0.1) !important;
+      border-color: #F0F6FC !important;
     }
 
     .tvevt-private-forget {
