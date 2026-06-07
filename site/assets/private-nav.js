@@ -1,38 +1,92 @@
 (function () {
-  // Проверяем текущую страницу для точной подсветки активного пункта
+  const params = new URLSearchParams(window.location.search);
+  const urlKey = params.get("key");
+
+  let key =
+    urlKey ||
+    localStorage.getItem("tvevt_client_key") ||
+    "";
+
+  if (key) {
+    localStorage.setItem("tvevt_client_key", key);
+  }
+
+  // ТОЧНЫЙ ФИКС: Корректно разделяем параметры через ? или &
+  function withKey(path) {
+    if (!key) return path;
+    const separator = path.includes("?") ? "&" : "?";
+    return path + separator + "key=" + encodeURIComponent(key);
+  }
+
   function activeClass(pageName) {
     const current = window.location.pathname;
     const cleanName = pageName.replace(".html", "");
-    if (current === "/" && cleanName === "index") return "active";
     return current.includes(cleanName) ? "active" : "";
   }
 
-  const nav = document.createElement("header");
-  nav.className = "tvevt-public-nav";
+  function forgetAccess() {
+    const confirmed = window.confirm(
+      "Forget TVEVT private access on this device?"
+    );
+    if (!confirmed) return;
 
-  // СТРОГИЙ ПУБЛИЧНЫЙ СТАНДАРТ: Home | Verify Record | Public Proof | Request Access
+    localStorage.removeItem("tvevt_client_key");
+    window.location.href = "/request-access.html";
+  }
+
+  const nav = document.createElement("header");
+  nav.className = "tvevt-private-nav";
+
   nav.innerHTML = `
-    <a class="tvevt-public-brand" href="/">
-      <div class="tvevt-public-logo">
+    <a class="tvevt-private-brand" href="/">
+      <div class="tvevt-private-logo">
         <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
       </div>
-      <div class="tvevt-public-brand-text">
+      <div class="tvevt-private-brand-text">
         <strong>TVEVT</strong>
         <span>Governance Console</span>
       </div>
     </a>
 
-    <nav class="tvevt-public-links">
-      <a class="${activeClass("index.html")}" href="/">Home</a>
-      <a class="${activeClass("record.html")}" href="/record.html">Verify Record</a>
-      <a class="${activeClass("proof.html")}" href="/proof.html">Public Proof</a>
-      <a class="primary ${activeClass("request-access.html")}" href="/request-access.html">Request Access</a>
+    <nav class="tvevt-private-links">
+      <a class="${activeClass("console.html")}" href="${withKey("/console.html")}">
+        Console
+      </a>
+      <a class="${activeClass("signals.html")}" href="${withKey("/signals.html")}">
+        Archive
+      </a>
+      <a class="${activeClass("execution-log.html")}" href="${withKey("/execution-log.html")}">
+        Execution Log
+      </a>
+      <a class="primary ${activeClass("seal.html")}" href="${withKey("/seal.html")}">
+        Create Record
+      </a>
+      <a href="/">
+        Public Site
+      </a>
+      ${
+        key
+          ? `
+            <button
+              class="tvevt-private-forget"
+              type="button"
+              id="tvevtForgetAccess"
+            >
+              Forget Access
+            </button>
+          `
+          : `
+            <a href="/request-access.html">
+              Request Access
+            </a>
+          `
+      }
     </nav>
   `;
 
   const style = document.createElement("style");
   style.textContent = `
-    .tvevt-public-nav {
+    .tvevt-private-nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -47,7 +101,7 @@
       font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
     }
 
-    .tvevt-public-brand {
+    .tvevt-private-brand {
       display: flex;
       align-items: center;
       gap: 14px;
@@ -56,7 +110,7 @@
       min-width: 0;
     }
 
-    .tvevt-public-logo {
+    .tvevt-private-logo {
       width: 44px;
       height: 44px;
       display: flex;
@@ -68,13 +122,13 @@
       flex: 0 0 auto;
     }
 
-    .tvevt-public-logo img {
+    .tvevt-private-logo img {
       width: 24px;
       height: 24px;
       display: block;
     }
 
-    .tvevt-public-brand-text strong {
+    .tvevt-private-brand-text strong {
       display: block;
       font-size: 20px;
       letter-spacing: -.02em;
@@ -83,7 +137,7 @@
       font-weight: 500;
     }
 
-    .tvevt-public-brand-text span {
+    .tvevt-private-brand-text span {
       display: block;
       margin-top: 4px;
       color: #8B949E;
@@ -91,7 +145,7 @@
       font-family: "JetBrains Mono", monospace;
     }
 
-    .tvevt-public-links {
+    .tvevt-private-links {
       display: flex;
       align-items: center;
       gap: 8px;
@@ -99,7 +153,8 @@
       justify-content: flex-end;
     }
 
-    .tvevt-public-links a {
+    .tvevt-private-links a,
+    .tvevt-private-forget {
       color: #F0F6FC;
       text-decoration: none;
       padding: 10px 16px;
@@ -108,56 +163,78 @@
       background: #21262D;
       font-size: 13px;
       font-weight: 500;
+      font-family: inherit;
+      cursor: pointer;
       transition: background .15s ease, border-color .15s ease, color .15s ease;
     }
 
-    .tvevt-public-links a:hover {
+    .tvevt-private-links a:hover,
+    .tvevt-private-forget:hover {
       border-color: #F0F6FC;
       background: #30363D;
     }
 
-    .tvevt-public-links a.active {
+    .tvevt-private-links a.active {
       background: rgba(240, 246, 252, 0.1) !important;
       border-color: #F0F6FC !important;
       color: #F0F6FC !important;
     }
 
-    .tvevt-public-links a.primary {
+    .tvevt-private-links a.primary {
       background: transparent;
+      color: #F0F6FC;
       border-color: #30363D;
     }
 
-    .tvevt-public-links a.primary:hover {
+    .tvevt-private-links a.primary:hover {
       background: #21262D;
       border-color: #F0F6FC;
     }
 
-    .tvevt-public-links a.primary.active {
+    .tvevt-private-links a.primary.active {
       background: rgba(240, 246, 252, 0.1) !important;
       border-color: #F0F6FC !important;
     }
 
-    @media(max-width:920px){
-      .tvevt-public-nav {
+    .tvevt-private-forget {
+      color: #FF4D4D;
+      border-color: rgba(255, 77, 77, 0.2);
+      background: rgba(255, 77, 77, 0.02);
+    }
+
+    .tvevt-private-forget:hover {
+      background: rgba(255, 77, 77, 0.08);
+      border-color: #FF4D4D;
+    }
+
+    @media(max-width:900px){
+      .tvevt-private-nav {
         align-items: flex-start;
         flex-direction: column;
         margin: 22px 24px;
         border-radius: 6px;
       }
-      .tvevt-public-links {
+      .tvevt-private-links {
         justify-content: flex-start;
         width: 100%;
       }
     }
 
     @media(max-width:640px){
-      .tvevt-public-links a {
+      .tvevt-private-links a,
+      .tvevt-private-forget {
         width: 100%;
         text-align: center;
+        justify-content: center;
       }
     }
   `;
 
   document.head.appendChild(style);
   document.body.insertBefore(nav, document.body.firstChild);
+
+  const forgetBtn = document.getElementById("tvevtForgetAccess");
+  if (forgetBtn) {
+    forgetBtn.addEventListener("click", forgetAccess);
+  }
 })();
