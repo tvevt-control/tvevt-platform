@@ -16,9 +16,12 @@
     return path + "?key=" + encodeURIComponent(key);
   }
 
-  function activeClass(page) {
+  // ТОТАЛЬНЫЙ ФИКС: Проверяем по вхождению имени, игнорируя наличие или отсутствие ".html"
+  function activeClass(pageName) {
     const current = window.location.pathname;
-    return current.endsWith(page) ? "active" : "";
+    // Если мы проверяем "console.html", очистим до "console" и проверим вхождение в путь
+    const cleanName = pageName.replace(".html", "");
+    return current.includes(cleanName) ? "active" : "";
   }
 
   function forgetAccess() {
@@ -171,7 +174,7 @@
       background: #30363D;
     }
 
-    /* ФИКС СТИЛЕЙ: Универсальная подсветка активной вкладки */
+    /* Настоящая, гарантированная подсветка */
     .tvevt-private-links a.active {
       background: rgba(240, 246, 252, 0.1) !important;
       border-color: #F0F6FC !important;
