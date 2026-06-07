@@ -6,421 +6,339 @@
 <title>TVEVT — Verified Record</title>
 <link rel="icon" type="image/svg+xml" href="/assets/brand/tvevt-favicon.svg">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
-:root{
-  --bg:#09090b;
-  --panel:#141416;
-  --line:rgba(255,255,255,.12);
-  --text:#ffffff;
-  --muted:#a7a7ad;
-  --soft:rgba(255,255,255,.42);
-  --orange:#ff9b3d;
-  --orange2:#ff7a1a;
-  --green:#2cff9a;
-  --red:#ff6a5f;
+:root {
+  --bg: #101419;
+  --panel: #161B22;
+  --panel2: #21262D;
+  --line: #30363D;
+  --text: #F0F6FC;
+  --muted: #8B949E;
+  --soft: rgba(240, 246, 252, 0.45);
+  
+  /* Фикс: Утвержденная институциональная бронза вместо рыжего */
+  --accent: #D4AF37;
+  --accent-muted: rgba(212, 175, 55, 0.12);
+  
+  --green: #00E699;
+  --red: #FF4D4D;
 }
 
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at top left, rgba(255,155,61,.16), transparent 32%),
-    var(--bg);
-  color:var(--text);
-  font-family:Arial, Helvetica, sans-serif;
+* {
+  box-sizing: border-box;
 }
 
-.wrap{
-  max-width:1100px;
-  margin:0 auto;
-  padding:34px 24px 80px;
+html {
+  scroll-behavior: smooth;
 }
 
-header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:18px;
-  padding:14px;
-  border:1px solid var(--line);
-  border-radius:28px;
-  background:rgba(20,20,22,.78);
-  backdrop-filter:blur(14px);
-  margin-bottom:34px;
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  color:white;
-  text-decoration:none;
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 80px 24px 80px;
 }
 
-.logoBox{
-  width:54px;
-  height:54px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid rgba(255,155,61,.35);
-  border-radius:18px;
-  background:rgba(255,155,61,.08);
+.card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 32px;
 }
 
-.logoBox img{
-  width:30px;
-  height:30px;
-  display:block;
+.statusBadge {
+  display: none;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
 }
 
-.brandText strong{
-  display:block;
-  font-size:23px;
-  letter-spacing:-.03em;
-  line-height:1;
+.seal {
+  width: 44px;
+  height: 44px;
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 230, 153, 0.08);
+  border: 1px solid rgba(0, 230, 153, 0.25);
+  color: var(--green);
+  font-size: 20px;
+  font-weight: 500;
+  flex: 0 0 auto;
 }
 
-.brandText span{
-  display:block;
-  margin-top:4px;
-  color:var(--muted);
-  font-size:13px;
+.seal.failed {
+  background: rgba(255, 77, 77, 0.08);
+  border-color: rgba(255, 77, 77, 0.25);
+  color: var(--red);
 }
 
-nav{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
+.status-label {
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-family: "JetBrains Mono", monospace;
 }
 
-nav a{
-  color:#fff;
-  text-decoration:none;
-  padding:11px 14px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  font-size:14px;
-  font-weight:800;
+.status-label.failed {
+  color: var(--red);
 }
 
-nav a.primary{
-  background:var(--orange);
-  color:#000;
-  border-color:transparent;
+.status-sub {
+  color: var(--muted);
+  margin-top: 4px;
+  font-size: 14px;
 }
 
-.card{
-  border:1px solid var(--line);
-  border-radius:28px;
-  background:rgba(20,20,22,.88);
-  padding:28px;
+h1 {
+  margin: 0 0 12px;
+  font-size: 36px;
+  letter-spacing: -.02em;
+  font-weight: 400;
 }
 
-.statusBadge{
-  display:none;
-  align-items:center;
-  gap:14px;
-  margin-bottom:22px;
+.lead {
+  margin: 0 0 24px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+  max-width: 760px;
 }
 
-.seal{
-  width:50px;
-  height:50px;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:rgba(44,255,154,.1);
-  border:1px solid rgba(44,255,154,.32);
-  color:var(--green);
-  font-size:28px;
-  flex:0 0 auto;
+.lookup {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 12px;
+  margin-top: 24px;
 }
 
-.seal.failed{
-  background:rgba(255,106,95,.12);
-  border-color:rgba(255,106,95,.34);
-  color:var(--red);
+input {
+  min-height: 48px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 0 16px;
+  font: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color .15s ease;
 }
 
-.status-label{
-  color:var(--green);
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:.14em;
-  text-transform:uppercase;
+input:focus {
+  border-color: var(--accent);
 }
 
-.status-label.failed{
-  color:var(--red);
+button, .button {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 12px 20px;
+  min-height: 48px;
+  background: var(--panel2);
+  color: var(--text);
+  font-weight: 500;
+  font-family: inherit;
+  font-size: 14px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s ease, border-color .15s ease, color .15s ease;
 }
 
-.status-sub{
-  color:var(--muted);
-  margin-top:5px;
-  font-size:14px;
+button:hover, .button:hover {
+  border-color: var(--text);
 }
 
-h1{
-  margin:0 0 10px;
-  font-size:44px;
-  letter-spacing:-.05em;
-  line-height:1.02;
+.bronze {
+  background: var(--accent-muted);
+  color: var(--accent);
+  border: 1px solid var(--accent);
 }
 
-.lead{
-  margin:0 0 20px;
-  color:var(--muted);
-  font-size:16px;
-  line-height:1.6;
-  max-width:760px;
+.bronze:hover {
+  background: var(--accent);
+  color: var(--bg);
 }
 
-.lookup{
-  display:grid;
-  grid-template-columns:1fr auto;
-  gap:12px;
-  margin-top:22px;
+.msg {
+  margin-top: 16px;
+  color: var(--green);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
 }
 
-input{
-  min-height:54px;
-  border:1px solid var(--line);
-  border-radius:14px;
-  background:rgba(255,255,255,.04);
-  color:var(--text);
-  padding:0 16px;
-  font:inherit;
-  outline:none;
+.msg.error {
+  color: var(--red);
 }
 
-button,.button{
-  border:1px solid var(--line);
-  border-radius:14px;
-  padding:13px 16px;
-  min-height:48px;
-  background:rgba(255,255,255,.04);
-  color:#fff;
-  font-weight:900;
-  cursor:pointer;
-  text-decoration:none;
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  font-size:13px;
+.record {
+  display: none;
+  margin-top: 32px;
+  padding-top: 28px;
+  border-top: 1px solid var(--line);
 }
 
-.orange{
-  background:var(--orange);
-  color:#000;
-  border-color:transparent;
+.notice {
+  border: 1px solid rgba(0, 230, 153, 0.2);
+  background: rgba(0, 230, 153, 0.02);
+  border-radius: 6px;
+  padding: 18px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 14px;
+  margin-bottom: 24px;
 }
 
-.msg{
-  margin-top:14px;
-  color:var(--green);
-  font-weight:800;
-  font-size:14px;
+.notice.failed {
+  border-color: rgba(255, 77, 77, 0.2);
+  background: rgba(255, 77, 77, 0.02);
 }
 
-.msg.error{
-  color:var(--red);
+.notice strong {
+  color: var(--text);
+  font-weight: 500;
 }
 
-.record{
-  display:none;
-  margin-top:26px;
-  padding-top:24px;
-  border-top:1px solid var(--line);
+.content-label {
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-bottom: 12px;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.notice{
-  border:1px solid rgba(44,255,154,.24);
-  background:rgba(44,255,154,.06);
-  border-radius:20px;
-  padding:18px;
-  color:var(--muted);
-  line-height:1.5;
-  margin-bottom:22px;
+.sealed-text {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  padding: 24px;
+  white-space: pre-wrap;
+  line-height: 1.65;
+  overflow-wrap: anywhere;
+  font-size: 16px;
+  color: var(--text);
 }
 
-.notice.failed{
-  border-color:rgba(255,106,95,.24);
-  background:rgba(255,106,95,.06);
+.meta {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  margin-top: 20px;
 }
 
-.notice strong{
-  color:#fff;
+.field {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel2);
+  padding: 16px;
+  overflow-wrap: anywhere;
 }
 
-.content-label{
-  color:var(--soft);
-  font-size:11px;
-  letter-spacing:.16em;
-  text-transform:uppercase;
-  font-weight:900;
-  margin-bottom:10px;
+.field small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  font-weight: 500;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.sealed-text{
-  border:1px solid var(--line);
-  border-radius:20px;
-  background:rgba(0,0,0,.18);
-  padding:22px;
-  white-space:pre-wrap;
-  line-height:1.6;
-  overflow-wrap:anywhere;
-  font-size:17px;
-  color:#fff;
+.field b {
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 1.5;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.meta{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:14px;
-  margin-top:18px;
+.technical {
+  display: none;
+  margin-top: 14px;
 }
 
-.field{
-  border:1px solid var(--line);
-  border-radius:18px;
-  background:rgba(0,0,0,.16);
-  padding:16px;
-  overflow-wrap:anywhere;
+.technical.show {
+  display: block;
 }
 
-.field small{
-  display:block;
-  color:var(--soft);
-  font-size:11px;
-  letter-spacing:.15em;
-  text-transform:uppercase;
-  margin-bottom:7px;
-  font-weight:900;
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 24px;
 }
 
-.field b{
-  font-size:14px;
-  line-height:1.45;
+.growth {
+  margin-top: 32px;
+  padding: 24px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel2);
+  display: none;
 }
 
-.technical{
-  display:none;
-  margin-top:14px;
+.growth.show {
+  display: block;
 }
 
-.technical.show{
-  display:block;
+.growth h2 {
+  margin: 0 0 8px;
+  font-size: 20px;
+  font-weight: 400;
 }
 
-.actions{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:22px;
+.growth p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 14px;
 }
 
-.growth{
-  margin-top:24px;
-  padding:22px;
-  border:1px solid rgba(255,155,61,.22);
-  border-radius:22px;
-  background:rgba(255,155,61,.055);
-  display:none;
-}
-
-.growth.show{
-  display:block;
-}
-
-.growth h2{
-  margin:0 0 8px;
-  font-size:22px;
-}
-
-.growth p{
-  margin:0;
-  color:var(--muted);
-  line-height:1.5;
-  font-size:15px;
-}
-
-footer{
-  margin-top:40px;
-  text-align:center;
-  color:rgba(255,255,255,.24);
-  font-size:11px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
+footer {
+  margin-top: 64px;
+  text-align: center;
+  color: rgba(255,255,255,0.15);
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  font-family: "JetBrains Mono", monospace;
 }
 
 @media(max-width:800px){
-  .wrap{padding:22px 18px 60px}
-
-  header{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  nav{
-    justify-content:flex-start;
-    width:100%;
-  }
-
-  nav a{
-    width:100%;
-    text-align:center;
-  }
-
-  h1{
-    font-size:34px;
-  }
-
-  .lookup,.meta{
-    grid-template-columns:1fr;
-  }
-
-  button,.button{
-    width:100%;
-  }
-
-  .actions{
-    flex-direction:column;
-  }
+  .wrap { padding: 96px 16px 60px; }
+  h1 { font-size: 28px; }
+  .lookup, .meta { grid-template-columns: 1fr; }
+  button, .button { width: 100%; }
+  .actions { flex-direction: column; }
 }
 </style>
 </head>
 
 <body>
 
+<script src="/assets/private-nav.js?v=2026-06-07-v3"></script>
+
 <div class="wrap">
-
-<header>
-  <a class="brand" href="/">
-    <div class="logoBox">
-      <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
-    </div>
-    <div class="brandText">
-      <strong>TVEVT</strong>
-      <span id="brandSub">Governance Console</span>
-    </div>
-  </a>
-
-  <nav>
-    <a href="/proof.html">Proof</a>
-    <a href="/record.html">Verify</a>
-    <a class="primary" id="newSignalLink" href="/seal.html">New Signal</a>
-    <a id="consoleLink" href="/request-access.html">Console</a>
-    <a id="signalsLink" href="/request-access.html">Signals</a>
-    <a id="logLink" href="/request-access.html">Execution Log</a>
-  </nav>
-</header>
 
 <section class="card">
 
@@ -432,7 +350,7 @@ footer{
     </div>
   </div>
 
-  <h1 id="title">Verified record</h1>
+  <h1 id="title">Verified Record</h1>
 
   <p class="lead" id="lead">
     A sealed signal with a timestamp, hash, and fixed verification link.
@@ -440,7 +358,7 @@ footer{
 
   <div class="lookup" id="lookup">
     <input id="recordInput" placeholder="Enter record ID, e.g. TVE-XXXXXX">
-    <button class="orange" id="load">Load</button>
+    <button class="bronze" id="load">Load</button>
   </div>
 
   <div class="msg" id="msg">Open a verification link or enter a record ID.</div>
@@ -493,8 +411,7 @@ footer{
       <button id="copyLink">Copy Link</button>
       <button id="shareProof">Share Proof</button>
       <button id="toggleTechnical">Show Hash</button>
-      <a class="button orange" id="sealNewLink" href="/seal.html">Seal New</a>
-      <a class="button" id="goConsoleLink" href="/request-access.html">Console</a>
+      <a class="button bronze" id="sealNewLink" href="/seal.html">Seal New</a>
     </div>
 
     <div class="growth" id="growth">
@@ -503,7 +420,7 @@ footer{
         Identity, account history, delivery, and team governance are the next control layer.
       </p>
       <div class="actions">
-        <a class="button orange" href="/request-access.html">Request Access</a>
+        <a class="button bronze" href="/request-access.html">Request Access</a>
       </div>
     </div>
 
@@ -533,22 +450,7 @@ function withKey(path){
 }
 
 function applyNavigation(){
-  $("newSignalLink").href = withKey("/seal.html");
   $("sealNewLink").href = withKey("/seal.html");
-
-  if(key){
-    $("brandSub").textContent = "Private Console Active";
-    $("consoleLink").href = withKey("/console.html");
-    $("signalsLink").href = withKey("/signals.html");
-    $("logLink").href = withKey("/execution-log.html");
-    $("goConsoleLink").href = withKey("/console.html");
-  }else{
-    $("brandSub").textContent = "Governance Console";
-    $("consoleLink").href = "/request-access.html";
-    $("signalsLink").href = "/request-access.html";
-    $("logLink").href = "/request-access.html";
-    $("goConsoleLink").href = "/request-access.html";
-  }
 }
 
 function idFromUrl(){
