@@ -41,7 +41,93 @@ body {
 .page {
   max-width: 1180px;
   margin: 0 auto;
-  padding: 80px 24px 80px;
+  padding: 28px 24px 80px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  margin-bottom: 54px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #F0F6FC;
+  text-decoration: none;
+  min-width: 0;
+}
+
+.logo-box {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(240, 246, 252, 0.15);
+  border-radius: 6px;
+  background: rgba(240, 246, 252, 0.02);
+  flex: 0 0 auto;
+}
+
+.logo-box img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.brand-text strong {
+  display: block;
+  font-size: 20px;
+  letter-spacing: -.02em;
+  line-height: 1;
+  color: #F0F6FC;
+  font-weight: 500;
+}
+
+.brand-text span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nav a {
+  color: #F0F6FC;
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: 1px solid #30363D;
+  background: #21262D;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.nav a:hover {
+  border-color: #F0F6FC;
+  background: #30363D;
+}
+
+.nav a.primary {
+  background: rgba(240, 246, 252, 0.1);
+  border-color: #F0F6FC;
 }
 
 .layout {
@@ -58,17 +144,15 @@ body {
 
 .badge {
   display: inline-flex;
-  align-items: center;
-  gap: 8px;
+  margin-bottom: 20px;
   padding: 6px 12px;
   border-radius: 4px;
-  background: var(--panel2);
   border: 1px solid var(--line);
+  background: var(--panel2);
   color: var(--text);
   font-size: 11px;
   letter-spacing: .05em;
   text-transform: uppercase;
-  margin-bottom: 20px;
   font-weight: 500;
   font-family: "JetBrains Mono", monospace;
 }
@@ -238,6 +322,15 @@ button:disabled {
 }
 
 @media(max-width:920px){
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+    border-radius: 6px;
+  }
+  .nav {
+    justify-content: flex-start;
+    width: 100%;
+  }
   .layout {
     grid-template-columns: 1fr;
     padding-top: 32px;
@@ -249,7 +342,11 @@ button:disabled {
 
 @media(max-width:640px){
   .page {
-    padding: 96px 16px 60px;
+    padding: 24px 16px 60px;
+  }
+  .nav a {
+    width: 100%;
+    text-align: center;
   }
   .box {
     padding: 24px;
@@ -263,9 +360,26 @@ button:disabled {
 
 <body>
 
-<script src="/assets/public-nav.js?v=2026-06-07-v1"></script>
-
 <div class="page">
+
+  <header class="header">
+    <a class="brand" href="/">
+      <div class="logo-box">
+        <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
+      </div>
+      <div class="brand-text">
+        <strong>TVEVT</strong>
+        <span>Governance Console</span>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/record.html">Verify Record</a>
+      <a href="/seal.html">Public Seal</a>
+      <a class="primary" href="/request-access.html">Request Access</a>
+    </nav>
+  </header>
 
   <main class="layout">
 
@@ -357,9 +471,9 @@ async function send() {
       showStatus("success", `Your access request has been received.<br><br>Your private console link was sent to your email.`);
     }
 
+    // ИСПРАВЛЕННЫЙ UX: Убрана дефектная mailto ссылка
     links.innerHTML = `
       <a href="/">Return to Home</a>
-      <a href="mailto:${email}">Open Email Application</a>
     `;
   } catch(err) {
     console.error(err);
