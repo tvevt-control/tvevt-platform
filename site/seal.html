@@ -3,223 +3,272 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Create Signal — TVEVT</title>
+<title>Create Record — TVEVT</title>
 <link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
-:root{
-  --bg:#09090b;
-  --panel:#141416;
-  --line:rgba(255,255,255,.12);
-  --text:#ffffff;
-  --muted:#a7a7ad;
-  --orange:#ff9b3d;
-  --green:#2cff9a;
-  --red:#ff6a5f;
+:root {
+  /* Унифицированная палитра Enterprise Slate с главной страницы */
+  --bg: #101419;
+  --panel: #161B22;
+  --panel2: #21262D;
+  --line: #30363D;
+  --text: #F0F6FC;
+  --muted: #8B949E;
+  --soft: #C9D1D9;
+  
+  /* Фикс: Утвержденная институциональная бронза вместо рыжего */
+  --accent: #D4AF37;
+  --accent-muted: rgba(212, 175, 55, 0.12);
+  --green: #00E699;
+  --red: #FF4D4D;
 }
 
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at top left, rgba(255,155,61,.16), transparent 32%),
-    var(--bg);
-  color:var(--text);
-  font-family:Arial, Helvetica, sans-serif;
+* {
+  box-sizing: border-box;
 }
 
-.wrap{
-  max-width:1100px;
-  margin:0 auto;
-  padding:34px 24px 80px;
+html {
+  scroll-behavior: smooth;
 }
 
-.modeBar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  margin-bottom:22px;
-  border:1px solid var(--line);
-  border-radius:20px;
-  padding:16px 18px;
-  background:rgba(255,255,255,.04);
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-.modeBar.private{
-  border-color:rgba(44,255,154,.22);
-  background:rgba(44,255,154,.06);
+.wrap {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 80px 24px 80px;
 }
 
-.modeBar strong{
-  display:block;
-  font-size:13px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:var(--orange);
+.modeBar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 16px 20px;
+  background: var(--panel);
 }
 
-.modeBar.private strong{
-  color:var(--green);
+.modeBar.private {
+  border-color: rgba(0, 230, 153, 0.2);
+  background: rgba(0, 230, 153, 0.02);
 }
 
-.modeBar span{
-  display:block;
-  margin-top:5px;
-  color:var(--muted);
-  font-size:14px;
+.modeBar strong {
+  display: block;
+  font-size: 11px;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-family: "JetBrains Mono", monospace;
 }
 
-.modeActions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
+.modeBar.private strong {
+  color: var(--green);
 }
 
-.topBtn{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  color:#fff;
-  border-radius:999px;
-  padding:10px 14px;
-  cursor:pointer;
-  text-decoration:none;
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.08em;
-  text-transform:uppercase;
+.modeBar span {
+  display: block;
+  margin-top: 5px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
 }
 
-.hero,.panel,.result{
-  border:1px solid var(--line);
-  border-radius:24px;
-  background:rgba(20,20,22,.88);
-  padding:24px;
+.modeActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-h1{
-  margin:0 0 12px;
-  font-size:40px;
-  letter-spacing:-.04em;
+.topBtn {
+  border: 1px solid var(--line);
+  background: var(--panel2);
+  color: var(--text);
+  border-radius: 4px;
+  padding: 8px 14px;
+  cursor: pointer;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 500;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
 }
 
-p{
-  color:var(--muted);
-  line-height:1.6;
+.topBtn:hover {
+  border-color: var(--text);
 }
 
-textarea{
-  width:100%;
-  min-height:300px;
-  margin-top:20px;
-  padding:18px;
-  border-radius:18px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  color:#fff;
-  font:inherit;
-  font-size:18px;
-  outline:none;
+.hero, .panel, .result {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 28px;
 }
 
-textarea:focus{
-  border-color:var(--orange);
+h1 {
+  margin: 0 0 12px;
+  font-size: 32px;
+  letter-spacing: -.02em;
+  font-weight: 400;
 }
 
-.actions{
-  display:flex;
-  gap:12px;
-  margin-top:18px;
-  flex-wrap:wrap;
+p {
+  color: var(--muted);
+  line-height: 1.65;
+  font-size: 15px;
 }
 
-button,.btn{
-  padding:13px 16px;
-  border-radius:14px;
-  border:0;
-  background:var(--orange);
-  color:#000;
-  font-weight:900;
-  cursor:pointer;
-  text-decoration:none;
+textarea {
+  width: 100%;
+  min-height: 260px;
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.65;
+  outline: none;
+  transition: border-color .15s ease;
 }
 
-button:disabled{
-  opacity:.65;
-  cursor:not-allowed;
+textarea:focus {
+  border-color: var(--accent);
 }
 
-.secondary{
-  background:transparent;
-  color:#fff;
-  border:1px solid var(--line);
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
 }
 
-.result{
-  display:none;
-  margin-top:20px;
-  border-color:rgba(44,255,154,.35);
+button, .btn {
+  padding: 14px 24px;
+  border-radius: 6px;
+  border: 0;
+  background: var(--accent-muted);
+  color: var(--accent);
+  border: 1px solid var(--accent);
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
 }
 
-.result.show{
-  display:block;
+button:hover, .btn:hover {
+  background: var(--accent);
+  color: var(--bg);
 }
 
-.field{
-  margin-top:10px;
-  padding:12px;
-  border:1px solid var(--line);
-  border-radius:12px;
-  background:rgba(0,0,0,.18);
-  word-break:break-all;
+button:disabled {
+  opacity: .5;
+  cursor: wait;
 }
 
-small{
-  display:block;
-  color:var(--muted);
-  margin-bottom:5px;
-  text-transform:uppercase;
-  letter-spacing:.12em;
-  font-weight:900;
-  font-size:11px;
+.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
 }
 
-.msg{
-  margin-top:12px;
-  color:var(--green);
-  font-weight:800;
-  min-height:22px;
+.secondary:hover {
+  border-color: var(--text);
+  background: var(--panel2);
 }
 
-.msg.error{
-  color:var(--red);
+.result {
+  display: none;
+  margin-top: 24px;
+  border-color: var(--line);
+  background: var(--panel2);
 }
 
-footer{
-  margin-top:40px;
-  text-align:center;
-  color:rgba(255,255,255,.24);
-  font-size:11px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
+.result.show {
+  display: block;
+}
+
+.result h2 {
+  margin: 0 0 16px;
+  font-size: 22px;
+  font-weight: 400;
+}
+
+.field {
+  margin-top: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  background: var(--bg);
+}
+
+small {
+  display: block;
+  color: var(--muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-weight: 500;
+  font-size: 10px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+b {
+  font-weight: 400;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  word-break: break-all;
+}
+
+.msg {
+  margin-top: 16px;
+  color: var(--green);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
+  min-height: 22px;
+}
+
+.msg.error {
+  color: var(--red);
+}
+
+footer {
+  margin-top: 64px;
+  text-align: center;
+  color: rgba(255,255,255,0.15);
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  font-family: "JetBrains Mono", monospace;
 }
 
 @media(max-width:800px){
-  .modeBar{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  h1{
-    font-size:34px;
-  }
-
-  button,.btn{
-    width:100%;
-    text-align:center;
-  }
+  .wrap { padding-top: 96px; }
+  .modeBar { flex-direction: column; align-items: flex-start; gap: 12px; }
+  h1 { font-size: 28px; }
+  button, .btn { width: 100%; text-align: center; }
 }
 </style>
 </head>
@@ -243,7 +292,7 @@ footer{
   </div>
 
   <section class="hero">
-    <h1>Create Signal</h1>
+    <h1>Create Record</h1>
     <p>
       Write the exact statement you want to seal. TVEVT will create a verified record,
       generate a cryptographic hash, and open the permanent verification page.
@@ -255,11 +304,11 @@ footer{
       <textarea id="text" placeholder="Enter the exact statement you want to seal..." required></textarea>
 
       <div class="actions">
-        <button id="sealBtn" type="submit">Seal Signal</button>
+        <button id="sealBtn" type="submit">Seal Record</button>
         <button id="clearBtn" class="secondary" type="button">Clear</button>
       </div>
 
-      <div id="msg" class="msg"></div>
+      <div id="msg" class="msg" aria-live="polite"></div>
     </form>
 
     <div id="result" class="result">
@@ -330,18 +379,16 @@ let currentRecordUrl = "";
 function setMessage(message, isError = false){
   msg.textContent = message;
   msg.classList.toggle("error", isError);
+  if(!isError && message) msg.style.color = "var(--green)";
 }
 
 function withKey(path){
-  return key
-    ? path + "?key=" + encodeURIComponent(key)
-    : path;
+  return key ? path + "?key=" + encodeURIComponent(key) : path;
 }
 
 function applyMode(){
   if(key){
     localStorage.setItem("tvevt_client_key", key);
-
     modeBar.classList.add("private");
     modeTitle.textContent = "Private Console Active";
     modeText.textContent = "This signal will be sealed under your private TVEVT identity.";
@@ -358,104 +405,79 @@ function applyMode(){
 
 async function safeJson(response){
   const raw = await response.text();
-
   if(!raw){
-    throw new Error(
-      "Empty response from /api/publish. Check Cloudflare function deployment."
-    );
+    throw new Error("Empty response from /api/publish. Check Cloudflare function deployment.");
   }
-
   try{
     return JSON.parse(raw);
   }catch(err){
-    throw new Error(
-      "Invalid JSON response from /api/publish: " + raw.slice(0, 180)
-    );
+    throw new Error("Invalid JSON response from /api/publish: " + raw.slice(0, 180));
   }
 }
 
 async function sealSignal(signalText){
-  const payload = {
-    text: signalText
-  };
-
-  if(key){
-    payload.key = key;
-  }
+  const payload = { text: signalText };
+  if(key) payload.key = key;
 
   const response = await fetch("/api/publish", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload)
   });
 
   const data = await safeJson(response);
-
   if(!response.ok || !data.ok){
-    throw new Error(data.error || "Unable to seal signal.");
+    throw new Error(data.error || "Unable to seal record.");
   }
-
   return data;
+}
+
+function loadPendingContext(){
+  const pendingText = sessionStorage.getItem("tvevt_pending_record_text");
+  if(pendingText && text){
+    text.value = pendingText;
+    sessionStorage.removeItem("tvevt_pending_record_text");
+  }
 }
 
 form.addEventListener("submit", async function(e){
   e.preventDefault();
-
   const signalText = text.value.trim();
 
   if(!signalText){
-    setMessage("Enter a signal before sealing.", true);
+    setMessage("Enter a statement before sealing.", true);
     return;
   }
 
   sealBtn.disabled = true;
   sealBtn.textContent = "Sealing...";
-
   result.classList.remove("show");
-  setMessage("Sealing signal and creating verified record...");
+  setMessage("Sealing statement and creating verified record...");
 
   try{
     const data = await sealSignal(signalText);
-
     const record = data.record || {};
+    const url = data.recordUrl || data.verification_url || record.recordUrl || record.verification_url;
 
-    const url =
-      data.recordUrl ||
-      data.verification_url ||
-      record.recordUrl ||
-      record.verification_url;
-
-    currentRecordUrl =
-      url ||
-      (window.location.origin + "/record.html?id=" + encodeURIComponent(data.id));
+    currentRecordUrl = url || (window.location.origin + "/record.html?id=" + encodeURIComponent(data.id));
 
     recordId.textContent = data.id || record.id || "—";
     hashEl.textContent = data.hash || record.hash || "—";
     logIdEl.textContent = data.logId || data.executionEvent?.id || "—";
     recordUrl.textContent = currentRecordUrl;
-
     openRecord.href = currentRecordUrl;
 
     result.classList.add("show");
-
     setMessage("Verified record created ✓ Opening verification page...");
 
     setTimeout(() => {
       window.location.href = currentRecordUrl;
     }, 900);
-
   }catch(err){
     console.error(err);
-
     sealBtn.disabled = false;
-    sealBtn.textContent = "Seal Signal";
-
-    setMessage(
-      err.message || "Signal could not be sealed. Please try again.",
-      true
-    );
+    sealBtn.textContent = "Seal Record";
+    setMessage(err.message || "Record could not be sealed. Please try again.", true);
   }
 });
 
@@ -470,7 +492,6 @@ copyRecord.onclick = async function(){
     setMessage("No verification link available yet.", true);
     return;
   }
-
   try{
     await navigator.clipboard.writeText(currentRecordUrl);
     setMessage("Verification link copied.");
@@ -480,6 +501,7 @@ copyRecord.onclick = async function(){
 };
 
 applyMode();
+loadPendingContext();
 </script>
 
 </body>
