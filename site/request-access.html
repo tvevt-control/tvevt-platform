@@ -2,355 +2,260 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Request Access — TVEVT</title>
+<link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
 
-<meta
-  name="viewport"
-  content="width=device-width, initial-scale=1"
->
-
-<title>
-  Request Access — TVEVT
-</title>
-
-<link
-  rel="icon"
-  href="/assets/brand/tvevt-favicon.svg"
-  type="image/svg+xml"
->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --bg:#09090b;
-  --panel:#141416;
-  --line:rgba(255,255,255,.12);
-  --text:#ffffff;
-  --muted:#a7a7ad;
-  --orange:#ff9b3d;
-  --green:#2cff9a;
-  --red:#ff6a5f;
+:root {
+  --bg: #101419;
+  --panel: #161B22;
+  --panel2: #21262D;
+  --line: #30363D;
+  --text: #F0F6FC;
+  --muted: #8B949E;
+  --soft: rgba(240, 246, 252, 0.45);
+  --accent: #F0F6FC;
+  --green: #00E699;
+  --red: #FF4D4D;
 }
 
-*{
-  box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at top left, rgba(255,155,61,.16), transparent 32%),
-    var(--bg);
-  color:var(--text);
-  font-family:Arial, Helvetica, sans-serif;
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-.page{
-  max-width:1180px;
-  margin:0 auto;
-  padding:28px 24px 80px;
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 80px 24px 80px;
 }
 
-.header{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:18px;
-  padding:14px;
-  border:1px solid var(--line);
-  border-radius:28px;
-  background:rgba(20,20,22,.78);
-  backdrop-filter:blur(14px);
+.layout {
+  min-height: calc(100vh - 240px);
+  display: grid;
+  grid-template-columns: 1fr 460px;
+  gap: 48px;
+  align-items: center;
 }
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:14px;
-  color:#fff;
-  text-decoration:none;
-  min-width:0;
+.copy {
+  max-width: 590px;
 }
 
-.logo{
-  width:54px;
-  height:54px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  border:1px solid rgba(255,155,61,.35);
-  border-radius:18px;
-  background:rgba(255,155,61,.08);
-  flex:0 0 auto;
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 4px;
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-size: 11px;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+  font-weight: 500;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.logo img{
-  width:30px;
-  height:30px;
-  display:block;
+h1 {
+  margin: 0;
+  font-size: 48px;
+  line-height: 1.05;
+  letter-spacing: -.03em;
+  font-weight: 400;
 }
 
-.brandText strong{
-  display:block;
-  font-size:23px;
-  letter-spacing:-.03em;
-  line-height:1;
-  color:#fff;
+.description {
+  color: var(--muted);
+  line-height: 1.65;
+  margin-top: 20px;
+  font-size: 16px;
 }
 
-.brandText span{
-  display:block;
-  margin-top:4px;
-  color:var(--muted);
-  font-size:13px;
+.points {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  margin-top: 32px;
 }
 
-.nav{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-  justify-content:flex-end;
+.point {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  padding: 18px;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 14px;
 }
 
-.nav a{
-  color:#fff;
-  text-decoration:none;
-  padding:11px 14px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  font-size:14px;
-  font-weight:800;
+.point strong {
+  color: var(--text);
+  font-weight: 500;
 }
 
-.nav a.primary{
-  background:var(--orange);
-  color:#000;
-  border-color:transparent;
+.box {
+  width: 100%;
+  padding: 32px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
 }
 
-.layout{
-  min-height:calc(100vh - 150px);
-  display:grid;
-  grid-template-columns:1fr 460px;
-  gap:42px;
-  align-items:center;
-  padding:54px 0 0;
+form {
+  margin: 0;
 }
 
-.copy{
-  max-width:590px;
+input {
+  width: 100%;
+  min-height: 48px;
+  padding: 0 16px;
+  margin-top: 14px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  background: var(--bg);
+  color: var(--text);
+  font-size: 14px;
+  font-family: inherit;
+  outline: none;
+  transition: border-color .15s ease;
 }
 
-.badge{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(255,155,61,.12);
-  border:1px solid rgba(255,155,61,.28);
-  color:#ffb36a;
-  font-size:12px;
-  letter-spacing:.08em;
-  text-transform:uppercase;
-  margin-bottom:18px;
-  font-weight:900;
+input:first-of-type {
+  margin-top: 0;
 }
 
-h1{
-  margin:0;
-  font-size:clamp(48px,7vw,84px);
-  line-height:.92;
-  letter-spacing:-.07em;
+input:focus {
+  border-color: var(--text);
 }
 
-.description{
-  color:var(--muted);
-  line-height:1.65;
-  margin-top:22px;
-  font-size:19px;
+button {
+  width: 100%;
+  margin-top: 20px;
+  min-height: 48px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel2);
+  color: var(--text);
+  font-weight: 500;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
 }
 
-.points{
-  display:grid;
-  grid-template-columns:1fr;
-  gap:12px;
-  margin-top:28px;
+button:hover {
+  background: var(--line);
+  border-color: var(--text);
 }
 
-.point{
-  border:1px solid var(--line);
-  border-radius:18px;
-  background:rgba(255,255,255,.035);
-  padding:16px;
-  color:var(--muted);
-  line-height:1.55;
-  font-size:14px;
+button:disabled {
+  opacity: .5;
+  cursor: not-allowed;
 }
 
-.point strong{
-  color:#fff;
+.status {
+  margin-top: 18px;
+  padding: 14px;
+  border-radius: 6px;
+  display: none;
+  line-height: 1.6;
+  font-size: 14px;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.box{
-  width:100%;
-  padding:34px;
-  background:rgba(20,20,22,.9);
-  border:1px solid var(--line);
-  border-radius:28px;
-  box-shadow:0 10px 40px rgba(0,0,0,.35);
+.status.show {
+  display: block;
 }
 
-form{
-  margin:0;
+.status.success {
+  background: rgba(0, 230, 153, 0.02);
+  border: 1px solid rgba(0, 230, 153, 0.2);
+  color: var(--green);
 }
 
-input{
-  width:100%;
-  padding:15px;
-  margin-top:12px;
-  border-radius:14px;
-  border:1px solid #2a2a2e;
-  background:#0b0b0c;
-  color:#ffffff;
-  font-size:16px;
-  outline:none;
-  transition:border-color .2s ease;
+.status.error {
+  background: rgba(255, 77, 77, 0.02);
+  border: 1px solid rgba(255, 77, 77, 0.2);
+  color: var(--red);
 }
 
-input:focus{
-  border-color:var(--orange);
+.status.info {
+  background: var(--panel2);
+  border: 1px solid var(--line);
+  color: var(--text);
 }
 
-button{
-  width:100%;
-  margin-top:20px;
-  padding:16px;
-  border:none;
-  border-radius:14px;
-  background:var(--orange);
-  color:#000000;
-  font-weight:900;
-  font-size:15px;
-  cursor:pointer;
-  transition:all .2s ease;
+.links {
+  margin-top: 20px;
 }
 
-button:hover{
-  transform:translateY(-1px);
+.links a {
+  display: block;
+  margin-top: 12px;
+  color: var(--text);
+  text-decoration: underline;
+  font-size: 14px;
+  font-weight: 500;
 }
 
-button:disabled{
-  opacity:.65;
-  cursor:not-allowed;
-  transform:none;
+.links a:hover {
+  color: var(--muted);
 }
 
-.status{
-  margin-top:18px;
-  padding:14px;
-  border-radius:14px;
-  display:none;
-  line-height:1.5;
-  font-size:14px;
+.footer {
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
 }
 
-.status.show{
-  display:block;
-}
-
-.status.success{
-  background:rgba(0,255,153,.08);
-  border:1px solid rgba(0,255,153,.2);
-  color:#7fffc1;
-}
-
-.status.error{
-  background:rgba(255,70,70,.08);
-  border:1px solid rgba(255,70,70,.18);
-  color:#ff8d8d;
-}
-
-.status.info{
-  background:rgba(255,155,61,.08);
-  border:1px solid rgba(255,155,61,.18);
-  color:#ffca8f;
-}
-
-.links{
-  margin-top:20px;
-}
-
-.links a{
-  display:block;
-  margin-top:12px;
-  color:var(--orange);
-  text-decoration:none;
-  font-size:14px;
-  font-weight:800;
-}
-
-.links a:hover{
-  opacity:.85;
-}
-
-.footer{
-  margin-top:28px;
-  color:#777;
-  font-size:12px;
-  line-height:1.6;
-}
-
-.siteFooter{
-  margin-top:38px;
-  text-align:center;
-  color:rgba(255,255,255,.24);
-  font-size:11px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
+.siteFooter {
+  margin-top: 64px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  font-family: "JetBrains Mono", monospace;
 }
 
 @media(max-width:920px){
-  .layout{
-    grid-template-columns:1fr;
-    padding-top:34px;
+  .layout {
+    grid-template-columns: 1fr;
+    padding-top: 32px;
   }
-
-  .copy{
-    max-width:none;
-  }
-
-  .header{
-    align-items:flex-start;
-    flex-direction:column;
-  }
-
-  .nav{
-    justify-content:flex-start;
+  .copy {
+    max-width: none;
   }
 }
 
 @media(max-width:640px){
-  .page{
-    padding:22px 18px 60px;
+  .page {
+    padding: 96px 16px 60px;
   }
-
-  .nav{
-    width:100%;
+  .box {
+    padding: 24px;
   }
-
-  .nav a{
-    width:100%;
-    text-align:center;
-  }
-
-  .box{
-    padding:26px;
-  }
-
-  h1{
-    font-size:44px;
+  h1 {
+    font-size: 34px;
   }
 }
 </style>
@@ -358,119 +263,49 @@ button:disabled{
 
 <body>
 
+<script src="/assets/public-nav.js?v=2026-06-07-v1"></script>
+
 <div class="page">
-
-  <header class="header">
-
-    <a class="brand" href="/">
-      <div class="logo">
-        <img
-          src="/assets/brand/tvevt-icon.svg"
-          alt="TVEVT"
-        >
-      </div>
-
-      <div class="brandText">
-        <strong>TVEVT</strong>
-        <span>Governance Console</span>
-      </div>
-    </a>
-
-    <nav class="nav">
-      <a href="/">Home</a>
-      <a href="/record.html">Verify Record</a>
-      <a href="/seal.html">Public Seal</a>
-      <a class="primary" href="/request-access.html">Request Access</a>
-    </nav>
-
-  </header>
 
   <main class="layout">
 
     <section class="copy">
-
-      <div class="badge">
-        TVEVT Private Access
-      </div>
-
-      <h1>
-        Request Access
-      </h1>
-
+      <div class="badge">TVEVT Private Access</div>
+      <h1>Request Access</h1>
       <div class="description">
         TVEVT private console access is managed through controlled
-        identity approval. This is not a social login. It is access
-        to verified signal infrastructure.
+        identity approval. This is access to verified infrastructure layer.
       </div>
 
       <div class="points">
-
         <div class="point">
           <strong>Controlled identity.</strong>
           Access is linked to an approved private console identity.
         </div>
-
         <div class="point">
           <strong>Recoverable access.</strong>
           If your email already exists, TVEVT can resend your existing private console link.
         </div>
-
         <div class="point">
-          <strong>Verified signal layer.</strong>
-          Private access enables signal creation, records, and execution logs.
+          <strong>Verified data layer.</strong>
+          Private access enables record creation, archives, and infrastructure execution logs.
         </div>
-
       </div>
-
     </section>
 
     <section class="box">
-
-      <form
-        id="accessForm"
-        onsubmit="event.preventDefault(); send();"
-      >
-
-        <input
-          id="name"
-          type="text"
-          placeholder="Your name"
-          autocomplete="name"
-          required
-        >
-
-        <input
-          id="email"
-          type="email"
-          placeholder="Email"
-          autocomplete="email"
-          inputmode="email"
-          required
-        >
-
-        <button
-          id="btn"
-          type="submit"
-        >
-          Request Access
-        </button>
-
+      <form id="accessForm" onsubmit="event.preventDefault(); send();">
+        <input id="name" type="text" placeholder="Your name" autocomplete="name" required>
+        <input id="email" type="email" placeholder="Email" autocomplete="email" inputmode="email" required>
+        <button id="btn" type="submit">Request Access</button>
       </form>
 
-      <div
-        id="status"
-        class="status"
-      ></div>
-
-      <div
-        id="links"
-        class="links"
-      ></div>
+      <div id="status" class="status"></div>
+      <div id="links" class="links"></div>
 
       <div class="footer">
-        TVEVT is infrastructure for verified organizational signals.
+        TVEVT is infrastructure for verified organizational records.
       </div>
-
     </section>
 
   </main>
@@ -483,129 +318,54 @@ button:disabled{
 
 <script>
 function showStatus(type, message) {
-  const status =
-    document.getElementById("status");
-
-  status.className =
-    `status show ${type}`;
-
-  status.innerHTML =
-    message;
+  const status = document.getElementById("status");
+  status.className = `status show ${type}`;
+  status.innerHTML = message;
 }
 
 async function send() {
-  const btn =
-    document.getElementById("btn");
-
-  const links =
-    document.getElementById("links");
-
-  const name =
-    document.getElementById("name")
-      .value
-      .trim();
-
-  const email =
-    document.getElementById("email")
-      .value
-      .trim();
+  const btn = document.getElementById("btn");
+  const links = document.getElementById("links");
+  const name = document.getElementById("name").value.trim();
+  const email = document.getElementById("email").value.trim();
 
   if (!name || !email) {
-    showStatus(
-      "error",
-      "Please fill in all required fields."
-    );
-
+    showStatus("error", "Please fill in all required fields.");
     return;
   }
 
   btn.disabled = true;
-  btn.innerText =
-    "Sending Request...";
-
+  btn.innerText = "Sending Request...";
   links.innerHTML = "";
-
-  showStatus(
-    "info",
-    "Submitting your access request..."
-  );
+  showStatus("info", "Submitting your access request...");
 
   try {
-    const res =
-      await fetch(
-        "/api/leads",
-        {
-          method:"POST",
-          headers:{
-            "Content-Type":
-              "application/json"
-          },
-          body:JSON.stringify({
-            name,
-            email
-          })
-        }
-      );
+    const res = await fetch("/api/leads", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email })
+    });
 
-    const data =
-      await res.json();
-
-    if (!res.ok) {
-      throw new Error(
-        data.error ||
-        "Request failed"
-      );
-    }
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Request failed");
 
     if (data.resent) {
-      btn.innerText =
-        "Access Link Resent";
-
-      showStatus(
-        "success",
-        `
-        Your TVEVT access is already active.<br><br>
-        We resent your private console link to your email.
-        `
-      );
+      btn.innerText = "Access Link Resent";
+      showStatus("success", `Your TVEVT access is already active.<br><br>We resent your private console link to your email.`);
     } else {
-      btn.innerText =
-        "Request Received";
-
-      showStatus(
-        "success",
-        `
-        Your access request has been received.<br><br>
-        Your private console link was sent to your email.
-        `
-      );
+      btn.innerText = "Request Received";
+      showStatus("success", `Your access request has been received.<br><br>Your private console link was sent to your email.`);
     }
 
     links.innerHTML = `
-      <a href="/">
-        Return to Home
-      </a>
-
-      <a href="mailto:${email}">
-        Open Email Application
-      </a>
+      <a href="/">Return to Home</a>
+      <a href="mailto:${email}">Open Email Application</a>
     `;
-
   } catch(err) {
     console.error(err);
-
     btn.disabled = false;
-
-    btn.innerText =
-      "Try Again";
-
-    showStatus(
-      "error",
-      `
-      Unable to complete your request.<br><br>
-      Please try again in a moment.
-      `
-    );
+    btn.innerText = "Try Again";
+    showStatus("error", `Unable to complete your request.<br><br>Please try again in a moment.`);
   }
 }
 </script>
