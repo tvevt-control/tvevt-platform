@@ -4,607 +4,605 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>TVEVT — Verified Records for Important Communication</title>
+<title>TVEVT — Fix Reality Before It Changes</title>
 
 <link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
-  rel="stylesheet"
->
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
-:root{
-  --bg:#070709;
-  --panel:#121214;
-  --panel2:#17171a;
-  --line:rgba(255,255,255,.09);
-  --text:#ffffff;
-  --muted:#a8a8af;
-  --soft:#d8d8df;
-  --orange:#ff9b3d;
-  --orange2:#ff7b1c;
-  --green:#2cff9a;
+:root {
+  --bg: #101419;
+  --panel: #161B22;
+  --panel2: #21262D;
+  --line: #30363D;
+  --text: #F0F6FC;
+  --muted: #8B949E;
+  --soft: #C9D1D9;
+  --accent: #D4AF37;
+  --accent-muted: rgba(212,175,55,0.12);
+  --green: #00E699;
 }
 
-*{
-  box-sizing:border-box;
+* {
+  box-sizing: border-box;
 }
 
-html{
-  scroll-behavior:smooth;
+html {
+  scroll-behavior: smooth;
 }
 
-body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at top left, rgba(255,155,61,.13), transparent 32%),
-    radial-gradient(circle at bottom right, rgba(44,255,154,.045), transparent 28%),
-    var(--bg);
-  color:var(--text);
-  font-family:"Inter", Arial, sans-serif;
-  -webkit-font-smoothing:antialiased;
-  text-rendering:optimizeLegibility;
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-.page{
-  max-width:1180px;
-  margin:0 auto;
-  padding:64px 24px 96px;
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 80px 24px 96px;
 }
 
-.hero{
-  display:grid;
-  grid-template-columns:1.05fr .95fr;
-  gap:46px;
-  align-items:center;
-  min-height:calc(100vh - 150px);
+.hero {
+  display: grid;
+  grid-template-columns: 1.05fr .95fr;
+  gap: 46px;
+  align-items: center;
+  min-height: calc(100vh - 180px);
 }
 
-.kicker{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  margin-bottom:22px;
-  padding:8px 12px;
-  border:1px solid rgba(255,155,61,.22);
-  border-radius:999px;
-  background:rgba(255,155,61,.06);
-  color:var(--orange);
-  font-size:12px;
-  font-weight:600;
-  letter-spacing:.08em;
-  text-transform:uppercase;
+.kicker {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 22px;
+  padding: 6px 12px;
+  border: 1px solid var(--accent-muted);
+  border-radius: 4px;
+  background: rgba(212,175,55,0.03);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-family: "JetBrains Mono", monospace;
 }
 
-h1{
-  margin:0;
-  max-width:720px;
-  font-size:68px;
-  line-height:1.02;
-  letter-spacing:-.065em;
-  font-weight:700;
+h1 {
+  margin: 0;
+  max-width: 720px;
+  font-size: 58px;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+  font-weight: 400;
 }
 
-.heroText{
-  margin:24px 0 0;
-  max-width:620px;
-  color:var(--soft);
-  font-size:19px;
-  line-height:1.65;
-  font-weight:400;
+.heroText {
+  margin: 24px 0 0;
+  max-width: 620px;
+  color: var(--soft);
+  font-size: 18px;
+  line-height: 1.65;
+  font-weight: 400;
 }
 
-.heroText strong{
-  color:#fff;
-  font-weight:600;
+.heroText strong {
+  color: var(--text);
+  font-weight: 500;
 }
 
-.heroActions{
-  display:flex;
-  flex-wrap:wrap;
-  gap:12px;
-  margin-top:30px;
+.heroActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 32px;
 }
 
-.btn{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  min-height:48px;
-  padding:14px 18px;
-  border-radius:999px;
-  text-decoration:none;
-  font-size:14px;
-  font-weight:650;
-  transition:
-    transform .12s ease,
-    border-color .15s ease,
-    background .15s ease;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 12px 24px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: transform .12s ease, border-color .15s ease, background .15s ease, color .15s ease;
 }
 
-.btn:active{
-  transform:scale(.985);
+.btn:active {
+  transform: scale(.985);
 }
 
-.btnPrimary{
-  border:1px solid rgba(255,155,61,.38);
-  background:linear-gradient(135deg, var(--orange), var(--orange2));
-  color:#140800;
+.btnPrimary {
+  border: 1px solid var(--accent);
+  background: var(--accent-muted);
+  color: var(--accent);
 }
 
-.btnSecondary{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.035);
-  color:#fff;
+.btnPrimary:hover {
+  background: var(--accent);
+  color: var(--bg);
 }
 
-.btnSecondary:hover{
-  border-color:rgba(255,255,255,.2);
-  background:rgba(255,255,255,.055);
+.btnSecondary {
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text);
 }
 
-.trustLine{
-  margin-top:24px;
-  color:var(--muted);
-  font-size:13px;
-  line-height:1.7;
+.btnSecondary:hover {
+  border-color: var(--text);
+  background: var(--panel);
 }
 
-.productPanel{
-  border:1px solid var(--line);
-  border-radius:32px;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
-  padding:26px;
-  box-shadow:0 20px 70px rgba(0,0,0,.28);
+.trustLine {
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.7;
 }
 
-.panelHeader{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:14px;
-  padding-bottom:18px;
-  border-bottom:1px solid var(--line);
+.productPanel {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 26px;
 }
 
-.status{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  color:var(--green);
-  font-size:12px;
-  font-weight:700;
-  letter-spacing:.12em;
-  text-transform:uppercase;
+.panelHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding-bottom: 18px;
+  border-bottom: 1px solid var(--line);
 }
 
-.statusDot{
-  width:9px;
-  height:9px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 18px rgba(44,255,154,.5);
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--green);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.recordId{
-  color:var(--muted);
-  font-size:12px;
-  font-weight:500;
+.statusDot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--green);
 }
 
-.recordCard{
-  margin-top:22px;
-  border:1px solid var(--line);
-  border-radius:24px;
-  background:rgba(0,0,0,.18);
-  padding:22px;
+.recordId {
+  color: var(--muted);
+  font-size: 11px;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.recordCard small{
-  display:block;
-  color:var(--muted);
-  font-size:11px;
-  font-weight:700;
-  letter-spacing:.14em;
-  text-transform:uppercase;
-  margin-bottom:10px;
+.recordCard {
+  margin-top: 22px;
 }
 
-.recordCard h2{
-  margin:0;
-  font-size:25px;
-  line-height:1.2;
-  letter-spacing:-.04em;
-  font-weight:650;
+.recordCard small {
+  display: block;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  margin-bottom: 10px;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.recordCard p{
-  margin:14px 0 0;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.7;
+.recordCard h2 {
+  margin: 0;
+  font-size: 22px;
+  line-height: 1.35;
+  letter-spacing: -.02em;
+  font-weight: 400;
 }
 
-.hashGrid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-  margin-top:16px;
+.recordCard p {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
 }
 
-.hashBox{
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:14px;
-  background:rgba(255,255,255,.025);
+.hashGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-top: 20px;
 }
 
-.hashBox span{
-  display:block;
-  color:var(--muted);
-  font-size:10px;
-  font-weight:700;
-  letter-spacing:.13em;
-  text-transform:uppercase;
-  margin-bottom:7px;
+.hashBox {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 12px;
+  background: var(--panel2);
 }
 
-.hashBox b{
-  display:block;
-  color:#fff;
-  font-size:13px;
-  font-weight:550;
-  word-break:break-all;
+.hashBox span {
+  display: block;
+  color: var(--muted);
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: .05em;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.flow{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:10px;
-  margin-top:18px;
+.hashBox b {
+  display: block;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 400;
+  word-break: break-all;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.flowStep{
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:13px;
-  text-align:center;
-  background:rgba(255,255,255,.025);
+.flow {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+  margin-top: 20px;
 }
 
-.flowStep b{
-  display:block;
-  font-size:13px;
-  font-weight:650;
+.flowStep {
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  padding: 10px 4px;
+  text-align: center;
+  background: var(--panel2);
 }
 
-.flowStep span{
-  display:block;
-  margin-top:5px;
-  color:var(--muted);
-  font-size:11px;
+.flowStep b {
+  display: block;
+  font-size: 12px;
+  font-weight: 500;
 }
 
-.section{
-  margin-top:86px;
+.flowStep span {
+  display: block;
+  margin-top: 3px;
+  color: var(--muted);
+  font-size: 10px;
 }
 
-.sectionHead{
-  display:flex;
-  align-items:flex-end;
-  justify-content:space-between;
-  gap:24px;
-  margin-bottom:22px;
+.section {
+  margin-top: 96px;
+  border-top: 1px solid var(--line);
+  padding-top: 48px;
 }
 
-.sectionHead h2{
-  margin:0;
-  font-size:38px;
-  line-height:1.08;
-  letter-spacing:-.045em;
-  font-weight:700;
+.sectionHead {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  margin-bottom: 32px;
 }
 
-.sectionHead p{
-  margin:0;
-  max-width:500px;
-  color:var(--muted);
-  font-size:15px;
-  line-height:1.65;
+.sectionHead h2 {
+  margin: 0;
+  font-size: 30px;
+  line-height: 1.2;
+  letter-spacing: -.02em;
+  font-weight: 400;
 }
 
-.useGrid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
+.sectionHead p {
+  margin: 0;
+  max-width: 500px;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
 }
 
-.useCard{
-  border:1px solid var(--line);
-  border-radius:24px;
-  padding:22px;
-  background:linear-gradient(180deg, rgba(255,255,255,.028), rgba(255,255,255,.012));
+.useGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
 }
 
-.useCard strong{
-  display:block;
-  margin-bottom:10px;
-  color:#fff;
-  font-size:16px;
-  font-weight:650;
-  letter-spacing:-.02em;
+.useCard {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 24px;
+  background: var(--panel);
 }
 
-.useCard p{
-  margin:0;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.65;
+.useCard strong {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text);
+  font-size: 16px;
+  font-weight: 500;
 }
 
-.why{
-  display:grid;
-  grid-template-columns:.9fr 1.1fr;
-  gap:24px;
-  align-items:stretch;
+.useCard p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
 }
 
-.whyMain{
-  border:1px solid rgba(255,155,61,.18);
-  border-radius:28px;
-  padding:28px;
-  background:rgba(255,155,61,.055);
+.why {
+  display: grid;
+  grid-template-columns: .9fr 1.1fr;
+  gap: 24px;
+  align-items: stretch;
 }
 
-.whyMain h2{
-  margin:0;
-  font-size:34px;
-  line-height:1.1;
-  letter-spacing:-.045em;
-  font-weight:700;
+.whyMain {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 28px;
+  background: var(--panel);
 }
 
-.whyMain p{
-  margin:18px 0 0;
-  color:var(--soft);
-  font-size:16px;
-  line-height:1.75;
+.whyMain h2 {
+  margin: 0;
+  font-size: 28px;
+  line-height: 1.25;
+  letter-spacing: -.02em;
+  font-weight: 400;
 }
 
-.whyList{
-  display:grid;
-  gap:12px;
+.whyMain p {
+  margin: 18px 0 0;
+  color: var(--soft);
+  font-size: 15px;
+  line-height: 1.7;
 }
 
-.whyItem{
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:20px;
-  background:rgba(255,255,255,.022);
+.whyList {
+  display: grid;
+  gap: 12px;
 }
 
-.whyItem strong{
-  display:block;
-  color:var(--orange);
-  font-size:14px;
-  font-weight:650;
-  margin-bottom:8px;
+.whyItem {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  padding: 20px;
+  background: var(--panel);
 }
 
-.whyItem p{
-  margin:0;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.65;
+.whyItem strong {
+  display: block;
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 500;
+  margin-bottom: 6px;
 }
 
-.sealBox{
-  border:1px solid var(--line);
-  border-radius:32px;
-  padding:30px;
-  background:rgba(18,18,20,.9);
+.whyItem p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
 }
 
-.sealTop{
-  display:flex;
-  justify-content:space-between;
-  gap:24px;
-  align-items:flex-start;
-  margin-bottom:20px;
+.sealBox {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 32px;
+  background: var(--panel);
 }
 
-.sealTop h2{
-  margin:0;
-  font-size:30px;
-  letter-spacing:-.04em;
-  font-weight:700;
+.sealTop {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+  align-items: flex-start;
+  margin-bottom: 24px;
 }
 
-.sealTop p{
-  margin:0;
-  max-width:460px;
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.65;
+.sealTop h2 {
+  margin: 0;
+  font-size: 26px;
+  letter-spacing: -.02em;
+  font-weight: 400;
 }
 
-.presets{
-  display:flex;
-  flex-wrap:wrap;
-  gap:10px;
-  margin-bottom:18px;
+.sealTop p {
+  margin: 0;
+  max-width: 460px;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.65;
 }
 
-.presetBtn{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.03);
-  color:var(--muted);
-  padding:10px 16px;
-  border-radius:999px;
-  font-family:inherit;
-  font-size:13px;
-  font-weight:600;
-  cursor:pointer;
-  transition:
-    border-color .15s ease,
-    background .15s ease,
-    color .15s ease;
+.presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 18px;
+}
+
+.presetBtn {
+  border: 1px solid var(--line);
+  background: var(--panel2);
+  color: var(--muted);
+  padding: 8px 16px;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: border-color .15s ease, background .15s ease, color .15s ease;
 }
 
 .presetBtn:hover,
-.presetBtn.active{
-  border-color:rgba(255,155,61,.42);
-  background:rgba(255,155,61,.08);
-  color:#fff;
+.presetBtn.active {
+  border-color: var(--accent);
+  background: var(--panel2);
+  color: var(--text);
 }
 
-textarea{
-  width:100%;
-  min-height:170px;
-  resize:vertical;
-  border:1px solid var(--line);
-  border-radius:22px;
-  background:rgba(0,0,0,.24);
-  color:#fff;
-  padding:22px;
-  font-family:inherit;
-  font-size:16px;
-  line-height:1.7;
-  outline:none;
+textarea {
+  width: 100%;
+  min-height: 180px;
+  resize: vertical;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--bg);
+  color: var(--text);
+  padding: 20px;
+  font-family: inherit;
+  font-size: 15px;
+  line-height: 1.65;
+  outline: none;
+  transition: border-color .15s ease;
 }
 
-textarea:focus{
-  border-color:rgba(255,155,61,.52);
+textarea:focus {
+  border-color: var(--accent);
 }
 
-.actions{
-  display:grid;
-  grid-template-columns:1.2fr 1fr;
-  gap:12px;
-  margin-top:18px;
+.actions {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 12px;
+  margin-top: 18px;
 }
 
-button{
-  border:0;
-  border-radius:18px;
-  padding:18px 20px;
-  font-family:inherit;
-  font-size:14px;
-  font-weight:700;
-  cursor:pointer;
-  transition:transform .12s ease, opacity .12s ease;
+button {
+  border: 0;
+  border-radius: 6px;
+  padding: 16px 20px;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: transform .12s ease, opacity .12s ease, background .15s ease, color .15s ease;
 }
 
-button:active{
-  transform:scale(.985);
+button:active {
+  transform: scale(.985);
 }
 
-button:disabled{
-  opacity:.7;
-  cursor:wait;
+button:disabled {
+  opacity: .5;
+  cursor: wait;
 }
 
-.primary{
-  background:linear-gradient(135deg, var(--orange), var(--orange2));
-  color:#140800;
+.primary {
+  background: var(--accent-muted);
+  color: var(--accent);
+  border: 1px solid var(--accent);
 }
 
-.secondary{
-  background:transparent;
-  color:#fff;
-  border:1px solid var(--line);
+.primary:hover {
+  background: var(--accent);
+  color: var(--bg);
 }
 
-.secondary:hover{
-  border-color:rgba(255,255,255,.24);
+.secondary {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
 }
 
-.msg{
-  margin-top:16px;
-  text-align:center;
-  color:var(--green);
-  font-size:14px;
-  font-weight:650;
-  min-height:20px;
+.secondary:hover {
+  border-color: var(--text);
+  background: var(--panel2);
 }
 
-.finalNote{
-  max-width:760px;
-  margin:72px auto 0;
-  text-align:center;
-  color:var(--muted);
-  font-size:15px;
-  line-height:1.8;
+.msg {
+  margin-top: 16px;
+  text-align: center;
+  color: var(--green);
+  font-size: 13px;
+  font-family: "JetBrains Mono", monospace;
+  min-height: 20px;
 }
 
-.finalNote strong{
-  color:#fff;
-  font-weight:650;
+.finalNote {
+  max-width: 760px;
+  margin: 86px auto 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.75;
 }
 
-footer{
-  margin-top:90px;
-  text-align:center;
-  color:rgba(255,255,255,.22);
-  font-size:11px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
+.finalNote strong {
+  color: var(--text);
+  font-weight: 500;
+}
+
+footer {
+  margin-top: 90px;
+  text-align: center;
+  color: rgba(255,255,255,0.15);
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  font-family: "JetBrains Mono", monospace;
 }
 
 @media(max-width:980px){
   .hero,
-  .why{
-    grid-template-columns:1fr;
+  .why {
+    grid-template-columns: 1fr;
   }
 
-  h1{
-    font-size:56px;
-  }
-
-  .useGrid{
-    grid-template-columns:1fr 1fr;
+  h1 {
+    font-size: 44px;
   }
 
   .sectionHead,
-  .sealTop{
-    flex-direction:column;
-    align-items:flex-start;
+  .sealTop {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
 }
 
 @media(max-width:720px){
-  .page{
-    padding:44px 16px 70px;
+  .page {
+    padding: 96px 16px 70px;
   }
 
-  h1{
-    font-size:42px;
+  h1 {
+    font-size: 36px;
   }
 
-  .heroText{
-    font-size:16px;
+  .heroText {
+    font-size: 16px;
   }
 
   .hashGrid,
   .flow,
   .useGrid,
-  .actions{
-    grid-template-columns:1fr;
+  .actions {
+    grid-template-columns: 1fr;
   }
 
   .productPanel,
-  .sealBox{
-    padding:22px;
+  .sealBox {
+    padding: 22px;
   }
 
   .sectionHead h2,
-  .whyMain h2{
-    font-size:30px;
+  .whyMain h2 {
+    font-size: 24px;
   }
 }
 </style>
@@ -619,27 +617,24 @@ footer{
   <section class="hero">
 
     <div>
-
       <div class="kicker">
-        Verified records for unstable communication
+        Trust Infrastructure
       </div>
 
       <h1>
-        Fix the facts before they become disputed.
+        Fix reality before it changes.
       </h1>
 
       <p class="heroText">
-        TVEVT lets you create permanent verification records for important messages,
-        meeting outcomes, commercial offers, approvals and asset transfers.
+        TVEVT creates verified records for facts, context and agreements before ambiguity appears.
         <br><br>
-        Not to argue later. To preserve clarity now.
+        <strong>The problem is not memory. The problem is ambiguity.</strong>
       </p>
 
       <div class="heroActions">
         <a class="btn btnPrimary" href="#seal">
           Create a Record
         </a>
-
         <a class="btn btnSecondary" href="/request-access.html">
           Request Private Console
         </a>
@@ -647,240 +642,165 @@ footer{
 
       <div class="trustLine">
         Write → Seal → Timestamp → Verify → Archive.
-        A simple workflow for preserving what actually happened.
+        <br>A stable architecture for preserving what actually happened.
       </div>
-
     </div>
 
     <aside class="productPanel" aria-label="TVEVT verification preview">
-
       <div class="panelHeader">
         <div class="status">
           <span class="statusDot"></span>
           Verified Record
         </div>
-
         <div class="recordId">
-          TVE-ALPHA
+          Sample Record
         </div>
       </div>
 
       <div class="recordCard">
-
-        <small>
-          Sealed Content
-        </small>
-
+        <small>Sealed Reality</small>
         <h2>
-          Commercial offer terms confirmed before delivery.
+          Meeting outcome fixed before interpretation changed.
         </h2>
-
         <p>
-          The original statement, timestamp and verification hash remain available
-          through a permanent record link.
+          The original statement, timestamp and verification hash remain available through a permanent record link.
         </p>
 
         <div class="hashGrid">
-
           <div class="hashBox">
             <span>Timestamp</span>
-            <b>2026-05-31 23:48 UTC</b>
+            <b>2026-06-07 00:00 UTC</b>
           </div>
-
           <div class="hashBox">
             <span>Status</span>
             <b>Verified</b>
           </div>
-
           <div class="hashBox">
             <span>Visibility</span>
-            <b>Private / Shareable</b>
+            <b>Public / Private</b>
           </div>
-
           <div class="hashBox">
             <span>Hash</span>
             <b>048bc033…3b051</b>
           </div>
-
         </div>
 
         <div class="flow">
-
           <div class="flowStep">
             <b>Write</b>
             <span>Exact text</span>
           </div>
-
           <div class="flowStep">
             <b>Seal</b>
             <span>Hash created</span>
           </div>
-
           <div class="flowStep">
             <b>Verify</b>
             <span>Status fixed</span>
           </div>
-
           <div class="flowStep">
             <b>Archive</b>
             <span>Record stored</span>
           </div>
-
         </div>
-
       </div>
-
     </aside>
 
   </section>
 
   <section class="section" id="use-cases">
-
     <div class="sectionHead">
       <h2>
-        Built for real situations.
+        Built for moments where interpretation can change.
       </h2>
-
       <p>
-        TVEVT is useful whenever the original version of something may matter later.
+        TVEVT turns important communication into a fixed reference point: sealed, timestamped, verified and archived.
       </p>
     </div>
 
     <div class="useGrid">
-
       <div class="useCard">
-        <strong>Meeting outcomes</strong>
-        <p>Preserve what was agreed before memory, interpretation or convenience changes the story.</p>
+        <strong>Protocols &amp; MoM</strong>
+        <p>Fix meeting outcomes, approvals and gentlemen’s agreements before different versions appear.</p>
       </div>
-
       <div class="useCard">
-        <strong>Commercial offers</strong>
-        <p>Fix pricing, scope, deadlines and delivery terms exactly as they were sent.</p>
+        <strong>Commercial Offers</strong>
+        <p>Preserve pricing, terms, deadlines and commercial commitments exactly as they were stated.</p>
       </div>
-
       <div class="useCard">
-        <strong>Asset condition</strong>
-        <p>Record the state of a valuable asset at inspection, delivery or transfer.</p>
+        <strong>Asset Condition Proof</strong>
+        <p>Record the state of a physical or digital asset at the moment of inspection, delivery or transfer.</p>
       </div>
-
       <div class="useCard">
-        <strong>Approvals</strong>
-        <p>Seal important approvals and confirmations before they become informal or unclear.</p>
+        <strong>IP Protection</strong>
+        <p>Seal concepts, scripts, designs and ideas before sharing them with counterparties or external teams.</p>
       </div>
-
-      <div class="useCard">
-        <strong>Authorship</strong>
-        <p>Preserve the original state of concepts, scripts, designs and project drafts before sharing.</p>
-      </div>
-
-      <div class="useCard">
-        <strong>Governance records</strong>
-        <p>Create traceable records for decisions, statements and internal execution moments.</p>
-      </div>
-
     </div>
-
   </section>
 
   <section class="section why">
-
     <div class="whyMain">
       <h2>
-        The problem is not memory.
-        The problem is ambiguity.
+        The problem is not memory.<br>The problem is ambiguity.
       </h2>
-
       <p>
-        Screenshots can be questioned. Messages can be deleted. Agreements can be remembered differently.
-        TVEVT gives you a fixed point of reference before the context starts moving.
+        Messages can be edited. Files can be replaced. Deadlines can be rewritten. Screenshots can be fabricated. AI increases uncertainty. TVEVT gives you a fixed point of reference before the context starts moving.
       </p>
     </div>
 
     <div class="whyList">
-
       <div class="whyItem">
-        <strong>For personal clarity</strong>
+        <strong>Preserve clarity now</strong>
         <p>You know exactly what was written, when it was sealed and what record proves it.</p>
       </div>
-
       <div class="whyItem">
-        <strong>For professional communication</strong>
-        <p>Important statements become traceable records instead of loose messages.</p>
+        <strong>Create a fixed reference point</strong>
+        <p>Important communication becomes a verified record instead of a loose message.</p>
       </div>
-
       <div class="whyItem">
-        <strong>For future verification</strong>
-        <p>A record can be opened later and checked against its stored verification hash.</p>
+        <strong>Verify later if needed</strong>
+        <p>A record can be opened and checked against its stored verification hash at any time.</p>
       </div>
-
     </div>
-
   </section>
 
   <section class="section sealBox" id="seal">
-
     <div class="sealTop">
       <h2>
         Create a verified record.
       </h2>
-
       <p>
-        Select a template or write your own statement.
-        This public flow creates a verification record instantly.
+        Select a template or write your own statement. This prepares the record and sends it into the TVEVT sealing flow.
       </p>
     </div>
 
     <div class="presets">
-
-      <button type="button" class="presetBtn" onclick="applyPreset('mom', this)">
-        Meeting Notes
-      </button>
-
-      <button type="button" class="presetBtn" onclick="applyPreset('offer', this)">
-        Commercial Offer
-      </button>
-
-      <button type="button" class="presetBtn" onclick="applyPreset('asset', this)">
-        Asset Condition
-      </button>
-
-      <button type="button" class="presetBtn" onclick="applyPreset('ip', this)">
-        IP Draft
-      </button>
-
+      <button type="button" class="presetBtn" onclick="applyPreset('mom', this)">Protocol / MoM</button>
+      <button type="button" class="presetBtn" onclick="applyPreset('offer', this)">Commercial Offer</button>
+      <button type="button" class="presetBtn" onclick="applyPreset('asset', this)">Asset Condition</button>
+      <button type="button" class="presetBtn" onclick="applyPreset('ip', this)">IP Note</button>
     </div>
 
     <form id="sealForm">
-
       <textarea
         id="text"
-        placeholder="Write what you want to preserve..."
+        placeholder="Enter what should remain unchanged: meeting outcome, commercial terms, agreement summary, asset condition or original idea..."
         required
       ></textarea>
 
       <div class="actions">
-
-        <button class="primary" id="sealBtn" type="submit">
-          Seal Verified Record
-        </button>
-
-        <button class="secondary" id="openConsole" type="button">
-          Open Private Console
-        </button>
-
+        <button class="primary" id="sealBtn" type="submit">Fix Instantly</button>
+        <button class="secondary" id="openConsole" type="button">Open Private Console</button>
       </div>
 
-      <div id="msg" class="msg"></div>
-
+      <div id="msg" class="msg" aria-live="polite"></div>
     </form>
-
   </section>
 
   <div class="finalNote">
-    <strong>TVEVT is not about winning arguments later.</strong>
+    <strong>TVEVT is not primarily about proving something to others.</strong>
     <br><br>
-    It is about preserving a reliable version of reality for yourself,
-    before messages, memories and circumstances become unclear.
+    It is about preserving certainty for yourself, before messages, files, deadlines and context become unstable.
   </div>
 
   <footer>
@@ -891,177 +811,71 @@ footer{
 
 <script>
 const presets = {
-  mom:
-`MEETING SUMMARY
-
-Date: ${new Date().toISOString().split("T")[0]}
-
-Main points agreed during the meeting:
-
-1. Timeline confirmed.
-2. Commercial terms reviewed.
-3. Final approval expected before June 15.
-
-This record preserves the original discussion.`,
-
-  offer:
-`COMMERCIAL OFFER
-
-Offer valid until: June 15, 2026
-
-Terms included:
-
-- Pricing confirmed.
-- Delivery conditions approved.
-- Certification requirements fixed.
-
-This record preserves the original commercial proposal.`,
-
-  asset:
-`ASSET CONDITION RECORD
-
-Asset reviewed and transferred in verified condition.
-
-Current status:
-- No visible damage detected.
-- Documentation reviewed.
-- Receiving side confirmed condition before transfer.
-
-This record preserves the condition at the moment of transfer.`,
-
-  ip:
-`INTELLECTUAL PROPERTY DRAFT
-
-Project concept documented before external sharing.
-
-This record preserves authorship and original structure before distribution.`
+  mom: `PROTOCOL / MEETING OUTCOME\n\nDate: ${new Date().toISOString().split("T")[0]}\n\nMain points fixed after the meeting:\n\n1. Key outcome:\n2. Responsibility:\n3. Deadline:\n4. Next step:\n\nThis record preserves the original meeting outcome before interpretation changes.`,
+  offer: `COMMERCIAL OFFER\n\nOffer date: ${new Date().toISOString().split("T")[0]}\n\nTerms to preserve:\n\n- Price:\n- Scope:\n- Deadline:\n- Delivery condition:\n- Valid until:\n\nThis record preserves the commercial terms exactly as stated.`,
+  asset: `ASSET CONDITION PROOF\n\nDate: ${new Date().toISOString().split("T")[0]}\n\nAsset condition at the moment of transfer or inspection:\n\n- Asset:\n- Condition:\n- Visible issues:\n- Documents reviewed:\n- Receiving side:\n\nThis record preserves the condition at this moment.`,
+  ip: `IP PROTECTION NOTE\n\nDate: ${new Date().toISOString().split("T")[0]}\n\nConcept, idea, design, script or draft before external sharing:\n\nTitle:\nDescription:\nKey elements:\nShared with:\n\nThis record preserves the original state before distribution.`
 };
 
 function applyPreset(type, button){
-  document
-    .querySelectorAll(".presetBtn")
-    .forEach(btn => {
-      btn.classList.remove("active");
-    });
+  document.querySelectorAll(".presetBtn").forEach(function(btn){
+    btn.classList.remove("active");
+  });
+  if(button) button.classList.add("active");
 
-  if(button){
-    button.classList.add("active");
+  const textArea = document.getElementById("text");
+  if(textArea && presets[type]){
+    textArea.value = presets[type];
   }
-
-  document.getElementById("text").value =
-    presets[type];
 }
 
-const openConsole =
-  document.getElementById("openConsole");
+document.addEventListener("DOMContentLoaded", function(){
+  const openConsole = document.getElementById("openConsole");
+  const sealForm = document.getElementById("sealForm");
+  const text = document.getElementById("text");
+  const msg = document.getElementById("msg");
+  const sealBtn = document.getElementById("sealBtn");
 
-const sealForm =
-  document.getElementById("sealForm");
+  applyPreset("mom", document.querySelector(".presetBtn"));
 
-const text =
-  document.getElementById("text");
-
-const msg =
-  document.getElementById("msg");
-
-const sealBtn =
-  document.getElementById("sealBtn");
-
-function getConsoleUrl(){
-  const key =
-    localStorage.getItem("tvevt_client_key");
-
-  if(key){
-    return "/console.html?key=" +
-      encodeURIComponent(key);
+  if(openConsole){
+    openConsole.onclick = function(){
+      openConsole.disabled = true;
+      openConsole.textContent = "Opening...";
+      const key = localStorage.getItem("tvevt_client_key");
+      window.location.href = key ? "/console.html?key=" + encodeURIComponent(key) : "/request-access.html";
+    };
   }
 
-  return "/request-access.html";
-}
+  if(sealForm && text && sealBtn && msg){
+    sealForm.addEventListener("submit", function(e){
+      e.preventDefault();
+      const value = text.value.trim();
 
-openConsole.onclick =
-  function(){
-    openConsole.disabled = true;
-    openConsole.textContent = "Opening...";
-    window.location.href = getConsoleUrl();
-  };
-
-sealForm.addEventListener(
-  "submit",
-  async function(e){
-    e.preventDefault();
-
-    const value =
-      text.value.trim();
-
-    if(!value){
-      msg.textContent =
-        "Write or select a statement first.";
-      return;
-    }
-
-    sealBtn.disabled = true;
-    sealBtn.textContent = "Sealing...";
-    msg.textContent = "Creating verified record...";
-
-    try{
-      const res =
-        await fetch(
-          "/api/publish",
-          {
-            method:"POST",
-            headers:{
-              "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-              text:value
-            })
-          }
-        );
-
-      const data =
-        await res.json();
-
-      if(!res.ok || !data.ok){
-        throw new Error(
-          data.error ||
-          "Unable to create record."
-        );
+      if(!value){
+        msg.style.color = "var(--text)";
+        msg.textContent = "Write or select a statement first.";
+        return;
       }
 
-      const url =
-        data.verification_url ||
-        data.recordUrl ||
-        (
-          "/record.html?id=" +
-          encodeURIComponent(data.id)
-        );
-
-      msg.textContent =
-        "Record created. Opening...";
-
-      window.location.href =
-        url;
-    }
-
-    catch(err){
-      console.error(err);
-
-      msg.textContent =
-        err.message ||
-        "Unable to create record.";
-
-      sealBtn.disabled = false;
-      sealBtn.textContent =
-        "Seal Verified Record";
-    }
+      try{
+        sessionStorage.setItem("tvevt_pending_record_text", value);
+        sealBtn.disabled = true;
+        sealBtn.textContent = "Fixing...";
+        msg.style.color = "var(--green)";
+        msg.textContent = "Redirecting to sealing layer...";
+        window.location.href = "/seal.html";
+      }
+      catch(err){
+        console.error("TVEVT Web Storage Exception:", err);
+        msg.style.color = "rgba(255,77,77,1)";
+        msg.textContent = "Storage error. Please try again.";
+        sealBtn.disabled = false;
+        sealBtn.textContent = "Fix Instantly";
+      }
+    });
   }
-);
-
-applyPreset(
-  "mom",
-  document.querySelector(".presetBtn")
-);
+});
 </script>
 
 </body>
