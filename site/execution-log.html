@@ -6,240 +6,207 @@
 <title>Execution Log — TVEVT</title>
 <link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
 <style>
-:root{
-  --bg:#09090b;
-  --line:rgba(255,255,255,.12);
-  --text:#ffffff;
-  --muted:#a7a7ad;
-  --orange:#ff9b3d;
-  --green:#2cff9a;
-  --red:#ff6a5f;
+:root {
+  --bg: #101419;
+  --panel: #161B22;
+  --panel2: #21262D;
+  --line: #30363D;
+  --text: #F0F6FC;
+  --muted: #8B949E;
+  --soft: rgba(240, 246, 252, 0.45);
+  --accent: #F0F6FC;
+  --green: #00E699;
+  --red: #FF4D4D;
 }
 
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  min-height:100vh;
-  background:
-    radial-gradient(circle at top left, rgba(255,155,61,.16), transparent 32%),
-    var(--bg);
-  color:var(--text);
-  font-family:Arial, Helvetica, sans-serif;
+* {
+  box-sizing: border-box;
 }
 
-.wrap{
-  max-width:1100px;
-  margin:0 auto;
-  padding:34px 24px 80px;
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-.modeBar{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:16px;
-  margin-bottom:22px;
-  border:1px solid rgba(44,255,154,.22);
-  border-radius:20px;
-  padding:16px 18px;
-  background:rgba(44,255,154,.06);
+.wrap {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 80px 24px 80px;
 }
 
-.modeBar strong{
-  display:block;
-  font-size:13px;
-  letter-spacing:.12em;
-  text-transform:uppercase;
-  color:var(--green);
+.hero, .item, .empty {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 32px;
 }
 
-.modeBar span{
-  display:block;
-  margin-top:5px;
-  color:var(--muted);
-  font-size:14px;
+h1 {
+  margin: 0 0 12px;
+  font-size: 36px;
+  letter-spacing: -.02em;
+  font-weight: 400;
 }
 
-.modeActions{
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
+p {
+  color: var(--muted);
+  line-height: 1.65;
+  font-size: 15px;
 }
 
-.topBtn{
-  border:1px solid var(--line);
-  background:rgba(255,255,255,.04);
-  color:#fff;
-  border-radius:999px;
-  padding:10px 14px;
-  cursor:pointer;
-  text-decoration:none;
-  font-size:12px;
-  font-weight:800;
-  letter-spacing:.08em;
-  text-transform:uppercase;
+.list {
+  margin-top: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
-h1{
-  margin:0 0 10px;
-  font-size:40px;
-  letter-spacing:-.04em;
+.item {
+  background: var(--panel);
+  padding: 24px;
 }
 
-p{
-  color:var(--muted);
-  line-height:1.6;
+.item small {
+  display: block;
+  color: var(--muted);
+  margin-bottom: 10px;
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  font-weight: 500;
+  font-size: 11px;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.hero,.item,.empty{
-  border:1px solid var(--line);
-  border-radius:24px;
-  background:rgba(20,20,22,.88);
-  padding:24px;
+.item strong {
+  display: block;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+  font-weight: 400;
+  font-size: 16px;
+  color: var(--text);
 }
 
-.list{
-  margin-top:24px;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
+.meta {
+  margin-top: 8px;
+  color: var(--muted);
+  font-size: 13px;
+  word-break: break-all;
+  line-height: 1.5;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.item small{
-  display:block;
-  color:var(--muted);
-  margin-bottom:8px;
-  text-transform:uppercase;
-  letter-spacing:.12em;
-  font-weight:900;
-  font-size:11px;
+.status {
+  display: inline-block;
+  margin-top: 14px;
+  padding: 4px 10px;
+  border-radius: 4px;
+  color: var(--green);
+  border: 1px solid rgba(0, 230, 153, 0.2);
+  background: rgba(0, 230, 153, 0.02);
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  font-family: "JetBrains Mono", monospace;
 }
 
-.item strong{
-  display:block;
-  line-height:1.5;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
+.actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 20px;
+  flex-wrap: wrap;
 }
 
-.meta{
-  margin-top:10px;
-  color:var(--muted);
-  font-size:13px;
-  word-break:break-all;
-  line-height:1.5;
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text);
+  font-weight: 500;
+  text-decoration: none;
+  border: 1px solid var(--line);
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  transition: background .15s ease, border-color .15s ease;
 }
 
-.status{
-  display:inline-block;
-  margin-top:12px;
-  padding:7px 10px;
-  border-radius:999px;
-  color:var(--green);
-  border:1px solid rgba(44,255,154,.32);
-  background:rgba(44,255,154,.08);
-  font-size:12px;
-  font-weight:900;
-  text-transform:uppercase;
+.btn:hover {
+  background: var(--panel2);
+  border-color: var(--text);
 }
 
-.actions{
-  display:flex;
-  gap:10px;
-  margin-top:16px;
-  flex-wrap:wrap;
+.btn.secondary {
+  color: var(--muted);
 }
 
-.btn{
-  padding:11px 14px;
-  border-radius:12px;
-  background:var(--orange);
-  color:#000;
-  font-weight:900;
-  text-decoration:none;
-  border:0;
-  cursor:pointer;
-  font-size:13px;
+.btn.secondary:hover {
+  color: var(--text);
 }
 
-.btn.secondary{
-  background:transparent;
-  color:#fff;
-  border:1px solid var(--line);
+.empty {
+  margin-top: 24px;
+  color: var(--muted);
+  text-align: center;
+  padding: 48px;
+  font-size: 15px;
 }
 
-.empty{
-  margin-top:24px;
-  color:var(--muted);
+.msg {
+  margin-top: 16px;
+  color: var(--green);
+  font-family: "JetBrains Mono", monospace;
+  font-size: 13px;
 }
 
-.msg{
-  margin-top:16px;
-  color:var(--green);
-  font-weight:800;
+.msg.error {
+  color: var(--red);
 }
 
-.msg.error{
-  color:var(--red);
-}
-
-footer{
-  margin-top:40px;
-  text-align:center;
-  color:rgba(255,255,255,.24);
-  font-size:11px;
-  letter-spacing:.18em;
-  text-transform:uppercase;
+footer {
+  margin-top: 64px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  font-family: "JetBrains Mono", monospace;
 }
 
 @media(max-width:800px){
-  .modeBar{
-    flex-direction:column;
-    align-items:flex-start;
-  }
-
-  h1{
-    font-size:34px;
-  }
-
-  .btn{
-    width:100%;
-    text-align:center;
-  }
+  .wrap { padding: 96px 16px 60px; }
+  h1 { font-size: 28px; }
+  .btn { width: 100%; text-align: center; }
+  .actions { flex-direction: column; }
 }
 </style>
 </head>
 
 <body>
 
-<script src="/assets/private-nav.js?v=2026-05-10"></script>
+<script src="/assets/private-nav.js?v=2026-06-07-v7"></script>
 
 <div class="wrap">
 
-  <div class="modeBar">
-    <div>
-      <strong>Private Execution Log</strong>
-      <span id="modeText">Loading private identity…</span>
-    </div>
-
-    <div class="modeActions">
-      <a class="topBtn" id="consoleLink" href="/console.html">Console</a>
-      <a class="topBtn" id="signalsLink" href="/signals.html">Signals</a>
-      <a class="topBtn" id="createLink" href="/seal.html">Create Signal</a>
-      <a class="topBtn" href="/">Public Site</a>
-    </div>
-  </div>
-
   <section class="hero">
     <h1>Execution Log</h1>
-
     <p>
       Private execution records connected to your TVEVT access key.
-      Each sealed signal appears as a verified execution event.
+      Each sealed event appears as a verified infrastructure execution record.
     </p>
-
     <div id="msg" class="msg"></div>
   </section>
 
@@ -267,327 +234,125 @@ const list = document.getElementById("list");
 const empty = document.getElementById("empty");
 const msg = document.getElementById("msg");
 
-const modeText =
-  document.getElementById("modeText");
-
-const consoleLink =
-  document.getElementById("consoleLink");
-
-const signalsLink =
-  document.getElementById("signalsLink");
-
-const createLink =
-  document.getElementById("createLink");
-
 function withKey(path){
-  return key
-    ? path + "?key=" + encodeURIComponent(key)
-    : path;
+  return key ? path + "?key=" + encodeURIComponent(key) : path;
 }
 
 function formatDate(value){
-
   if(!value) return "—";
-
   try{
-    return new Date(value)
-      .toLocaleString();
+    return new Date(value).toLocaleString();
   }catch{
     return value;
   }
 }
 
-function setMessage(
-  text,
-  error = false
-){
+function setMessage(text, error = false){
   msg.textContent = text || "";
-  msg.classList.toggle(
-    "error",
-    error
-  );
-}
-
-function applyMode(){
-
-  if(key){
-
-    localStorage.setItem(
-      "tvevt_client_key",
-      key
-    );
-
-    modeText.textContent =
-      "Private identity active on this device.";
-
-    consoleLink.href =
-      withKey("/console.html");
-
-    signalsLink.href =
-      withKey("/signals.html");
-
-    createLink.href =
-      withKey("/seal.html");
-
-  }else{
-
-    modeText.textContent =
-      "No private identity found.";
-
-    consoleLink.href =
-      "/request-access.html";
-
-    consoleLink.textContent =
-      "Request Access";
-
-    signalsLink.href =
-      "/request-access.html";
-
-    createLink.href =
-      "/seal.html";
-  }
+  msg.classList.toggle("error", error);
+  if(!error && text) msg.style.color = "var(--green)";
 }
 
 function normalizeLogs(data){
-
-  if(Array.isArray(data))
-    return data;
-
-  if(Array.isArray(data.logs))
-    return data.logs;
-
-  if(Array.isArray(data.events))
-    return data.events;
-
+  if(Array.isArray(data)) return data;
+  if(Array.isArray(data.logs)) return data.logs;
+  if(Array.isArray(data.events)) return data.events;
   return [];
 }
 
 async function loadFromApi(){
+  const response = await fetch(
+    "/api/execution-log?key=" + encodeURIComponent(key)
+  );
+  const data = await response.json();
 
-  const response =
-    await fetch(
-      "/api/execution-log?key=" +
-      encodeURIComponent(key)
-    );
-
-  const data =
-    await response.json();
-
-  if(
-    !response.ok ||
-    data.ok === false
-  ){
-    throw new Error(
-      data.error ||
-      "Unable to load execution log."
-    );
+  if(!response.ok || data.ok === false){
+    throw new Error(data.error || "Unable to load execution log.");
   }
-
   return normalizeLogs(data);
 }
 
 function loadLocalFallback(){
-
-  const storageKey =
-    "tvevt_logs_" +
-    (key || "default");
-
-  return JSON.parse(
-    localStorage.getItem(storageKey)
-    || "[]"
-  );
+  const storageKey = "tvevt_logs_" + (key || "default");
+  return JSON.parse(localStorage.getItem(storageKey) || "[]");
 }
 
 function saveLocalFallback(logs){
-
-  if(
-    !key ||
-    !Array.isArray(logs)
-  ){
-    return;
-  }
-
-  const limited =
-    logs.slice(0, 50);
-
-  localStorage.setItem(
-    "tvevt_logs_" + key,
-    JSON.stringify(limited)
-  );
+  if(!key || !Array.isArray(logs)) return;
+  const limited = logs.slice(0, 50);
+  localStorage.setItem("tvevt_logs_" + key, JSON.stringify(limited));
 }
 
 function render(logs){
-
   list.innerHTML = "";
-
   if(!logs.length){
-
-    empty.style.display =
-      "block";
-
+    empty.style.display = "block";
     return;
   }
-
-  empty.style.display =
-    "none";
+  empty.style.display = "none";
 
   logs
     .slice()
     .reverse()
     .forEach(log => {
+      const id = log.id || "—";
+      const signalId = log.signalId || "—";
+      const event = log.event || "RECORD_EVENT";
+      const time = log.time || log.createdAt || log.timestamp || "";
+      const text = log.text || "Record sealed and verified event created.";
+      const status = log.status || "recorded";
+      const hash = log.hash || "—";
+      const visibility = log.visibility || "private";
+      const recordUrl = log.recordUrl || log.verification_url ||
+        (signalId !== "—" ? "/record.html?id=" + encodeURIComponent(signalId) : "#");
 
-      const id =
-        log.id || "—";
+      const div = document.createElement("div");
+      div.className = "item";
 
-      const signalId =
-        log.signalId || "—";
+      const label = document.createElement("small");
+      label.textContent = `${id} · ${formatDate(time)}`;
 
-      const event =
-        log.event ||
-        "SIGNAL_EVENT";
+      const title = document.createElement("strong");
+      title.textContent = text;
 
-      const time =
-        log.time ||
-        log.createdAt ||
-        log.timestamp ||
-        "";
+      const metaEvent = document.createElement("div");
+      metaEvent.className = "meta";
+      metaEvent.textContent = `Event: ${event}`;
 
-      const text =
-        log.text ||
-        "Signal sealed and verified record created.";
+      const meta1 = document.createElement("div");
+      meta1.className = "meta";
+      meta1.textContent = `Record ID: ${signalId}`;
 
-      const status =
-        log.status ||
-        "recorded";
+      const meta2 = document.createElement("div");
+      meta2.className = "meta";
+      meta2.textContent = `Hash: ${hash}`;
 
-      const hash =
-        log.hash || "—";
+      const meta3 = document.createElement("div");
+      meta3.className = "meta";
+      meta3.textContent = `Visibility: ${visibility}`;
 
-      const visibility =
-        log.visibility ||
-        "private";
+      const badge = document.createElement("span");
+      badge.className = "status";
+      badge.textContent = status;
 
-      const recordUrl =
-        log.recordUrl ||
-        log.verification_url ||
-        (
-          signalId !== "—"
-            ? "/record.html?id=" +
-              encodeURIComponent(signalId)
-            : "#"
-        );
+      const actions = document.createElement("div");
+      actions.className = "actions";
 
-      const div =
-        document.createElement("div");
+      const open = document.createElement("a");
+      open.className = "btn";
+      open.href = withKey(recordUrl);
+      open.textContent = "Open Record";
 
-      div.className =
-        "item";
+      const copy = document.createElement("button");
+      copy.className = "btn secondary";
+      copy.type = "button";
+      copy.textContent = "Copy Link";
 
-      const label =
-        document.createElement("small");
-
-      label.textContent =
-        `${id} · ${formatDate(time)}`;
-
-      const title =
-        document.createElement("strong");
-
-      title.textContent =
-        text;
-
-      const metaEvent =
-        document.createElement("div");
-
-      metaEvent.className =
-        "meta";
-
-      metaEvent.textContent =
-        `Event: ${event}`;
-
-      const meta1 =
-        document.createElement("div");
-
-      meta1.className =
-        "meta";
-
-      meta1.textContent =
-        `Signal ID: ${signalId}`;
-
-      const meta2 =
-        document.createElement("div");
-
-      meta2.className =
-        "meta";
-
-      meta2.textContent =
-        `Hash: ${hash}`;
-
-      const meta3 =
-        document.createElement("div");
-
-      meta3.className =
-        "meta";
-
-      meta3.textContent =
-        `Visibility: ${visibility}`;
-
-      const badge =
-        document.createElement("span");
-
-      badge.className =
-        "status";
-
-      badge.textContent =
-        status;
-
-      const actions =
-        document.createElement("div");
-
-      actions.className =
-        "actions";
-
-      const open =
-        document.createElement("a");
-
-      open.className =
-        "btn";
-
-      open.href =
-        recordUrl;
-
-      open.textContent =
-        "Open Record";
-
-      const copy =
-        document.createElement("button");
-
-      copy.className =
-        "btn secondary";
-
-      copy.type =
-        "button";
-
-      copy.textContent =
-        "Copy Link";
-
-      copy.onclick =
-        async () => {
-
-          const full =
-            recordUrl.startsWith("http")
-              ? recordUrl
-              : (
-                  window.location.origin +
-                  recordUrl
-                );
-
-          await navigator.clipboard
-            .writeText(full);
-
-          setMessage(
-            "Verification link copied."
-          );
-        };
+      copy.onclick = async () => {
+        const full = recordUrl.startsWith("http") ? recordUrl : (window.location.origin + recordUrl);
+        await navigator.clipboard.writeText(full);
+        setMessage("Verification link copied.");
+      };
 
       actions.appendChild(open);
       actions.appendChild(copy);
@@ -606,61 +371,32 @@ function render(logs){
 }
 
 async function init(){
-
-  applyMode();
+  if(key){
+    localStorage.setItem("tvevt_client_key", key);
+  }
 
   if(!key){
-
-    empty.style.display =
-      "block";
-
-    setMessage(
-      "Private access is required to load your execution log.",
-      true
-    );
-
+    empty.style.display = "block";
+    setMessage("Private access is required to load your execution log.", true);
     return;
   }
 
-  setMessage(
-    "Loading private execution log…"
-  );
+  setMessage("Loading private execution log…");
 
   try{
-
-    const logs =
-      await loadFromApi();
-
+    const logs = await loadFromApi();
     saveLocalFallback(logs);
-
     render(logs);
-
-    setMessage(
-      "Execution log loaded."
-    );
-
+    setMessage("Execution log loaded.");
   }catch(err){
-
     console.error(err);
-
-    const fallback =
-      loadLocalFallback();
-
+    const fallback = loadLocalFallback();
     if(fallback.length){
-
       render(fallback);
-
-      setMessage(
-        "Loaded local fallback execution log."
-      );
-
+      setMessage("Loaded local fallback execution log.");
     }else{
-
       render([]);
-
-      setMessage(
-        "No private execution records found yet."
-      );
+      setMessage("No private execution records found yet.");
     }
   }
 }
