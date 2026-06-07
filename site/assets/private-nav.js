@@ -172,25 +172,27 @@
     }
 
     .tvevt-private-links a.active {
-      background: rgba(212, 175, 55, 0.12);
+      background: rgba(212, 175, 55, 0.1);
       border-color: #D4AF37;
       color: #D4AF37;
     }
 
     .tvevt-private-links a.primary {
-      background: rgba(212, 175, 55, 0.12);
-      color: #D4AF37;
+      background: #D4AF37;
+      color: #101419;
       border-color: #D4AF37;
     }
 
     .tvevt-private-links a.primary:hover {
-      background: #D4AF37;
+      background: #F0F6FC;
       color: #101419;
+      border-color: #F0F6FC;
     }
 
     .tvevt-private-links a.primary.active {
       background: #D4AF37;
       color: #101419;
+      border-color: #D4AF37;
     }
 
     .tvevt-private-forget {
