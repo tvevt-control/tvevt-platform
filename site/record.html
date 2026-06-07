@@ -20,9 +20,9 @@
   --muted: #8B949E;
   --soft: rgba(240, 246, 252, 0.45);
   
-  /* Фикс: Утвержденная институциональная бронза вместо рыжего */
-  --accent: #D4AF37;
-  --accent-muted: rgba(212, 175, 55, 0.12);
+  /* Тотальный фикс: переводим акцент в благородную нейтральную платину */
+  --accent: #F0F6FC;
+  --accent-muted: rgba(240, 246, 252, 0.1);
   
   --green: #00E699;
   --red: #FF4D4D;
@@ -165,17 +165,20 @@ button, .button {
 
 button:hover, .button:hover {
   border-color: var(--text);
+  background: var(--line);
 }
 
+/* Наш каноничный контурный стиль для кнопок действий */
 .bronze {
-  background: var(--accent-muted);
-  color: var(--accent);
-  border: 1px solid var(--accent);
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--line);
 }
 
 .bronze:hover {
-  background: var(--accent);
-  color: var(--bg);
+  background: var(--panel2);
+  color: var(--text);
+  border-color: var(--text);
 }
 
 .msg {
@@ -336,7 +339,7 @@ footer {
 
 <body>
 
-<script src="/assets/private-nav.js?v=2026-06-07-v3"></script>
+<script src="/assets/private-nav.js?v=2026-06-07-v4"></script>
 
 <div class="wrap">
 
