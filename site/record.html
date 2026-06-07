@@ -19,11 +19,8 @@
   --text: #F0F6FC;
   --muted: #8B949E;
   --soft: rgba(240, 246, 252, 0.45);
-  
-  /* Тотальный фикс: переводим акцент в благородную нейтральную платину */
   --accent: #F0F6FC;
   --accent-muted: rgba(240, 246, 252, 0.1);
-  
   --green: #00E699;
   --red: #FF4D4D;
 }
@@ -168,7 +165,6 @@ button:hover, .button:hover {
   background: var(--line);
 }
 
-/* Наш каноничный контурный стиль для кнопок действий */
 .bronze {
   background: transparent;
   color: var(--text);
@@ -339,7 +335,8 @@ footer {
 
 <body>
 
-<script src="/assets/private-nav.js?v=2026-06-07-v4"></script>
+<!-- Принудительно подключаем v8 для меню -->
+<script src="/assets/private-nav.js?v=2026-06-07-v8"></script>
 
 <div class="wrap">
 
@@ -449,15 +446,29 @@ if(key){
 }
 
 function withKey(path){
-  return key ? path + "?key=" + encodeURIComponent(key) : path;
+  if (!key) return path;
+  const separator = path.includes("?") ? "&" : "?";
+  return path + separator + "key=" + encodeURIComponent(key);
 }
 
 function applyNavigation(){
   $("sealNewLink").href = withKey("/seal.html");
 }
 
+// УМНЫЙ UX-ФИКС: Изолируем ID от любых налипших параметров URL (?key или &key)
 function idFromUrl(){
-  return params.get("id") || "";
+  let rawId = params.get("id") || "";
+  if (!rawId) {
+    const match = location.search.match(/[?&]id=([^&?]+)/);
+    if (match) rawId = match[1];
+  }
+  if (rawId.includes("?")) {
+    rawId = rawId.split("?")[0];
+  }
+  if (rawId.includes("&")) {
+    rawId = rawId.split("&")[0];
+  }
+  return rawId.trim();
 }
 
 function reset(){
@@ -581,7 +592,6 @@ $("recordInput").onkeydown = event => {
 
 $("copyLink").onclick = async () => {
   if(!currentRecord) return;
-
   const link = location.origin + "/record.html?id=" + encodeURIComponent(currentRecord.id);
   await copyText(link, "Copied ✓ Verification link copied.", $("copyLink"));
 };
