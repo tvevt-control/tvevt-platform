@@ -34,6 +34,7 @@
   const nav = document.createElement("header");
   nav.className = "tvevt-private-nav";
 
+  // СВЯЗКА ИНТЕРФЕЙСА: В меню теперь Archive, но ведет строго на физический /signals.html
   nav.innerHTML = `
     <a class="tvevt-private-brand" href="/">
       <div class="tvevt-private-logo">
@@ -50,7 +51,7 @@
         Console
       </a>
       <a class="${activeClass("signals.html")}" href="${withKey("/signals.html")}">
-        Signals
+        Archive
       </a>
       <a class="${activeClass("execution-log.html")}" href="${withKey("/execution-log.html")}">
         Execution Log
@@ -113,9 +114,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(255, 123, 28, 0.3);
+      border: 1px solid rgba(240, 246, 252, 0.15);
       border-radius: 6px;
-      background: rgba(255, 123, 28, 0.04);
+      background: rgba(240, 246, 252, 0.02);
       flex: 0 0 auto;
     }
 
@@ -172,39 +173,37 @@
     }
 
     .tvevt-private-links a.active {
-      background: rgba(255, 123, 28, 0.1);
-      border-color: #FF7B1C;
-      color: #FF7B1C;
+      background: rgba(240, 246, 252, 0.1);
+      border-color: #F0F6FC;
+      color: #F0F6FC;
     }
 
-    /* ФИКС: Жестко вшиваем фирменный рыжий оранжевый цвет иконки */
+    /* ФИКС: Полная автономность от внешних CSS-переменных страницы */
     .tvevt-private-links a.primary {
-      background: #FF7B1C;
-      color: #101419;
-      border-color: #FF7B1C;
+      background: transparent;
+      color: #F0F6FC;
+      border-color: #30363D;
     }
 
     .tvevt-private-links a.primary:hover {
-      background: #F0F6FC;
-      color: #101419;
+      background: #21262D;
       border-color: #F0F6FC;
     }
 
     .tvevt-private-links a.primary.active {
-      background: #FF7B1C;
-      color: #101419;
-      border-color: #FF7B1C;
+      background: rgba(240, 246, 252, 0.1);
+      border-color: #F0F6FC;
     }
 
     .tvevt-private-forget {
-      color: #FF7B1C;
-      border-color: rgba(255, 123, 28, 0.3);
-      background: rgba(255, 123, 28, 0.04);
+      color: #FF4D4D;
+      border-color: rgba(255, 77, 77, 0.2);
+      background: rgba(255, 77, 77, 0.02);
     }
 
     .tvevt-private-forget:hover {
-      background: rgba(255, 123, 28, 0.12);
-      border-color: #FF7B1C;
+      background: rgba(255, 77, 77, 0.08);
+      border-color: #FF4D4D;
     }
 
     @media(max-width:900px){
