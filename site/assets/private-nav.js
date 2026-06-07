@@ -16,10 +16,8 @@
     return path + "?key=" + encodeURIComponent(key);
   }
 
-  // ТОТАЛЬНЫЙ ФИКС: Проверяем по вхождению имени, игнорируя наличие или отсутствие ".html"
   function activeClass(pageName) {
     const current = window.location.pathname;
-    // Если мы проверяем "console.html", очистим до "console" и проверим вхождение в путь
     const cleanName = pageName.replace(".html", "");
     return current.includes(cleanName) ? "active" : "";
   }
@@ -116,9 +114,9 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 1px solid rgba(240, 246, 252, 0.15);
+      border: 1px solid rgba(255, 123, 28, 0.25);
       border-radius: 6px;
-      background: rgba(240, 246, 252, 0.02);
+      background: rgba(255, 123, 28, 0.03);
       flex: 0 0 auto;
     }
 
@@ -174,22 +172,29 @@
       background: #30363D;
     }
 
-    /* Настоящая, гарантированная подсветка */
     .tvevt-private-links a.active {
       background: rgba(240, 246, 252, 0.1) !important;
       border-color: #F0F6FC !important;
       color: #F0F6FC !important;
     }
 
+    /* ВОЗВРАЩАЕМ КАНOН: Кнопка главного действия в нашем фирменном оранжевом цвете */
     .tvevt-private-links a.primary {
-      background: transparent;
-      color: #F0F6FC;
-      border-color: #30363D;
+      background: rgba(255, 123, 28, 0.08);
+      color: #FF7B1C;
+      border-color: #FF7B1C;
     }
 
     .tvevt-private-links a.primary:hover {
-      background: #21262D;
-      border-color: #F0F6FC;
+      background: #FF7B1C;
+      color: #101419;
+      border-color: #FF7B1C;
+    }
+
+    .tvevt-private-links a.primary.active {
+      background: #FF7B1C !important;
+      color: #101419 !important;
+      border-color: #FF7B1C !important;
     }
 
     .tvevt-private-forget {
