@@ -1,48 +1,319 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>TVEVT — Proof</title>
-  <link rel="icon" type="image/svg+xml" href="/tvevt-favicon.svg">
-  <style>
-    :root{--text:#f4f6f8;--muted:rgba(244,246,248,.56);--line:rgba(255,255,255,.12);--orange:#ff7a1a;--orange2:#ffb14a}
-    *{box-sizing:border-box}
-    body{margin:0;min-height:100vh;background:radial-gradient(circle at 20% 0%,rgba(255,122,26,.13),transparent 32%),linear-gradient(180deg,#10131a,#07090c);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Inter","SF Pro Display","Segoe UI",Arial,sans-serif}
-    .page{min-height:100vh;padding:34px}
-    header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid var(--line);padding-bottom:28px}
-    .brand{display:flex;align-items:center;gap:14px;color:var(--text);text-decoration:none}.brand img{width:42px}.brand strong{letter-spacing:.16em}.brand span span{display:block;margin-top:4px;color:var(--muted);font-size:11px;letter-spacing:.12em;text-transform:uppercase}
-    nav{display:flex;gap:10px}nav a{color:var(--text);text-decoration:none;border:1px solid var(--line);border-radius:999px;padding:12px 18px;font-size:13px;text-transform:uppercase;letter-spacing:.1em;background:rgba(255,255,255,.03)}
-    main{width:min(980px,100%);margin:58px auto 0}
-    .hero,.panel{border:1px solid var(--line);border-radius:30px;background:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015)),rgba(10,13,18,.72);padding:34px;box-shadow:0 30px 100px rgba(0,0,0,.25)}
-    .hero{margin-bottom:22px}
-    h1{margin:0;font-size:clamp(46px,7vw,84px);line-height:.95;letter-spacing:-.06em}
-    .lead{margin:20px 0 0;max-width:760px;color:var(--muted);font-size:20px;line-height:1.5}
-    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin:22px 0}
-    .item{border:1px solid var(--line);border-radius:22px;background:rgba(0,0,0,.18);padding:22px;min-height:180px}
-    .num{color:var(--orange2);font-size:12px;font-weight:900;letter-spacing:.18em;text-transform:uppercase;margin-bottom:14px}
-    h2{margin:0 0 10px;font-size:24px;letter-spacing:-.04em}
-    p{margin:0;color:var(--muted);line-height:1.55;font-size:16px}
-    .actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:26px}
-    .button{min-height:56px;padding:0 24px;border-radius:999px;border:1px solid var(--line);color:var(--text);text-decoration:none;display:inline-flex;align-items:center;justify-content:center;font-weight:850;letter-spacing:.13em;text-transform:uppercase;background:rgba(255,255,255,.035)}
-    .orange{background:linear-gradient(135deg,var(--orange2),var(--orange));color:#170900;border-color:rgba(255,122,26,.8)}
-    footer{text-align:center;color:rgba(244,246,248,.32);font-size:11px;letter-spacing:.22em;text-transform:uppercase;margin-top:30px}
-    @media(max-width:820px){.page{padding:22px}nav{display:none}main{margin-top:34px}.grid{grid-template-columns:1fr}.button{width:100%}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TVEVT — Public Proof</title>
+<link rel="icon" href="/assets/brand/tvevt-favicon.svg" type="image/svg+xml">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+:root {
+  --bg: #101419;
+  --panel: #161B22;
+  --panel2: #21262D;
+  --line: #30363D;
+  --text: #F0F6FC;
+  --muted: #8B949E;
+  --accent: #F0F6FC;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 28px 24px 80px;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 14px 24px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  margin-bottom: 54px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #F0F6FC;
+  text-decoration: none;
+  min-width: 0;
+}
+
+.logo-box {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(240, 246, 252, 0.15);
+  border-radius: 6px;
+  background: rgba(240, 246, 252, 0.02);
+  flex: 0 0 auto;
+}
+
+.logo-box img {
+  width: 24px;
+  height: 24px;
+  display: block;
+}
+
+.brand-text strong {
+  display: block;
+  font-size: 20px;
+  letter-spacing: -.02em;
+  line-height: 1;
+  color: #F0F6FC;
+  font-weight: 500;
+}
+
+.brand-text span {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 12px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+.nav a {
+  color: #F0F6FC;
+  text-decoration: none;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: 1px solid #30363D;
+  background: #21262D;
+  font-size: 13px;
+  font-weight: 500;
+  transition: background .15s ease, border-color .15s ease;
+}
+
+.nav a:hover {
+  border-color: #F0F6FC;
+  background: #30363D;
+}
+
+.nav a.active {
+  background: rgba(240, 246, 252, 0.1) !important;
+  border-color: #F0F6FC !important;
+}
+
+.nav a.primary {
+  background: rgba(240, 246, 252, 0.1);
+  border-color: #F0F6FC;
+}
+
+main {
+  margin-top: 40px;
+}
+
+.hero {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 42px;
+  margin-bottom: 24px;
+}
+
+h1 {
+  margin: 0;
+  font-size: 48px;
+  line-height: 1.1;
+  letter-spacing: -.03em;
+  font-weight: 400;
+}
+
+.lead {
+  margin: 20px 0 0;
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 18px;
+  line-height: 1.6;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.item {
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background: var(--panel);
+  padding: 24px;
+  min-height: 180px;
+}
+
+.num {
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: .05em;
+  margin-bottom: 14px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+h2 {
+  margin: 0 0 12px;
+  font-size: 22px;
+  letter-spacing: -.02em;
+  font-weight: 500;
+}
+
+p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+  font-size: 14px;
+}
+
+.panel-box {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel);
+  padding: 32px;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 32px;
+}
+
+.button {
+  min-height: 44px;
+  padding: 0 20px;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  color: var(--text);
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s ease, border-color .15s ease;
+  background: var(--panel2);
+}
+
+.button:hover {
+  background: var(--line);
+  border-color: var(--text);
+}
+
+.button.primary {
+  background: transparent;
+  border-color: var(--text);
+}
+
+.button.primary:hover {
+  background: var(--panel2);
+}
+
+footer.siteFooter {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.15);
+  font-size: 10px;
+  letter-spacing: .15em;
+  text-transform: uppercase;
+  margin-top: 64px;
+  font-family: "JetBrains Mono", monospace;
+}
+
+@media(max-width:920px){
+  .header {
+    align-items: flex-start;
+    flex-direction: column;
+    border-radius: 6px;
+  }
+  .nav {
+    justify-content: flex-start;
+    width: 100%;
+  }
+  .grid {
+    grid-template-columns: 1fr;
+  }
+  .button {
+    width: 100%;
+    text-align: center;
+  }
+}
+
+@media(max-width:640px){
+  .page {
+    padding: 24px 16px 60px;
+  }
+  .hero {
+    padding: 24px;
+  }
+  h1 {
+    font-size: 34px;
+  }
+}
+</style>
 </head>
 <body>
 <div class="page">
-  <header>
-    <a class="brand" href="/"><img src="/assets/brand/tvevt-icon.svg" alt="TVEVT"><span><strong>TVEVT</strong><span>Governance Console</span></span></a>
-    <nav><a href="/record.html">Verify</a><a href="/seal.html">New Signal</a></nav>
+
+  <header class="header">
+    <a class="brand" href="/">
+      <div class="logo-box">
+        <img src="/assets/brand/tvevt-icon.svg" alt="TVEVT">
+      </div>
+      <div class="brand-text">
+        <strong>TVEVT</strong>
+        <span>Governance Console</span>
+      </div>
+    </a>
+
+    <nav class="nav">
+      <a href="/">Home</a>
+      <a href="/record.html">Verify Record</a>
+      <a class="active" href="/proof.html">Public Proof</a>
+      <a class="primary" href="/request-access.html">Request Access</a>
+    </nav>
   </header>
 
   <main>
     <section class="hero">
       <h1>Why it can be trusted.</h1>
-      <p class="lead">A TVEVT record is a sealed signal with three proof elements: time, hash, and a fixed verification page.</p>
+      <p class="lead">A TVEVT record is a sealed artifact with three proof elements: time, hash, and a fixed verification page.</p>
       <div class="actions">
-        <a class="button orange" href="/seal.html">Seal a Signal</a>
+        <a class="button primary" href="/request-access.html">Request Access to Seal</a>
         <a class="button" href="/record.html">Verify Record</a>
       </div>
     </section>
@@ -51,29 +322,29 @@
       <div class="item">
         <div class="num">01</div>
         <h2>Timestamp</h2>
-        <p>The record shows when the signal was sealed.</p>
+        <p>The record shows exactly when the cryptographic proof layer was sealed.</p>
       </div>
 
       <div class="item">
         <div class="num">02</div>
         <h2>Hash</h2>
-        <p>The record has a digital fingerprint. Change the content, and the fingerprint changes.</p>
+        <p>The record has a unique digital fingerprint. Change the content, and the reference fingerprint breaks immediately.</p>
       </div>
 
       <div class="item">
         <div class="num">03</div>
         <h2>Verification</h2>
-        <p>The link opens a stable proof surface for the sealed record.</p>
+        <p>The system opens a stable, unalterable proof surface for inspecting the history of the record.</p>
       </div>
     </section>
 
-    <section class="panel">
+    <section class="panel-box">
       <h2>What TVEVT proves</h2>
-      <p>TVEVT proves that a specific statement was sealed as a record at a specific moment. It does not claim the statement is factually true. It creates a fixed reference point for inspection.</p>
+      <p>TVEVT proves that a specific statement was sealed as an unalterable record at a specific point in time. It creates a fixed, mathematically verified reference point for continuous auditing and organizational compliance.</p>
     </section>
   </main>
 
-  <footer>Say it once. Prove it forever.</footer>
+  <footer class="siteFooter">Say it once. Prove it forever.</footer>
 </div>
 </body>
 </html>
