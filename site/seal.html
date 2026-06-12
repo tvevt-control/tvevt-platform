@@ -20,10 +20,12 @@
   --text: #F0F6FC;
   --muted: #8B949E;
   --soft: #C9D1D9;
-  
-  /* Фикс: жестко прописываем оранжево-рыжий бренд-цвет вместо желтеющей бронзы */
+
+  /* Фикс по канону: тонкая оранжевая рамка вместо кричащих заливок */
   --accent: #FF7B1C;
+  --accent-hover: #FF8D3A;
   --accent-muted: rgba(255, 123, 28, 0.12);
+
   --green: #00E699;
   --red: #FF4D4D;
 }
@@ -113,7 +115,9 @@ body {
   border-color: var(--text);
 }
 
-.hero, .panel, .result {
+.hero,
+.panel,
+.result {
   border: 1px solid var(--line);
   border-radius: 8px;
   background: var(--panel);
@@ -133,11 +137,58 @@ p {
   font-size: 15px;
 }
 
+/* Сетка интерактивных шаблонов (First Signal Experience) */
+.tvevt-templates-grid {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin: 20px 0;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 20px;
+}
+
+.tvevt-tpl-btn {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--muted);
+  padding: 10px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  font-family: inherit;
+  cursor: pointer;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
+}
+
+.tvevt-tpl-btn:hover {
+  border-color: var(--muted);
+  color: var(--text);
+}
+
+.tvevt-tpl-btn.active {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--panel);
+}
+
+.input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 20px;
+}
+
+.input-group label {
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--muted);
+}
+
+/* Каноничные поля ввода */
+input[type="text"],
 textarea {
   width: 100%;
-  min-height: 260px;
-  margin-top: 20px;
-  padding: 20px;
+  padding: 16px 20px;
   border-radius: 6px;
   border: 1px solid var(--line);
   background: var(--bg);
@@ -149,38 +200,52 @@ textarea {
   transition: border-color .15s ease;
 }
 
+input[type="text"] {
+  height: 48px;
+}
+
+textarea {
+  min-height: 220px;
+  resize: vertical;
+}
+
+input[type="text"]:focus,
 textarea:focus {
-  border-color: var(--accent);
+  border-color: var(--text);
 }
 
 .actions {
   display: flex;
   gap: 12px;
-  margin-top: 20px;
+  margin-top: 24px;
   flex-wrap: wrap;
 }
 
-button, .btn {
-  padding: 14px 24px;
+/* Каноничная кнопка действия (TVEVT Action Accent Rule — По скриншотам главной) */
+button,
+.btn {
+  height: 48px;
+  padding: 0 24px;
   border-radius: 6px;
-  border: 0;
-  background: var(--accent-muted);
+  background: var(--panel);
   color: var(--accent);
   border: 1px solid var(--accent);
   font-size: 14px;
   font-weight: 500;
   font-family: inherit;
   cursor: pointer;
-  transition: background .15s ease, color .15s ease;
+  transition: border-color .15s ease, color .15s ease, background .15s ease;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   text-decoration: none;
 }
 
-button:hover, .btn:hover {
-  background: var(--accent);
-  color: var(--bg);
+button:hover,
+.btn:hover {
+  background: var(--panel);
+  border-color: var(--accent-hover);
+  color: var(--accent-hover);
 }
 
 button:disabled {
@@ -197,6 +262,7 @@ button:disabled {
 .secondary:hover {
   border-color: var(--text);
   background: var(--panel2);
+  color: var(--text);
 }
 
 .result {
@@ -265,17 +331,43 @@ footer {
 }
 
 @media(max-width:800px){
-  .wrap { padding-top: 96px; }
-  .modeBar { flex-direction: column; align-items: flex-start; gap: 12px; }
-  h1 { font-size: 28px; }
-  button, .btn { width: 100%; text-align: center; }
+  .wrap {
+    padding: 96px 16px 80px;
+  }
+
+  .modeBar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .tvevt-templates-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
+  .tvevt-tpl-btn {
+    width: 100%;
+    text-align: left;
+  }
+
+  h1 {
+    font-size: 28px;
+  }
+
+  button,
+  .btn {
+    width: 100%;
+    text-align: center;
+  }
 }
 </style>
 </head>
 
 <body>
 
-<script src="/assets/private-nav.js?v=2026-06-07-v3"></script>
+<script src="/assets/private-nav.js?v=2026-06-12-v1"></script>
 
 <div class="wrap">
 
@@ -292,19 +384,49 @@ footer {
   </div>
 
   <section class="hero">
-    <h1>Create Record</h1>
+    <h1>Create Your First Verified Record</h1>
     <p>
-      Write the exact statement you want to seal. TVEVT will create a verified record,
-      generate a cryptographic hash, and open the permanent verification page.
+      Create a permanent, verifiable reference point for an important decision,
+      agreement or event before ambiguity appears.
     </p>
   </section>
 
   <section class="panel" style="margin-top:20px">
+
+    <div class="tvevt-templates-grid" aria-label="Record templates">
+      <button type="button" class="tvevt-tpl-btn" data-type="founder">Founder Note</button>
+      <button type="button" class="tvevt-tpl-btn" data-type="meeting">Meeting Summary</button>
+      <button type="button" class="tvevt-tpl-btn" data-type="board">Board Decision</button>
+      <button type="button" class="tvevt-tpl-btn" data-type="client">Client Instruction</button>
+      <button type="button" class="tvevt-tpl-btn" data-type="public">Public Statement</button>
+    </div>
+
     <form id="form">
-      <textarea id="text" placeholder="Enter the exact statement you want to seal..." required></textarea>
+
+      <div class="input-group">
+        <label for="title">Record Title</label>
+        <input
+          type="text"
+          id="title"
+          name="title"
+          maxlength="120"
+          required
+          placeholder="e.g., Meeting Summary — Project Alpha"
+        >
+      </div>
+
+      <div class="input-group">
+        <label for="text">Statement Content</label>
+        <textarea
+          id="text"
+          name="text"
+          placeholder="Write the exact statement you want to seal..."
+          required
+        ></textarea>
+      </div>
 
       <div class="actions">
-        <button id="sealBtn" type="submit">Seal Record</button>
+        <button id="sealBtn" type="submit">Create First Record</button>
         <button id="clearBtn" class="secondary" type="button">Clear</button>
       </div>
 
@@ -348,6 +470,29 @@ footer {
 </div>
 
 <script>
+const templates = {
+  founder: {
+    title: "Founder Note — Strategic Intent",
+    text: "Today I defined the core long-term vision for the TVEVT trust layer. This record seals our product values before scaling."
+  },
+  meeting: {
+    title: "Meeting Summary — Project Alpha",
+    text: "Today we approved the launch of Project Alpha. Decisions made: 1. Core scope frozen. 2. Timeline set to Q3. This record serves as the official meeting reference."
+  },
+  board: {
+    title: "Board Decision — Budget Resolution",
+    text: "The Board of Directors has approved the allocation of the architectural budget for the 2026 fiscal infrastructure."
+  },
+  client: {
+    title: "Client Instruction — Scope Change",
+    text: "The client requested a change to the project scope. Confirmed via operational brief on 12 June 2026. This record preserves the instruction before interpretation changes."
+  },
+  public: {
+    title: "Public Statement — Pre-Draft Launch",
+    text: "Official statement regarding the launch of our verification protocol. Draft finalized and locked before external distribution."
+  }
+};
+
 const params = new URLSearchParams(window.location.search);
 
 let key =
@@ -356,6 +501,7 @@ let key =
   "";
 
 const form = document.getElementById("form");
+const titleInput = document.getElementById("title");
 const text = document.getElementById("text");
 const sealBtn = document.getElementById("sealBtn");
 const clearBtn = document.getElementById("clearBtn");
@@ -373,17 +519,32 @@ const modeBar = document.getElementById("modeBar");
 const modeTitle = document.getElementById("modeTitle");
 const modeText = document.getElementById("modeText");
 const consoleLink = document.getElementById("consoleLink");
+const templateButtons = document.querySelectorAll(".tvevt-tpl-btn");
 
 let currentRecordUrl = "";
 
 function setMessage(message, isError = false){
   msg.textContent = message;
   msg.classList.toggle("error", isError);
-  if(!isError && message) msg.style.color = "var(--green)";
+  if(!isError && message){
+    msg.style.color = "var(--green)";
+  }
 }
 
 function withKey(path){
   return key ? path + "?key=" + encodeURIComponent(key) : path;
+}
+
+function appendKeyToUrl(url){
+  if(!key) return url;
+
+  const absolute = url.startsWith("http")
+    ? url
+    : window.location.origin + url;
+
+  if(absolute.includes("key=")) return absolute;
+
+  return absolute + (absolute.includes("?") ? "&" : "?") + "key=" + encodeURIComponent(key);
 }
 
 function applyMode(){
@@ -403,11 +564,33 @@ function applyMode(){
   }
 }
 
+function applyTemplate(type){
+  if(!templates[type]) return;
+
+  titleInput.value = templates[type].title;
+  text.value = templates[type].text;
+
+  templateButtons.forEach(function(btn){
+    btn.classList.toggle("active", btn.getAttribute("data-type") === type);
+  });
+
+  setMessage("");
+  result.classList.remove("show");
+}
+
+templateButtons.forEach(function(button){
+  button.addEventListener("click", function(){
+    applyTemplate(button.getAttribute("data-type"));
+  });
+});
+
 async function safeJson(response){
   const raw = await response.text();
+
   if(!raw){
     throw new Error("Empty response from /api/publish. Check Cloudflare function deployment.");
   }
+
   try{
     return JSON.parse(raw);
   }catch(err){
@@ -415,37 +598,80 @@ async function safeJson(response){
   }
 }
 
-async function sealSignal(signalText){
-  const payload = { text: signalText };
-  if(key) payload.key = key;
+async function sealSignal(titleText, signalText){
+  const payload = {
+    title: titleText,
+    text: signalText
+  };
+
+  if(key){
+    payload.key = key;
+  }
 
   const response = await fetch("/api/publish", {
     method: "POST",
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json"
+    },
     body: JSON.stringify(payload)
   });
 
   const data = await safeJson(response);
-  if(!response.ok || !data.ok){
+
+  if(!response.ok || data.ok === false){
     throw new Error(data.error || "Unable to seal record.");
   }
+
   return data;
+}
+
+// ИСПРАВЛЕНО: Безопасный, бронированный расчет URL с валидацией ID
+function getRecordUrl(data){
+  const record = data.record || {};
+
+  const directUrl =
+    data.recordUrl ||
+    data.verification_url ||
+    record.recordUrl ||
+    record.verification_url ||
+    "";
+
+  const fallbackId = data.id || record.id || "";
+  
+  if (!directUrl && !fallbackId) {
+    throw new Error("Record created, but Record ID was not returned.");
+  }
+
+  const baseUrl = directUrl || ("/record.html?id=" + encodeURIComponent(fallbackId));
+  return appendKeyToUrl(baseUrl);
 }
 
 function loadPendingContext(){
   const pendingText = sessionStorage.getItem("tvevt_pending_record_text");
+
   if(pendingText && text){
+    titleInput.value = "Imported Record — Draft";
     text.value = pendingText;
     sessionStorage.removeItem("tvevt_pending_record_text");
+
+    templateButtons.forEach(function(btn){
+      btn.classList.remove("active");
+    });
+
+    return;
   }
+
+  applyTemplate("founder");
 }
 
 form.addEventListener("submit", async function(e){
   e.preventDefault();
+
+  const titleText = titleInput.value.trim();
   const signalText = text.value.trim();
 
-  if(!signalText){
-    setMessage("Enter a statement before sealing.", true);
+  if(!titleText || !signalText){
+    setMessage("Enter both Title and Statement before sealing.", true);
     return;
   }
 
@@ -455,11 +681,10 @@ form.addEventListener("submit", async function(e){
   setMessage("Sealing statement and creating verified record...");
 
   try{
-    const data = await sealSignal(signalText);
+    const data = await sealSignal(titleText, signalText);
     const record = data.record || {};
-    const url = data.recordUrl || data.verification_url || record.recordUrl || record.verification_url;
 
-    currentRecordUrl = url || (window.location.origin + "/record.html?id=" + encodeURIComponent(data.id));
+    currentRecordUrl = getRecordUrl(data);
 
     recordId.textContent = data.id || record.id || "—";
     hashEl.textContent = data.hash || record.hash || "—";
@@ -470,21 +695,27 @@ form.addEventListener("submit", async function(e){
     result.classList.add("show");
     setMessage("Verified record created ✓ Opening verification page...");
 
-    setTimeout(() => {
+    setTimeout(function(){
       window.location.href = currentRecordUrl;
     }, 900);
+
   }catch(err){
     console.error(err);
     sealBtn.disabled = false;
-    sealBtn.textContent = "Seal Record";
+    sealBtn.textContent = "Create First Record";
     setMessage(err.message || "Record could not be sealed. Please try again.", true);
   }
 });
 
 clearBtn.onclick = function(){
+  titleInput.value = "";
   text.value = "";
   setMessage("");
   result.classList.remove("show");
+
+  templateButtons.forEach(function(btn){
+    btn.classList.remove("active");
+  });
 };
 
 copyRecord.onclick = async function(){
@@ -492,6 +723,7 @@ copyRecord.onclick = async function(){
     setMessage("No verification link available yet.", true);
     return;
   }
+
   try{
     await navigator.clipboard.writeText(currentRecordUrl);
     setMessage("Verification link copied.");
