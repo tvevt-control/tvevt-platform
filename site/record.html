@@ -216,6 +216,19 @@ button:hover, .button:hover {
   font-weight: 500;
 }
 
+/* Новые каноничные стили для Record Identity Layer v1 */
+.identity-block {
+  margin-bottom: 24px;
+}
+
+.record-display-title {
+  font-size: 24px;
+  letter-spacing: -.02em;
+  font-weight: 500;
+  color: var(--text);
+  margin: 0 0 4px 0;
+}
+
 .content-label {
   color: var(--muted);
   font-size: 10px;
@@ -335,7 +348,6 @@ footer {
 
 <body>
 
-<!-- Принудительно подключаем v8 для меню -->
 <script src="/assets/private-nav.js?v=2026-06-07-v8"></script>
 
 <div class="wrap">
@@ -368,6 +380,11 @@ footer {
     <div class="notice" id="notice">
       <strong>This record cannot be altered without detection.</strong><br>
       The content below is the sealed statement associated with this verification record.
+    </div>
+
+    <div class="identity-block">
+      <div class="content-label">Record Title</div>
+      <h2 class="record-display-title" id="recordDisplayTitle">Untitled Verified Record</h2>
     </div>
 
     <div class="content-label">Sealed content</div>
@@ -471,6 +488,17 @@ function idFromUrl(){
   return rawId.trim();
 }
 
+// Изолированная функция извлечения заголовка с жестким легаси-фолбеком по ТЗ
+function getTitle(data) {
+  const record = data.record || {};
+  return (
+    data.title ||
+    record.title ||
+    (record.content && record.content.title) ||
+    "Untitled Verified Record"
+  );
+}
+
 function reset(){
   $("badge").style.display = "none";
   $("record").style.display = "none";
@@ -488,6 +516,7 @@ function reset(){
   $("recalculatedHash").textContent = "—";
   $("recordStatus").textContent = "sealed";
   $("visibility").textContent = "—";
+  $("recordDisplayTitle").textContent = "Untitled Verified Record"; // Сброс тайтла
   $("content").textContent = "No record loaded.";
   $("msg").classList.remove("error");
   currentRecord = null;
@@ -528,6 +557,10 @@ function render(data){
   $("recalculatedHash").textContent = verification.recalculatedHash || "—";
   $("recordStatus").textContent = record.anchor_status || record.status || "sealed";
   $("visibility").textContent = record.visibility || "public";
+  
+  // Безопасный рендеринг Record Title наружу
+  $("recordDisplayTitle").textContent = getTitle(data);
+  
   $("content").textContent = record.text || record.content?.text || "No sealed text available.";
 
   $("title").textContent = verified ? "Record verified" : "Record integrity warning";
