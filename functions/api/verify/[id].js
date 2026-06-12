@@ -31,6 +31,16 @@ function getText(record) {
   );
 }
 
+// ИСПРАВЛЕНО: Добавлена изолированная каноничная функция извлечения заголовка по ТЗ
+function getTitle(record) {
+  return (
+    record.title ||
+    record.content?.title ||
+    record.name ||
+    "Untitled Verified Record"
+  );
+}
+
 function buildCanonicalPayload(record) {
   if (record.canonicalPayload) {
     return record.canonicalPayload;
@@ -199,6 +209,9 @@ export async function onRequestGet(context) {
 
     const text = getText(record);
 
+    // ИСПРАВЛЕНО: Объявлена константа title строго под text по вашей логике
+    const title = getTitle(record);
+
     const recordUrl =
       record.recordUrl ||
       record.verification_url ||
@@ -211,8 +224,14 @@ export async function onRequestGet(context) {
 
       verification,
 
+      // ИСПРАВЛЕНО: Expose title на самый верхний уровень ответа API
+      title,
+
       record: {
         id: record.id || id,
+
+        // ИСПРАВЛЕНО: Инжект title в корень объекта record
+        title,
 
         type: record.type || "Verified Signal",
 
@@ -227,7 +246,9 @@ export async function onRequestGet(context) {
 
         text,
 
+        // ИСПРАВЛЕНО: Обогащение внутренней структуры контента
         content: {
+          title,
           text
         },
 
