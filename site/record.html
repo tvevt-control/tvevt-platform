@@ -472,7 +472,6 @@ function applyNavigation(){
   $("sealNewLink").href = withKey("/seal.html");
 }
 
-// УМНЫЙ UX-ФИКС: Изолируем ID от любых налипших параметров URL (?key или &key)
 function idFromUrl(){
   let rawId = params.get("id") || "";
   if (!rawId) {
@@ -488,7 +487,6 @@ function idFromUrl(){
   return rawId.trim();
 }
 
-// Изолированная функция извлечения заголовка с жестким легаси-фолбеком по ТЗ
 function getTitle(data) {
   const record = data.record || {};
   return (
@@ -516,7 +514,7 @@ function reset(){
   $("recalculatedHash").textContent = "—";
   $("recordStatus").textContent = "sealed";
   $("visibility").textContent = "—";
-  $("recordDisplayTitle").textContent = "Untitled Verified Record"; // Сброс тайтла
+  $("recordDisplayTitle").textContent = "Untitled Verified Record";
   $("content").textContent = "No record loaded.";
   $("msg").classList.remove("error");
   currentRecord = null;
@@ -558,7 +556,6 @@ function render(data){
   $("recordStatus").textContent = record.anchor_status || record.status || "sealed";
   $("visibility").textContent = record.visibility || "public";
   
-  // Безопасный рендеринг Record Title наружу
   $("recordDisplayTitle").textContent = getTitle(data);
   
   $("content").textContent = record.text || record.content?.text || "No sealed text available.";
@@ -629,14 +626,19 @@ $("copyLink").onclick = async () => {
   await copyText(link, "Copied ✓ Verification link copied.", $("copyLink"));
 };
 
+// ИСПРАВЛЕНО: Полное внедрение Share Layer v1 с каноническими переносами строк ("воздухом") по ТЗ
 $("shareProof").onclick = async () => {
   if(!currentRecord) return;
-
   const link = location.origin + "/record.html?id=" + encodeURIComponent(currentRecord.id);
   const verified = currentVerification?.verified === true;
-
+  const recordTitle =
+    currentRecord.title ||
+    currentRecord.content?.title ||
+    "Untitled Verified Record";
   const text =
-`This signal has been verified in TVEVT.
+`${recordTitle}
+
+This record has been verified in TVEVT.
 
 Record ID: ${currentRecord.id}
 Status: ${verified ? "VERIFIED" : "INTEGRITY WARNING"}
@@ -644,10 +646,9 @@ Status: ${verified ? "VERIFIED" : "INTEGRITY WARNING"}
 ${link}
 
 Say it once. Prove it forever.`;
-
   if (navigator.share) {
     await navigator.share({
-      title: "TVEVT Verified Record",
+      title: recordTitle,
       text
     });
     $("msg").textContent = "Share proof opened.";
