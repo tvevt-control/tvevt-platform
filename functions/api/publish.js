@@ -56,6 +56,10 @@ export async function onRequestPost(context) {
 
     const text = String(body.text || "").trim();
 
+    // ИСПРАВЛЕНО: Чтение и валидация входящего заголовка по ТЗ
+    const title = String(body.title || "").trim();
+    const finalTitle = title || "Untitled Verified Record";
+
     const clientKey = String(
       body.key ||
       body.clientKey ||
@@ -84,6 +88,7 @@ export async function onRequestPost(context) {
       IMPORTANT:
       Keep this payload stable.
       verify/[id].js already supports this format.
+      Строго сохраняем старую структуру по ТЗ во избежание поломки верификации.
     */
     const payload = JSON.stringify({
       text,
@@ -96,6 +101,9 @@ export async function onRequestPost(context) {
 
     const record = {
       id,
+
+      // ИСПРАВЛЕНО: Добавлен Record Title в корень объекта
+      title: finalTitle,
 
       type: "verified_signal",
 
@@ -111,7 +119,9 @@ export async function onRequestPost(context) {
 
       text,
 
+      // ИСПРАВЛЕНО: Расширена структура content без потери обратной совместимости
       content: {
+        title: finalTitle,
         text
       },
 
@@ -148,7 +158,10 @@ export async function onRequestPost(context) {
 
       event: "signal_sealed",
 
+      // ИСПРАВЛЕНО: Текст оставлен без шума, title добавлен свойством
       text: "Signal sealed and verified record created.",
+
+      title: finalTitle,
 
       signalId: id,
 
@@ -193,6 +206,9 @@ export async function onRequestPost(context) {
       id,
 
       logId,
+
+      // ИСПРАВЛЕНО: Вывод title на верхний уровень ответа API
+      title: finalTitle,
 
       hash,
 
